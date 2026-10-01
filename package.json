@@ -13,7 +13,7 @@
     "content:validate": "tsx scripts/validate-content.ts",
     "images": "node -e \"console.log('images: stub until BUILD_PLAN 2.6')\"",
     "lhci": "node -e \"console.log('lhci: stub until BUILD_PLAN 1.6')\"",
-    "launch:check": "node -e \"console.error('launch:check: stub until BUILD_PLAN 1.5; failing until it can scan for TODO_'); process.exit(1)\""
+    "launch:check": "tsx scripts/launch-check.ts"
   },
   "dependencies": {
     "@mdx-js/mdx": "^3.1.1",

@@ -92,7 +92,6 @@ export const Project = z.object({
 export const Site = z.object({
   name: z.literal("Afrokan Labs"),
   domain: z.string(),
-  url: z.url(),
   email: z.email(),
   location: z.string(),
   /** E.164, e.g. +233201234567. The only place the number exists. */

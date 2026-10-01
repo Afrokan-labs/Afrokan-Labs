@@ -4,6 +4,7 @@ import "@/styles/tokens.css";
 import "@/styles/base.css";
 import "@/styles/grid.css";
 import { getSite } from "@/lib/content";
+import { env } from "@/lib/env";
 
 const site = getSite();
 
@@ -19,7 +20,7 @@ const sans = Schibsted_Grotesk({
 
 // Per-page titles, descriptions and Open Graph tags come in BUILD_PLAN 3.3.
 export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
+  metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
   title: site.name,
 };
 

@@ -8,7 +8,6 @@ import type { Site } from "./schema";
 export const site = {
   name: "Afrokan Labs",
   domain: "afrokanlabs.com",
-  url: "https://afrokanlabs.com",
   email: "hello@afrokanlabs.com",
   location: "Accra, Ghana",
 

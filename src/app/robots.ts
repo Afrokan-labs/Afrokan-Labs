@@ -1,14 +1,12 @@
 import type { MetadataRoute } from "next";
-import { getSite } from "@/lib/content";
-
-const site = getSite();
+import { env } from "@/lib/env";
 
 export const dynamic = "force-static";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: { userAgent: "*", allow: "/" },
-    sitemap: `${site.url}/sitemap.xml`,
-    host: site.url,
+    sitemap: `${env.NEXT_PUBLIC_SITE_URL}/sitemap.xml`,
+    host: env.NEXT_PUBLIC_SITE_URL,
   };
 }

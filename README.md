@@ -39,7 +39,7 @@ pnpm launch:check     # fails while any TODO_ placeholder remains
 
 `typecheck`, `lint`, `content:validate` and `build` must all pass before a change is done.
 
-`images` and `lhci` are stubs until BUILD_PLAN 2.6 and 1.6. `launch:check` is a stub until 1.5 and fails on purpose until then. `build` runs `content:validate` first, so invalid content stops the build.
+`images` and `lhci` are stubs until BUILD_PLAN 2.6 and 1.6. `launch:check` lists every remaining `TODO_` with its file and line. `build` runs `content:validate` first, so invalid content stops the build.
 
 Don't run `pnpm build` while `pnpm dev` is running. Both write to `.next/`, and the dev server breaks.
 
@@ -68,4 +68,4 @@ Edit copy in `src/content/`. Unconfirmed facts are strings starting with `TODO_`
 
 ## Environment
 
-Copy `.env.example` to `.env.local`. Only `NEXT_PUBLIC_*` variables are used by the build. Business details such as the WhatsApp number and email are content, so they live in `src/content/site.ts`, not in env files.
+Copy `.env.example` to `.env.local`. Only `NEXT_PUBLIC_*` variables are used by the build, validated in `src/lib/env.ts`. `NEXT_PUBLIC_SITE_URL` is required: without it `pnpm dev` and `pnpm build` stop with an error. Business details such as the WhatsApp number and email are content, so they live in `src/content/site.ts`, not in env files.
