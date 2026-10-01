@@ -3,7 +3,9 @@ import { Schibsted_Grotesk } from "next/font/google";
 import "@/styles/tokens.css";
 import "@/styles/base.css";
 import "@/styles/grid.css";
-import { site } from "@/content/site";
+import { getSite } from "@/lib/content";
+
+const site = getSite();
 
 // Self-hosted at build time. The class on <body> redefines --font-sans as the font,
 // its metric-matched fallback face, then the design doc's fallback stack.

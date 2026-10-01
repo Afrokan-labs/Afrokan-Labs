@@ -1,0 +1,179 @@
+/**
+ * Content schemas. These are the content rules from docs/architecture.md §4,
+ * enforced by the build rather than by memory: content that breaks a rule
+ * fails `pnpm content:validate` and `pnpm build`.
+ */
+import { z } from "zod";
+
+/**
+ * An unconfirmed business fact. Dev and preview builds accept these;
+ * `pnpm launch:check` fails while any remain (BUILD_PLAN 1.5).
+ */
+export const Todo = z.string().regex(/^TODO_[A-Z0-9_]+$/, "Placeholders look like TODO_SOME_FACT");
+const orTodo = <T extends z.ZodType>(schema: T, expected: string) =>
+  z.union([schema, Todo], {
+    error: `Expected ${expected}, or a TODO_ placeholder until it is confirmed`,
+  });
+
+export const BuiltKind = z.enum(["whatsapp-assistant", "workflow-tool", "website"]);
+
+// ----- Projects: docs/architecture.md §4, copied verbatim -----
+
+// prettier-ignore
+const Image = z.object({
+  src: z.string(),
+  alt: z.string().min(10),
+  piiRedacted: z.literal(true),         // customer details blurred
+  clientApproved: z.literal(true),      // client OK'd showing this screenshot
+  showsClientBranding: z.boolean(),     // client name/logo visible in the image?
+});
+
+// prettier-ignore
+const Conversation = z.object({
+  fromStaffTestNumber: z.literal(true), // never real customer messages
+  clientApproved: z.literal(true),
+  messages: z.array(z.object({
+    speaker: z.enum(["customer", "assistant"]),
+    text: z.string().min(1).max(500),
+  })).min(2),
+});
+
+// prettier-ignore
+export const Project = z.object({
+  slug: z.string().regex(/^[a-z0-9-]+$/),
+  published: z.boolean(),
+  featured: z.boolean().default(false),
+  order: z.number(),
+
+  client: z.object({
+    name: z.string(),
+    descriptionApproved: z.boolean(),   // tier: anonymised (OK to describe at all)
+    nameApproved: z.boolean(),          // tier: named
+    anonymisedLabel: z.string(),        // "A Ghanaian clearing and forwarding firm"
+  }),
+  industry: z.string(),
+  status: z.enum(["live", "delivered"]),
+  liveSince: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/).optional(), // "2026-05"
+  formerBrand: z.string().optional(),   // "Deuel's Designs"; rendered at named tier only
+
+  built: z.array(z.enum(["whatsapp-assistant", "workflow-tool", "website"])),
+  summary: z.object({
+    problem: z.string().max(280),
+    solution: z.string().max(280),
+  }),
+
+  // Optional on purpose: if unconfirmed, the block is omitted, never filled
+  result: z.object({ text: z.string(), confirmed: z.literal(true) }).optional(),
+  testimonial: z.object({
+    quote: z.string(), name: z.string(), role: z.string(),
+    writtenPermission: z.literal(true),
+  }).optional(),
+  conversation: Conversation.optional(),
+
+  images: z.array(Image),
+  seo: z.object({ title: z.string().max(60), description: z.string().max(155) }),
+}).superRefine((p, ctx) => {
+  const fail = (message: string) => ctx.addIssue({ code: z.ZodIssueCode.custom, message });
+
+  if (p.published && !p.client.descriptionApproved)
+    fail("Cannot publish without the client's OK to describe the work (anonymised tier).");
+  if (p.status === "live" && !p.liveSince)
+    fail('status "live" requires liveSince.');
+  if (!p.client.nameApproved) {
+    if (p.result || p.testimonial)
+      fail("Result and testimonial require the named tier (nameApproved).");
+    if (p.images.some((i) => i.showsClientBranding))
+      fail("An image shows client branding but the client name is not approved.");
+  }
+});
+
+// ----- Site facts -----
+
+export const Site = z.object({
+  name: z.literal("Afrokan Labs"),
+  domain: z.string(),
+  url: z.url(),
+  email: z.email(),
+  location: z.string(),
+  /** E.164, e.g. +233201234567. The only place the number exists. */
+  whatsappNumber: orTodo(
+    z.string().regex(/^\+[1-9]\d{7,14}$/),
+    "an E.164 number such as +233201234567",
+  ),
+  /** Fills "We reply within ___ on weekdays." */
+  replyWithin: orTodo(z.string().min(1), 'a reply time such as "4 hours"'),
+  /** Prefilled WhatsApp messages. Brackets are prompts for the visitor and ship as written. */
+  whatsappPrefill: z.object({
+    default: z.string().min(1),
+    demo: z.string().min(1),
+  }),
+  /** Open decision #2 (docs/content/README.md). Off until decided. */
+  demoOffer: z.object({ enabled: z.boolean() }),
+  social: z.object({
+    linkedin: orTodo(z.url(), "the LinkedIn page URL").optional(),
+  }),
+});
+
+// ----- Homepage sections -----
+
+const SectionCopy = z.object({
+  title: z.string().min(1),
+  cta: z.string().min(1).optional(),
+});
+
+export const Services = z.object({
+  section: SectionCopy,
+  items: z
+    .array(z.object({ kind: BuiltKind, title: z.string().min(1), body: z.string().min(1) }))
+    .length(3, "The strategy specifies exactly three services."),
+});
+
+export const Process = z.object({
+  section: SectionCopy,
+  steps: z
+    .array(z.object({ title: z.string().min(1), body: z.string().min(1) }))
+    .length(4, "The strategy specifies four steps."),
+  /** Open decision #3: one honest pricing signal. */
+  pricingNote: orTodo(z.string().min(1), "one of the approved pricing lines"),
+});
+
+export const Team = z.object({
+  section: SectionCopy,
+  statement: z.string().min(1),
+  members: z
+    .array(
+      z.object({
+        name: orTodo(z.string().min(1), "a name"),
+        role: orTodo(z.string().min(1), "a role"),
+        photo: z
+          .object({
+            /** Source image in assets/images/; optimised in BUILD_PLAN 2.6. */
+            src: z.string(),
+            alt: z.string().min(10),
+          })
+          .optional(),
+      }),
+    )
+    .min(1),
+});
+
+export type Project = z.infer<typeof Project>;
+export type Site = z.infer<typeof Site>;
+export type Services = z.infer<typeof Services>;
+export type Process = z.infer<typeof Process>;
+export type Team = z.infer<typeof Team>;
+export type BuiltKind = z.infer<typeof BuiltKind>;
+
+export const TierCopy = z.object({
+  proofLine: z.object({
+    live: z.string().includes("{client}"),
+    delivered: z.string().includes("{client}"),
+  }),
+  conversationCaption: z.object({
+    named: z.string().includes("{short}"),
+    anonymised: z.string().min(1),
+    delivered: orTodo(z.string().min(1), "a caption for a delivered (not live) system"),
+  }),
+  shortNames: z.record(z.string(), z.string()),
+});
+export type TierCopy = z.infer<typeof TierCopy>;

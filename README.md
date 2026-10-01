@@ -39,7 +39,7 @@ pnpm launch:check     # fails while any TODO_ placeholder remains
 
 `typecheck`, `lint`, `content:validate` and `build` must all pass before a change is done.
 
-`content:validate`, `images` and `lhci` are stubs until BUILD_PLAN 1.4, 2.6 and 1.6. `launch:check` is a stub until 1.5 and fails on purpose until then.
+`images` and `lhci` are stubs until BUILD_PLAN 2.6 and 1.6. `launch:check` is a stub until 1.5 and fails on purpose until then. `build` runs `content:validate` first, so invalid content stops the build.
 
 Don't run `pnpm build` while `pnpm dev` is running. Both write to `.next/`, and the dev server breaks.
 
@@ -56,9 +56,15 @@ assets/images/   Source images (already redacted); optimised at build time
 docs/            Architecture, build plan, design system, approved copy
 src/app/         Routes, layout, sitemap, robots
 src/components/  Components (Mark.tsx is the logo; keep its path as is)
-src/content/     All copy and business facts
+src/content/     All copy and business facts; schema.ts holds the content rules
+src/lib/         content.ts loads and validates content (only pages call it)
+scripts/         Build-time scripts (content validation)
 src/styles/      Design tokens and base styles
 ```
+
+## Content
+
+Edit copy in `src/content/`. Unconfirmed facts are strings starting with `TODO_`; builds accept them, `launch:check` does not. Case studies are MDX files in `src/content/projects/`. A project with `published: false` shows only under `pnpm dev`.
 
 ## Environment
 
