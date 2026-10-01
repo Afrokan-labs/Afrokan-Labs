@@ -66,7 +66,8 @@ Everything visitors read is in `content/`:
 1. **Tokens:** edit `styles/tokens.css`. Colours, fonts, the spacing scale, radii, container width and section padding are all defined there, and nothing else hard-codes them.
 2. **Sections:** each section's layout lives in `components/sections/<Section>.module.css`.
 3. **Visuals:** swap each `<Placeholder>` for the real image or illustration.
-4. **Effects:** `DESIGN:` comments mark where the original effects were (hero line drawing, gradient streaks, chat mock-up, nav scroll style). The chat transcript is kept in `content/work.ts` under `illustration`.
+4. **Effects:** `DESIGN:` comments mark where the original effects were (hero line drawing, gradient streaks, chat mock-up). The chat transcript is kept in `content/work.ts` under `illustration`.
+5. **Nav:** already in its finished design (floating capsule on scroll, green signal line for the current section, live Accra clock, full-screen mobile menu). Its values are the `--nav-*` and motion tokens in `tokens.css`; nav copy is `navMenu` in `content/home.ts`.
 
 Breakpoints are 600px and 900px. They're listed at the top of `tokens.css`, because CSS custom properties can't be used inside media queries.
 

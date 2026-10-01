@@ -9,6 +9,14 @@ export const navLinks = [
 
 export const navCta = { label: "Start a project", href: "/#contact" };
 
+export const navMenu = {
+  openLabel: "Menu",
+  closeLabel: "Close",
+  contactHeading: "Say hello",
+  /** City and IANA time zone for the live clock in the nav. */
+  clock: { city: "Accra", timeZone: "Africa/Accra", zoneLabel: "GMT" },
+};
+
 export const hero = {
   title: "Software and AI built for the way Ghanaian businesses work.",
   lede: "Afrokan Labs builds websites, AI assistants and backend systems that take repetitive work off your team's hands. We start in Ghana, and we're building for the whole continent.",

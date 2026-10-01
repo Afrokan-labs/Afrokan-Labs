@@ -109,11 +109,23 @@
   --focus-ring: 2px solid var(--color-green);
   --focus-offset: 3px;
   --duration-fast: 0.18s;
+  --duration-base: 0.35s;
+  --duration-slow: 0.6s;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --control-height: 3rem;
+
+  /* ----- Nav ----- */
+  --nav-capsule-bg: rgba(21, 22, 22, 0.9);
+  --nav-capsule-border: rgba(255, 255, 255, 0.08);
+  --nav-capsule-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+  --nav-blur: 16px;
+  --nav-capsule-inset: var(--space-3);
 }
 
 @media (prefers-reduced-motion: reduce) {
   :root {
     --duration-fast: 0s;
+    --duration-base: 0s;
+    --duration-slow: 0s;
   }
 }
