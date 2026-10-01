@@ -1,34 +1,12 @@
-/**
- * Everything you'll want to edit without touching the layout lives here.
- * Empty strings hide the related buttons, so the WhatsApp and booking
- * options switch on automatically once you fill them in.
- */
-export const site = {
-  name: "Afrokan Labs",
-  domain: "afrokanlabs.com",
-  url: "https://afrokanlabs.com",
-  tagline: ["Build", "Innovate", "Unlock Africa"],
-  location: "Accra, Ghana",
-
-  email: "hello@afrokanlabs.com",
-  /** International format, digits only, e.g. "233201234567". Leave empty to hide. */
-  whatsapp: "",
-  /** e.g. "https://cal.com/afrokanlabs/intro". Leave empty to hide. */
-  bookingUrl: "",
-
-  social: {
-    linkedin: "",
-    x: "",
-    instagram: "",
-  },
-};
-
 export type TeamMember = {
   name: string;
   role: string;
   bio: string;
+  /** Path under /public. Leave empty to show a placeholder. */
   photo: string;
 };
+
+export const teamTitle = "The team";
 
 export const team: TeamMember[] = [
   {
@@ -45,3 +23,10 @@ export const team: TeamMember[] = [
   //   photo: "/team/full-name.jpg",
   // },
 ];
+
+export const joinCard = {
+  title: "We're growing",
+  body: "We work with engineers, designers and data people who want to build for African businesses.",
+  linkLabel: "Get in touch",
+  emailSubject: "Joining Afrokan Labs",
+};

@@ -2,34 +2,13 @@ import Image from "next/image";
 import { Nav } from "@/components/Nav";
 import { Mark, MARK_PATH, Wordmark } from "@/components/Mark";
 import { ContactForm } from "@/components/ContactForm";
-import { site, team } from "@/site.config";
-
-const services = [
-  {
-    title: "Websites",
-    body: "Fast, mobile-first sites that explain what you do and turn visitors into enquiries. Built to load well on Ghanaian mobile data, and easy for your team to update.",
-    examples: "Company sites, landing pages, online catalogues",
-  },
-  {
-    title: "AI assistants and chatbots",
-    body: "Assistants that answer customer questions on WhatsApp or your website, using your own documents, prices and policies, so your staff stop answering the same question fifty times a day.",
-    examples: "WhatsApp assistants, website chat, internal knowledge bots",
-  },
-  {
-    title: "Backend and workflow systems",
-    body: "The tools behind the counter: dashboards, document generators, booking and records systems that replace spreadsheets, paper forms and copy-paste work.",
-    examples: "Admin dashboards, document generators, automations",
-  },
-];
-
-const steps = [
-  { title: "Discovery call", body: "We learn how your business runs today and where time or money leaks out." },
-  { title: "Plan and quote", body: "You get a clear scope, timeline and fixed price before any work starts." },
-  { title: "Build in short cycles", body: "We show you working pieces every week, so there are no surprises at the end." },
-  { title: "Launch and support", body: "We go live with you, train your team, and stay on hand as you grow." },
-];
-
-const whatsappHref = site.whatsapp ? `https://wa.me/${site.whatsapp}` : "";
+import { site, whatsappHref } from "@/content/site";
+import { services, servicesIntro } from "@/content/services";
+import { steps, processTitle } from "@/content/process";
+import { products, productsIntro } from "@/content/products";
+import { team, teamTitle, joinCard } from "@/content/team";
+import { work, workTitle } from "@/content/work";
+import { hero, mission, contact } from "@/content/home";
 
 export default function Home() {
   return (
@@ -48,18 +27,15 @@ export default function Home() {
           <div className="container hero-inner">
             <p className="hero-tagline">{site.tagline.join("  ·  ")}</p>
             <h1 id="hero-title" className="hero-title">
-              Software and AI built for the way Ghanaian businesses work.
+              {hero.title}
             </h1>
-            <p className="hero-lede">
-              Afrokan Labs builds websites, AI assistants and backend systems that take repetitive work off your
-              team&apos;s hands. We start in Ghana, and we&apos;re building for the whole continent.
-            </p>
+            <p className="hero-lede">{hero.lede}</p>
             <div className="hero-actions">
-              <a href="#contact" className="btn btn--green">
-                Start a project
+              <a href={hero.primary.href} className="btn btn--green">
+                {hero.primary.label}
               </a>
-              <a href="#work" className="btn btn--ghost-dark">
-                See our work
+              <a href={hero.secondary.href} className="btn btn--ghost-dark">
+                {hero.secondary.label}
               </a>
             </div>
           </div>
@@ -70,12 +46,9 @@ export default function Home() {
           <div className="container split">
             <div className="split-head">
               <h2 id="services-title" className="h2">
-                What we build
+                {servicesIntro.title}
               </h2>
-              <p className="muted">
-                Three kinds of work, often combined. Most clients start with one and add the others as the first one pays
-                off.
-              </p>
+              <p className="muted">{servicesIntro.body}</p>
             </div>
             <ul className="service-list">
               {services.map((s) => (
@@ -93,52 +66,26 @@ export default function Home() {
         <section id="work" className="section dark" aria-labelledby="work-title">
           <div className="container">
             <h2 id="work-title" className="h2">
-              Recent work
+              {workTitle}
             </h2>
 
-            <article className="case">
-              <div className="case-text">
-                <p className="case-client">ESE Logistic Solution Limited</p>
-                <h3 className="case-title">A website, a document tool and a WhatsApp assistant for a logistics company</h3>
-                <p className="muted-dark">
-                  ESE&apos;s customers kept asking the same questions about shipments and paperwork. We built them a
-                  marketing website, a generator that tells each customer exactly which documents to prepare, and an AI
-                  assistant on WhatsApp that answers questions from ESE&apos;s own information, day or night.
-                </p>
-                <dl className="case-facts">
-                  <div>
-                    <dt>Delivered</dt>
-                    <dd>Website, document checklist generator, WhatsApp AI assistant</dd>
-                  </div>
-                  <div>
-                    <dt>Built under</dt>
-                    <dd>Deuel&apos;s Designs, an Afrokan Labs product</dd>
-                  </div>
-                </dl>
-              </div>
-
-              <figure className="chat" aria-label="Illustrative WhatsApp conversation with the assistant">
-                <div className="chat-head">
-                  <span className="chat-avatar">
-                    <Mark />
-                  </span>
-                  <span>
-                    <strong>ESE Assistant</strong>
-                    <small>online</small>
-                  </span>
+            {work.map((c) => (
+              <article key={c.slug} className="case">
+                <div className="case-text">
+                  <p className="case-client">{c.client}</p>
+                  <h3 className="case-title">{c.title}</h3>
+                  <p className="muted-dark">{c.summary}</p>
+                  <dl className="case-facts">
+                    {c.facts.map((f) => (
+                      <div key={f.label}>
+                        <dt>{f.label}</dt>
+                        <dd>{f.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
                 </div>
-                <div className="chat-body">
-                  <p className="bubble bubble--in">Hi, which documents do I need for my import shipment?</p>
-                  <p className="bubble bubble--out">
-                    For most imports you&apos;ll need the bill of lading, commercial invoice and packing list. Tell me
-                    what you&apos;re shipping and I&apos;ll send your full checklist.
-                  </p>
-                  <p className="bubble bubble--in">Used vehicle from the UK</p>
-                  <p className="bubble bubble--out">Got it. Here&apos;s your checklist 📄</p>
-                </div>
-                <figcaption>Illustration of the assistant&apos;s flow</figcaption>
-              </figure>
-            </article>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -146,7 +93,7 @@ export default function Home() {
         <section className="section light" aria-labelledby="process-title">
           <div className="container">
             <h2 id="process-title" className="h2">
-              How a project runs
+              {processTitle}
             </h2>
             <ol className="steps">
               {steps.map((s, i) => (
@@ -167,26 +114,30 @@ export default function Home() {
           <div className="container">
             <div className="split-head split-head--wide">
               <h2 id="products-title" className="h2">
-                Our products
+                {productsIntro.title}
               </h2>
-              <p className="muted">Afrokan Labs is the home for a growing family of products and services.</p>
+              <p className="muted">{productsIntro.body}</p>
             </div>
             <div className="products">
-              <article className="product">
-                <p className="product-name">Deuel&apos;s Designs</p>
-                <p>
-                  Our web and digital design studio. Deuel&apos;s Designs takes on client websites and platforms, from
-                  brand-new company sites to full systems like the ESE Logistic build.
-                </p>
-                <a href="#contact" className="link">
-                  Work with Deuel&apos;s Designs
-                </a>
-              </article>
-              <article className="product product--soon" aria-label="More products coming">
-                <Mark className="product-soon-mark" />
-                <p className="product-name">More in the lab</p>
-                <p className="muted">New products for African businesses are in development. Watch this space.</p>
-              </article>
+              {products.map((p) =>
+                p.comingSoon ? (
+                  <article key={p.name} className="product product--soon">
+                    <Mark className="product-soon-mark" />
+                    <p className="product-name">{p.name}</p>
+                    <p className="muted">{p.body}</p>
+                  </article>
+                ) : (
+                  <article key={p.name} className="product">
+                    <p className="product-name">{p.name}</p>
+                    <p>{p.body}</p>
+                    {p.link && (
+                      <a href={p.link.href} className="link">
+                        {p.link.label}
+                      </a>
+                    )}
+                  </article>
+                ),
+              )}
             </div>
           </div>
         </section>
@@ -195,7 +146,7 @@ export default function Home() {
         <section id="team" className="section light" aria-labelledby="team-title">
           <div className="container">
             <h2 id="team-title" className="h2">
-              The team
+              {teamTitle}
             </h2>
             <div className="team">
               {team.map((m) => (
@@ -217,12 +168,10 @@ export default function Home() {
                 </article>
               ))}
               <article className="person person--join">
-                <p className="h3">We&apos;re growing</p>
-                <p className="muted">
-                  We work with engineers, designers and data people who want to build for African businesses.
-                </p>
-                <a className="link" href={`mailto:${site.email}?subject=Joining%20Afrokan%20Labs`}>
-                  Get in touch
+                <p className="h3">{joinCard.title}</p>
+                <p className="muted">{joinCard.body}</p>
+                <a className="link" href={`mailto:${site.email}?subject=${encodeURIComponent(joinCard.emailSubject)}`}>
+                  {joinCard.linkLabel}
                 </a>
               </article>
             </div>
@@ -234,13 +183,9 @@ export default function Home() {
           <div className="hero-streak hero-streak--soft" aria-hidden="true" />
           <div className="container mission-inner">
             <h2 id="mission-title" className="mission-title">
-              Ghana first. Then the rest of Africa.
+              {mission.title}
             </h2>
-            <p className="muted-dark">
-              Most software is designed somewhere else and adapted for us later. We do it the other way round: we build
-              for how businesses here actually operate, with mobile money, WhatsApp-first customers and patchy
-              connections in mind. What works in Accra becomes the base for products across the continent.
-            </p>
+            <p className="muted-dark">{mission.body}</p>
           </div>
         </section>
 
@@ -249,12 +194,9 @@ export default function Home() {
           <div className="container split">
             <div className="split-head">
               <h2 id="contact-title" className="h2">
-                Start a project
+                {contact.title}
               </h2>
-              <p className="muted-dark">
-                Tell us what&apos;s slowing your business down. We&apos;ll reply within two working days with
-                questions or a first idea.
-              </p>
+              <p className="muted-dark">{contact.body}</p>
               <ul className="contact-direct">
                 <li>
                   <span>Email</span>
@@ -264,7 +206,7 @@ export default function Home() {
                   <li>
                     <span>WhatsApp</span>
                     <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
-                      Chat with us
+                      {contact.whatsappLabel}
                     </a>
                   </li>
                 )}
@@ -272,7 +214,7 @@ export default function Home() {
                   <li>
                     <span>Call</span>
                     <a href={site.bookingUrl} target="_blank" rel="noopener noreferrer">
-                      Book a 20-minute call
+                      {contact.bookingLabel}
                     </a>
                   </li>
                 )}
