@@ -89,6 +89,11 @@ export const Project = z.object({
 
 // ----- Site facts -----
 
+const NavLink = z.object({
+  label: z.string().min(1),
+  href: z.string().regex(/^\/(?!\/)/, "Internal links start with a single /"),
+});
+
 export const Site = z.object({
   name: z.literal("Afrokan Labs"),
   domain: z.string(),
@@ -113,7 +118,15 @@ export const Site = z.object({
     opensWhatsApp: z.string().min(1),
     opensNewTab: z.string().min(1),
     status: z.object({ live: z.string().min(1), delivered: z.string().min(1) }),
+    nav: z.object({
+      main: z.string().min(1),
+      footer: z.string().min(1),
+      menu: z.string().min(1),
+      close: z.string().min(1),
+    }),
   }),
+  nav: z.object({ items: z.array(NavLink).min(1), cta: z.string().min(1) }),
+  footer: z.object({ links: z.array(NavLink).min(1), linkedinLabel: z.string().min(1) }),
   social: z.object({
     linkedin: orTodo(z.url(), "the LinkedIn page URL").optional(),
   }),

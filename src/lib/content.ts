@@ -109,6 +109,24 @@ export async function getProjectBody(slug: string) {
   return compileBody(file);
 }
 
+// ----- Navigation -----
+
+/**
+ * Header and footer links. /work exists only while a project is visible
+ * (architecture §4), so "Work" is dropped otherwise: the site never links
+ * to a page that does not exist.
+ */
+export function getNav() {
+  const { nav, footer } = getSite();
+  const hasWork = getProjects().length > 0;
+  const keep = (l: { href: string }) => hasWork || l.href !== "/work";
+  return {
+    items: nav.items.filter(keep),
+    cta: nav.cta,
+    footerLinks: footer.links.filter(keep),
+  };
+}
+
 // ----- Tier-derived copy (architecture §4) -----
 
 const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
