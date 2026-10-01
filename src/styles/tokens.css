@@ -117,6 +117,27 @@
   /* §8 SiteHeader: desktop header height, used for scroll-padding-top */
   --header-height: 64px;
 
+  /* §8 Button: 48px tall on mobile (44px from 1024px), 20px side padding,
+     20px WhatsApp glyph, 40% opacity when disabled, scale 0.98 when pressed */
+  --button-height: 48px;
+  --button-padding-x: 20px;
+  --icon-size: 20px;
+  --disabled-opacity: 0.4;
+  --press-scale: 0.98;
+
+  /* §8 Button secondary: 1px --ink border; §2 dark band: --rule-on-dark hairlines */
+  --border-ink: 1px solid var(--ink);
+  --border-hair-on-dark: 1px solid var(--rule-on-dark);
+
+  /* §10: tap targets at least 44×44px */
+  --tap-target: 44px;
+
+  /* §8 TextLink: 1px underline at rest */
+  --link-underline: 1px;
+
+  /* §8 StatusChip: 8px dot */
+  --dot-size: 8px;
+
   /* §5 grid table: columns and gutter per breakpoint */
   --grid-columns: 4;
   --grid-gutter: var(--space-4); /* 16px */
@@ -132,6 +153,7 @@
 @media (min-width: 1024px) {
   :root {
     --grid-columns: 12;
+    --button-height: 44px;
     --grid-gutter: var(--space-5); /* 24px */
   }
 }

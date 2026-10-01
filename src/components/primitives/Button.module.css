@@ -1,0 +1,78 @@
+/* design-system §8 Button. */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--button-height);
+  padding-inline: var(--button-padding-x);
+  border: 0;
+  border-radius: var(--radius-s);
+  font-family: inherit;
+  font-size: var(--text-body);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-small);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+
+.primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--ink);
+  border: var(--border-ink);
+}
+
+.onDark {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* On the dark band the focus ring uses the dark-band accent. */
+.onDark:focus-visible {
+  outline-color: var(--accent-on-dark);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--ink);
+}
+
+/* Hover only on devices that hover: on Android a tapped button keeps its hover style. */
+@media (hover: hover) {
+  .primary:hover {
+    background: var(--ink-hover);
+  }
+
+  .secondary:hover {
+    background: var(--surface-2);
+  }
+}
+
+.button:active {
+  transform: scale(var(--press-scale));
+}
+
+.button:disabled {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.icon {
+  flex: none;
+  width: var(--icon-size);
+  height: var(--icon-size);
+}

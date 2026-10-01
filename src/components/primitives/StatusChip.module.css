@@ -1,0 +1,30 @@
+/* design-system §8 StatusChip: 8px dot plus mono label. */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.dot {
+  flex: none;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: 50%;
+  background: currentcolor;
+}
+
+/* --live is used only here, for a system that is genuinely live (§2). */
+.live {
+  color: var(--live);
+}
+
+.delivered {
+  color: var(--ink-2);
+}

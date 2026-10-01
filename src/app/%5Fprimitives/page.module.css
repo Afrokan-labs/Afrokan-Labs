@@ -1,0 +1,59 @@
+/* Temporary primitives page. Tokens only. */
+
+.page {
+  padding-block: var(--section-y) 0;
+}
+
+.title {
+  margin-block: var(--space-3) var(--space-9);
+}
+
+.block {
+  padding-block-end: var(--space-9);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  align-items: center;
+  margin-block-end: var(--space-5);
+}
+
+.narrow {
+  max-width: var(--container);
+  width: min(100%, calc(var(--space-11) * 2));
+}
+
+.gridDemo {
+  row-gap: var(--space-5);
+}
+
+.cell {
+  grid-column: span 4;
+  padding-block-start: var(--space-4);
+  border-top: var(--border-strong);
+}
+
+.rules {
+  display: grid;
+  gap: var(--space-5);
+  margin-block-start: var(--space-7);
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: calc(var(--space-11) * 3);
+}
+
+.dark {
+  padding-block: var(--section-y);
+  background: var(--ink);
+  color: var(--on-dark);
+}
+
+.dark h2 {
+  margin-block-end: var(--space-7);
+}

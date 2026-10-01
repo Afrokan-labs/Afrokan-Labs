@@ -108,7 +108,12 @@ export const Site = z.object({
   }),
   /** Open decision #2 (docs/content/README.md). Off until decided. */
   demoOffer: z.object({ enabled: z.boolean() }),
-  ui: z.object({ skipLink: z.string().min(1) }),
+  ui: z.object({
+    skipLink: z.string().min(1),
+    opensWhatsApp: z.string().min(1),
+    opensNewTab: z.string().min(1),
+    status: z.object({ live: z.string().min(1), delivered: z.string().min(1) }),
+  }),
   social: z.object({
     linkedin: orTodo(z.url(), "the LinkedIn page URL").optional(),
   }),

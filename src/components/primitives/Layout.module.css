@@ -1,0 +1,18 @@
+/* design-system §6 rules. */
+
+.rule {
+  margin: 0;
+  border: 0;
+}
+
+.hair {
+  border-top: var(--border-hair);
+}
+
+.strong {
+  border-top: var(--border-strong);
+}
+
+.onDark {
+  border-top: var(--border-hair-on-dark);
+}
