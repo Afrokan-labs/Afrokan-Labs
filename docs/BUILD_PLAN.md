@@ -31,7 +31,7 @@ These don't block development; they block **launch**. Until they're done, the re
 
 ## Phase 2: Homepage
 
-- [ ] **2.1 Primitives.** Button, TextLink, MetaLabel, StatusChip, Container, Grid, Rule, ResponsiveImage, plus `lib/whatsapp.ts` and `lib/analytics.ts` (`track()` no-ops without an ID; typed union of every event and location in architecture §7).
+- [x] **2.1 Primitives.** Button, TextLink, MetaLabel, StatusChip, Container, Grid, Rule, ResponsiveImage, plus `lib/whatsapp.ts` and `lib/analytics.ts` (`track()` no-ops without an ID; typed union of every event and location in architecture §7).
   - Accept: a temporary `/_primitives` page renders all of them (delete it before launch); keyboard focus is visible on every interactive element.
 - [ ] **2.2 Layout.** SiteHeader, SiteFooter, MenuSheet (client component on native `<dialog>` with `showModal()`, per design-system §8).
   - Accept: the menu is fully keyboard-operable, focus returns to the toggle on close, and it works at 320px width.

@@ -2,19 +2,49 @@
   "ci": {
     "collect": {
       "staticDistDir": "./out",
-      "numberOfRuns": 3
+      "numberOfRuns": 3,
+      "autodiscoverUrlBlocklist": ["/_primitives.html"]
     },
     "assert": {
       "assertions": {
-        "categories:performance": ["error", { "minScore": 0.9, "aggregationMethod": "median-run" }],
-        "categories:accessibility": ["error", { "minScore": 1 }],
-        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.05 }],
+        "categories:performance": [
+          "error",
+          {
+            "minScore": 0.9,
+            "aggregationMethod": "median-run"
+          }
+        ],
+        "categories:accessibility": [
+          "error",
+          {
+            "minScore": 1
+          }
+        ],
+        "cumulative-layout-shift": [
+          "error",
+          {
+            "maxNumericValue": 0.05
+          }
+        ],
         "largest-contentful-paint": [
           "error",
-          { "maxNumericValue": 2500, "aggregationMethod": "median-run" }
+          {
+            "maxNumericValue": 2500,
+            "aggregationMethod": "median-run"
+          }
         ],
-        "total-byte-weight": ["error", { "maxNumericValue": 1000000 }],
-        "resource-summary:script:size": ["error", { "maxNumericValue": 120000 }]
+        "total-byte-weight": [
+          "error",
+          {
+            "maxNumericValue": 1000000
+          }
+        ],
+        "resource-summary:script:size": [
+          "error",
+          {
+            "maxNumericValue": 120000
+          }
+        ]
       }
     },
     "upload": {

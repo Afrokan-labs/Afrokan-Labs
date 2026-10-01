@@ -53,6 +53,7 @@ The remaining sections and the case study page are rebuilt in Phases 2 and 3.
 | 5 | Existing founder photo | Move to `assets/images/`; use until the Phase 0 photo session |
 | 6 | CLS target | ≤ 0.05 in CI; 0 is the design goal |
 | 7 | "More case studies as projects launch." (design-system §9) | Dropped, per the CLAUDE.md no-filler rule |
+| 8   | Font loading: `display: swap` (design-system §3) vs zero font shift (§11) | Keep `swap` (2026-10-01). Text may re-wrap when the font arrives; CLS stays within the 0.05 CI budget. `/_primitives` is excluded from Lighthouse |
 
 ## Notes
 

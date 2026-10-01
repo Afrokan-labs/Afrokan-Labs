@@ -1,0 +1,45 @@
+/* Assistant-side bubble with three dots that fade in turn (opacity only, §7). */
+
+.indicator {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-self: flex-end;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-chat);
+  border-end-end-radius: var(--radius-s);
+  background: var(--chat-assistant);
+}
+
+.dot {
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: 50%;
+  background: var(--ink-2);
+  animation: pulse calc(var(--dur-slow) * 3) var(--ease) infinite;
+}
+
+.dot:nth-child(2) {
+  animation-delay: var(--dur-slow);
+}
+
+.dot:nth-child(3) {
+  animation-delay: calc(var(--dur-slow) * 2);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* The global reduced-motion rule shortens animations to 0.01ms, which makes an infinite loop flicker. */
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation: none;
+  }
+}
