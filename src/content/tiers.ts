@@ -18,6 +18,15 @@ export const tierCopy = {
     // system that is delivered but not confirmed live.
     delivered: "TODO_CAPTION_DELIVERED",
   },
+  /**
+   * Read before each bubble by screen readers (design-system §8 ChatThread).
+   * The anonymised assistant label is not in the docs; it avoids naming the client.
+   */
+  speakerLabels: {
+    customer: "Customer:",
+    assistantNamed: "{short} assistant:",
+    assistantAnonymised: "Assistant:",
+  },
   /** Short client names used in captions at the named tier, by project slug. */
   shortNames: {
     "ese-logistic": "ESE",

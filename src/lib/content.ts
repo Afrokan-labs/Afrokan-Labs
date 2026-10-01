@@ -155,6 +155,36 @@ export function getConversationCaption(p: schema.Project): string | undefined {
   return copy.conversationCaption.named.replace("{short}", short);
 }
 
+/** Screen-reader speaker labels for the conversation, by tier. */
+export function getSpeakerLabels(p: schema.Project) {
+  const copy = getTierCopy();
+  const short = copy.shortNames[p.slug];
+  const assistant =
+    p.client.nameApproved && short
+      ? copy.speakerLabels.assistantNamed.replace("{short}", short)
+      : copy.speakerLabels.assistantAnonymised;
+  return { customer: copy.speakerLabels.customer, assistant };
+}
+
+/** StatusChip labels, e.g. { live: "Live since May 2026", delivered: "Delivered" }. */
+export function getStatusLabels(p: schema.Project) {
+  const { status } = getSite().ui;
+  const live = p.liveSince
+    ? status.liveSince.replace("{date}", formatMonth(p.liveSince))
+    : status.live;
+  return { live, delivered: status.delivered };
+}
+
+/** "2026-05" -> "May 2026". */
+function formatMonth(yyyyMm: string): string {
+  const [y, m] = yyyyMm.split("-").map(Number);
+  return new Intl.DateTimeFormat("en-GB", {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(Date.UTC(y, m - 1, 1)));
+}
+
 // ----- Validation entry point (pnpm content:validate) -----
 
 /** Validates every content file, drafts included, and compiles every MDX body. */

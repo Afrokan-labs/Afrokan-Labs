@@ -1,0 +1,79 @@
+/*
+ * design-system §8 Hero. Mobile (360px first): headline, subhead, proof line
+ * and the WhatsApp button within one screen; the conversation lives in
+ * Featured work below 1024px.
+ */
+
+.hero {
+  padding-block: var(--space-8) var(--section-y);
+}
+
+.inner {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.text {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: start;
+}
+
+.subhead {
+  font-size: var(--text-body-l);
+  line-height: var(--leading-body-l);
+  color: var(--ink-2);
+}
+
+.proof {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-6);
+  margin-block-start: var(--space-3);
+}
+
+/* The animated copy of the conversation: desktop only (§8 ChatThread placement). */
+.device {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding-block-start: var(--space-10);
+  }
+
+  .inner {
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    column-gap: var(--grid-gutter);
+    align-items: center;
+  }
+
+  .text {
+    grid-column: 1 / span 8;
+  }
+
+  /* §5 asymmetric split: 7 columns of text, 5 for the phone outline. */
+  .withChat .text {
+    grid-column: 1 / span 7;
+  }
+
+  .device {
+    display: block;
+    grid-column: 8 / span 5;
+    padding: var(--space-5);
+    border: var(--border-hair);
+    border-radius: var(--radius-m);
+    background: var(--paper);
+    box-shadow: var(--shadow-device);
+  }
+}

@@ -1,0 +1,56 @@
+/* design-system §8 ChatThread. */
+
+.figure {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.thread {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.typing {
+  position: absolute;
+  inset-inline-end: 0;
+}
+
+.caption {
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+  color: var(--ink-2);
+}
+
+/*
+ * Avoiding the flash of complete content (§8), as written in the design doc:
+ * hide unplayed bubbles only when JS runs and motion is allowed. Hidden
+ * bubbles use opacity, not display, so their space is reserved and nothing
+ * shifts when they appear.
+ */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  /* Messages arrive over --dur-slow (§7). */
+  .thread[data-state="animating"] [data-step] {
+    transition: opacity var(--dur-slow) var(--ease);
+  }
+
+  .thread[data-state="idle"] [data-step]:not([data-step="0"]) {
+    opacity: 0;
+
+    /* Failsafe: if JS hasn't taken over within 4s (slow 3G, failed bundle), show everything */
+    animation: chat-failsafe 0s 4s forwards;
+  }
+
+  /* While animating, JS reveals bubbles by setting data-shown on each one */
+  .thread[data-state="animating"] [data-step]:not([data-shown]) {
+    opacity: 0;
+  }
+}
+
+@keyframes chat-failsafe {
+  to {
+    opacity: 1;
+  }
+}
