@@ -1,0 +1,119 @@
+/*
+ * Afrokan Labs design tokens.
+ *
+ * Every brand value lives here. Global styles and the section CSS Modules
+ * only reference these variables, so most of the final design can be
+ * applied by editing this file.
+ *
+ * Breakpoints can't be custom properties inside media queries. The ones
+ * used across the CSS Modules are:
+ *   --bp-sm: 600px   (single column, stacked form rows)
+ *   --bp-md: 900px   (split layouts collapse, mobile nav)
+ */
+:root {
+  /* ----- Brand colours ----- */
+  --color-black: #0b0b0b;
+  --color-green: #00c853;
+  --color-gray: #f2f3f5;
+  --color-white: #ffffff;
+
+  /* ----- Supporting colours ----- */
+  --color-green-deep: #00963f;
+  --color-green-hover: #2bdc72;
+  --color-black-raised: #151616;
+  --color-text-muted: #50565c;
+  --color-text-muted-dark: #a3a8ad;
+  --color-text-faint-dark: #6f7479;
+  --color-line: #dcdee2;
+  --color-line-dark: #262828;
+  --color-line-strong: #b9bdc3;
+  --color-field-border: #333636;
+  --color-field-border-hover: #4a4e4e;
+  --color-error-bg: rgba(255, 82, 82, 0.1);
+  --color-error-border: rgba(255, 82, 82, 0.35);
+  --color-error-text: #ffb3b3;
+  --color-success-bg: rgba(0, 200, 83, 0.06);
+
+  /* ----- Surfaces (dark / light / gray sections) ----- */
+  --surface-dark-bg: var(--color-black);
+  --surface-dark-raised: var(--color-black-raised);
+  --surface-dark-text: var(--color-white);
+  --surface-dark-muted: var(--color-text-muted-dark);
+  --surface-dark-line: var(--color-line-dark);
+
+  --surface-light-bg: var(--color-white);
+  --surface-gray-bg: var(--color-gray);
+  --surface-light-text: var(--color-black);
+  --surface-light-muted: var(--color-text-muted);
+  --surface-light-line: var(--color-line);
+
+  --color-accent: var(--color-green);
+  --color-accent-on-light: var(--color-green-deep);
+
+  /* ----- Placeholders (skeleton only) ----- */
+  --placeholder-bg: rgba(128, 128, 128, 0.12);
+  --placeholder-border: rgba(128, 128, 128, 0.5);
+
+  /* ----- Typography ----- */
+  --font-sans: "Sora Variable", "Sora", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --text-xs: 0.78rem;
+  --text-sm: 0.9rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.15rem;
+  --text-h3: 1.3rem;
+  --text-h2: clamp(2rem, 4.2vw, 3.25rem);
+  --text-h1: clamp(2.6rem, 6.6vw, 5.6rem);
+  --text-display: clamp(2.4rem, 6vw, 4.75rem);
+  --text-case-title: clamp(1.6rem, 3vw, 2.35rem);
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --leading-tight: 1.05;
+  --leading-snug: 1.25;
+  --leading-body: 1.6;
+
+  --tracking-tight: -0.035em;
+  --tracking-snug: -0.02em;
+
+  /* ----- Spacing scale ----- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 2rem;
+  --space-8: 2.5rem;
+  --space-9: 3rem;
+  --space-10: 4rem;
+  --space-11: 6rem;
+
+  /* ----- Radii ----- */
+  --radius-s: 8px;
+  --radius-m: 14px;
+  --radius-l: 22px;
+  --radius-pill: 999px;
+
+  /* ----- Layout ----- */
+  --container: 1180px;
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --section-y: clamp(4.5rem, 10vw, 8.5rem);
+  --nav-height: 4.5rem;
+  --grid-gap: clamp(2.5rem, 6vw, 6rem);
+
+  /* ----- Interaction ----- */
+  --focus-ring: 2px solid var(--color-green);
+  --focus-offset: 3px;
+  --duration-fast: 0.18s;
+  --control-height: 3rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0s;
+  }
+}
