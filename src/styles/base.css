@@ -116,6 +116,9 @@ textarea {
 
 .skip-link {
   position: absolute;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
   top: var(--space-2);
   left: var(--space-2);
   z-index: 100;

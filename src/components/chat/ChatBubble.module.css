@@ -1,0 +1,21 @@
+/* --radius-chat on three corners, --radius-s (4px) on the tail corner (§6). */
+
+.bubble {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-chat);
+  color: var(--ink);
+  font-size: var(--text-body);
+  line-height: var(--leading-small);
+}
+
+.customer {
+  align-self: flex-start;
+  background: var(--surface-2);
+  border-end-start-radius: var(--radius-s);
+}
+
+.assistant {
+  align-self: flex-end;
+  background: var(--chat-assistant);
+  border-end-end-radius: var(--radius-s);
+}
