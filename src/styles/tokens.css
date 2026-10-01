@@ -114,8 +114,13 @@
   --focus-ring: 2px solid var(--accent);
   --focus-offset: 2px;
 
-  /* §8 SiteHeader: desktop header height, used for scroll-padding-top */
+  /* §8 SiteHeader: 64px desktop (sticky, also scroll-padding-top), 56px mobile */
   --header-height: 64px;
+  --header-height-mobile: 56px;
+
+  /* §8 MenuSheet: links at 24px, 56px row height */
+  --menu-link-size: 1.5rem;
+  --menu-row-height: 56px;
 
   /* §8 Button: 48px tall on mobile (44px from 1024px), 20px side padding,
      20px WhatsApp glyph, 40% opacity when disabled, scale 0.98 when pressed */

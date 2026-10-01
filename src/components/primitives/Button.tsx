@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes, MouseEventHandler, ReactNode, Ref } from "react";
 import type { TrackingAttrs } from "@/lib/analytics";
 import styles from "./Button.module.css";
 
@@ -16,9 +16,16 @@ type CommonProps = Partial<TrackingAttrs> & {
   children: ReactNode;
 };
 
-type LinkProps = CommonProps & { href: string };
+type LinkProps = CommonProps & {
+  href: string;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
+  ref?: Ref<HTMLAnchorElement>;
+};
 type NativeButtonProps = CommonProps &
-  Omit<ButtonHTMLAttributes<HTMLButtonElement>, keyof CommonProps> & { href?: undefined };
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, keyof CommonProps> & {
+    href?: undefined;
+    ref?: Ref<HTMLButtonElement>;
+  };
 
 /**
  * design-system §8 Button. Renders a link when given href, otherwise a button.

@@ -38,10 +38,7 @@ export default function PrimitivesPage() {
   const services = getServices();
 
   return (
-    <main id="top" className={styles.page}>
-      <a href="#top" className="skip-link">
-        {site.ui.skipLink}
-      </a>
+    <main id="main" className={styles.page}>
       <Container>
         <MetaLabel>Internal · delete before launch</MetaLabel>
         <h1 className={styles.title}>Primitives</h1>
