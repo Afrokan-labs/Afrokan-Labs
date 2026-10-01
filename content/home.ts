@@ -38,3 +38,19 @@ export const contactForm = {
   sentTitle: "Message sent.",
   sentBody: "We reply within two working days. If it's urgent, email",
 };
+
+/** Shared copy for /work/[slug] pages. */
+export const caseStudyPage = {
+  backLabel: "← All work",
+  sectionTitles: { problem: "The problem", built: "What we built", result: "The result" },
+  ctaTitle: "Start a project",
+  ctaLabel: "Get in touch",
+  ctaHref: "/#contact",
+};
+
+export const notFoundPage = {
+  eyebrow: "404",
+  title: "We couldn't find that page.",
+  body: "The link may be broken, or the page may have moved.",
+  linkLabel: "Back to the home page",
+};
