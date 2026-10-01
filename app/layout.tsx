@@ -1,30 +1,13 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import "@fontsource-variable/sora";
 import "@/styles/tokens.css";
 import "./globals.css";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { site } from "@/content/site";
 
+// Per-page titles, descriptions and Open Graph tags come in BUILD_PLAN 3.3.
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: {
-    default: "Afrokan Labs | Websites, AI assistants and business software in Ghana",
-    template: "%s | Afrokan Labs",
-  },
-  description: site.description,
-  openGraph: {
-    title: "Afrokan Labs",
-    description: "Websites, AI assistants and business software for Ghanaian businesses.",
-    url: site.url,
-    siteName: site.name,
-    locale: "en_GH",
-    type: "website",
-  },
-};
-
-export const viewport: Viewport = {
-  // Keep in sync with --color-black in styles/tokens.css.
-  themeColor: "#0B0B0B",
+  title: site.name,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -35,7 +18,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         {children}
-        <WhatsAppButton />
       </body>
     </html>
   );
