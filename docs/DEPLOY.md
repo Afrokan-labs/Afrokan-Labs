@@ -13,7 +13,9 @@ Static export (`out/`) on **Cloudflare Pages** with Git integration (architectur
 
 ## 2. Cloudflare Pages (once)
 
-Workers & Pages → Create → Pages → **Connect to Git** → choose the repository.
+Workers & Pages → Create → **Pages** tab → **Connect to Git** (or "Import an existing Git repository") → choose the repository.
+
+> **Pages, not Workers.** The Create screen opens on Workers. A Workers project asks for a **deploy command** (`npx wrangler deploy`); Wrangler then detects Next.js, tries to convert the site with the OpenNext server adapter, and fails with `ENOENT … .next/standalone/.next/server/pages-manifest.json`, because this site is a static export with no server. If the setup form shows a deploy command, go back and pick Pages. The Pages form only asks for a build command and an output directory.
 
 | Setting | Value |
 | --- | --- |
