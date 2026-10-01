@@ -33,7 +33,7 @@ These don't block development; they block **launch**. Until they're done, the re
 
 - [x] **2.1 Primitives.** Button, TextLink, MetaLabel, StatusChip, Container, Grid, Rule, ResponsiveImage, plus `lib/whatsapp.ts` and `lib/analytics.ts` (`track()` no-ops without an ID; typed union of every event and location in architecture §7).
   - Accept: a temporary `/_primitives` page renders all of them (delete it before launch); keyboard focus is visible on every interactive element.
-- [ ] **2.2 Layout.** SiteHeader, SiteFooter, MenuSheet (client component on native `<dialog>` with `showModal()`, per design-system §8).
+- [x] **2.2 Layout.** SiteHeader, SiteFooter, MenuSheet (client component on native `<dialog>` with `showModal()`, per design-system §8).
   - Accept: the menu is fully keyboard-operable, focus returns to the toggle on close, and it works at 320px width.
 - [ ] **2.3 Hero.** A server-rendered headline, subhead, tier-derived proof line and CTA, with the animated `ChatThread` (≥1024px only) as a client island implementing design-system §8 exactly: CSS pre-paint hiding, the 4s failsafe, the three JS checks, and the displayed-instance check.
   - Accept: every row of the ChatThread visitor table behaves as specified. Test JS disabled, reduced motion, and late hydration (throttle so JS arrives after 4s; the thread must not hide and replay).

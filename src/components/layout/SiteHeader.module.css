@@ -1,0 +1,70 @@
+/* design-system §8 SiteHeader. No backdrop-filter, no transparent-to-solid change. */
+
+.header {
+  background: var(--paper);
+  border-bottom: var(--border-hair);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  min-height: var(--header-height-mobile);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* Desktop navigation and button appear from 1024px; below that, MenuSheet. */
+.nav,
+.cta {
+  display: none;
+}
+
+.list {
+  display: flex;
+  gap: var(--space-6);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  color: var(--ink);
+  font-size: var(--text-body);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .link:hover {
+    color: var(--accent);
+  }
+}
+
+@media (min-width: 1024px) {
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .inner {
+    min-height: var(--header-height);
+  }
+
+  .nav {
+    display: block;
+    margin-inline-start: auto;
+  }
+
+  .cta {
+    display: block;
+  }
+}
