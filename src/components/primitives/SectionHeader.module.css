@@ -1,0 +1,12 @@
+/* §4: --space-8 between a section header and its content. */
+
+.header {
+  display: grid;
+  gap: var(--space-3);
+  margin-block-end: var(--space-8);
+}
+
+.meta {
+  display: flex;
+  gap: var(--space-3);
+}

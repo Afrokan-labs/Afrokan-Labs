@@ -1,0 +1,57 @@
+/* design-system §8 TextLink: 1px underline at rest that grows on hover, left to right. */
+
+.link {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.text {
+  position: relative;
+  display: inline-block;
+}
+
+.text::before,
+.text::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: var(--link-underline);
+  background: currentcolor;
+}
+
+.text::after {
+  height: calc(var(--link-underline) * 2);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-base) var(--ease);
+}
+
+/* §10: 44px tap target for links that stand on their own line. */
+.standalone {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+}
+
+@media (hover: hover) {
+  .link:hover {
+    color: var(--accent-hover);
+  }
+
+  .link:hover .text::after {
+    transform: scaleX(1);
+  }
+
+  .onDark:hover {
+    color: var(--accent-on-dark);
+  }
+}
+
+.onDark {
+  color: var(--accent-on-dark);
+}
+
+.onDark:focus-visible {
+  outline-color: var(--accent-on-dark);
+}

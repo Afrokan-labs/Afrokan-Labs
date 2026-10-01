@@ -23,8 +23,14 @@ export const site = {
 
   demoOffer: { enabled: false },
 
-  // Interface text. Not in homepage-copy.md; standard accessibility wording.
-  ui: { skipLink: "Skip to content" },
+  // Interface text. Skip link: standard wording, not in homepage-copy.md.
+  // The rest is from design-system.md §8 (Button, TextLink, StatusChip).
+  ui: {
+    skipLink: "Skip to content",
+    opensWhatsApp: "(opens WhatsApp)",
+    opensNewTab: "(opens in a new tab)",
+    status: { live: "Live", delivered: "Delivered" },
+  },
 
   social: {
     // Copy §7: show LinkedIn only if the page exists and is kept active.

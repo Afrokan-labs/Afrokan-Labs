@@ -1,0 +1,12 @@
+/* design-system §6 and §9: images use --radius-m; --surface-2 shows if loading fails. */
+
+.picture {
+  display: block;
+}
+
+.img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-m);
+  background: var(--surface-2);
+}
