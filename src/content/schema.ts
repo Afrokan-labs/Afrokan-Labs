@@ -117,7 +117,11 @@ export const Site = z.object({
     skipLink: z.string().min(1),
     opensWhatsApp: z.string().min(1),
     opensNewTab: z.string().min(1),
-    status: z.object({ live: z.string().min(1), delivered: z.string().min(1) }),
+    status: z.object({
+      live: z.string().min(1),
+      liveSince: z.string().includes("{date}"),
+      delivered: z.string().min(1),
+    }),
     nav: z.object({
       main: z.string().min(1),
       footer: z.string().min(1),
@@ -191,6 +195,11 @@ export const TierCopy = z.object({
     named: z.string().includes("{short}"),
     anonymised: z.string().min(1),
     delivered: orTodo(z.string().min(1), "a caption for a delivered (not live) system"),
+  }),
+  speakerLabels: z.object({
+    customer: z.string().min(1),
+    assistantNamed: z.string().includes("{short}"),
+    assistantAnonymised: z.string().min(1),
   }),
   shortNames: z.record(z.string(), z.string()),
 });
