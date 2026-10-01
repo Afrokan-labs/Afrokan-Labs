@@ -19,6 +19,8 @@ const config = {
     "selector-pseudo-class-no-unknown": [true, { ignorePseudoClasses: ["global"] }],
     // design-system.md writes alpha as a number: rgb(22 19 15 / 0.25)
     "alpha-value-notation": "number",
+    // Font family names in custom properties keep their case (Roboto, not roboto).
+    "value-keyword-case": ["lower", { ignoreProperties: ["/^--font-/"] }],
     "media-feature-range-notation": "prefix",
     "media-feature-name-value-allowed-list": {
       "min-width": ["640px", "1024px", "1440px"],

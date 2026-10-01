@@ -1,126 +1,137 @@
 /*
  * Afrokan Labs design tokens.
  *
- * Every brand value lives here. Global styles and the section CSS Modules
- * only reference these variables, so most of the final design can be
- * applied by editing this file.
+ * The first block is the token sheet from docs/design-system.md §12, copied
+ * value for value. Every raw colour, size and font value on the site lives
+ * in this file; everything else uses var(--…). Change a value in the design
+ * doc first, then here.
  *
- * Breakpoints can't be custom properties inside media queries. The ones
- * used across the CSS Modules are:
- *   --bp-sm: 600px   (single column, stacked form rows)
- *   --bp-md: 900px   (split layouts collapse, mobile nav)
+ * --font-sans: next/font self-hosts Schibsted Grotesk and generates a
+ * metric-matched "Schibsted Grotesk Fallback" face (no layout shift on load).
+ * It redefines --font-sans on <body> to include that face (src/app/layout.tsx).
+ * The value below is the design doc's stack and applies outside body.
  */
 :root {
-  /* ----- Brand colours ----- */
-  --color-black: #0b0b0b;
-  --color-green: #00c853;
-  --color-gray: #f2f3f5;
-  --color-white: #fff;
+  /* Colour */
+  --paper: #f6f3ee;
+  --surface-2: #eee9e1;
+  --ink: #16130f;
+  --ink-hover: #2b2620;
+  --ink-2: #5a534b;
+  --rule: #e2dcd3;
+  --accent: #a63f26;
+  --accent-hover: #963820;
+  --live: #2a7349;
+  --chat-assistant: #e7f0e9;
+  --on-dark: #f6f3ee;
+  --on-dark-2: #b8afa3;
+  --accent-on-dark: #e07a5a;
+  --rule-on-dark: #2e2924;
 
-  /* ----- Supporting colours ----- */
-  --color-green-deep: #00963f;
-  --color-green-hover: #2bdc72;
-  --color-black-raised: #151616;
-  --color-text-muted: #50565c;
-  --color-text-muted-dark: #a3a8ad;
-  --color-text-faint-dark: #6f7479;
-  --color-line: #dcdee2;
-  --color-line-dark: #262828;
-  --color-line-strong: #b9bdc3;
-  --color-field-border: #333636;
-  --color-field-border-hover: #4a4e4e;
-  --color-error-bg: rgb(255 82 82 / 0.1);
-  --color-error-border: rgb(255 82 82 / 0.35);
-  --color-error-text: #ffb3b3;
-  --color-success-bg: rgb(0 200 83 / 0.06);
+  /* Type */
+  --font-sans: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", monospace;
+  --text-display: clamp(2.25rem, 1.5rem + 3.33vw, 4.5rem);
+  --text-h2: clamp(1.75rem, 1.4rem + 1.48vw, 2.75rem);
+  --text-h3: clamp(1.25rem, 1.08rem + 0.74vw, 1.75rem);
+  --text-statement: clamp(1.5rem, 1.25rem + 1.11vw, 2.25rem);
+  --text-body-l: clamp(1.125rem, 1.08rem + 0.19vw, 1.25rem);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-label: clamp(0.75rem, 0.73rem + 0.09vw, 0.8125rem);
 
-  /* ----- Surfaces (dark / light / gray sections) ----- */
-  --surface-dark-bg: var(--color-black);
-  --surface-dark-raised: var(--color-black-raised);
-  --surface-dark-text: var(--color-white);
-  --surface-dark-muted: var(--color-text-muted-dark);
-  --surface-dark-line: var(--color-line-dark);
-  --surface-light-bg: var(--color-white);
-  --surface-gray-bg: var(--color-gray);
-  --surface-light-text: var(--color-black);
-  --surface-light-muted: var(--color-text-muted);
-  --surface-light-line: var(--color-line);
-  --color-accent: var(--color-green);
-  --color-accent-on-light: var(--color-green-deep);
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+  --space-11: 160px;
+  --section-y: clamp(64px, 10vw, 160px);
 
-  /* ----- Placeholders (skeleton only) ----- */
-  --placeholder-bg: rgb(128 128 128 / 0.12);
-  --placeholder-border: rgb(128 128 128 / 0.5);
+  /* Shape */
+  --radius-s: 4px;
+  --radius-m: 8px;
+  --radius-chat: 12px;
+  --border-hair: 1px solid var(--rule);
+  --border-strong: 2px solid var(--ink);
+  --shadow-device: 0 20px 40px -24px rgb(22 19 15 / 0.25);
 
-  /* ----- Typography ----- */
-  --font-sans:
-    "Sora Variable", "Sora", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --text-xs: 0.78rem;
-  --text-sm: 0.9rem;
-  --text-base: 1.0625rem;
-  --text-lg: 1.15rem;
-  --text-h3: 1.3rem;
-  --text-h2: clamp(2rem, 4.2vw, 3.25rem);
-  --text-h1: clamp(2.6rem, 6.6vw, 5.6rem);
-  --text-display: clamp(2.4rem, 6vw, 4.75rem);
-  --text-case-title: clamp(1.6rem, 3vw, 2.35rem);
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-slow: 400ms;
+
+  /* Layout */
+  --container: 1200px;
+  --container-xl: 1280px;
+  --page-margin: var(--space-4); /* 16px; becomes 32px at 640px (see §5) */
+}
+
+@media (min-width: 640px) {
+  :root {
+    --page-margin: var(--space-6);
+  }
+}
+
+/* Breakpoints are not tokens: hard-code 640px / 1024px / 1440px in media queries. */
+
+/*
+ * Values the design doc specifies outside the §12 sheet, named here so that
+ * no other file needs a raw value. Each one cites where the doc defines it.
+ * PENDING: add these to the §12 sheet in docs/design-system.md.
+ */
+/* stylelint-disable-next-line no-duplicate-selectors -- kept apart from the §12 sheet on purpose */
+:root {
+  /* §3 type scale table: weight, line height and tracking per style */
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
-  --weight-bold: 700;
-  --leading-tight: 1.05;
-  --leading-snug: 1.25;
+  --leading-display: 1.05;
+  --leading-h2: 1.1;
+  --leading-h3: 1.2;
+  --leading-statement: 1.25;
+  --leading-body-l: 1.55;
   --leading-body: 1.6;
-  --tracking-tight: -0.035em;
-  --tracking-snug: -0.02em;
+  --leading-small: 1.5;
+  --leading-label: 1.4;
+  --tracking-display: -0.02em;
+  --tracking-h2: -0.015em;
+  --tracking-h3: -0.01em;
+  --tracking-statement: -0.01em;
+  --tracking-label: 0.06em;
 
-  /* ----- Spacing scale ----- */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.5rem;
-  --space-7: 2rem;
-  --space-8: 2.5rem;
-  --space-9: 3rem;
-  --space-10: 4rem;
-  --space-11: 6rem;
+  /* §3 rules: body text line length */
+  --measure: 68ch;
 
-  /* ----- Radii ----- */
-  --radius-s: 8px;
-  --radius-m: 14px;
-  --radius-l: 22px;
-  --radius-pill: 999px;
+  /* §8 Button: focus-visible outline */
+  --focus-ring: 2px solid var(--accent);
+  --focus-offset: 2px;
 
-  /* ----- Layout ----- */
-  --container: 1180px;
-  --gutter: clamp(1.25rem, 4vw, 2.5rem);
-  --section-y: clamp(4.5rem, 10vw, 8.5rem);
-  --nav-height: 4.5rem;
-  --grid-gap: clamp(2.5rem, 6vw, 6rem);
+  /* §8 SiteHeader: desktop header height, used for scroll-padding-top */
+  --header-height: 64px;
 
-  /* ----- Interaction ----- */
-  --focus-ring: 2px solid var(--color-green);
-  --focus-offset: 3px;
-  --duration-fast: 0.18s;
-  --duration-base: 0.35s;
-  --duration-slow: 0.6s;
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --control-height: 3rem;
-
-  /* ----- Nav ----- */
-  --nav-capsule-bg: rgb(21 22 22 / 0.9);
-  --nav-capsule-border: rgb(255 255 255 / 0.08);
-  --nav-capsule-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.7);
-  --nav-blur: 16px;
-  --nav-capsule-inset: var(--space-3);
+  /* §5 grid table: columns and gutter per breakpoint */
+  --grid-columns: 4;
+  --grid-gutter: var(--space-4); /* 16px */
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (min-width: 640px) {
   :root {
-    --duration-fast: 0s;
-    --duration-base: 0s;
-    --duration-slow: 0s;
+    --grid-columns: 8;
+    --grid-gutter: 20px; /* §5 md gutter; not on the §4 spacing scale */
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --grid-columns: 12;
+    --grid-gutter: var(--space-5); /* 24px */
   }
 }
