@@ -108,6 +108,7 @@ export const Site = z.object({
   }),
   /** Open decision #2 (docs/content/README.md). Off until decided. */
   demoOffer: z.object({ enabled: z.boolean() }),
+  ui: z.object({ skipLink: z.string().min(1) }),
   social: z.object({
     linkedin: orTodo(z.url(), "the LinkedIn page URL").optional(),
   }),
@@ -176,3 +177,19 @@ export const TierCopy = z.object({
   shortNames: z.record(z.string(), z.string()),
 });
 export type TierCopy = z.infer<typeof TierCopy>;
+
+export const Home = z.object({
+  meta: z.object({ title: z.string().min(1), description: z.string().max(155) }),
+  hero: z.object({
+    headline: z.string().min(1),
+    subhead: z.string().min(1),
+    primaryCta: z.string().min(1),
+    secondaryLink: z.string().min(1),
+  }),
+  contact: z.object({
+    title: z.string().min(1),
+    /** {replyWithin} is filled from site.replyWithin. */
+    body: z.string().includes("{replyWithin}"),
+  }),
+});
+export type Home = z.infer<typeof Home>;

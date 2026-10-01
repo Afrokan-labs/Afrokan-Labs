@@ -12,7 +12,7 @@
     "format:check": "prettier --check .",
     "content:validate": "tsx scripts/validate-content.ts",
     "images": "node -e \"console.log('images: stub until BUILD_PLAN 2.6')\"",
-    "lhci": "node -e \"console.log('lhci: stub until BUILD_PLAN 1.6')\"",
+    "lhci": "lhci autorun",
     "launch:check": "tsx scripts/launch-check.ts"
   },
   "dependencies": {
@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.7",
+    "@lhci/cli": "^0.15.1",
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",

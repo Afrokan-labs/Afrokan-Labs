@@ -2,7 +2,7 @@
 
 Company website for Afrokan Labs, Accra. Next.js (App Router) with static export, TypeScript and CSS Modules over design tokens. Hosted on Cloudflare Pages.
 
-> **Status:** foundation in progress. The home page is a bare placeholder until BUILD_PLAN 1.6 (coming soon) and Phase 2 (homepage).
+> **Status:** foundation in place. `/` is a temporary coming-soon page until the homepage ships at launch (BUILD_PLAN Phase 2 and 5.1).
 
 ## Start here
 
@@ -14,6 +14,7 @@ Company website for Afrokan Labs, Accra. Next.js (App Router) with static export
 | `docs/design-system.md` | Tokens, grid, type and components                         |
 | `docs/content/`         | Approved copy and strategy                                |
 | `docs/AUDIT.md`         | What was kept and removed from the previous site, and why |
+| `docs/DEPLOY.md`        | GitHub, Cloudflare Pages and environment variable setup   |
 
 ## Run it locally
 
@@ -39,7 +40,7 @@ pnpm launch:check     # fails while any TODO_ placeholder remains
 
 `typecheck`, `lint`, `content:validate` and `build` must all pass before a change is done.
 
-`images` and `lhci` are stubs until BUILD_PLAN 2.6 and 1.6. `launch:check` lists every remaining `TODO_` with its file and line. `build` runs `content:validate` first, so invalid content stops the build.
+`images` is a stub until BUILD_PLAN 2.6. `lhci` runs Lighthouse against `out/` with the budgets in `lighthouserc.json` (needs Chrome). `launch:check` lists every remaining `TODO_` with its file and line. `build` runs `content:validate` first, so invalid content stops the build.
 
 Don't run `pnpm build` while `pnpm dev` is running. Both write to `.next/`, and the dev server breaks.
 

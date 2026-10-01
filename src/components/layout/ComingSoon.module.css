@@ -1,0 +1,91 @@
+/* Holding page. Values are tokens from src/styles/tokens.css. */
+
+.header {
+  border-bottom: var(--border-hair);
+}
+
+.headerInner {
+  display: flex;
+  align-items: center;
+  min-height: var(--space-8);
+}
+
+.brand :global(.wordmark) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--ink);
+}
+
+.brand :global(.wordmark-mark) {
+  width: var(--space-6);
+}
+
+.brand :global(.wordmark-text) {
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-h2);
+}
+
+.main {
+  display: grid;
+  gap: var(--space-9);
+  padding-block: var(--section-y);
+}
+
+.hero {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.subhead {
+  font-size: var(--text-body-l);
+  line-height: var(--leading-body-l);
+  color: var(--ink-2);
+}
+
+.contact {
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-6);
+  border-top: var(--border-strong);
+}
+
+.email {
+  font-size: var(--text-body-l);
+  color: var(--accent);
+}
+
+@media (hover: hover) {
+  .email:hover {
+    color: var(--accent-hover);
+  }
+}
+
+.location {
+  color: var(--ink-2);
+}
+
+.footer {
+  padding-block: var(--space-6);
+  border-top: var(--border-hair);
+  font-size: var(--text-small);
+  color: var(--ink-2);
+}
+
+/* Asymmetric split from 1024px (design-system §5): text left, contact right. */
+@media (min-width: 1024px) {
+  .main {
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    column-gap: var(--grid-gutter);
+    align-items: end;
+  }
+
+  .hero {
+    grid-column: 1 / span 7;
+  }
+
+  .contact {
+    grid-column: 9 / span 4;
+  }
+}
