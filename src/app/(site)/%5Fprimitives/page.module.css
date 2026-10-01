@@ -57,3 +57,10 @@
 .dark h2 {
   margin-block-end: var(--space-7);
 }
+
+.threads {
+  display: grid;
+  gap: var(--space-7);
+  margin-block-start: var(--space-7);
+  max-width: calc(var(--space-11) * 3);
+}

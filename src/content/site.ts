@@ -29,7 +29,8 @@ export const site = {
     skipLink: "Skip to content",
     opensWhatsApp: "(opens WhatsApp)",
     opensNewTab: "(opens in a new tab)",
-    status: { live: "Live", delivered: "Delivered" },
+    // Copy §2: "Live since [Month Year]"; {date} is filled from the project's liveSince.
+    status: { live: "Live", liveSince: "Live since {date}", delivered: "Delivered" },
     // Navigation controls and landmark names: standard wording, not in the copy docs.
     nav: { main: "Main", footer: "Footer", menu: "Menu", close: "Close" },
   },

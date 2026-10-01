@@ -7,6 +7,7 @@
  */
 import type { Metadata } from "next";
 import { ChatBubble } from "@/components/chat/ChatBubble";
+import { ChatThread, type ChatMessage } from "@/components/chat/ChatThread";
 import { TypingIndicator } from "@/components/chat/TypingIndicator";
 import { Button } from "@/components/primitives/Button";
 import { Container, Grid, Rule } from "@/components/primitives/Layout";
@@ -31,6 +32,16 @@ const SAMPLE_IMAGE =
   encodeURIComponent(
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#EEE9E1"/><path d="M40 260 L160 120 L240 200 L300 150 L360 260 Z" fill="#E2DCD3"/></svg>',
   );
+
+// SAMPLE messages for testing ChatThread only. Not a real conversation, never
+// shown on a public page; the hero uses the ESE-approved conversation once it exists.
+const SAMPLE_THREAD: ChatMessage[] = [
+  { speaker: "customer", text: "Sample customer message (test data)" },
+  { speaker: "assistant", text: "Sample assistant reply (test data)" },
+  { speaker: "customer", text: "Sample follow-up (test data)" },
+  { speaker: "assistant", text: "Sample second reply (test data)" },
+];
+const SAMPLE_LABELS = { customer: "Customer:", assistant: "Assistant:" };
 
 export default function PrimitivesPage() {
   const site = getSite();
@@ -148,6 +159,35 @@ export default function PrimitivesPage() {
             />
             <TypingIndicator />
           </ol>
+          <div className={styles.threads}>
+            <div data-test="animated">
+              <MetaLabel tone="muted">ChatThread · animated</MetaLabel>
+              <ChatThread
+                animate
+                messages={SAMPLE_THREAD}
+                caption="Sample caption (test data)"
+                speakerLabels={SAMPLE_LABELS}
+              />
+            </div>
+            <div data-test="static">
+              <MetaLabel tone="muted">ChatThread · static</MetaLabel>
+              <ChatThread
+                animate={false}
+                messages={SAMPLE_THREAD}
+                caption="Sample caption (test data)"
+                speakerLabels={SAMPLE_LABELS}
+              />
+            </div>
+            {/* Displayed-instance check: an animated copy that is display:none must not run timers. */}
+            <div data-test="hidden" hidden>
+              <ChatThread
+                animate
+                messages={SAMPLE_THREAD}
+                caption="Sample caption (test data)"
+                speakerLabels={SAMPLE_LABELS}
+              />
+            </div>
+          </div>
         </section>
       </Container>
 
