@@ -23,6 +23,9 @@ export const site = {
 
   demoOffer: { enabled: false },
 
+  // Interface text. Not in homepage-copy.md; standard accessibility wording.
+  ui: { skipLink: "Skip to content" },
+
   social: {
     // Copy §7: show LinkedIn only if the page exists and is kept active.
     // Set the URL, or delete this line to leave it out.

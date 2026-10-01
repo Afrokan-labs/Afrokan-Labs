@@ -10,6 +10,7 @@ import { basename, join } from "node:path";
 import matter from "gray-matter";
 import * as runtime from "react/jsx-runtime";
 import { z } from "zod";
+import { home } from "../content/home";
 import { workProcess } from "../content/process";
 import * as schema from "../content/schema";
 import { services } from "../content/services";
@@ -35,6 +36,7 @@ function parse<T extends z.ZodType>(source: string, s: T, data: unknown): z.outp
 // ----- Typed content files -----
 
 export const getSite = () => parse("src/content/site.ts", schema.Site, site);
+export const getHome = () => parse("src/content/home.ts", schema.Home, home);
 export const getServices = () => parse("src/content/services.ts", schema.Services, services);
 export const getProcess = () => parse("src/content/process.ts", schema.Process, workProcess);
 export const getTeam = () => parse("src/content/team.ts", schema.Team, team);
@@ -140,6 +142,7 @@ export function getConversationCaption(p: schema.Project): string | undefined {
 /** Validates every content file, drafts included, and compiles every MDX body. */
 export async function validateAllContent() {
   getSite();
+  getHome();
   getTierCopy();
   const services = getServices();
   const process = getProcess();
