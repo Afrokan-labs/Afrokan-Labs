@@ -26,7 +26,7 @@ These don't block development; they block **launch**. Until they're done, the re
   - Accept: each of these fails validation: `piiRedacted: false`; `writtenPermission: false`; a testimonial with `nameApproved: false`; an image with `showsClientBranding: true` and `nameApproved: false`; `published: true` with `descriptionApproved: false`; `status: "live"` with no `liveSince`.
 - [x] **1.5 Env and launch guard.** Create `lib/env.ts` (public variables only), `.env.example`, and `scripts/launch-check.ts` (scans `src/content` for `TODO_` and exits 1 listing each one).
   - Accept: `pnpm launch:check` lists the current placeholders and exits non-zero.
-- [ ] **1.6 CI and deploy.** Add `.github/workflows/ci.yml` (typecheck, lint, content:validate, build, and Lighthouse CI against `out/` with `lighthouserc.json` budgets). Add a temporary "coming soon" page at `/`. Write a `docs/DEPLOY.md` with the Cloudflare Pages settings: build command `pnpm build`, output `out`, Node version, and public env vars per environment.
+- [x] **1.6 CI and deploy.** Add `.github/workflows/ci.yml` (typecheck, lint, content:validate, build, and Lighthouse CI against `out/` with `lighthouserc.json` budgets). Add a temporary "coming soon" page at `/`. Write a `docs/DEPLOY.md` with the Cloudflare Pages settings: build command `pnpm build`, output `out`, Node version, and public env vars per environment.
   - Accept: CI passes on a PR. Franklin connects Cloudflare and confirms the preview URL works.
 
 ## Phase 2: Homepage
