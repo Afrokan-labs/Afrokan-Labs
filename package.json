@@ -16,7 +16,6 @@
     "launch:check": "node -e \"console.error('launch:check: stub until BUILD_PLAN 1.5; failing until it can scan for TODO_'); process.exit(1)\""
   },
   "dependencies": {
-    "@fontsource-variable/sora": "^5.1.0",
     "next": "15.5.27",
     "react": "19.1.9",
     "react-dom": "19.1.9"
