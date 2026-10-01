@@ -1,93 +1,65 @@
-# Afrokan Labs website
+# afrokanlabs.com
 
-Next.js 15 (App Router) and TypeScript, with no CSS framework. Content, design tokens and section components are kept separate, so copy and the final visual design can change independently.
+Company website for Afrokan Labs, Accra. Next.js (App Router) with static export, TypeScript and CSS Modules over design tokens. Hosted on Cloudflare Pages.
 
-> **Status:** structural skeleton. Decorative effects are stripped out and visuals are labelled placeholders. Search the code for `DESIGN:` and `TODO:` to see what's still open.
+> **Status:** foundation in progress. The home page is a bare placeholder until BUILD_PLAN 1.6 (coming soon) and Phase 2 (homepage).
+
+## Start here
+
+| File                    | What it decides                                           |
+| ----------------------- | --------------------------------------------------------- |
+| `CLAUDE.md`             | Stack, rules and overrides. Wins over the other docs      |
+| `docs/architecture.md`  | Architecture and reasoning                                |
+| `docs/BUILD_PLAN.md`    | Ordered tasks with acceptance criteria                    |
+| `docs/design-system.md` | Tokens, grid, type and components                         |
+| `docs/content/`         | Approved copy and strategy                                |
+| `docs/AUDIT.md`         | What was kept and removed from the previous site, and why |
 
 ## Run it locally
 
-```bash
-npm install
-npm run dev        # http://localhost:3000
-```
-
-Checks before pushing:
+Use the Node version in `.nvmrc` and pnpm.
 
 ```bash
-npx tsc --noEmit
-npm run build
+pnpm install
+pnpm dev              # http://localhost:3000
 ```
+
+## Commands
+
+```bash
+pnpm build            # static export to out/
+pnpm typecheck        # route types + tsc --noEmit
+pnpm lint             # ESLint + Stylelint (token enforcement)
+pnpm format           # Prettier
+pnpm content:validate # Zod-validate all content
+pnpm images           # optimise source images to AVIF/WebP
+pnpm lhci             # Lighthouse CI against out/
+pnpm launch:check     # fails while any TODO_ placeholder remains
+```
+
+`typecheck`, `lint`, `content:validate` and `build` must all pass before a change is done.
+
+`content:validate`, `images` and `lhci` are stubs until BUILD_PLAN 1.4, 2.6 and 1.6. `launch:check` is a stub until 1.5 and fails on purpose until then.
+
+Don't run `pnpm build` while `pnpm dev` is running. Both write to `.next/`, and the dev server breaks.
+
+## Styling rules
+
+- Every raw colour, size and font value lives in `src/styles/tokens.css`.
+- In `src/components/**`, colour, spacing and font properties must use `var(--…)`. Stylelint fails the build otherwise.
+- Media queries use only `min-width: 640px`, `1024px` or `1440px`.
 
 ## Project structure
 
 ```
-app/
-  layout.tsx              Root layout: fonts, tokens, global metadata, WhatsApp button
-  page.tsx                Home page; composes the sections in order
-  work/[slug]/            Case study pages, generated from content/work.ts
-  not-found.tsx           404 page
-  api/contact/route.ts    Contact form endpoint (sends through Resend)
-  sitemap.ts, robots.ts   SEO files
-  opengraph-image.tsx     Placeholder social share image
-  icon.svg                Favicon
-  globals.css             Reset and base element styles only
-components/
-  sections/               One component and CSS Module per home page section
-  Mark.tsx                Logo mark and wordmark (keep the path as is)
-  Placeholder.tsx         Labelled placeholder box for images and visuals
-  WhatsAppButton.tsx      Floating WhatsApp link
-content/                  All copy and data, typed
-styles/
-  tokens.css              Every brand value: colours, type, spacing, radii, layout
-  shared.module.css       Shared primitives: container, surfaces, headings, buttons, links
-public/team/              Team photos
+assets/images/   Source images (already redacted); optimised at build time
+docs/            Architecture, build plan, design system, approved copy
+src/app/         Routes, layout, sitemap, robots
+src/components/  Components (Mark.tsx is the logo; keep its path as is)
+src/content/     All copy and business facts
+src/styles/      Design tokens and base styles
 ```
 
-## Edit content
+## Environment
 
-Everything visitors read is in `content/`:
-
-| File | What's in it |
-| --- | --- |
-| `content/site.ts` | Name, domain, URL, tagline, email, WhatsApp, booking link, location, social links |
-| `content/home.ts` | Nav links, hero, mission and contact copy, and shared copy for the case study and 404 pages |
-| `content/services.ts` | The three services |
-| `content/work.ts` | Case studies. Each entry becomes a page at `/work/<slug>` and is added to the sitemap |
-| `content/process.ts` | The project steps |
-| `content/products.ts` | Products. Add an entry to add a card |
-| `content/team.ts` | Team members. Put photos in `public/team/` |
-
-- **WhatsApp:** set `whatsapp` in `content/site.ts` (digits only, e.g. `233201234567`). The floating button and contact link then appear.
-- **Booking link:** set `bookingUrl` (e.g. a Cal.com link) and a "Book a 20-minute call" link appears in the contact section.
-- **Social links:** fill in any of `social.linkedin`, `social.x` or `social.instagram` and they appear in the footer.
-
-## Apply the design
-
-1. **Tokens:** edit `styles/tokens.css`. Colours, fonts, the spacing scale, radii, container width and section padding are all defined there, and nothing else hard-codes them.
-2. **Sections:** each section's layout lives in `components/sections/<Section>.module.css`.
-3. **Visuals:** swap each `<Placeholder>` for the real image or illustration.
-4. **Effects:** `DESIGN:` comments mark where the original effects were (hero line drawing, gradient streaks, chat mock-up). The chat transcript is kept in `content/work.ts` under `illustration`.
-5. **Nav:** already in its finished design (floating capsule on scroll, green signal line for the current section, live Accra clock, full-screen mobile menu). Its values are the `--nav-*` and motion tokens in `tokens.css`; nav copy is `navMenu` in `content/home.ts`.
-
-Breakpoints are 600px and 900px. They're listed at the top of `tokens.css`, because CSS custom properties can't be used inside media queries.
-
-## Contact form
-
-The form posts to `app/api/contact/route.ts`, which sends the message through [Resend](https://resend.com).
-
-1. Create a free Resend account and verify `afrokanlabs.com` (add the DNS records it gives you).
-2. Copy `.env.example` to `.env.local` and fill in `RESEND_API_KEY`.
-3. On Vercel, add the same variables under Project → Settings → Environment Variables.
-
-Until the key is set, the form shows a clear message pointing visitors to the email address instead.
-
-## Deploy on Vercel
-
-1. Push this folder to a GitHub repo.
-2. Import the repo at vercel.com/new (it detects Next.js automatically).
-3. Add the environment variables above.
-4. In Project → Settings → Domains, add `afrokanlabs.com` and `www.afrokanlabs.com`, then set the DNS records Vercel shows you at your domain registrar.
-
-## Email on the domain
-
-`hello@afrokanlabs.com` needs a mailbox. Zoho Mail (free tier) or Google Workspace both work; add their MX records at your registrar. These sit alongside Vercel's and Resend's records without conflict.
+Copy `.env.example` to `.env.local`. Only `NEXT_PUBLIC_*` variables are used by the build. Business details such as the WhatsApp number and email are content, so they live in `src/content/site.ts`, not in env files.

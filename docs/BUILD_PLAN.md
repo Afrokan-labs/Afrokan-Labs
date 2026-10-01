@@ -18,7 +18,7 @@ These don't block development; they block **launch**. Until they're done, the re
 
 - [x] **1.1 Audit the existing repo.** Read the codebase and report: Next/React versions, router type, existing pages and components, styling approach, and anything conflicting with CLAUDE.md. Propose what to keep, change and delete. **Change no code in this task.**
   - Accept: a written report, and Franklin approves the cleanup list.
-- [ ] **1.2 Tooling.** Apply the approved cleanup. Set `output: 'export'` and `images.unoptimized`, TS strict, ESLint, Stylelint (`color-no-hex`, `stylelint-declaration-strict-value`, and `media-feature-name-value-allowed-list` for 640/1024/1440px), Prettier, `.nvmrc`, and the pnpm scripts listed in CLAUDE.md (stub `images`, `lhci` and `launch:check` if needed).
+- [x] **1.2 Tooling.** Apply the approved cleanup. Set `output: 'export'` and `images.unoptimized`, TS strict, ESLint, Stylelint (`color-no-hex`, `stylelint-declaration-strict-value`, and `media-feature-name-value-allowed-list` for 640/1024/1440px), Prettier, `.nvmrc`, and the pnpm scripts listed in CLAUDE.md (stub `images`, `lhci` and `launch:check` if needed).
   - Accept: `pnpm build` produces `out/`; a hex colour in a component's CSS fails lint; `@media (min-width: 700px)` fails lint.
 - [ ] **1.3 Design tokens and base styles.** Create `tokens.css`, `base.css` and `grid.css` **exactly** from `docs/design-system.md`. Set up the font with `next/font`, and `lang="en-GH"` in `layout.tsx`.
   - Accept: every token in the design doc exists, and no value was invented. If the design doc is missing, stop.

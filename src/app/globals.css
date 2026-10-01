@@ -13,6 +13,9 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--nav-height) + var(--space-2));
+
+  /* Safari on iOS still needs the prefix. */
+  /* stylelint-disable-next-line property-no-vendor-prefix */
   -webkit-text-size-adjust: 100%;
 }
 
@@ -26,11 +29,20 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, p, ul, ol, dl, dd, figure {
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
   margin: 0;
 }
 
-ul, ol {
+ul,
+ol {
   padding: 0;
   list-style: none;
 }
@@ -39,12 +51,16 @@ a {
   color: inherit;
 }
 
-img, svg {
+img,
+svg {
   display: block;
   max-width: 100%;
 }
 
-button, input, select, textarea {
+button,
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -59,7 +75,7 @@ button, input, select, textarea {
   width: 1px;
   height: 1px;
   overflow: hidden;
-  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
   white-space: nowrap;
 }
 
@@ -74,6 +90,7 @@ button, input, select, textarea {
   color: var(--color-black);
   font-weight: var(--weight-semibold);
 }
+
 .skip-link:focus {
   top: var(--space-4);
 }
@@ -82,6 +99,7 @@ button, input, select, textarea {
   html {
     scroll-behavior: auto;
   }
+
   *,
   *::before,
   *::after {
