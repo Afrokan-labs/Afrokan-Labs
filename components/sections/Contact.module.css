@@ -1,0 +1,25 @@
+.contact {
+  border-top: 1px solid var(--surface-dark-line);
+}
+
+.direct {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+.direct li {
+  display: grid;
+  gap: 0.1rem;
+}
+.direct span {
+  font-size: var(--text-sm);
+  color: var(--surface-dark-muted);
+}
+.direct a {
+  font-weight: var(--weight-semibold);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+  overflow-wrap: anywhere;
+}

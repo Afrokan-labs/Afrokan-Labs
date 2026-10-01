@@ -1,0 +1,119 @@
+/* Shared layout and type primitives used by several sections. */
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  position: relative;
+  padding-block: var(--section-y);
+}
+
+/* ----- Surfaces ----- */
+.dark {
+  background: var(--surface-dark-bg);
+  color: var(--surface-dark-text);
+}
+.gray {
+  background: var(--surface-gray-bg);
+  color: var(--surface-light-text);
+}
+.light {
+  background: var(--surface-light-bg);
+  color: var(--surface-light-text);
+}
+
+/* ----- Type ----- */
+.h2 {
+  font-size: var(--text-h2);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.h3 {
+  font-size: var(--text-h3);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-snug);
+}
+
+.muted {
+  color: var(--surface-light-muted);
+}
+.dark .muted,
+.mutedDark {
+  color: var(--surface-dark-muted);
+}
+
+.link {
+  display: inline-block;
+  font-weight: var(--weight-semibold);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+}
+.link:hover {
+  color: var(--color-accent-on-light);
+}
+.dark .link:hover {
+  color: var(--color-accent);
+}
+
+/* ----- Buttons ----- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-height);
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-pill);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease;
+}
+.btnPrimary {
+  background: var(--color-green);
+  color: var(--color-black);
+}
+.btnPrimary:hover {
+  background: var(--color-green-hover);
+}
+.btnPrimary:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.btnGhost {
+  border-color: currentColor;
+  color: inherit;
+  background: transparent;
+}
+
+/* ----- Two-column split: heading column + content column ----- */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: var(--grid-gap);
+  align-items: start;
+}
+.splitHead {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 26rem;
+}
+
+@media (max-width: 900px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}
