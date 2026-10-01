@@ -15,7 +15,7 @@
   --color-black: #0b0b0b;
   --color-green: #00c853;
   --color-gray: #f2f3f5;
-  --color-white: #ffffff;
+  --color-white: #fff;
 
   /* ----- Supporting colours ----- */
   --color-green-deep: #00963f;
@@ -29,10 +29,10 @@
   --color-line-strong: #b9bdc3;
   --color-field-border: #333636;
   --color-field-border-hover: #4a4e4e;
-  --color-error-bg: rgba(255, 82, 82, 0.1);
-  --color-error-border: rgba(255, 82, 82, 0.35);
+  --color-error-bg: rgb(255 82 82 / 0.1);
+  --color-error-border: rgb(255 82 82 / 0.35);
   --color-error-text: #ffb3b3;
-  --color-success-bg: rgba(0, 200, 83, 0.06);
+  --color-success-bg: rgb(0 200 83 / 0.06);
 
   /* ----- Surfaces (dark / light / gray sections) ----- */
   --surface-dark-bg: var(--color-black);
@@ -40,23 +40,21 @@
   --surface-dark-text: var(--color-white);
   --surface-dark-muted: var(--color-text-muted-dark);
   --surface-dark-line: var(--color-line-dark);
-
   --surface-light-bg: var(--color-white);
   --surface-gray-bg: var(--color-gray);
   --surface-light-text: var(--color-black);
   --surface-light-muted: var(--color-text-muted);
   --surface-light-line: var(--color-line);
-
   --color-accent: var(--color-green);
   --color-accent-on-light: var(--color-green-deep);
 
   /* ----- Placeholders (skeleton only) ----- */
-  --placeholder-bg: rgba(128, 128, 128, 0.12);
-  --placeholder-border: rgba(128, 128, 128, 0.5);
+  --placeholder-bg: rgb(128 128 128 / 0.12);
+  --placeholder-border: rgb(128 128 128 / 0.5);
 
   /* ----- Typography ----- */
-  --font-sans: "Sora Variable", "Sora", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-
+  --font-sans:
+    "Sora Variable", "Sora", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --text-xs: 0.78rem;
   --text-sm: 0.9rem;
   --text-base: 1.0625rem;
@@ -66,16 +64,13 @@
   --text-h1: clamp(2.6rem, 6.6vw, 5.6rem);
   --text-display: clamp(2.4rem, 6vw, 4.75rem);
   --text-case-title: clamp(1.6rem, 3vw, 2.35rem);
-
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
   --weight-bold: 700;
-
   --leading-tight: 1.05;
   --leading-snug: 1.25;
   --leading-body: 1.6;
-
   --tracking-tight: -0.035em;
   --tracking-snug: -0.02em;
 
@@ -115,9 +110,9 @@
   --control-height: 3rem;
 
   /* ----- Nav ----- */
-  --nav-capsule-bg: rgba(21, 22, 22, 0.9);
-  --nav-capsule-border: rgba(255, 255, 255, 0.08);
-  --nav-capsule-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+  --nav-capsule-bg: rgb(21 22 22 / 0.9);
+  --nav-capsule-border: rgb(255 255 255 / 0.08);
+  --nav-capsule-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.7);
   --nav-blur: 16px;
   --nav-capsule-inset: var(--space-3);
 }

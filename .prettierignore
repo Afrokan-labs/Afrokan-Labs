@@ -1,0 +1,10 @@
+.next
+out
+node_modules
+pnpm-lock.yaml
+# Approved documents are edited by hand.
+docs
+CLAUDE.md
+next-task.md
+# Logo path; kept exactly as provided.
+src/components/Mark.tsx
