@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { site } from "@/site.config";
+import { site } from "@/content/site";
 
 type Status = "idle" | "sending" | "sent" | "error";
 

@@ -2,13 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Wordmark } from "./Mark";
+import { navLinks as links, navCta } from "@/content/home";
 
-const links = [
-  { href: "#services", label: "Services" },
-  { href: "#work", label: "Work" },
-  { href: "#products", label: "Products" },
-  { href: "#team", label: "Team" },
-];
 
 export function Nav() {
   const [open, setOpen] = useState(false);
@@ -38,8 +33,8 @@ export function Nav() {
               {l.label}
             </a>
           ))}
-          <a href="#contact" className="btn btn--green nav-cta" onClick={() => setOpen(false)}>
-            Start a project
+          <a href={navCta.href} className="btn btn--green nav-cta" onClick={() => setOpen(false)}>
+            {navCta.label}
           </a>
         </nav>
 
