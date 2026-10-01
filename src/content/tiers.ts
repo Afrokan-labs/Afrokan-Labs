@@ -20,6 +20,6 @@ export const tierCopy = {
   },
   /** Short client names used in captions at the named tier, by project slug. */
   shortNames: {
-    "clearing-forwarding-firm": "ESE",
+    "ese-logistic": "ESE",
   },
 } satisfies z.input<typeof TierCopy>;
