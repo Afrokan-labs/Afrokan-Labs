@@ -1,24 +1,17 @@
 /* ===== Afrokan Labs brand tokens ===== */
+/* Legacy aliases onto styles/tokens.css; removed when sections move to CSS Modules. */
 :root {
-  --ink: #0b0b0b;
-  --green: #00c853;
-  --green-deep: #00963f;
-  --mist: #f2f3f5;
-  --white: #ffffff;
-
-  --ink-2: #151616;
-  --line-dark: #262828;
-  --text-dark-muted: #a3a8ad;
-  --text-muted: #50565c;
-  --line: #dcdee2;
-
-  --font: "Sora Variable", "Sora", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-
-  --container: 1180px;
-  --gutter: clamp(1.25rem, 4vw, 2.5rem);
-  --section-y: clamp(4.5rem, 10vw, 8.5rem);
-  --radius-s: 8px;
-  --radius-l: 22px;
+  --ink: var(--color-black);
+  --green: var(--color-green);
+  --green-deep: var(--color-green-deep);
+  --mist: var(--color-gray);
+  --white: var(--color-white);
+  --ink-2: var(--color-black-raised);
+  --line-dark: var(--color-line-dark);
+  --text-dark-muted: var(--color-text-muted-dark);
+  --text-muted: var(--color-text-muted);
+  --line: var(--color-line);
+  --font: var(--font-sans);
 }
 
 *,
