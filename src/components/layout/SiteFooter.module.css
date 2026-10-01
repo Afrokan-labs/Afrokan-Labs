@@ -1,0 +1,27 @@
+.footer {
+  border-top: var(--border-hair);
+  font-size: var(--text-small);
+  color: var(--ink-2);
+}
+
+.inner {
+  display: grid;
+  gap: var(--space-3);
+  padding-block: var(--space-7);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-6);
+}
+
+.name {
+  color: var(--ink);
+  font-weight: var(--weight-semibold);
+}
+
+.copyright {
+  margin-block-start: var(--space-3);
+}

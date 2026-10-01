@@ -30,6 +30,28 @@ export const site = {
     opensWhatsApp: "(opens WhatsApp)",
     opensNewTab: "(opens in a new tab)",
     status: { live: "Live", delivered: "Delivered" },
+    // Navigation controls and landmark names: standard wording, not in the copy docs.
+    nav: { main: "Main", footer: "Footer", menu: "Menu", close: "Close" },
+  },
+
+  // homepage-strategy.md, Navigation. "Work" is left out while no project is published.
+  nav: {
+    items: [
+      { label: "Work", href: "/work" },
+      { label: "What we build", href: "/#services" },
+      { label: "How we work", href: "/#process" },
+      { label: "About", href: "/#about" },
+    ],
+    cta: "WhatsApp us",
+  },
+
+  // homepage-copy.md §7.
+  footer: {
+    links: [
+      { label: "Work", href: "/work" },
+      { label: "About", href: "/#about" },
+    ],
+    linkedinLabel: "LinkedIn",
   },
 
   social: {
