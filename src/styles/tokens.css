@@ -133,6 +133,16 @@
   --disabled-opacity: 0.4;
   --press-scale: 0.98;
 
+  /* §8 Button Loading: "Spinner replaces the label". The doc gives no size or
+     speed: the ring matches the 20px glyph, 2px like --border-strong, one turn
+     per second. PENDING: confirm in docs/design-system.md. */
+  --spinner-border: 2px;
+  --spinner-duration: 1s;
+
+  /* Cloudflare Turnstile widget: 65px tall (Cloudflare's fixed size), reserved
+     so the form doesn't shift when it renders. */
+  --turnstile-height: 65px;
+
   /* §8 Button secondary: 1px --ink border; §2 dark band: --rule-on-dark hairlines */
   --border-ink: 1px solid var(--ink);
   --border-hair-on-dark: 1px solid var(--rule-on-dark);
