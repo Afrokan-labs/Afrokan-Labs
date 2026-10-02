@@ -15,6 +15,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import matter from "gray-matter";
 import { caseStudy } from "../src/content/case-study";
+import { contact } from "../src/content/contact";
 import { home } from "../src/content/home";
 import { privacy } from "../src/content/privacy";
 import { workProcess } from "../src/content/process";
@@ -31,7 +32,7 @@ const APPROVED = [
   "docs/content/README.md",
   "docs/design-system.md",
 ];
-const DRAFTS = ["docs/content/privacy.md", "docs/content/seo.md"];
+const DRAFTS = ["docs/content/privacy.md", "docs/content/seo.md", "docs/content/contact.md"];
 
 const norm = (s: string) =>
   s
@@ -62,7 +63,17 @@ function collect(value: unknown, where: string) {
     for (const [k, v] of Object.entries(value)) collect(v, where ? `${where}.${k}` : k);
 }
 collect(
-  { site, home, services, process: workProcess, team, tiers: tierCopy, caseStudy, privacy },
+  {
+    site,
+    home,
+    services,
+    process: workProcess,
+    team,
+    tiers: tierCopy,
+    caseStudy,
+    privacy,
+    contact,
+  },
   "",
 );
 const PROJECTS = join("src", "content", "projects");

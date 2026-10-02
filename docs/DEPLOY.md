@@ -40,10 +40,11 @@ Settings → Variables and Secrets. Set them separately for **Production** and *
 | --- | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | `https://afrokanlabs.com` | _leave unset_ | Previews fall back to Cloudflare's `CF_PAGES_URL` (see `next.config.ts`). Production never falls back: if it's missing, the build fails. |
 | `NEXT_PUBLIC_ANALYTICS_ID` | Umami website ID for afrokanlabs.com (see §6) | _leave unset_ | Unset means no analytics script loads, so test clicks don't pollute the data. Must be a UUID or the build fails. |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | The real site key (see §7) | `1x00000000000000000000AA` | Required, or the build fails. The Preview value is Turnstile's published test key, which always passes. A production build (branch `main`) with a test key fails. |
 | `NODE_VERSION` | `24` | `24` | Only if the build log shows the wrong Node version. |
 | `PNPM_VERSION` | `10.23.0` | `10.23.0` | Keep in step with `packageManager`. |
 
-Phase 6 only (contact form): `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (Turnstile's test key in Preview), and the secrets `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, set as **encrypted secrets in Production only**. The Next build never reads the secrets; the Pages Function does at runtime.
+The contact form's function also needs three **secrets** (type: Secret), in **Production only**: `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY` and `CONTACT_TO_EMAIL` (see §7). The Next build never reads them; `functions/api/contact.ts` reads and checks them on each request. Without them, previews show the form, but sending fails with the "couldn't send" message.
 
 Never put a secret in a `NEXT_PUBLIC_` variable: those are inlined into the public site.
 
@@ -74,6 +75,38 @@ The tracker loads from `https://cloud.umami.is` and sends events to `https://gat
 
 Analytics can't see conversations once a visitor reaches WhatsApp. Both prefilled messages begin "Hi Afrokan Labs,". Log each chat that starts that way in the conversations sheet (architecture §7): Date, Business type, Qualified (Y/N), Became a quote (Y/N).
 
+## 7. Contact form (BUILD_PLAN 6.1)
+
+The form posts to `functions/api/contact.ts`, a Pages Function that Cloudflare deploys automatically from `functions/`. Set this up **before** merging the form to `main`, in this order:
+
+1. **Approve the copy.** Approve `docs/content/contact.md` and the privacy page Draft v2 (`docs/content/privacy.md`). Architecture §13 requires the privacy update before the form goes live.
+2. **Turnstile.** Go to Cloudflare dashboard → Turnstile → Add widget. Name it afrokanlabs.com, add the hostname `afrokanlabs.com`, and choose the Managed mode. Copy the **site key** into `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (Production) and the **secret key** into `TURNSTILE_SECRET_KEY` (Production, Secret).
+3. **Resend.**
+   1. Sign up at [resend.com](https://resend.com) with `admin@afrokanlabs.com`, and turn on 2FA.
+   2. Add the domain **`notify.afrokanlabs.com`**, not the root domain, so a deliverability problem can't affect the main mailbox (architecture §6).
+   3. Add the SPF and DKIM records Resend shows to Cloudflare DNS, and wait for Resend to show the domain as verified.
+   4. Create an API key with **Sending access** for that domain only, and put it in `RESEND_API_KEY` (Production, Secret).
+4. **DMARC.** If `_dmarc.afrokanlabs.com` doesn't exist yet, add a TXT record `v=DMARC1; p=none; rua=mailto:admin@afrokanlabs.com`. Tighten it to `p=quarantine` once the reports are clean.
+5. **Inbox.** Set `CONTACT_TO_EMAIL` (Production, Secret) to `hello@afrokanlabs.com`.
+6. **Rate limit.** Go to Cloudflare dashboard → afrokanlabs.com → Security → WAF → Rate limiting rules → Create rule. Use: URI Path equals `/api/contact`, Method `POST`, 5 requests per 10 minutes per IP, action Block for 10 minutes. The free plan allows one rule; this is it.
+7. **Deploy and test.** After the production deploy, send one real message from a phone with an email address in the second field. Check that it arrives at hello@, isn't in spam, and that replying goes to the address you entered. Then send one with a WhatsApp number and no email. The notification then has no Reply-To.
+
+**Testing a preview end to end (optional).** Previews have no secrets, so sending fails there by design. To try it, add Preview-scoped secrets temporarily:
+- `TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA` (the test secret)
+- your real `RESEND_API_KEY`
+- `CONTACT_TO_EMAIL`
+
+Retry the deployment, send a message, then **delete the three Preview secrets**.
+
+**Locally:**
+
+```bash
+pnpm build
+npx wrangler pages dev out --compatibility-date=2026-08-01
+```
+
+Wrangler reads the function's secrets from `.dev.vars`, which is git-ignored (see `.env.example` for its contents). `pnpm test:contact` checks the function with Turnstile and Resend stubbed, and CI runs it.
+
 ## Rollback
 
 Pages project → Deployments → pick the last good deployment → **Rollback to this deployment**. Then fix forward through a pull request.
@@ -81,7 +114,7 @@ Pages project → Deployments → pick the last good deployment → **Rollback t
 ## Local checks before pushing
 
 ```bash
-pnpm typecheck && pnpm lint && pnpm content:validate && pnpm build && pnpm lhci && pnpm a11y
+pnpm typecheck && pnpm lint && pnpm content:validate && pnpm test:contact && pnpm build && pnpm lhci && pnpm a11y
 ```
 
 `pnpm lhci` and `pnpm a11y` need Chrome installed (set `CHROME_PATH` if `a11y` can't find it). It writes reports to `.lighthouseci/`, which isn't committed.
