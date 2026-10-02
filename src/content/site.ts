@@ -10,6 +10,8 @@ export const site = {
   domain: "afrokanlabs.com",
   email: "hello@afrokanlabs.com",
   location: "Accra, Ghana",
+  // The same fact as `location`, structured for JSON-LD (architecture §8: Accra at city level).
+  address: { locality: "Accra", country: "GH" },
 
   // Phase 0: dedicated WhatsApp Business number.
   whatsappNumber: "TODO_WHATSAPP_E164",

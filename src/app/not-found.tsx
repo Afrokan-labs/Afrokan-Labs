@@ -8,10 +8,8 @@ import styles from "./not-found.module.css";
 
 const copy = getSite().ui.notFound;
 
-export const metadata: Metadata = {
-  title: copy.title,
-  robots: { index: false, follow: false },
-};
+// Next adds <meta name="robots" content="noindex"> to the 404 itself.
+export const metadata: Metadata = { title: copy.title };
 
 /**
  * Exported as 404.html. It sits outside the (site) route group, so it adds the

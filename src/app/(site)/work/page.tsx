@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
 import { StickyActionBar } from "@/components/layout/StickyActionBar";
 import { ProjectCard } from "@/components/work/ProjectCard";
-import { getHome, getProjects } from "@/lib/content";
+import { getCaseStudyCopy, getHome, getProjects } from "@/lib/content";
+import { pageMetadata } from "@/lib/seo";
 import { whatsappLink } from "@/lib/whatsapp";
 import { getWorkIndexData } from "@/lib/work";
 import styles from "./page.module.css";
 
 const data = getWorkIndexData(getProjects());
 
-export const metadata: Metadata = { title: data.title };
+export const metadata: Metadata = pageMetadata({
+  path: "/work",
+  title: data.title,
+  description: getCaseStudyCopy().workIndex.description,
+});
 
 /**
  * The work index. With no visible project this page is still built (static

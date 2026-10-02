@@ -9,6 +9,7 @@ export const privacy = {
   // Set to who approved it and when, e.g. "Franklin Wiafe, 2026-10-03".
   approvedBy: "TODO_PRIVACY_COPY_APPROVAL",
   title: "Privacy",
+  description: "TODO_PRIVACY_META_DESCRIPTION",
   intro:
     "This site is built to collect as little as possible. Here is everything it collects, and why.",
   sections: [

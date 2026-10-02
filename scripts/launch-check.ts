@@ -1,11 +1,13 @@
 /**
- * pnpm launch:check — lists every TODO_ placeholder in src/content and exits 1
- * while any remain. Must pass on the launch PR (architecture §11).
+ * pnpm launch:check — lists every TODO_ placeholder in src/content, and every
+ * indexable page without its OG image in public/og/, and exits 1 while any
+ * remain. Must pass on the launch PR (architecture §11).
  *
  * Usage: tsx scripts/launch-check.ts [dir]   (default: src/content)
  */
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
+import { getIndexablePaths, getOgImage, ogImagePath } from "../src/lib/pages";
 
 const root = process.argv[2] ?? join(process.cwd(), "src", "content");
 // schema.ts defines the placeholder format; it isn't content.
@@ -31,14 +33,28 @@ const found = files(root).flatMap((file) =>
     ),
 );
 
-if (found.length === 0) {
-  console.log("launch:check passed: no TODO_ placeholders in src/content.");
-} else {
-  const width = Math.max(...found.map((f) => f.where.length));
-  console.error(`launch:check failed: ${found.length} TODO_ placeholder(s) remain.\n`);
-  for (const f of found) console.error(`  ${f.where.padEnd(width)}  ${f.token}`);
-  console.error(
-    "\nConfirm each fact and replace it, or remove the field. See docs/BUILD_PLAN.md Phase 0.",
+const missingOg = getIndexablePaths()
+  .filter((path) => !getOgImage(path))
+  .map((path) => ({ where: `public${ogImagePath(path)}`, token: `OG image for ${path}` }));
+
+const problems = [...found, ...missingOg];
+
+if (problems.length === 0) {
+  console.log(
+    "launch:check passed: no TODO_ placeholders in src/content, and every OG image exists.",
   );
+} else {
+  const width = Math.max(...problems.map((f) => f.where.length));
+  if (found.length) {
+    console.error(`launch:check failed: ${found.length} TODO_ placeholder(s) remain.\n`);
+    for (const f of found) console.error(`  ${f.where.padEnd(width)}  ${f.token}`);
+    console.error(
+      "\nConfirm each fact and replace it, or remove the field. See docs/BUILD_PLAN.md Phase 0.\n",
+    );
+  }
+  if (missingOg.length) {
+    console.error(`launch:check failed: ${missingOg.length} OG image(s) missing (1200×630 PNG).\n`);
+    for (const f of missingOg) console.error(`  ${f.where.padEnd(width)}  ${f.token}`);
+  }
   process.exit(1);
 }
