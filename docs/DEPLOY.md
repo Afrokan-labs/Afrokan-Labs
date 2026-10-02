@@ -85,3 +85,16 @@ pnpm typecheck && pnpm lint && pnpm content:validate && pnpm build && pnpm lhci
 ```
 
 `pnpm lhci` needs Chrome installed. It writes reports to `.lighthouseci/`, which isn't committed.
+
+### Security headers (BUILD_PLAN 4.2)
+
+`public/_headers` is copied to `out/` and applied by Cloudflare. To test it locally with the CSP applied:
+
+```bash
+pnpm build
+npx wrangler pages dev out --compatibility-date=2026-08-01
+```
+
+Open the printed URL and check the browser console is clean on every page. If you change where analytics loads from, update `src/lib/analytics.ts` and the CSP together: `pnpm content:validate` fails if they disagree.
+
+After the first production deploy, scan https://afrokanlabs.com at [securityheaders.com](https://securityheaders.com). Expect an A: the `'unsafe-inline'` in `script-src` is required by Next's static export (CLAUDE.md override #1).
