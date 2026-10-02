@@ -1,0 +1,88 @@
+/* /contact form (architecture §5, design-system §9 error and success states). */
+
+.form {
+  display: grid;
+  gap: var(--space-6);
+  max-width: var(--measure);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.label {
+  font-weight: var(--weight-semibold);
+}
+
+.hint {
+  font-size: var(--text-small);
+  color: var(--ink-2);
+}
+
+/* 16px text, so phones don't zoom in on focus; 1px ink border for 3:1 contrast. */
+.input {
+  width: 100%;
+  min-height: var(--tap-target);
+  padding: var(--space-3);
+  border: var(--border-ink);
+  border-radius: var(--radius-s);
+  background: transparent;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+textarea.input {
+  resize: vertical;
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.error {
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+  color: var(--accent);
+}
+
+/* The form-level message is always in the page (a live region) but takes no room until filled. */
+.alert:empty {
+  display: contents;
+}
+
+/* Honeypot: kept in the page for bots, moved off-screen for people. */
+.trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Reserve Turnstile's height so the widget doesn't shift the button when it appears. */
+.turnstile {
+  min-height: var(--turnstile-height);
+}
+
+.submit {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+}
+
+.success {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+  max-width: var(--measure);
+  padding-block-start: var(--space-5);
+  border-top: var(--border-strong);
+}
+
+.successTitle {
+  font-size: var(--text-h3);
+  line-height: var(--leading-h3);
+  letter-spacing: var(--tracking-h3);
+}

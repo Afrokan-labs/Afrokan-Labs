@@ -9,6 +9,7 @@ import { trackingAttrs } from "./analytics";
 import {
   clientDisplayName,
   getConversationCaption,
+  getContactCopy,
   getHome,
   getProcess,
   getProjects,
@@ -147,6 +148,8 @@ export function getHomeData(projects: Project[] = getProjects(), options: Option
     cta: { ...whatsappLink({ location: "contact" }), label: home.contact.cta },
     email: site.email,
     emailTracking: trackingAttrs("email_click", { location: "contact" }),
+    // architecture §5: the band links to the form now that /contact exists.
+    formLink: { href: "/contact", label: getContactCopy().homeLink },
     location: site.location,
   };
 

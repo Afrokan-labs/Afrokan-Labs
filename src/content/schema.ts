@@ -290,3 +290,54 @@ export const Privacy = z.object({
   }),
 });
 export type Privacy = z.infer<typeof Privacy>;
+
+const FieldErrors = z.object({
+  required: z.string().min(1),
+  tooLong: z.string().includes("{max}"),
+});
+const ResultPage = z.object({ title: z.string().min(1), body: z.string().min(1) });
+
+/** /contact (BUILD_PLAN 6.1, architecture §5). Field rules: src/lib/contact-form.ts. */
+export const ContactCopy = z.object({
+  /** Who approved the copy and when. TODO_ until approved (launch:check fails). */
+  approvedBy: orTodo(z.string().min(1), "who approved the contact form copy and when"),
+  title: z.string().min(1),
+  /** Meta description. Omitted from the page while TODO_. */
+  description: orTodo(z.string().min(1).max(155), "a meta description of up to 155 characters"),
+  intro: z.string().min(1),
+  whatsappCta: z.string().min(1),
+  fields: z.object({
+    name: z.object({ label: z.string().min(1), errors: FieldErrors }),
+    contact: z.object({
+      label: z.string().min(1),
+      hint: z.string().min(1),
+      errors: FieldErrors.extend({ invalid: z.string().min(1) }),
+    }),
+    message: z.object({ label: z.string().min(1), errors: FieldErrors }),
+  }),
+  /** Label of the hidden honeypot field; only bots and some screen readers ever meet it. */
+  honeypotLabel: z.string().min(1),
+  submit: z.string().min(1),
+  /** Screen-reader text while sending (the button shows a spinner). */
+  sending: z.string().min(1),
+  /** Shown above the button when sending fails for any reason other than a field error. */
+  failed: z.string().min(1),
+  /** Shown only without JavaScript, which Turnstile needs. "{email}" is the site email. */
+  noScript: z.string().includes("{email}"),
+  success: z.object({
+    title: z.string().min(1),
+    /** {replyWithin} is filled from site.replyWithin; `bodyUnconfirmed` is used until it is set. */
+    body: z.string().includes("{replyWithin}"),
+    bodyUnconfirmed: z.string().min(1),
+  }),
+  /** Static pages the form lands on when posted without JavaScript. */
+  notSent: ResultPage,
+  /** The homepage contact band's link to /contact (architecture §5). */
+  homeLink: z.string().min(1),
+  /** The notification email. User input never goes into the subject (architecture §6). */
+  email: z.object({
+    subject: z.string().min(1),
+    labels: z.object({ name: z.string(), contact: z.string(), message: z.string() }),
+  }),
+});
+export type ContactCopy = z.infer<typeof ContactCopy>;

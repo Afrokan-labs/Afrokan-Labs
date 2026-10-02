@@ -1,0 +1,11 @@
+.page {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: start;
+  padding-block: var(--space-8) var(--section-y);
+}
+
+.body {
+  font-size: var(--text-body-l);
+  line-height: var(--leading-body-l);
+}

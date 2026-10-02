@@ -1,0 +1,58 @@
+/**
+ * The contact form's fields and rules (architecture §5). One schema, used by
+ * the browser (ContactForm) and the Pages Function (functions/api/contact.ts),
+ * so both apply the same validation and length limits.
+ *
+ * zod/mini keeps the browser bundle small, and ContactForm loads this module
+ * only once the visitor starts on the form. Field names and other constants
+ * live in ./contact-fields, which has no dependencies. Issues carry an error
+ * key, not copy: the wording lives in src/content/contact.ts. No path aliases
+ * here, because wrangler bundles this file into the function.
+ */
+import * as z from "zod/mini";
+import { FIELD, LIMITS, type Field, type FieldErrors } from "./contact-fields";
+
+const email = z.email();
+
+/** An email address, or a phone number of 9–15 digits (spaces, dashes, brackets and a leading + allowed). */
+export function isEmailOrPhone(value: string): boolean {
+  if (value.includes("@")) return z.safeParse(email, value).success;
+  return /^\+?[\d\s()-]+$/.test(value) && /^\d{9,15}$/.test(value.replace(/\D/g, ""));
+}
+
+const text = (max: number) =>
+  z.string().check(z.trim(), z.minLength(1, "required"), z.maxLength(max, "tooLong"));
+
+export const ContactSubmission = z.object({
+  name: text(LIMITS.name),
+  contact: text(LIMITS.contact).check(z.refine(isEmailOrPhone, "invalid")),
+  message: text(LIMITS.message),
+});
+export type ContactSubmission = z.infer<typeof ContactSubmission>;
+
+/** The submitted contact, when it is an email address: the notification's Reply-To. */
+export const replyToFor = (contact: string) => (contact.includes("@") ? contact : undefined);
+
+type Result = { ok: true; data: ContactSubmission } | { ok: false; errors: FieldErrors };
+
+/** Validates the three fields. Returns the first error key per field. */
+export function validateContact(input: Record<Field, unknown>): Result {
+  const result = z.safeParse(ContactSubmission, input);
+  if (result.success) return { ok: true, data: result.data };
+
+  const errors: FieldErrors = {};
+  for (const issue of result.error.issues) {
+    const field = issue.path[0] as Field;
+    // A missing or non-string value counts as "required".
+    const key = (["required", "tooLong", "invalid"] as const).find((k) => k === issue.message);
+    errors[field] ??= key ?? "required";
+  }
+  return { ok: false, errors };
+}
+
+/** Reads the three fields from posted form data. */
+export const readFields = (form: FormData): Record<Field, unknown> => ({
+  name: form.get(FIELD.name),
+  contact: form.get(FIELD.contact),
+  message: form.get(FIELD.message),
+});

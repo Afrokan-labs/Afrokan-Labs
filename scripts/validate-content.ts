@@ -6,12 +6,13 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ANALYTICS_ENDPOINT_ORIGIN, ANALYTICS_SCRIPT } from "../src/lib/analytics";
+import { TURNSTILE_ORIGIN } from "../src/lib/contact-fields";
 import { ContentError, validateAllContent } from "../src/lib/content";
 import { getIndexablePaths, getOgImage } from "../src/lib/pages";
 
 async function main() {
   const s = await validateAllContent();
-  checkCspAllowsAnalytics();
+  checkCsp();
   // Throws on a file that isn't a 1200×630 PNG. Missing images are launch:check's job.
   const og = getIndexablePaths().filter((path) => getOgImage(path)).length;
   console.log(
@@ -21,24 +22,41 @@ async function main() {
   );
 }
 
-/** public/_headers must allow the origins src/lib/analytics.ts loads from and sends to. */
-function checkCspAllowsAnalytics() {
+/**
+ * public/_headers: every CSP must allow the origins src/lib/analytics.ts loads
+ * from and sends to, and only /contact may allow Turnstile (architecture §13).
+ */
+function checkCsp() {
   const headers = readFileSync(join(process.cwd(), "public", "_headers"), "utf8");
-  const csp = headers.match(/Content-Security-Policy:(.*)/)?.[1] ?? "";
-  const directive = (name: string) =>
+  // path -> CSP, e.g. "/*" -> "default-src 'self'; ..."
+  const csps = new Map<string, string>();
+  let path = "";
+  for (const line of headers.split(/\r?\n/)) {
+    if (/^\S/.test(line) && !line.startsWith("#")) path = line.trim();
+    const csp = line.match(/^\s+Content-Security-Policy:(.*)/)?.[1];
+    if (csp) csps.set(path, csp);
+  }
+  const allows = (csp: string, name: string, origin: string) =>
     csp
       .split(";")
       .map((d) => d.trim().split(/\s+/))
-      .find(([n]) => n === name) ?? [];
-  const missing = [
-    ["script-src", new URL(ANALYTICS_SCRIPT).origin],
-    ["connect-src", ANALYTICS_ENDPOINT_ORIGIN],
-  ].filter(([name, origin]) => !directive(name).includes(origin));
-  if (missing.length)
-    throw new Error(
-      "public/_headers: the CSP must allow the analytics origins in src/lib/analytics.ts: " +
-        missing.map(([name, origin]) => `${name} ${origin}`).join(", "),
-    );
+      .some(([n, ...values]) => n === name && values.includes(origin));
+
+  const problems: string[] = [];
+  const need = (path: string, name: string, origin: string, wanted: boolean) => {
+    const csp = csps.get(path);
+    if (csp === undefined) problems.push(`no CSP for ${path}`);
+    else if (allows(csp, name, origin) !== wanted)
+      problems.push(`${path}: ${name} must ${wanted ? "" : "not "}allow ${origin}`);
+  };
+  for (const path of ["/*", "/contact"]) {
+    need(path, "script-src", new URL(ANALYTICS_SCRIPT).origin, true);
+    need(path, "connect-src", ANALYTICS_ENDPOINT_ORIGIN, true);
+  }
+  need("/contact", "script-src", TURNSTILE_ORIGIN, true);
+  need("/contact", "frame-src", TURNSTILE_ORIGIN, true);
+  need("/*", "script-src", TURNSTILE_ORIGIN, false);
+  if (problems.length) throw new Error(`public/_headers CSP:\n  ${problems.join("\n  ")}`);
 }
 
 main().catch((error: unknown) => {
