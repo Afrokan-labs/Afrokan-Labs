@@ -40,7 +40,7 @@ Settings → Variables and Secrets. Set them separately for **Production** and *
 | --- | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | `https://afrokanlabs.com` | _leave unset_ | Previews fall back to Cloudflare's `CF_PAGES_URL` (see `next.config.ts`). Production never falls back: if it's missing, the build fails. |
 | `NEXT_PUBLIC_ANALYTICS_ID` | Umami website ID for afrokanlabs.com (see §6) | _leave unset_ | Unset means no analytics script loads, so test clicks don't pollute the data. Must be a UUID or the build fails. |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | The real site key (see §7) | `1x00000000000000000000AA` | Required, or the build fails. The Preview value is Turnstile's published test key, which always passes. A production build (branch `main`) with a test key fails. |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | The real site key (see §7) | _leave unset_ | Previews fall back to Turnstile's published test key, which always passes (see `next.config.ts`). Production never falls back: a missing key, or a test key, fails the build. |
 | `NODE_VERSION` | `24` | `24` | Only if the build log shows the wrong Node version. |
 | `PNPM_VERSION` | `10.23.0` | `10.23.0` | Keep in step with `packageManager`. |
 
