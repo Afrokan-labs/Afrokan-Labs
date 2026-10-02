@@ -148,7 +148,15 @@ export function getHomeData(projects: Project[] = getProjects(), options: Option
     location: site.location,
   };
 
+  // Mobile sticky bar (design-system §8): appears after the hero CTA, hides at Contact.
+  const sticky = {
+    cta: { ...whatsappLink({ location: "sticky" }), label: home.hero.primaryCta },
+    showAfter: "hero-cta",
+    hideAt: "contact",
+  };
+
   return {
+    sticky,
     hero,
     featuredWork,
     offer,
