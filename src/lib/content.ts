@@ -5,7 +5,7 @@
  * Invalid content throws, so `pnpm content:validate` and `pnpm build` fail
  * with a message naming the file and the rule that was broken.
  */
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, join } from "node:path";
 import matter from "gray-matter";
 import * as runtime from "react/jsx-runtime";
@@ -193,14 +193,26 @@ export async function validateAllContent() {
   getHome();
   getTierCopy();
   const services = getServices();
-  const process = getProcess();
+  const processContent = getProcess();
   const team = getTeam();
   const projects = readProjectFiles();
   for (const file of projects) await compileBody(file);
 
+  // Every referenced image must exist as a source file (the pipeline needs it).
+  const referenced = [
+    ...team.members.flatMap((m) =>
+      m.photo ? [{ src: m.photo.src, from: "src/content/team.ts" }] : [],
+    ),
+    ...projects.flatMap((f) => f.project.images.map((i) => ({ src: i.src, from: f.source }))),
+  ];
+  for (const { src, from } of referenced) {
+    if (!existsSync(join(process.cwd(), src)))
+      throw new ContentError(from, `image "${src}" does not exist. Add it under assets/images/.`);
+  }
+
   return {
     services: services.items.length,
-    steps: process.steps.length,
+    steps: processContent.steps.length,
     teamMembers: team.members.length,
     projects: projects.length,
     published: projects.filter((f) => f.project.published).length,

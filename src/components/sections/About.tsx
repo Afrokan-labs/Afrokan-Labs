@@ -1,3 +1,4 @@
+import { ResponsiveImage } from "@/components/primitives/ResponsiveImage";
 import { SectionHeader } from "@/components/primitives/SectionHeader";
 import type { HomeData } from "@/lib/home";
 import styles from "./About.module.css";
@@ -5,8 +6,8 @@ import styles from "./About.module.css";
 type Props = HomeData["about"];
 
 /**
- * design-system §8 About: statement and TeamMember ×n (name and role only).
- * Photos join in BUILD_PLAN 2.6 with the image pipeline (4:5, same session).
+ * design-system §8 About: statement and TeamMember ×n. Real photos in a
+ * consistent 4:5 crop, name and role only.
  */
 export function About({ title, statement, members }: Props) {
   return (
@@ -19,6 +20,13 @@ export function About({ title, statement, members }: Props) {
             <ul className={styles.team}>
               {members.map((m) => (
                 <li key={m.name} className={styles.member}>
+                  {m.photo && (
+                    <ResponsiveImage
+                      {...m.photo}
+                      sizes="(min-width: 1024px) 190px, 50vw"
+                      className={styles.photo}
+                    />
+                  )}
                   <p className={styles.name}>{m.name}</p>
                   <p className={styles.role}>{m.role}</p>
                 </li>
