@@ -4,7 +4,6 @@
       "staticDistDir": "./out",
       "numberOfRuns": 3,
       "autodiscoverUrlBlocklist": [
-        "/_primitives.html",
         "/_fixtures/none.html",
         "/_fixtures/anonymised.html",
         "/_fixtures/named.html",

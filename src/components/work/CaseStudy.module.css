@@ -1,31 +1,50 @@
+/* Case study page in the redesign: dark panels, lime accents. */
+
 .page {
   display: grid;
-  gap: var(--section-y);
-  padding-block: var(--space-8) var(--section-y);
+  gap: clamp(40px, 6vw, 72px);
+  padding-block: clamp(40px, 6vw, 72px) clamp(56px, 8vw, 96px);
 }
 
 .header {
   display: grid;
-  gap: var(--space-4);
+  gap: 14px;
+}
+
+.header h1 {
+  max-width: 20em;
+  font-size: var(--text-h1);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
 }
 
 .attribution {
-  color: var(--ink-2);
+  color: var(--mute);
+  font-size: 0.86rem;
+}
+
+.block h2,
+.cta h2 {
+  font-size: var(--text-h2);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 /* The MDX body: "The problem" and "What we built". */
 .prose {
   display: grid;
-  gap: var(--space-4);
-  font-size: var(--text-body-l);
-  line-height: var(--leading-body-l);
+  gap: 14px;
+  color: var(--mute);
+  font-size: 0.9rem;
+  line-height: 1.7;
 }
 
 .prose h2 {
-  margin-block-start: var(--space-5);
-  font-size: var(--text-h3);
-  line-height: var(--leading-h3);
-  letter-spacing: var(--tracking-h3);
+  margin-block-start: 12px;
+  color: var(--white);
+  font-size: clamp(1.1rem, 0.95rem + 0.6vw, 1.45rem);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 
 .prose h2:first-child {
@@ -34,31 +53,37 @@
 
 .prose ul {
   display: grid;
-  gap: var(--space-2);
-  padding-inline-start: var(--space-5);
+  gap: 8px;
+  padding-inline-start: 20px;
   list-style: disc;
+}
+
+.prose li::marker {
+  color: var(--lime);
 }
 
 .block {
   display: grid;
-  gap: var(--space-6);
+  gap: 24px;
 }
 
 .chat {
-  max-width: var(--measure);
+  max-width: 68ch;
 }
 
 .result {
-  font-size: var(--text-statement);
-  font-weight: var(--weight-medium);
-  line-height: var(--leading-statement);
-  letter-spacing: var(--tracking-statement);
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.9rem);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 
 .cta {
   display: grid;
-  gap: var(--space-5);
+  gap: 20px;
   justify-items: start;
-  padding-block-start: var(--space-7);
-  border-top: var(--border-strong);
+  padding: clamp(24px, 3.4vw, 44px);
+  border: 1px solid var(--panel-border);
+  border-radius: 26px;
+  background: var(--panel);
 }

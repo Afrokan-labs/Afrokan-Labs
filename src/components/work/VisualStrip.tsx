@@ -18,7 +18,7 @@ export function VisualStrip({ images }: { images: Image[] }) {
     <ul className={styles.strip}>
       {images.map((img) => (
         <li key={img.src} className={styles.panel}>
-          <ResponsiveImage {...img} sizes="(min-width: 1024px) 400px, 85vw" />
+          <ResponsiveImage {...img} sizes="(max-width: 900px) 85vw, 400px" />
         </li>
       ))}
     </ul>

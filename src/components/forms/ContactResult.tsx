@@ -20,7 +20,7 @@ export function ContactResult({ title, body, whatsapp }: Props) {
     <main id="main" className={`container ${styles.page}`}>
       <h1>{title}</h1>
       <p className={styles.body}>{body}</p>
-      <Button variant="secondary" {...link}>
+      <Button variant="line" {...link}>
         {label}
       </Button>
     </main>

@@ -1,10 +1,16 @@
 .page {
   display: grid;
-  gap: var(--space-8);
-  padding-block: var(--space-8) var(--section-y);
+  gap: clamp(32px, 5vw, 56px);
+  padding-block: clamp(40px, 6vw, 72px) clamp(56px, 8vw, 96px);
+}
+
+.page h1 {
+  font-size: var(--text-h1);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
 }
 
 .list {
   display: grid;
-  gap: var(--space-9);
+  gap: clamp(48px, 7vw, 96px);
 }
