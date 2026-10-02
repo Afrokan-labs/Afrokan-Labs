@@ -243,3 +243,10 @@ export const Home = z.object({
   }),
 });
 export type Home = z.infer<typeof Home>;
+
+export const CaseStudyCopy = z.object({
+  attribution: z.string().includes("{formerBrand}"),
+  headings: z.object({ howItWorks: z.string().min(1), result: z.string().min(1) }),
+  cta: z.object({ title: z.string().min(1), button: z.string().min(1) }),
+});
+export type CaseStudyCopy = z.infer<typeof CaseStudyCopy>;

@@ -1,0 +1,64 @@
+.page {
+  display: grid;
+  gap: var(--section-y);
+  padding-block: var(--space-8) var(--section-y);
+}
+
+.header {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.attribution {
+  color: var(--ink-2);
+}
+
+/* The MDX body: "The problem" and "What we built". */
+.prose {
+  display: grid;
+  gap: var(--space-4);
+  font-size: var(--text-body-l);
+  line-height: var(--leading-body-l);
+}
+
+.prose h2 {
+  margin-block-start: var(--space-5);
+  font-size: var(--text-h3);
+  line-height: var(--leading-h3);
+  letter-spacing: var(--tracking-h3);
+}
+
+.prose h2:first-child {
+  margin-block-start: 0;
+}
+
+.prose ul {
+  display: grid;
+  gap: var(--space-2);
+  padding-inline-start: var(--space-5);
+  list-style: disc;
+}
+
+.block {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.chat {
+  max-width: var(--measure);
+}
+
+.result {
+  font-size: var(--text-statement);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-statement);
+  letter-spacing: var(--tracking-statement);
+}
+
+.cta {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: start;
+  padding-block-start: var(--space-7);
+  border-top: var(--border-strong);
+}

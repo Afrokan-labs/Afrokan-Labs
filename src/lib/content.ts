@@ -10,6 +10,7 @@ import { basename, join } from "node:path";
 import matter from "gray-matter";
 import * as runtime from "react/jsx-runtime";
 import { z } from "zod";
+import { caseStudy } from "../content/case-study";
 import { home } from "../content/home";
 import { workProcess } from "../content/process";
 import * as schema from "../content/schema";
@@ -37,6 +38,8 @@ function parse<T extends z.ZodType>(source: string, s: T, data: unknown): z.outp
 
 export const getSite = () => parse("src/content/site.ts", schema.Site, site);
 export const getHome = () => parse("src/content/home.ts", schema.Home, home);
+export const getCaseStudyCopy = () =>
+  parse("src/content/case-study.ts", schema.CaseStudyCopy, caseStudy);
 export const getServices = () => parse("src/content/services.ts", schema.Services, services);
 export const getProcess = () => parse("src/content/process.ts", schema.Process, workProcess);
 export const getTeam = () => parse("src/content/team.ts", schema.Team, team);
@@ -191,6 +194,7 @@ function formatMonth(yyyyMm: string): string {
 export async function validateAllContent() {
   getSite();
   getHome();
+  getCaseStudyCopy();
   getTierCopy();
   const services = getServices();
   const processContent = getProcess();

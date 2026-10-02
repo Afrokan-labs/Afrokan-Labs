@@ -20,12 +20,9 @@ import {
   getTeam,
 } from "./content";
 import type { Project } from "../content/schema";
+import { confirmed } from "./confirmed";
 import { getImage } from "./images";
 import { demoOfferLink, whatsappLink } from "./whatsapp";
-
-/** A business fact that has been confirmed (not a TODO_ placeholder). */
-const confirmed = (value: string | undefined): value is string =>
-  !!value && !value.startsWith("TODO_");
 
 const stepNumber = (i: number) => String(i + 1).padStart(2, "0");
 
