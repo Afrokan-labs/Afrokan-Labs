@@ -58,6 +58,13 @@ declare global {
 
 export const analyticsEnabled = Boolean(process.env.NEXT_PUBLIC_ANALYTICS_ID);
 
+/**
+ * Umami Cloud's tracker, and the origin it sends events to (checked against the
+ * real tracker). The CSP must allow both (BUILD_PLAN 4.2).
+ */
+export const ANALYTICS_SCRIPT = "https://cloud.umami.is/script.js";
+export const ANALYTICS_ENDPOINT_ORIGIN = "https://gateway.umami.is";
+
 /** Records an event from a client component. Does nothing without an analytics ID or script. */
 export function track<E extends AnalyticsEvent>(event: E, ...[props]: PropsArg<E>): void {
   if (!analyticsEnabled || typeof window === "undefined") return;

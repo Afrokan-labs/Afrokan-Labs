@@ -14,7 +14,9 @@ const PublicEnv = z.object({
     .url({ error: "NEXT_PUBLIC_SITE_URL must be a full URL, e.g. https://afrokanlabs.com" })
     .transform((url) => url.replace(/\/+$/, "")),
   /** Umami website ID. Unset in previews and locally, so track() does nothing. */
-  NEXT_PUBLIC_ANALYTICS_ID: z.string().optional(),
+  NEXT_PUBLIC_ANALYTICS_ID: z
+    .uuid({ error: "NEXT_PUBLIC_ANALYTICS_ID must be the Umami website ID (a UUID)" })
+    .optional(),
 });
 
 // Each variable is referenced by its full name so Next can inline it.
