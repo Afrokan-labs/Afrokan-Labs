@@ -108,10 +108,13 @@ export const Site = z.object({
   ),
   /** Fills "We reply within ___ on weekdays." */
   replyWithin: orTodo(z.string().min(1), 'a reply time such as "4 hours"'),
-  /** Prefilled WhatsApp messages. Brackets are prompts for the visitor and ship as written. */
+  /**
+   * Prefilled WhatsApp messages. Brackets are prompts for the visitor and ship as written.
+   * Both open with "Hi Afrokan Labs," so site-origin chats can be counted (architecture §7).
+   */
   whatsappPrefill: z.object({
-    default: z.string().min(1),
-    demo: z.string().min(1),
+    default: z.string().startsWith("Hi Afrokan Labs,"),
+    demo: z.string().startsWith("Hi Afrokan Labs,"),
   }),
   /** Open decision #2 (docs/content/README.md). Off until decided. */
   demoOffer: z.object({ enabled: z.boolean() }),
