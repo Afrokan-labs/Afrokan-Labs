@@ -1,0 +1,126 @@
+/* reference §9 .x-quotes */
+
+.quotes {
+  margin-top: clamp(56px, 8vw, 96px);
+}
+
+.view {
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    var(--ink) 14%,
+    var(--ink) 86%,
+    transparent 100%
+  );
+}
+
+.track {
+  display: flex;
+  gap: 16px;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.card {
+  display: grid;
+  flex: 0 0 min(360px, 80vw);
+  align-content: start;
+  gap: 12px;
+  padding: 16px 18px 20px;
+  border: 1px solid var(--card-dark-border);
+  border-radius: 14px;
+  background: var(--card-dark);
+  opacity: 0.35;
+  transition: opacity 0.35s;
+}
+
+.card[data-on="true"] {
+  opacity: 1;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.av {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--input-border);
+}
+
+.who {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.who b {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.who span {
+  color: var(--mute);
+  font-size: 0.66rem;
+  font-weight: 300;
+}
+
+.mark {
+  flex: none;
+  width: 22px;
+  height: 18px;
+  margin-left: auto;
+  color: var(--lime);
+}
+
+.card blockquote {
+  color: var(--quote);
+  font-size: 0.76rem;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.nav button {
+  display: grid;
+  place-items: center;
+  width: var(--tap-target);
+  height: var(--tap-target);
+  padding: 0;
+  border: 1px solid var(--line-3);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.nav svg {
+  width: 13px;
+  height: 13px;
+}
+
+@media (hover: hover) {
+  .nav button:hover {
+    border-color: var(--lime);
+    color: var(--lime);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    transition: none;
+  }
+}

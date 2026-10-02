@@ -1,57 +1,158 @@
-/* The one dark band on the homepage (design-system §2). */
+/* reference §11 .x-contact */
 
-.band {
-  padding-block: var(--section-y);
-  background: var(--ink);
-  color: var(--on-dark);
-}
-
-.inner {
+.contact {
   display: grid;
-  gap: var(--space-7);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  align-items: end;
+  gap: 24px;
+  margin-top: clamp(56px, 8vw, 100px);
+  padding-inline: clamp(0px, 3vw, 40px);
 }
 
-.title {
-  font-size: var(--text-display);
-  line-height: var(--leading-display);
-  letter-spacing: var(--tracking-display);
-}
-
-.detail {
+.text {
   display: grid;
-  gap: var(--space-4);
-  justify-items: start;
+  align-content: center;
+  gap: 14px;
+  min-width: 0;
+  padding-bottom: clamp(24px, 5vw, 70px);
 }
 
-.body {
-  font-size: var(--text-body-l);
-  line-height: var(--leading-body-l);
+.h2 {
+  font-size: var(--text-h2);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
-.note {
-  color: var(--on-dark-2);
+.text > p:not(.msg) {
+  max-width: 52ch;
+  color: var(--mute);
+  font-size: 0.8rem;
+  font-weight: 300;
+  line-height: 1.6;
 }
 
-.actions {
+.form {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-3) var(--space-6);
-  margin-block: var(--space-3);
+  gap: 6px;
+  max-width: 420px;
+  margin-top: 6px;
+  padding: 5px 5px 5px 18px;
+  border: 1px solid var(--input-border);
+  border-radius: var(--pill);
+  background: var(--panel);
 }
 
-@media (min-width: 1024px) {
-  .inner {
-    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
-    column-gap: var(--grid-gutter);
-    align-items: end;
+.form:focus-within {
+  border-color: var(--lime);
+}
+
+.form input {
+  flex: 1;
+  min-width: 0;
+  min-height: 38px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--white);
+  font-size: 0.82rem;
+  font-weight: 300;
+}
+
+.form input::placeholder {
+  color: var(--placeholder);
+}
+
+.form button {
+  flex: none;
+  min-height: 38px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--pill);
+  background: var(--lime);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .form button:hover {
+    background: var(--lime-hover);
+  }
+}
+
+.form button:focus-visible {
+  outline-color: var(--white);
+}
+
+.msg {
+  min-height: 1.2em;
+  color: var(--lime);
+  font-size: 0.74rem;
+  font-weight: 300;
+}
+
+.wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap-target);
+  color: var(--white);
+  font-size: 0.8rem;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.wa svg {
+  width: 16px;
+  height: 16px;
+  color: var(--lime);
+}
+
+@media (hover: hover) {
+  .wa:hover {
+    color: var(--lime);
+  }
+}
+
+.cutout {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 360px);
+  aspect-ratio: 1 / 1.15;
+}
+
+.cutout::before {
+  content: "";
+  position: absolute;
+  inset: 18% 6% 0;
+  background: radial-gradient(closest-side, var(--glow-strong), transparent);
+}
+
+.cutout picture {
+  position: relative;
+  height: 100%;
+}
+
+.cutout img {
+  height: 100%;
+  object-fit: contain;
+  object-position: 50% 100%;
+  background: transparent;
+}
+
+@media (max-width: 760px) {
+  .contact {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .title {
-    grid-column: 1 / span 7;
+  .text {
+    padding-bottom: 0;
   }
 
-  .detail {
-    grid-column: 8 / span 5;
+  .cutout {
+    width: min(80%, 300px);
   }
 }

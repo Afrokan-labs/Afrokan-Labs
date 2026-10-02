@@ -1,73 +1,83 @@
-import { ChatThread, type ChatMessage } from "@/components/chat/ChatThread";
-import { Button } from "@/components/primitives/Button";
-import { StatusChip } from "@/components/primitives/StatusChip";
-import { TextLink } from "@/components/primitives/TextLink";
-import type { TrackingAttrs } from "@/lib/analytics";
-import type { WhatsAppLinkProps } from "@/lib/whatsapp";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { ResponsiveImage } from "@/components/primitives/ResponsiveImage";
+import { Burst, Spark, Swirl, Tail, Ticks } from "@/components/ui/icons";
+import type { HomeData } from "@/lib/home";
 import styles from "./Hero.module.css";
 
-type Props = {
-  headline: string;
-  subhead: string;
-  cta: WhatsAppLinkProps & { label: string };
-  /** Omitted when no project is published (architecture §4). */
-  proof?: {
-    line: string;
-    status: "live" | "delivered";
-    statusLabels: { live: string; delivered: string };
-  };
-  /** "See the case study", omitted when no project is published. */
-  caseStudy?: { href: string; label: string; tracking: TrackingAttrs };
-  /** Shown from 1024px only, and only once a conversation is approved. */
-  conversation?: {
-    messages: ChatMessage[];
-    caption: string;
-    speakerLabels: { customer: string; assistant: string };
-  };
-};
+type Props = HomeData["hero"];
 
 /**
- * design-system §8 Hero. Server-rendered: the headline is the LCP element and
- * never waits for JS. ChatThread is the only client island, desktop only.
+ * reference §1: the white hero card with the pill nav inside, the centred
+ * headline (the LCP element, server-rendered text), and the three-column
+ * stage: lede, portrait with the CTA group, and the badge.
  */
-export function Hero({ headline, subhead, cta, proof, caseStudy, conversation }: Props) {
-  const { label: ctaLabel, ...ctaLink } = cta;
-
+export function Hero({
+  header,
+  introId,
+  headline,
+  lede,
+  workLink,
+  ctaId,
+  startProject,
+  whatsapp,
+  badge,
+  photo,
+}: Props) {
+  const { label: whatsappLabel, srNote, ...whatsappAttrs } = whatsapp;
   return (
-    <section className={styles.hero} aria-labelledby="hero-title">
-      <div className={`container ${styles.inner} ${conversation ? styles.withChat : ""}`}>
-        <div className={styles.text}>
-          <h1 id="hero-title">{headline}</h1>
-          <p className={styles.subhead}>{subhead}</p>
+    <div className={styles.hero} id="top">
+      <SiteHeader {...header} inCard />
 
-          {proof && (
-            <p className={styles.proof}>
-              <StatusChip status={proof.status} labels={proof.statusLabels} />
-              <span>{proof.line}</span>
-            </p>
-          )}
+      <div className={styles.h1Row} id={introId} tabIndex={-1}>
+        <Burst className={styles.burst} />
+        <h1 className={styles.h1}>
+          {headline}
+          <Tail className={styles.tail} />
+        </h1>
+      </div>
 
-          <div id="hero-cta" className={styles.actions}>
-            <Button {...ctaLink}>{ctaLabel}</Button>
-            {caseStudy && (
-              <TextLink standalone arrow href={caseStudy.href} {...caseStudy.tracking}>
-                {caseStudy.label}
-              </TextLink>
-            )}
+      <div className={styles.stage}>
+        <div className={styles.left}>
+          <Ticks className={styles.ticks} />
+          <p className={styles.lede}>{lede}</p>
+          <a className={styles.ghost} href={workLink.href}>
+            {workLink.label}
+          </a>
+        </div>
+
+        <div className={styles.photo}>
+          <div className={styles.circle} aria-hidden="true" />
+          <div className={styles.person}>
+            <ResponsiveImage
+              {...photo}
+              priority
+              sizes="(max-width: 900px) 70vw, 330px"
+              className={styles.personImg}
+            />
+          </div>
+          <Swirl className={styles.swirl} />
+          <div className={styles.ctas} id={ctaId}>
+            <a className={styles.go} href={startProject.href}>
+              {startProject.label}
+            </a>
+            <a {...whatsappAttrs}>
+              {whatsappLabel}
+              <span className="sr-only"> {srNote}</span>
+            </a>
           </div>
         </div>
 
-        {conversation && (
-          <div className={styles.device}>
-            <ChatThread
-              animate
-              messages={conversation.messages}
-              caption={conversation.caption}
-              speakerLabels={conversation.speakerLabels}
-            />
+        <div className={styles.right}>
+          <div className={styles.sparks} aria-hidden="true">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <Spark key={i} />
+            ))}
           </div>
-        )}
+          <span className={styles.big}>{badge.title}</span>
+          <span className={styles.small}>{badge.line}</span>
+        </div>
       </div>
-    </section>
+      <div className={styles.foot} aria-hidden="true" />
+    </div>
   );
 }

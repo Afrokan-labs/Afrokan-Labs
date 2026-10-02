@@ -1,0 +1,69 @@
+/* reference §10 .x-ticker */
+
+/* Full bleed, clipped so the tilted band never causes horizontal scroll. */
+.ticker {
+  width: 100vw;
+  margin-top: clamp(64px, 9vw, 110px);
+  margin-left: calc(50% - 50vw);
+  padding-block: 12px;
+  overflow: clip;
+}
+
+.band {
+  width: 104%;
+  margin-left: -2%;
+  padding-block: clamp(8px, 1vw, 12px);
+  overflow: hidden;
+  rotate: -2.6deg;
+  background: var(--white);
+  color: var(--ink);
+  box-shadow: var(--ticker-shadow);
+}
+
+.move {
+  display: flex;
+  width: max-content;
+}
+
+.list {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: clamp(14px, 1.6vw, 22px);
+  padding-right: clamp(14px, 1.6vw, 22px);
+}
+
+.list li {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(14px, 1.6vw, 22px);
+  font-size: clamp(1rem, 0.8rem + 0.9vw, 1.6rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.list li::after {
+  content: "";
+  width: 0.7em;
+  height: 0.7em;
+  background: var(--lime);
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .move {
+    animation: marquee 32s linear infinite;
+  }
+
+  .band:hover .move {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}

@@ -1,57 +1,119 @@
-/*
- * design-system §8 ProcessStep: topped by --border-strong. Desktop: four
- * columns. Mobile: a vertical stack with the rule on the left edge forming
- * one continuous line.
- */
+/* reference §7 .x-process */
 
-.section {
-  padding-block-end: var(--section-y);
+.process {
+  margin-top: clamp(56px, 8vw, 96px);
+  padding-inline: clamp(0px, 3vw, 40px);
+}
+
+.head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px 48px;
+  align-items: start;
+}
+
+.h2 {
+  font-size: var(--text-h2);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.head p {
+  justify-self: end;
+  max-width: 44ch;
+  color: var(--mute);
+  font-size: 0.86rem;
+  font-weight: 300;
+  line-height: 1.65;
 }
 
 .steps {
   display: grid;
-  border-inline-start: var(--border-strong);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: clamp(24px, 3vw, 36px);
 }
 
 .step {
+  position: relative;
   display: grid;
-  gap: var(--space-2);
-  padding-block: var(--space-5);
-  padding-inline-start: var(--space-5);
+  align-content: start;
+  gap: 12px;
+  padding: 20px 20px 24px;
+  border: 1px solid var(--panel-border);
+  border-radius: 18px;
+  background: var(--panel);
 }
 
-.title {
-  font-size: var(--text-body-l);
-  font-weight: var(--weight-semibold);
-  line-height: var(--leading-body-l);
-  letter-spacing: 0;
+.sn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--lime);
+  color: var(--ink);
+  font-family: var(--font-wide);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
-.body {
-  color: var(--ink-2);
+.step h3 {
+  margin-top: 6px;
+  font-size: 0.98rem;
+  font-weight: 500;
+  line-height: 1.3;
 }
 
-.note {
-  margin-block-start: var(--space-7);
-  font-size: var(--text-body-l);
-  line-height: var(--leading-body-l);
+.step p {
+  color: var(--mute);
+  font-size: 0.76rem;
+  font-weight: 300;
+  line-height: 1.6;
 }
 
-.cta {
-  margin-block-start: var(--space-6);
+/* Short connectors between the cards on desktop. */
+.step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 39px;
+  right: -15px;
+  width: 16px;
+  height: 1px;
+  background: var(--line-2);
 }
 
-@media (min-width: 1024px) {
+.btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+@media (max-width: 900px) {
   .steps {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    column-gap: var(--grid-gutter);
-    border-inline-start: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .step {
-    align-content: start;
-    padding-block: var(--space-5) 0;
-    padding-inline-start: 0;
-    border-top: var(--border-strong);
+  .step::after {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .head {
+    grid-template-columns: 1fr;
+  }
+
+  .head p {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 520px) {
+  .steps {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
