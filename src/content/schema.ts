@@ -146,7 +146,15 @@ const SectionCopy = z.object({
 export const Services = z.object({
   section: SectionCopy,
   items: z
-    .array(z.object({ kind: BuiltKind, title: z.string().min(1), body: z.string().min(1) }))
+    .array(
+      z.object({
+        kind: BuiltKind,
+        /** Technology label (Tag), shown after the outcome headline. */
+        tag: z.string().min(1),
+        title: z.string().min(1),
+        body: z.string().min(1),
+      }),
+    )
     .length(3, "The strategy specifies exactly three services."),
 });
 
@@ -213,10 +221,25 @@ export const Home = z.object({
     primaryCta: z.string().min(1),
     secondaryLink: z.string().min(1),
   }),
+  featured: z.object({
+    eyebrow: z.string().min(1),
+    titles: z.record(z.string(), z.string().min(1)),
+    caseStudyLink: z.string().min(1),
+    whatsappCta: z.string().min(1),
+    fields: z.object({
+      client: z.string().min(1),
+      industry: z.string().min(1),
+      status: z.string().min(1),
+      built: z.string().min(1),
+    }),
+    resultLabel: z.string().min(1),
+  }),
+  offer: z.object({ title: z.string().min(1), body: z.string().min(1), cta: z.string().min(1) }),
   contact: z.object({
     title: z.string().min(1),
-    /** {replyWithin} is filled from site.replyWithin. */
-    body: z.string().includes("{replyWithin}"),
+    body: z.string().min(1),
+    responseNote: z.string().includes("{replyWithin}"),
+    cta: z.string().min(1),
   }),
 });
 export type Home = z.infer<typeof Home>;
