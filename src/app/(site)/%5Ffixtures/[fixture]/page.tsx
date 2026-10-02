@@ -4,6 +4,7 @@
  * Delete before launch (BUILD_PLAN 5.1). Not indexed, not in Lighthouse.
  */
 import type { Metadata } from "next";
+import { StickyActionBar } from "@/components/layout/StickyActionBar";
 import { HomeSections } from "@/components/sections/HomeSections";
 import { fixtures, type FixtureName } from "@/fixtures/projects";
 import { getHomeData } from "@/lib/home";
@@ -25,8 +26,11 @@ export default async function FixturePage({ params }: { params: Promise<{ fixtur
   // The named fixture also turns the demo offer on, so OfferBand is exercised.
   const data = getHomeData([...projects], { demoOfferEnabled: fixture === "named" });
   return (
-    <main id="main">
-      <HomeSections data={data} />
-    </main>
+    <>
+      <main id="main">
+        <HomeSections data={data} />
+      </main>
+      <StickyActionBar {...data.sticky} />
+    </>
   );
 }
