@@ -1,27 +1,178 @@
-.footer {
-  border-top: var(--border-hair);
-  font-size: var(--text-small);
-  color: var(--ink-2);
+/* reference .x-footwrap, .x-foot-card and its parts */
+
+.wrap {
+  padding-block: clamp(40px, 6vw, 72px) clamp(16px, 2vw, 24px);
 }
 
-.inner {
+.card {
   display: grid;
-  gap: var(--space-3);
-  padding-block: var(--space-7);
+  gap: clamp(24px, 3.4vw, 40px);
+  padding: clamp(24px, 3.4vw, 40px) clamp(18px, 3.4vw, 40px) clamp(16px, 2vw, 22px);
+  border-radius: 22px;
+  background: var(--lime);
+  color: var(--ink);
 }
 
-.row {
+.top {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px 40px;
+}
+
+.logo {
+  display: inline-flex;
+  min-height: var(--tap-target);
   align-items: center;
-  gap: 0 var(--space-6);
-}
-
-.name {
   color: var(--ink);
-  font-weight: var(--weight-semibold);
+  font-size: clamp(1.4rem, 1rem + 1.4vw, 2rem);
+  letter-spacing: -0.02em;
+  text-decoration: none;
 }
 
-.copyright {
-  margin-block-start: var(--space-3);
+.logo span {
+  font-size: inherit;
+}
+
+.blurb {
+  max-width: 40ch;
+  color: var(--on-lime-2);
+  font-size: 0.74rem;
+  line-height: 1.6;
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.6fr);
+  gap: 24px 20px;
+}
+
+.colTitle {
+  margin-bottom: 12px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.list {
+  display: grid;
+  gap: 2px;
+}
+
+.list li,
+.link {
+  color: var(--on-lime-2);
+  font-size: 0.74rem;
+  overflow-wrap: anywhere;
+}
+
+/* 24px rows keep the column links comfortable to tap (WCAG 2.5.8). */
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .link:hover {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+.news p {
+  margin-bottom: 12px;
+  color: var(--on-lime-2);
+  font-size: 0.74rem;
+  line-height: 1.6;
+}
+
+.newsForm {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.newsForm input {
+  width: 100%;
+  min-height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--pill);
+  background: var(--news-input);
+  color: var(--ink);
+  font-size: 0.76rem;
+}
+
+.newsForm input::placeholder {
+  color: var(--on-lime-placeholder);
+}
+
+.newsForm button {
+  min-height: var(--tap-target);
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--pill);
+  background: var(--white);
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--foot-rule);
+  color: var(--on-lime-2);
+  font-size: 0.7rem;
+}
+
+.social {
+  display: flex;
+  gap: 8px;
+}
+
+.social a {
+  display: grid;
+  place-items: center;
+  width: var(--tap-target);
+  height: var(--tap-target);
+  border-radius: 50%;
+  color: var(--ink);
+}
+
+.social svg {
+  width: 14px;
+  height: 14px;
+}
+
+@media (hover: hover) {
+  .social a:hover {
+    background: var(--ink);
+    color: var(--lime);
+  }
+}
+
+.card :focus-visible {
+  outline-color: var(--ink);
+}
+
+@media (max-width: 900px) {
+  .cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .news {
+    grid-column: 1 / -1;
+  }
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { Wordmark } from "@/components/Mark";
+import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/primitives/Button";
 import type { WhatsAppLinkProps } from "@/lib/whatsapp";
 import styles from "./MenuSheet.module.css";
@@ -12,11 +12,11 @@ type Props = {
   links: { label: string; href: string }[];
   /** whatsappLink({ location: "menu" }), built on the server. */
   cta: WhatsAppLinkProps & { label: string };
-  labels: { menu: string; close: string; nav: string };
+  labels: { menu: string; close: string; nav: string; home: string };
 };
 
 /**
- * design-system §8 MenuSheet (below 1024px). Built on native <dialog> with
+ * The mobile menu (900px and below, reference .x-menu). Built on native <dialog> with
  * showModal(): the browser provides the focus trap, Escape to close and the
  * inert background. This component adds closing on link tap and returning
  * focus to the toggle.
@@ -33,8 +33,8 @@ export function MenuSheet({ siteName, links, cta, labels }: Props) {
     const onClose = () => toggleRef.current?.focus({ preventScroll: true });
     dialog.addEventListener("close", onClose);
 
-    // The sheet is mobile-only. If the window grows past 1024px, close it.
-    const desktop = window.matchMedia("(min-width: 1024px)");
+    // The sheet is for 900px and below. If the window grows past that, close it.
+    const desktop = window.matchMedia("(min-width: 901px)");
     const onResize = () => desktop.matches && dialog.open && dialog.close();
     desktop.addEventListener("change", onResize);
 
@@ -52,7 +52,7 @@ export function MenuSheet({ siteName, links, cta, labels }: Props) {
     <div className={styles.root}>
       <Button
         ref={toggleRef}
-        variant="ghost"
+        className={styles.toggle}
         aria-haspopup="dialog"
         aria-controls="menu-sheet"
         onClick={open}
@@ -62,10 +62,10 @@ export function MenuSheet({ siteName, links, cta, labels }: Props) {
 
       <dialog id="menu-sheet" ref={dialogRef} className={styles.sheet} aria-label={labels.menu}>
         <div className={`container ${styles.top}`}>
-          <Link href="/" className={styles.brand} aria-label={siteName} onClick={close}>
-            <Wordmark />
+          <Link href="/" className={styles.brand} aria-label={labels.home} onClick={close}>
+            <Logo name={siteName} />
           </Link>
-          <Button variant="ghost" onClick={close}>
+          <Button variant="line" onClick={close}>
             {labels.close}
           </Button>
         </div>

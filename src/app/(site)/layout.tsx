@@ -1,17 +1,17 @@
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { getChromeProps } from "@/lib/chrome";
+import { getSite } from "@/lib/content";
 
 /**
- * Shared header and footer for the site's pages. The coming-soon page at "/"
- * sits outside this group until launch (BUILD_PLAN 5.1). Pages here render
- * <main id="main">, the skip link's target.
+ * Inner pages: the pill nav on the dark page, then the page, then the lime
+ * footer. Pages here render <main id="main">, the skip link's target.
  */
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   const chrome = getChromeProps();
   return (
     <>
-      <SiteHeader {...chrome.header} />
+      <SiteHeader {...chrome.header} siteName={getSite().name} />
       {children}
       <SiteFooter {...chrome.footer} />
     </>

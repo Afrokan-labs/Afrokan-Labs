@@ -1,69 +1,48 @@
 import Link from "next/link";
-import { Wordmark } from "@/components/Mark";
-import { Button } from "@/components/primitives/Button";
-import type { WhatsAppLinkProps } from "@/lib/whatsapp";
+import { Logo } from "@/components/ui/Logo";
+import type { ChromeProps } from "@/lib/chrome";
 import { MenuSheet } from "./MenuSheet";
 import styles from "./SiteHeader.module.css";
 
-type Props = {
+type Props = ChromeProps["header"] & {
   siteName: string;
-  skipLink: { label: string; target: string };
-  links: { label: string; href: string }[];
-  /** whatsappLink({ location: "header" }) for the desktop button. */
-  headerCta: WhatsAppLinkProps;
-  /** whatsappLink({ location: "menu" }) for the button pinned in the mobile menu. */
-  menuCta: WhatsAppLinkProps;
-  ctaLabel: string;
-  labels: { nav: string; menu: string; close: string };
+  /** Inside the homepage hero card (reference .x-hero) rather than on the dark page. */
+  inCard?: boolean;
 };
 
 /**
- * design-system §8 SiteHeader. Desktop: 64px, sticky, solid --paper with a
- * hairline. Mobile: 56px, not sticky, wordmark and menu toggle only (the hero
- * CTA and the sticky bar keep WhatsApp one tap away).
+ * The black pill nav (reference .x-nav): two links, the logo, two links.
+ * At 900px and below only the logo and a lime "Menu" pill show; the menu
+ * holds the links and the WhatsApp CTA.
  */
-export function SiteHeader({
-  siteName,
-  skipLink,
-  links,
-  headerCta,
-  menuCta,
-  ctaLabel,
-  labels,
-}: Props) {
+export function SiteHeader({ siteName, skipLink, links, menuCta, labels, inCard }: Props) {
+  const left = links.slice(0, Math.ceil(links.length / 2));
+  const right = links.slice(left.length);
+  const side = (items: typeof links) => (
+    <ul className={styles.side}>
+      {items.map((l) => (
+        <li key={l.href}>
+          <a href={l.href} className={styles.link}>
+            {l.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+
   return (
-    <header className={styles.header}>
+    <header className={inCard ? styles.inCard : styles.onPage}>
       <a href={`#${skipLink.target}`} className="skip-link">
         {skipLink.label}
       </a>
-      <div className={`container ${styles.inner}`}>
-        <Link href="/" className={styles.brand} aria-label={siteName}>
-          <Wordmark />
+      <nav className={styles.nav} aria-label={labels.nav}>
+        {side(left)}
+        <Link href="/" className={styles.logo} aria-label={labels.home}>
+          <Logo name={siteName} />
         </Link>
-
-        <nav className={styles.nav} aria-label={labels.nav}>
-          <ul className={styles.list}>
-            {links.map((l) => (
-              <li key={l.href}>
-                <a href={l.href} className={styles.link}>
-                  {l.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className={styles.cta}>
-          <Button {...headerCta}>{ctaLabel}</Button>
-        </div>
-
-        <MenuSheet
-          siteName={siteName}
-          links={links}
-          cta={{ ...menuCta, label: ctaLabel }}
-          labels={labels}
-        />
-      </div>
+        {side(right)}
+        <MenuSheet siteName={siteName} links={links} cta={menuCta} labels={labels} />
+      </nav>
     </header>
   );
 }
