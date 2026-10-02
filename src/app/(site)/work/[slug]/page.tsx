@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { StickyActionBar } from "@/components/layout/StickyActionBar";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { CaseStudy } from "@/components/work/CaseStudy";
 import { getCaseStudyData } from "@/lib/case-study";
 import { getProject, getProjectBody, getProjects } from "@/lib/content";
+import { articleJsonLd, pageMetadata } from "@/lib/seo";
 
 // Only visible projects get a page: published ones, plus drafts under `next dev`.
 export const dynamicParams = false;
@@ -26,7 +28,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const project = getProject((await params).slug);
   if (!project) return {};
   const { seo } = getCaseStudyData(project);
-  return { title: seo.title, description: seo.description };
+  return pageMetadata({ path: `/work/${project.slug}`, ...seo, type: "article" });
 }
 
 export default async function CaseStudyPage({ params }: Params) {
@@ -39,6 +41,7 @@ export default async function CaseStudyPage({ params }: Params) {
 
   return (
     <>
+      <JsonLd data={articleJsonLd({ path: `/work/${slug}`, ...data.seo })} />
       <main id="main">
         <CaseStudy {...data} body={<Body />} />
       </main>

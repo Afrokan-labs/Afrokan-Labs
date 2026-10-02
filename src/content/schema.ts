@@ -99,6 +99,8 @@ export const Site = z.object({
   domain: z.string(),
   email: z.email(),
   location: z.string(),
+  /** schema.org PostalAddress for JSON-LD: city level only (architecture §8). */
+  address: z.object({ locality: z.string().min(1), country: z.string().regex(/^[A-Z]{2}$/) }),
   /** E.164, e.g. +233201234567. The only place the number exists. */
   whatsappNumber: orTodo(
     z.string().regex(/^\+[1-9]\d{7,14}$/),
@@ -252,7 +254,11 @@ export type Home = z.infer<typeof Home>;
 export const CaseStudyCopy = z.object({
   attribution: z.string().includes("{formerBrand}"),
   headings: z.object({ howItWorks: z.string().min(1), result: z.string().min(1) }),
-  workIndex: z.object({ title: z.string().min(1) }),
+  workIndex: z.object({
+    title: z.string().min(1),
+    /** Meta description. Omitted from the page while TODO_. */
+    description: orTodo(z.string().min(1).max(155), "a meta description of up to 155 characters"),
+  }),
   cta: z.object({ title: z.string().min(1), button: z.string().min(1) }),
 });
 export type CaseStudyCopy = z.infer<typeof CaseStudyCopy>;
@@ -261,6 +267,8 @@ export const Privacy = z.object({
   /** Who approved the copy and when. TODO_ until approved (launch:check fails). */
   approvedBy: orTodo(z.string().min(1), "who approved the privacy copy and when"),
   title: z.string().min(1),
+  /** Meta description. Omitted from the page while TODO_. */
+  description: orTodo(z.string().min(1).max(155), "a meta description of up to 155 characters"),
   intro: z.string().min(1),
   sections: z
     .array(
