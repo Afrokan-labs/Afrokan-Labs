@@ -1,7 +1,8 @@
 /**
  * Token enforcement (CLAUDE.md override 5, design-system §5):
  * - no hex colours outside src/styles/tokens.css
- * - colour, spacing and font values in components must be var(--…)
+ * - colour and font-family values in components must be var(--…); sizes are
+ *   ported from the reference and may be raw (CLAUDE.md override 5)
  * - media queries use only the fixed breakpoints
  */
 
@@ -22,8 +23,9 @@ const config = {
     // Font family names in custom properties keep their case (Roboto, not roboto).
     "value-keyword-case": ["lower", { ignoreProperties: ["/^--font-/"] }],
     "media-feature-range-notation": "prefix",
+    // The reference's breakpoints (design-system §5), as desktop-first max-width queries.
     "media-feature-name-value-allowed-list": {
-      "min-width": ["640px", "1024px", "1440px"],
+      "max-width": ["520px", "560px", "760px", "900px", "960px"],
     },
   },
   overrides: [
@@ -32,21 +34,10 @@ const config = {
       rules: { "color-no-hex": null },
     },
     {
-      files: ["src/components/**/*.css"],
+      files: ["src/components/**/*.css", "src/app/**/*.css"],
       rules: {
         "scale-unlimited/declaration-strict-value": [
-          [
-            "/color$/",
-            "fill",
-            "stroke",
-            "/^margin/",
-            "/^padding/",
-            "/gap$/",
-            "font",
-            "font-family",
-            "font-size",
-            "font-weight",
-          ],
+          ["/color$/", "fill", "stroke", "background", "font-family"],
           {
             ignoreValues: [
               "0",

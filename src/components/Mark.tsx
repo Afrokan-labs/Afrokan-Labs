@@ -27,16 +27,3 @@ export function Mark({ className, title }: MarkProps) {
     </svg>
   );
 }
-
-export function Wordmark({ className }: { className?: string }) {
-  return (
-    <span className={`wordmark ${className ?? ""}`}>
-      <Mark className="wordmark-mark" />
-      <span className="wordmark-text">
-        Afrokan
-        <br />
-        Labs
-      </span>
-    </span>
-  );
-}

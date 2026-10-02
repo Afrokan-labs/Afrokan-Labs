@@ -1,4 +1,4 @@
-/* design-system §6 and §9: images use --radius-m; --surface-2 shows if loading fails. */
+/* Containers set shape and crop; --photo-bg shows while loading or if loading fails. */
 
 .picture {
   display: block;
@@ -7,6 +7,5 @@
 .img {
   width: 100%;
   height: auto;
-  border-radius: var(--radius-m);
-  background: var(--surface-2);
+  background: var(--photo-bg);
 }

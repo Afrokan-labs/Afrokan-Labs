@@ -1,39 +1,27 @@
-/* design-system §8 TextLink: 1px underline at rest that grows on hover, left to right. */
+/* Text links: lime on dark, ink on white; underline on hover-capable devices. */
 
 .link {
-  color: var(--accent);
+  color: var(--lime);
   text-decoration: none;
 }
 
 .text {
-  position: relative;
-  display: inline-block;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
-.text::before,
-.text::after {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  height: var(--link-underline);
-  background: currentcolor;
-}
-
-.text::after {
-  height: calc(var(--link-underline) * 2);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--dur-base) var(--ease);
+.ink {
+  color: var(--ink);
 }
 
 /* Decorative arrow after the label; hidden from screen readers. */
 .arrow::before {
   content: "→";
-  margin-inline-start: var(--space-1);
+  margin-inline-start: 4px;
 }
 
-/* §10: 44px tap target for links that stand on their own line. */
+/* A link on its own line gets a 44px tap target. */
 .standalone {
   display: inline-flex;
   align-items: center;
@@ -41,23 +29,15 @@
 }
 
 @media (hover: hover) {
+  .link:hover .text {
+    text-decoration-thickness: 2px;
+  }
+
   .link:hover {
-    color: var(--accent-hover);
+    color: var(--lime-hover);
   }
 
-  .link:hover .text::after {
-    transform: scaleX(1);
+  .ink:hover {
+    color: var(--ink);
   }
-
-  .onDark:hover {
-    color: var(--accent-on-dark);
-  }
-}
-
-.onDark {
-  color: var(--accent-on-dark);
-}
-
-.onDark:focus-visible {
-  outline-color: var(--accent-on-dark);
 }

@@ -1,12 +1,18 @@
-/* §4: --space-8 between a section header and its content. */
+/* reference .x-h2 header block. */
 
 .header {
   display: grid;
-  gap: var(--space-3);
-  margin-block-end: var(--space-8);
+  gap: 12px;
+  margin-block-end: clamp(24px, 3vw, 36px);
+}
+
+.header h2 {
+  font-size: var(--text-h2);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .meta {
   display: flex;
-  gap: var(--space-3);
+  gap: 12px;
 }

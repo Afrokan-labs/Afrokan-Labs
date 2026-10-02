@@ -10,8 +10,8 @@ type Props = {
 };
 
 /**
- * design-system §8 StatusChip. The label is picked by status, so "Live" can
- * only show when status is "live" (CLAUDE.md content rules).
+ * Status with a dot (reference .x-live). The label is picked by status, so
+ * "Live" and the lime dot only show when status is "live" (CLAUDE.md content rules).
  */
 export function StatusChip({ status, labels, className }: Props) {
   return (

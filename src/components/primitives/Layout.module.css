@@ -1,18 +1,15 @@
-/* design-system §6 rules. */
+/* Dividers. */
 
 .rule {
   margin: 0;
   border: 0;
 }
 
-.hair {
-  border-top: var(--border-hair);
+.hair,
+.onDark {
+  border-top: 1px solid var(--line-2);
 }
 
 .strong {
-  border-top: var(--border-strong);
-}
-
-.onDark {
-  border-top: var(--border-hair-on-dark);
+  border-top: 2px solid var(--white);
 }

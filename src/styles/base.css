@@ -1,6 +1,6 @@
 /*
- * Reset, base typography and focus styles. Values come from tokens.css;
- * section references are to docs/design-system.md.
+ * Reset, base typography and focus styles (docs/design-system.md v2).
+ * Values come from tokens.css; sizes are the reference's.
  */
 
 *,
@@ -15,21 +15,20 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-/* §8 SiteHeader: the desktop header is sticky, so anchors land below it. */
-@media (min-width: 1024px) {
+@media (prefers-reduced-motion: no-preference) {
   html {
-    scroll-padding-top: var(--header-height);
+    scroll-behavior: smooth;
   }
 }
 
 body {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: var(--text-body);
-  font-weight: var(--weight-regular);
-  line-height: var(--leading-body);
-  color: var(--ink);
-  background: var(--paper);
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--white);
+  background: var(--page);
 }
 
 h1,
@@ -52,31 +51,12 @@ ol {
   list-style: none;
 }
 
-/* §3 scale. h1 uses Display; components restyle headings where needed. */
-h1 {
-  font-size: var(--text-display);
-  font-weight: var(--weight-semibold);
-  line-height: var(--leading-display);
-  letter-spacing: var(--tracking-display);
-}
-
-h2 {
-  font-size: var(--text-h2);
-  font-weight: var(--weight-semibold);
-  line-height: var(--leading-h2);
-  letter-spacing: var(--tracking-h2);
-}
-
-h3 {
-  font-size: var(--text-h3);
-  font-weight: var(--weight-semibold);
-  line-height: var(--leading-h3);
-  letter-spacing: var(--tracking-h3);
-}
-
-/* §3: line length capped at about 70 characters. */
-p {
-  max-width: var(--measure);
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 500;
+  text-wrap: balance;
 }
 
 a {
@@ -99,27 +79,15 @@ textarea {
   color: inherit;
 }
 
-/* §8 Button / §10: visible focus on every interactive element. Never removed. */
+/* §8: visible focus on every interactive element. Never removed. */
 :focus-visible {
   outline: var(--focus-ring);
   outline-offset: var(--focus-offset);
 }
 
-/* Wordmark (src/components/Mark.tsx uses these global class names). */
-.wordmark {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.wordmark-mark {
-  width: var(--space-6);
-}
-
-.wordmark-text {
-  font-size: var(--text-small);
-  font-weight: var(--weight-semibold);
-  line-height: var(--leading-h2);
+/* In-page anchors land clear of the top edge. */
+[id] {
+  scroll-margin-top: 24px;
 }
 
 .sr-only {
@@ -136,14 +104,15 @@ textarea {
   display: inline-flex;
   align-items: center;
   min-height: var(--tap-target);
-  top: var(--space-2);
-  left: var(--space-2);
+  top: 8px;
+  left: 8px;
   z-index: 100;
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-s);
-  background: var(--ink);
-  color: var(--paper);
-  font-weight: var(--weight-semibold);
+  padding: 8px 18px;
+  border-radius: var(--pill);
+  background: var(--lime);
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: none;
   transform: translateY(-200%);
 }
 
@@ -151,12 +120,12 @@ textarea {
   transform: none;
 }
 
-/* §7, as written in the design doc. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }

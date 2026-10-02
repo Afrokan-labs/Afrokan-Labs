@@ -1,141 +1,105 @@
 /*
- * Afrokan Labs design tokens.
+ * Afrokan Labs design tokens, docs/design-system.md v2.
  *
- * The first block is the token sheet from docs/design-system.md §12, copied
- * value for value. Every raw colour, size and font value on the site lives
- * in this file; everything else uses var(--…). Change a value in the design
- * doc first, then here.
+ * Every raw colour and font stack on the site lives in this file; component
+ * CSS uses var(--…) for them (Stylelint enforces it). Values are ported from
+ * docs/design/handoff/reference.html; each group names its reference rule.
  *
- * --font-sans: next/font self-hosts Schibsted Grotesk and generates a
- * metric-matched "Schibsted Grotesk Fallback" face (no layout shift on load).
- * It redefines --font-sans on <body> to include that face (src/app/layout.tsx).
- * The value below is the design doc's stack and applies outside body.
+ * --font-sans and --font-wide: next/font self-hosts Lexend and Unbounded and
+ * redefines both on <body> with metric-matched fallback faces
+ * (src/app/layout.tsx). The stacks below apply outside body.
  */
 :root {
-  /* Colour */
-  --paper: #f6f3ee;
-  --surface-2: #eee9e1;
-  --ink: #16130f;
-  --ink-hover: #2b2620;
-  --ink-2: #5a534b;
-  --rule: #e2dcd3;
-  --accent: #a63f26;
-  --accent-hover: #963820;
-  --live: #2a7349;
-  --chat-assistant: #e7f0e9;
-  --on-dark: #f6f3ee;
-  --on-dark-2: #b8afa3;
-  --accent-on-dark: #e07a5a;
-  --rule-on-dark: #2e2924;
+  color-scheme: dark;
 
-  /* Type */
-  --font-sans: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* §2 Colour: surfaces */
+  --page: #121212;
+  --panel: #1c1c1c;
+  --panel-border: #2a2a2a;
+  --card-dark: #262626;
+  --card-dark-border: #303030;
+  --white: #fff;
+
+  /* §2 Colour: lines and borders (decorative) */
+  --line: #343434;
+  --line-2: #4a4a4a;
+  --line-3: #5a5a5a;
+  --line-hover: #7a7a7a;
+  --input-border: #3a3a3a;
+  --divider-mark: #9a9a9a;
+
+  /* §2 Colour: text */
+  --ink: #0d0d0d;
+  --ink-2: #555;
+  --ink-3: #6a6a6a;
+  --mute: #a3a3a3;
+  --quote: #d6d6d6;
+  --placeholder: #8a8a8a;
+  --on-lime-2: #1d3a0c;
+  --on-lime-3: #1f3a10;
+  --on-lime-placeholder: #3f5f2a;
+
+  /* Form errors on dark (8.2:1 on --page, 7.4:1 on --panel). Not in the
+     reference, which has no error states; lime would read as success. */
+  --error: #ff8a7a;
+
+  /* §2 Colour: accent */
+  --lime: #8cf04a;
+  --lime-hover: #79de37;
+
+  /* §2 Colour: hero and decoration */
+  --grey-circle: #ededed;
+  --person-bg: #d9d9d9;
+  --face-bg: #cfcfcf;
+  --photo-bg: #2a2a2a;
+  --nav-hover: #222;
+  --row-open: #222;
+  --ring-blue: #4b5bff;
+  --bulb-red: #e2453c;
+
+  /* Translucent layers (reference: .x-glow, .x-ctas, .x-tband, .x-news, .x-foot-bot) */
+  --glow: rgb(140 240 74 / 0.1);
+  --glow-strong: rgb(140 240 74 / 0.16);
+  --live-halo: rgb(140 240 74 / 0.18);
+  --cta-group-bg: rgb(20 20 20 / 0.55);
+  --cta-group-border: rgb(255 255 255 / 0.35);
+  --cta-group-hover: rgb(255 255 255 / 0.12);
+  --ticker-shadow: 0 6px 24px rgb(0 0 0 / 0.35);
+  --toggle-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+  --news-input: rgb(255 255 255 / 0.55);
+  --foot-rule: rgb(13 13 13 / 0.18);
+  --menu-backdrop: rgb(0 0 0 / 0.6);
+
+  /* §3 Type */
+  --font-sans: "Lexend", "Segoe UI", system-ui, sans-serif;
+  --font-wide: "Unbounded", "Arial Black", system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", monospace;
-  --text-display: clamp(2.25rem, 1.5rem + 3.33vw, 4.5rem);
-  --text-h2: clamp(1.75rem, 1.4rem + 1.48vw, 2.75rem);
-  --text-h3: clamp(1.25rem, 1.08rem + 0.74vw, 1.75rem);
-  --text-statement: clamp(1.5rem, 1.25rem + 1.11vw, 2.25rem);
-  --text-body-l: clamp(1.125rem, 1.08rem + 0.19vw, 1.25rem);
-  --text-body: 1rem;
-  --text-small: 0.875rem;
-  --text-label: clamp(0.75rem, 0.73rem + 0.09vw, 0.8125rem);
+  --text-h1: clamp(1.9rem, 1rem + 3.4vw, 3.6rem);
+  --text-h2: clamp(1.6rem, 1.1rem + 1.6vw, 2.35rem);
 
-  /* Spacing */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-  --space-7: 48px;
-  --space-8: 64px;
-  --space-9: 96px;
-  --space-10: 128px;
-  --space-11: 160px;
-  --section-y: clamp(64px, 10vw, 160px);
+  /* §5 Layout */
+  --max: 1180px;
+  --gutter: clamp(16px, 3vw, 32px);
 
-  /* Shape */
-  --radius-s: 4px;
-  --radius-m: 8px;
-  --radius-chat: 12px;
-  --border-hair: 1px solid var(--rule);
-  --border-strong: 2px solid var(--ink);
-  --shadow-device: 0 20px 40px -24px rgb(22 19 15 / 0.25);
+  /* §4 Shape */
+  --pill: 999px;
 
-  /* Motion */
+  /* §6 Motion */
   --ease: cubic-bezier(0.2, 0, 0, 1);
   --dur-fast: 150ms;
-  --dur-base: 250ms;
+  --dur-base: 200ms;
   --dur-slow: 400ms;
 
-  /* Layout */
-  --container: 1200px;
-  --container-xl: 1280px;
-  --page-margin: var(--space-4); /* 16px; becomes 32px at 640px (see §5) */
-}
+  /* §8 Focus */
+  --focus-ring: 2px solid var(--lime);
+  --focus-offset: 3px;
 
-@media (min-width: 640px) {
-  :root {
-    --page-margin: var(--space-6);
-  }
-}
-
-/* Breakpoints are not tokens: hard-code 640px / 1024px / 1440px in media queries. */
-
-/*
- * Values the design doc specifies outside the §12 sheet, named here so that
- * no other file needs a raw value. Each one cites where the doc defines it.
- * PENDING: add these to the §12 sheet in docs/design-system.md.
- */
-/* stylelint-disable-next-line no-duplicate-selectors -- kept apart from the §12 sheet on purpose */
-:root {
-  /* §3 type scale table: weight, line height and tracking per style */
-  --weight-regular: 400;
-  --weight-medium: 500;
-  --weight-semibold: 600;
-  --leading-display: 1.05;
-  --leading-h2: 1.1;
-  --leading-h3: 1.2;
-  --leading-statement: 1.25;
-  --leading-body-l: 1.55;
-  --leading-body: 1.6;
-  --leading-small: 1.5;
-  --leading-label: 1.4;
-  --tracking-display: -0.02em;
-  --tracking-h2: -0.015em;
-  --tracking-h3: -0.01em;
-  --tracking-statement: -0.01em;
-  --tracking-label: 0.06em;
-
-  /* §3 rules: body text line length */
-  --measure: 68ch;
-
-  /* §8 Button: focus-visible outline */
-  --focus-ring: 2px solid var(--accent);
-  --focus-offset: 2px;
-
-  /* §8 SiteHeader: 64px desktop (sticky, also scroll-padding-top), 56px mobile */
-  --header-height: 64px;
-  --header-height-mobile: 56px;
-
-  /* §8 StickyActionBar: 64px plus env(safe-area-inset-bottom) */
+  /* Sizes components share */
+  --tap-target: 44px;
+  --icon-size: 16px;
   --sticky-bar-height: 64px;
 
-  /* §8 MenuSheet: links at 24px, 56px row height */
-  --menu-link-size: 1.5rem;
-  --menu-row-height: 56px;
-
-  /* §8 Button: 48px tall on mobile (44px from 1024px), 20px side padding,
-     20px WhatsApp glyph, 40% opacity when disabled, scale 0.98 when pressed */
-  --button-height: 48px;
-  --button-padding-x: 20px;
-  --icon-size: 20px;
-  --disabled-opacity: 0.4;
-  --press-scale: 0.98;
-
-  /* §8 Button Loading: "Spinner replaces the label". The doc gives no size or
-     speed: the ring matches the 20px glyph, 2px like --border-strong, one turn
-     per second. PENDING: confirm in docs/design-system.md. */
+  /* Button loading spinner: 2px ring, one turn per second. */
   --spinner-border: 2px;
   --spinner-duration: 1s;
 
@@ -143,35 +107,8 @@
      so the form doesn't shift when it renders. */
   --turnstile-height: 65px;
 
-  /* §8 Button secondary: 1px --ink border; §2 dark band: --rule-on-dark hairlines */
-  --border-ink: 1px solid var(--ink);
-  --border-hair-on-dark: 1px solid var(--rule-on-dark);
-
-  /* §10: tap targets at least 44×44px */
-  --tap-target: 44px;
-
-  /* §8 TextLink: 1px underline at rest */
-  --link-underline: 1px;
-
-  /* §8 StatusChip: 8px dot */
-  --dot-size: 8px;
-
-  /* §5 grid table: columns and gutter per breakpoint */
-  --grid-columns: 4;
-  --grid-gutter: var(--space-4); /* 16px */
-}
-
-@media (min-width: 640px) {
-  :root {
-    --grid-columns: 8;
-    --grid-gutter: 20px; /* §5 md gutter; not on the §4 spacing scale */
-  }
-}
-
-@media (min-width: 1024px) {
-  :root {
-    --grid-columns: 12;
-    --button-height: 44px;
-    --grid-gutter: var(--space-5); /* 24px */
-  }
+  /* Chat bubbles (case study conversation, once approved) */
+  --chat-customer: var(--card-dark);
+  --chat-assistant: var(--lime);
+  --radius-chat: 12px;
 }
