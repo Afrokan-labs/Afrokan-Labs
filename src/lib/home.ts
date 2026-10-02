@@ -20,6 +20,7 @@ import {
   getTeam,
 } from "./content";
 import type { Project } from "../content/schema";
+import { getImage } from "./images";
 import { demoOfferLink, whatsappLink } from "./whatsapp";
 
 /** A business fact that has been confirmed (not a TODO_ placeholder). */
@@ -133,7 +134,11 @@ export function getHomeData(projects: Project[] = getProjects(), options: Option
     // Members with unconfirmed names or roles are left out until confirmed.
     members: team.members
       .filter((m) => confirmed(m.name) && confirmed(m.role))
-      .map((m) => ({ name: m.name, role: m.role })),
+      .map((m) => ({
+        name: m.name,
+        role: m.role,
+        photo: m.photo && { ...getImage(m.photo.src), alt: m.photo.alt },
+      })),
   };
 
   const contact = {
