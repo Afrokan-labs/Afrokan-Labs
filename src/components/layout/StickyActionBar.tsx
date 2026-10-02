@@ -59,12 +59,15 @@ export function StickyActionBar({ cta, showAfter, hideAt }: Props) {
   return (
     <>
       <div className={styles.spacer} aria-hidden="true" />
-      {/* Hidden until JS decides; inert keeps the off-screen button out of the tab order. */}
-      <div className={styles.bar} data-visible={visible} inert={!visible}>
+      {/*
+       * Hidden until JS decides; inert keeps the off-screen button out of the tab order.
+       * An <aside> so the bar sits in a landmark like the rest of the page.
+       */}
+      <aside className={styles.bar} data-visible={visible} inert={!visible}>
         <Button fullWidth {...link}>
           {label}
         </Button>
-      </div>
+      </aside>
     </>
   );
 }
