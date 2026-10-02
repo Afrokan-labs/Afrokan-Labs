@@ -10,7 +10,8 @@
         "/_fixtures/named.html",
         "/_fixtures/case-study/anonymised.html",
         "/_fixtures/case-study/named.html"
-      ]
+      ],
+      "maxAutodiscoverUrls": 0
     },
     "assert": {
       "assertions": {

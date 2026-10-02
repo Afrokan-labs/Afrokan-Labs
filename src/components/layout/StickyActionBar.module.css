@@ -18,17 +18,18 @@
   transform: none;
 }
 
-/* The bar never covers the last content: main gets matching bottom padding on mobile. */
-:global(main):has(~ .bar) {
-  padding-block-end: calc(var(--sticky-bar-height) + env(safe-area-inset-bottom));
+/*
+ * The bar never covers the last content: a spacer after main, the bar's height
+ * on mobile. A spacer rather than padding on main, so the page keeps its own
+ * bottom spacing.
+ */
+.spacer {
+  height: calc(var(--sticky-bar-height) + env(safe-area-inset-bottom));
 }
 
 @media (min-width: 1024px) {
-  .bar {
+  .bar,
+  .spacer {
     display: none;
-  }
-
-  :global(main):has(~ .bar) {
-    padding-block-end: 0;
   }
 }

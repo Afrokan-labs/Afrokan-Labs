@@ -23,8 +23,9 @@ type Props = {
 
 /**
  * design-system §8 StickyActionBar, below 1024px only. Render it directly
- * after the page's <main>. IntersectionObserver only, no scroll listeners.
- * Fixed position and transform-only motion, so it never shifts the layout.
+ * after the page's <main>; its spacer keeps the last content clear of the bar.
+ * IntersectionObserver only, no scroll listeners. Fixed position and
+ * transform-only motion, so it never shifts the layout.
  */
 export function StickyActionBar({ cta, showAfter, hideAt }: Props) {
   const [pastTrigger, setPastTrigger] = useState(!showAfter);
@@ -56,11 +57,14 @@ export function StickyActionBar({ cta, showAfter, hideAt }: Props) {
   const { label, ...link } = cta;
 
   return (
-    // Hidden until JS decides; inert keeps the off-screen button out of the tab order.
-    <div className={styles.bar} data-visible={visible} inert={!visible}>
-      <Button fullWidth {...link}>
-        {label}
-      </Button>
-    </div>
+    <>
+      <div className={styles.spacer} aria-hidden="true" />
+      {/* Hidden until JS decides; inert keeps the off-screen button out of the tab order. */}
+      <div className={styles.bar} data-visible={visible} inert={!visible}>
+        <Button fullWidth {...link}>
+          {label}
+        </Button>
+      </div>
+    </>
   );
 }

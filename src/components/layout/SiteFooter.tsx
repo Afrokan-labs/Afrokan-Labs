@@ -25,7 +25,7 @@ export function SiteFooter({
   year,
 }: Props) {
   return (
-    <footer className={styles.footer}>
+    <footer id="site-footer" className={styles.footer}>
       <div className={`container ${styles.inner}`}>
         <p className={styles.row}>
           <span className={styles.name}>{siteName}</span>

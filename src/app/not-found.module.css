@@ -1,0 +1,12 @@
+.page {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: start;
+  padding-block: var(--section-y);
+}
+
+.body {
+  font-size: var(--text-body-l);
+  line-height: var(--leading-body-l);
+  color: var(--ink-2);
+}

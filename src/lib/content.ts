@@ -12,6 +12,7 @@ import * as runtime from "react/jsx-runtime";
 import { z } from "zod";
 import { caseStudy } from "../content/case-study";
 import { home } from "../content/home";
+import { privacy } from "../content/privacy";
 import { workProcess } from "../content/process";
 import * as schema from "../content/schema";
 import { services } from "../content/services";
@@ -40,6 +41,7 @@ export const getSite = () => parse("src/content/site.ts", schema.Site, site);
 export const getHome = () => parse("src/content/home.ts", schema.Home, home);
 export const getCaseStudyCopy = () =>
   parse("src/content/case-study.ts", schema.CaseStudyCopy, caseStudy);
+export const getPrivacy = () => parse("src/content/privacy.ts", schema.Privacy, privacy);
 export const getServices = () => parse("src/content/services.ts", schema.Services, services);
 export const getProcess = () => parse("src/content/process.ts", schema.Process, workProcess);
 export const getTeam = () => parse("src/content/team.ts", schema.Team, team);
@@ -195,6 +197,7 @@ export async function validateAllContent() {
   getSite();
   getHome();
   getCaseStudyCopy();
+  getPrivacy();
   getTierCopy();
   const services = getServices();
   const processContent = getProcess();

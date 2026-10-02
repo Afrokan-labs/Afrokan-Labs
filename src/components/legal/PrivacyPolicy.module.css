@@ -1,0 +1,37 @@
+.page {
+  display: grid;
+  gap: var(--space-6);
+  max-width: var(--measure);
+  padding-block: var(--space-8) var(--section-y);
+}
+
+.intro {
+  font-size: var(--text-body-l);
+  line-height: var(--leading-body-l);
+  color: var(--ink-2);
+}
+
+.section {
+  display: grid;
+  gap: var(--space-3);
+  padding-block-start: var(--space-5);
+  border-top: var(--border-hair);
+}
+
+.heading {
+  font-size: var(--text-h3);
+  line-height: var(--leading-h3);
+  letter-spacing: var(--tracking-h3);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-2);
+  padding-inline-start: var(--space-5);
+  list-style: disc;
+}
+
+.updated {
+  font-size: var(--text-small);
+  color: var(--ink-2);
+}
