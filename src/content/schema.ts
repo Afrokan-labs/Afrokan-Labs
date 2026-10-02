@@ -94,6 +94,17 @@ const NavLink = z.object({
   href: z.string().regex(/^\/(?!\/)/, "Internal links start with a single /"),
 });
 
+/** A heading with one highlighted phrase (design-system §1 rule 4), e.g. "Our [Services]". */
+export const Heading = z.object({
+  lead: z.string(),
+  mark: z.string().min(1),
+  tail: z.string().optional(),
+});
+export type Heading = z.infer<typeof Heading>;
+
+/** A source image in assets/images/ (optimised by scripts/optimize-images.ts) and its alt text. */
+const Picture = z.object({ src: z.string().startsWith("assets/images/"), alt: z.string().min(10) });
+
 export const Site = z.object({
   name: z.literal("Afrokan Labs"),
   domain: z.string(),
@@ -106,7 +117,7 @@ export const Site = z.object({
     z.string().regex(/^\+[1-9]\d{7,14}$/),
     "an E.164 number such as +233201234567",
   ),
-  /** Fills "We reply within ___ on weekdays." */
+  /** Fills the contact form's "we'll reply within ___ on weekdays". */
   replyWithin: orTodo(z.string().min(1), 'a reply time such as "4 hours"'),
   /**
    * Prefilled WhatsApp messages. Brackets are prompts for the visitor and ship as written.
@@ -130,6 +141,8 @@ export const Site = z.object({
     nav: z.object({
       main: z.string().min(1),
       footer: z.string().min(1),
+      social: z.string().min(1),
+      home: z.string().min(1),
       menu: z.string().min(1),
       close: z.string().min(1),
     }),
@@ -139,52 +152,82 @@ export const Site = z.object({
       link: z.string().min(1),
     }),
   }),
-  nav: z.object({ items: z.array(NavLink).min(1), cta: z.string().min(1) }),
-  footer: z.object({ links: z.array(NavLink).min(1), linkedinLabel: z.string().min(1) }),
+  /** Header pill: two links each side of the logo. */
+  nav: z.object({ items: z.array(NavLink).length(4), cta: z.string().min(1) }),
+  /** Tilted ticker keywords (homepage-copy-v2 §10). */
+  ticker: z.object({ label: z.string().min(1), items: z.array(z.string().min(1)).min(3) }),
+  footer: z.object({
+    blurb: z.string().min(1),
+    columns: z.object({
+      company: z.object({ title: z.string().min(1), links: z.array(NavLink).min(1) }),
+      services: z.object({ title: z.string().min(1), links: z.array(NavLink).min(1) }),
+      resources: z.object({ title: z.string().min(1), links: z.array(NavLink).min(1) }),
+      contact: z.object({ title: z.string().min(1), whatsapp: z.string().min(1) }),
+    }),
+    copyright: z.string().includes("{year}"),
+    /** Switched off until a provider is chosen (homepage-copy-v2 §12). */
+    newsletter: z.object({
+      enabled: z.boolean(),
+      title: z.string().min(1),
+      body: z.string().min(1),
+      label: z.string().min(1),
+      placeholder: z.string().min(1),
+      submit: z.string().min(1),
+    }),
+  }),
+  /** Profiles; each icon shows only once its URL is confirmed. */
   social: z.object({
     linkedin: orTodo(z.url(), "the LinkedIn page URL").optional(),
+    x: orTodo(z.url(), "the X profile URL").optional(),
+    instagram: orTodo(z.url(), "the Instagram profile URL").optional(),
   }),
 });
 
-// ----- Homepage sections -----
-
-const SectionCopy = z.object({
-  title: z.string().min(1),
-  cta: z.string().min(1).optional(),
-});
+// ----- Homepage sections (homepage-copy-v2.md) -----
 
 export const Services = z.object({
-  section: SectionCopy,
+  tab: z.string().min(1),
+  heading: Heading,
+  body: z.string().min(1),
   items: z
     .array(
       z.object({
-        kind: BuiltKind,
-        /** Technology label (Tag), shown after the outcome headline. */
-        tag: z.string().min(1),
-        title: z.string().min(1),
+        /** Links the service to a project's `built` list; its tag labels the case study. */
+        kind: BuiltKind.optional(),
+        tag: z.string().min(1).optional(),
+        name: z.string().min(1),
         body: z.string().min(1),
       }),
     )
-    .length(3, "The strategy specifies exactly three services."),
+    .min(1),
+  image: Picture,
+  /** Text around the rotating ring. */
+  ring: z.string().min(1),
+  cards: z.object({
+    process: z.object({ text: z.string().min(1), label: z.string().min(1) }),
+    contact: z.object({ text: z.string().min(1), label: z.string().min(1) }),
+  }),
 });
 
 export const Process = z.object({
-  section: SectionCopy,
+  heading: Heading,
+  body: z.string().min(1),
   steps: z
     .array(z.object({ title: z.string().min(1), body: z.string().min(1) }))
     .length(4, "The strategy specifies four steps."),
-  /** Open decision #3: one honest pricing signal. */
-  pricingNote: orTodo(z.string().min(1), "one of the approved pricing lines"),
+  cta: z.string().min(1),
 });
 
 export const Team = z.object({
-  section: SectionCopy,
-  statement: z.string().min(1),
+  heading: Heading,
+  join: z.string().min(1),
   members: z
     .array(
       z.object({
         name: orTodo(z.string().min(1), "a name"),
         role: orTodo(z.string().min(1), "a role"),
+        bio: orTodo(z.string().min(1).max(220), "a one or two line bio").optional(),
+        linkedin: orTodo(z.url(), "their LinkedIn URL").optional(),
         photo: z
           .object({
             /** Source image in assets/images/; optimised in BUILD_PLAN 2.6. */
@@ -197,11 +240,28 @@ export const Team = z.object({
     .min(1),
 });
 
+/** Real, approved quotes only. An empty list hides the section (design-system §7). */
+export const Testimonials = z.object({
+  label: z.string().min(1),
+  labels: z.object({ previous: z.string().min(1), next: z.string().min(1) }),
+  items: z.array(
+    z.object({
+      quote: z.string().min(1).max(400),
+      name: z.string().min(1),
+      role: z.string().min(1),
+      company: z.string().min(1),
+      photo: Picture.optional(),
+      writtenPermission: z.literal(true),
+    }),
+  ),
+});
+
 export type Project = z.infer<typeof Project>;
 export type Site = z.infer<typeof Site>;
 export type Services = z.infer<typeof Services>;
 export type Process = z.infer<typeof Process>;
 export type Team = z.infer<typeof Team>;
+export type Testimonials = z.infer<typeof Testimonials>;
 export type BuiltKind = z.infer<typeof BuiltKind>;
 
 export const TierCopy = z.object({
@@ -227,12 +287,37 @@ export const Home = z.object({
   meta: z.object({ title: z.string().min(1), description: z.string().max(155) }),
   hero: z.object({
     headline: z.string().min(1),
-    subhead: z.string().min(1),
+    lede: z.string().min(1),
+    /** "Chat with us on WhatsApp": the sticky bar and other full-length CTAs. */
     primaryCta: z.string().min(1),
-    secondaryLink: z.string().min(1),
+    workLink: z.string().min(1),
+    startProject: z.string().min(1),
+    whatsapp: z.string().min(1),
+    badge: z.object({ title: z.string().min(1), line: z.string().min(1) }),
+    photo: Picture,
+  }),
+  stats: z.object({
+    label: z.string().min(1),
+    items: z
+      .array(
+        z.object({
+          value: z.string().min(1),
+          suffix: z.string().optional(),
+          label: z.string().min(1),
+        }),
+      )
+      .min(1),
+  }),
+  ideas: z.object({
+    title: z.string().min(1),
+    body: z.string().min(1),
+    banner: z.string().min(1),
+    wide: Picture,
+    tall: Picture,
   }),
   featured: z.object({
-    eyebrow: z.string().min(1),
+    tab: z.string().min(1),
+    heading: Heading,
     titles: z.record(z.string(), z.string().min(1)),
     caseStudyLink: z.string().min(1),
     whatsappCta: z.string().min(1),
@@ -244,12 +329,17 @@ export const Home = z.object({
     }),
     resultLabel: z.string().min(1),
   }),
+  words: z.object({ label: z.string().min(1), items: z.array(z.string().min(1)).length(3) }),
   offer: z.object({ title: z.string().min(1), body: z.string().min(1), cta: z.string().min(1) }),
   contact: z.object({
     title: z.string().min(1),
     body: z.string().min(1),
-    responseNote: z.string().includes("{replyWithin}"),
-    cta: z.string().min(1),
+    emailLabel: z.string().min(1),
+    emailPlaceholder: z.string().min(1),
+    submit: z.string().min(1),
+    invalid: z.string().min(1),
+    whatsapp: z.string().min(1),
+    image: Picture,
   }),
 });
 export type Home = z.infer<typeof Home>;

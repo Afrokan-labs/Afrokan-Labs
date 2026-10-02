@@ -1,22 +1,26 @@
 import type { z } from "zod";
 import type { Team } from "./schema";
 
-/** Copy source: docs/content/homepage-copy.md §5. */
+/**
+ * Copy source: docs/content/homepage-copy-v2.md §8 (approved 2026-10-02).
+ * Only real people. Members with unconfirmed names or roles are left out.
+ */
 export const team = {
-  section: { title: "Who we are" },
-  statement:
-    "Afrokan Labs is a small team of engineers in Accra. We build for Ghanaian businesses because we understand how they run: on WhatsApp, on mobile, and often on paper. We think software should fit that, not fight it. The people who scope your project are the people who build it.",
+  heading: { lead: "Meet", mark: "the Team" },
+  join: "Join our team",
   members: [
     {
       name: "Franklin Wiafe",
       role: "Founder",
+      bio: "Leads product and engineering at Afrokan Labs. Information Technology student at the University of Ghana and researcher in its HCI lab.",
+      linkedin: "TODO_FRANKLIN_LINKEDIN_URL",
       // Interim photo until the Phase 0 photo session (docs/AUDIT.md decision 5).
       photo: {
         src: "assets/images/franklin-wiafe.jpg",
         alt: "Franklin Wiafe, founder of Afrokan Labs",
       },
     },
-    // Copy §5 lists a second member. Fill in, or delete this entry.
+    // Fill in each real member (NOTES-AND-ASSETS §8), or delete this entry.
     { name: "TODO_TEAM_MEMBER_2_NAME", role: "TODO_TEAM_MEMBER_2_ROLE" },
   ],
 } satisfies z.input<typeof Team>;

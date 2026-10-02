@@ -1,33 +1,50 @@
 import type { z } from "zod";
 import type { Services } from "./schema";
 
-/** Copy source: docs/content/homepage-copy.md §3. */
+/** Copy source: docs/content/homepage-copy-v2.md §4 (approved 2026-10-02). */
 export const services = {
-  section: {
-    title: "What we build",
-    cta: "Tell us what's slowing your business down",
-  },
-  // Tags name the technology after the outcome (homepage-strategy §3). The
-  // wording is not in the copy doc; it follows each service's own body text.
-  // Order is open decision #1 (docs/content/README.md); default is WhatsApp assistant first.
+  tab: "WHAT WE DO",
+  heading: { lead: "Our", mark: "Services" },
+  body: "We build AI and software tools that help Ghanaian businesses serve customers faster and run smoother.",
+  // `kind` links a row to a project's `built` list; `tag` labels it on case studies.
   items: [
     {
       kind: "whatsapp-assistant",
       tag: "WhatsApp AI assistant",
-      title: "Answer customers on WhatsApp without tying up your staff",
-      body: "WhatsApp AI assistants that draw on your own documents and policies, so customers get accurate answers at any time of day.",
-    },
-    {
-      kind: "workflow-tool",
-      tag: "Internal tool",
-      title: "Replace paperwork and spreadsheets with tools your team actually uses",
-      body: "Simple internal tools, such as checklists, trackers and forms, built around the way your business already runs.",
+      name: "WhatsApp AI Assistants",
+      body: "Assistants that answer customers on WhatsApp from your own documents and policies, any time of day.",
     },
     {
       kind: "website",
       tag: "Website",
-      title: "A website that brings in enquiries, not just a brochure",
-      body: "Fast, mobile-first websites that turn visitors into WhatsApp conversations.",
+      name: "Web Platforms",
+      body: "Fast, mobile-first websites and web apps that turn visitors into WhatsApp conversations.",
+    },
+    {
+      kind: "workflow-tool",
+      tag: "Internal tool",
+      name: "Workflow Tools",
+      body: "Checklists, trackers and forms that replace paperwork and spreadsheets, built around how your team already works.",
+    },
+    {
+      name: "Backend Systems",
+      body: "The databases, dashboards and integrations that keep everything connected behind the scenes.",
     },
   ],
+  // PLACEHOLDER until the real photo arrives (NOTES-AND-ASSETS §4).
+  image: {
+    src: "assets/images/PLACEHOLDER-services-at-work.jpg",
+    alt: "Placeholder for a photo of someone at work",
+  },
+  ring: "Afrokan Labs · Afrokan Labs · Afrokan Labs · Afrokan Labs ·",
+  cards: {
+    process: {
+      text: "Ever wondered how a project goes from idea to launch?",
+      label: "See how we work",
+    },
+    contact: {
+      text: "Looking for a team who can turn your idea into a working product?",
+      label: "Talk to our team",
+    },
+  },
 } satisfies z.input<typeof Services>;

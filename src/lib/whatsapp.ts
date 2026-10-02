@@ -37,6 +37,19 @@ export function whatsappLink({ location }: { location: WhatsAppLocation }): What
   };
 }
 
+/**
+ * A plain WhatsApp text link (no Button glyph flag), for footers and inline
+ * links that draw their own icon. Same href, note and tracking as whatsappLink().
+ */
+export function whatsappTextLink({ location }: { location: WhatsAppLocation }) {
+  const site = getSite();
+  return {
+    href: waHref(site.whatsappPrefill.default),
+    srNote: site.ui.opensWhatsApp,
+    ...trackingAttrs("whatsapp_click", { location }),
+  };
+}
+
 /** The demo-offer CTA (OfferBand), with the demo prefill, tracked as demo_offer_click. */
 export function demoOfferLink(): WhatsAppLinkProps {
   const site = getSite();

@@ -19,6 +19,7 @@ import * as schema from "../content/schema";
 import { services } from "../content/services";
 import { site } from "../content/site";
 import { team } from "../content/team";
+import { testimonials } from "../content/testimonials";
 import { tierCopy } from "../content/tiers";
 
 const PROJECTS_DIR = join(process.cwd(), "src", "content", "projects");
@@ -48,6 +49,8 @@ export const getServices = () => parse("src/content/services.ts", schema.Service
 export const getProcess = () => parse("src/content/process.ts", schema.Process, workProcess);
 export const getTeam = () => parse("src/content/team.ts", schema.Team, team);
 export const getTierCopy = () => parse("src/content/tiers.ts", schema.TierCopy, tierCopy);
+export const getTestimonials = () =>
+  parse("src/content/testimonials.ts", schema.Testimonials, testimonials);
 
 // ----- Projects (MDX) -----
 
@@ -119,18 +122,25 @@ export async function getProjectBody(slug: string) {
 // ----- Navigation -----
 
 /**
- * Header and footer links. /work exists only while a project is visible
- * (architecture §4), so "Work" is dropped otherwise: the site never links
- * to a page that does not exist.
+ * Header and footer links. Work (the homepage section, /work and case
+ * studies) exists only while a project is visible (architecture §4), so those
+ * links are dropped otherwise: the site never links to a page that does not exist.
  */
 export function getNav() {
   const { nav, footer } = getSite();
   const hasWork = getProjects().length > 0;
-  const keep = (l: { href: string }) => hasWork || l.href !== "/work";
+  const keep = (l: { href: string }) =>
+    hasWork || !(l.href === "/#work" || l.href === "/work" || l.href.startsWith("/work/"));
+  const { company, services, resources, contact } = footer.columns;
   return {
     items: nav.items.filter(keep),
     cta: nav.cta,
-    footerLinks: footer.links.filter(keep),
+    columns: {
+      company: { ...company, links: company.links.filter(keep) },
+      services,
+      resources: { ...resources, links: resources.links.filter(keep) },
+      contact,
+    },
   };
 }
 
@@ -197,11 +207,12 @@ function formatMonth(yyyyMm: string): string {
 /** Validates every content file, drafts included, and compiles every MDX body. */
 export async function validateAllContent() {
   getSite();
-  getHome();
+  const home = getHome();
   getCaseStudyCopy();
   getPrivacy();
   getContactCopy();
   getTierCopy();
+  const quotes = getTestimonials();
   const services = getServices();
   const processContent = getProcess();
   const team = getTeam();
@@ -210,6 +221,14 @@ export async function validateAllContent() {
 
   // Every referenced image must exist as a source file (the pipeline needs it).
   const referenced = [
+    ...[home.hero.photo, home.ideas.wide, home.ideas.tall, home.contact.image].map((i) => ({
+      src: i.src,
+      from: "src/content/home.ts",
+    })),
+    { src: services.image.src, from: "src/content/services.ts" },
+    ...quotes.items.flatMap((q) =>
+      q.photo ? [{ src: q.photo.src, from: "src/content/testimonials.ts" }] : [],
+    ),
     ...team.members.flatMap((m) =>
       m.photo ? [{ src: m.photo.src, from: "src/content/team.ts" }] : [],
     ),
