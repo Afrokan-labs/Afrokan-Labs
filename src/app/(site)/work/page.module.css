@@ -1,0 +1,10 @@
+.page {
+  display: grid;
+  gap: var(--space-8);
+  padding-block: var(--space-8) var(--section-y);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-9);
+}

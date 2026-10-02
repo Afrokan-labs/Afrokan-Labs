@@ -1,0 +1,14 @@
+.card {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.head {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.summary {
+  font-size: var(--text-body-l);
+  line-height: var(--leading-body-l);
+}

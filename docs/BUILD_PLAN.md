@@ -48,7 +48,7 @@ These don't block development; they block **launch**. Until they're done, the re
 
 - [x] **3.1 Case study.** `/work/[slug]` with `generateStaticParams`, Dossier, FieldList, PullQuote, VisualStrip; optional blocks omitted when absent.
   - Accept: at the anonymised tier, the page shows the anonymised label, no `formerBrand`, no branded images, and no result or testimonial blocks. With no published project, `/work` and `/work/*` are not generated.
-- [ ] **3.2 Work index, Privacy, 404.** No `/about` page. The privacy page states what analytics collects (cookieless, no personal data).
+- [x] **3.2 Work index, Privacy, 404.** No `/about` page. The privacy page states what analytics collects (cookieless, no personal data).
   - Accept: the work index looks complete with a single project.
 - [ ] **3.3 SEO.** Metadata API per page, `sitemap.ts` and `robots.ts` (`force-static`), JSON-LD (Organization + ProfessionalService on home, Article on case studies), and static OG image paths under `public/og/`.
   - Accept: built HTML contains the correct canonical URL, OG tags and valid JSON-LD on every page.

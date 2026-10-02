@@ -33,6 +33,12 @@ export const site = {
     status: { live: "Live", liveSince: "Live since {date}", delivered: "Delivered" },
     // Navigation controls and landmark names: standard wording, not in the copy docs.
     nav: { main: "Main", footer: "Footer", menu: "Menu", close: "Close" },
+    // Drafted with the privacy page (docs/content/privacy.md); awaiting approval.
+    notFound: {
+      title: "Page not found",
+      body: "This page doesn't exist or has moved.",
+      link: "Go to the homepage",
+    },
   },
 
   // homepage-strategy.md, Navigation. "Work" is left out while no project is published.
@@ -51,6 +57,8 @@ export const site = {
     links: [
       { label: "Work", href: "/work" },
       { label: "About", href: "/#about" },
+      // Drafted with the privacy page (docs/content/privacy.md); awaiting approval.
+      { label: "Privacy", href: "/privacy" },
     ],
     linkedinLabel: "LinkedIn",
   },
