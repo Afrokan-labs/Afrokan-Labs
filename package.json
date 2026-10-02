@@ -13,6 +13,7 @@
     "content:validate": "tsx scripts/validate-content.ts",
     "images": "tsx scripts/optimize-images.ts",
     "lhci": "lhci autorun",
+    "a11y": "tsx scripts/a11y.ts",
     "launch:check": "tsx scripts/launch-check.ts"
   },
   "dependencies": {
@@ -29,6 +30,7 @@
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "axe-core": "^4.13.0",
     "eslint": "^9.39.5",
     "eslint-config-next": "15.5.27",
     "prettier": "^3.9.9",

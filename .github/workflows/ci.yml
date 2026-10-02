@@ -52,6 +52,10 @@ jobs:
       - name: Lighthouse CI
         run: pnpm lhci
 
+      # axe on every built page plus a keyboard pass (BUILD_PLAN 4.3).
+      - name: Accessibility
+        run: pnpm a11y
+
       - name: Upload Lighthouse reports
         if: always()
         uses: actions/upload-artifact@v7
