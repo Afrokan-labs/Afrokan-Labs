@@ -14,14 +14,27 @@ type Props = {
   sizes?: string;
   /** Above-the-fold images load eagerly; everything else is lazy. */
   priority?: boolean;
+  /** On the <img>, e.g. to crop with object-fit. */
   className?: string;
+  /** On the <picture> wrapper. */
+  pictureClassName?: string;
 };
 
 /** design-system §11: <picture> with explicit dimensions. Use instead of next/image. */
 export function ResponsiveImage(props: Props) {
-  const { src, alt, width, height, sources = [], sizes, priority, className } = props;
+  const {
+    src,
+    alt,
+    width,
+    height,
+    sources = [],
+    sizes,
+    priority,
+    className,
+    pictureClassName,
+  } = props;
   return (
-    <picture className={styles.picture}>
+    <picture className={[styles.picture, pictureClassName].filter(Boolean).join(" ")}>
       {sources.map((s) => (
         <source key={s.type} type={s.type} srcSet={s.srcSet} sizes={sizes} />
       ))}

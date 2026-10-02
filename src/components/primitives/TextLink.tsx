@@ -5,8 +5,8 @@ import styles from "./TextLink.module.css";
 type Props = Partial<TrackingAttrs> & {
   href: string;
   children: ReactNode;
-  /** "onDark" inside the contact band. */
-  tone?: "default" | "onDark";
+  /** "default" is lime, for dark surfaces; "ink" is for white and lime cards. */
+  tone?: "default" | "ink";
   /**
    * A link on its own line (not inside a sentence) gets a 44px tap target (§10).
    * Links inside running text keep the line height.
@@ -21,7 +21,7 @@ type Props = Partial<TrackingAttrs> & {
     | { external: true; externalNote: string }
   );
 
-/** design-system §8 TextLink. */
+/** Text link: lime on dark surfaces, ink on white (design-system §2 rule 1). */
 export function TextLink({
   href,
   children,
@@ -35,7 +35,7 @@ export function TextLink({
 }: Props) {
   const classes = [
     styles.link,
-    tone === "onDark" && styles.onDark,
+    tone === "ink" && styles.ink,
     standalone && styles.standalone,
     className,
   ]

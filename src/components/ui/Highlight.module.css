@@ -1,0 +1,9 @@
+/* reference .x-hl */
+.hl {
+  display: inline-block;
+  padding: 0 0.22em 0.05em;
+  border-radius: 8px;
+  background: var(--lime);
+  color: var(--ink);
+  transform: rotate(-2deg);
+}

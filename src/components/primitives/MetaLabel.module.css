@@ -1,22 +1,21 @@
-/* design-system §3 Label (mono) and §8 MetaLabel. */
+/* Small uppercase labels (reference .x-fact dt). */
 
 .label {
-  font-family: var(--font-mono);
-  font-size: var(--text-label);
-  font-weight: var(--weight-medium);
-  line-height: var(--leading-label);
-  letter-spacing: var(--tracking-label);
+  font-size: 0.64rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .accent {
-  color: var(--accent);
+  color: var(--lime);
 }
 
 .muted {
-  color: var(--ink-2);
+  color: var(--mute);
 }
 
-.onDark {
-  color: var(--accent-on-dark);
+.ink {
+  color: var(--ink);
 }

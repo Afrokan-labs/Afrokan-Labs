@@ -1,23 +1,8 @@
-/*
- * Container and column grid, docs/design-system.md §5.
- * Margins come from --page-margin, columns and gutters from --grid-columns
- * and --grid-gutter; all three change at the breakpoints in tokens.css.
- */
+/* Content width and gutter (reference .x-wrap): 1180px max, fluid side padding. */
 
 .container {
-  width: min(var(--container), 100% - 2 * var(--page-margin));
+  width: 100%;
+  max-width: var(--max);
   margin-inline: auto;
-}
-
-@media (min-width: 1440px) {
-  .container {
-    width: min(var(--container-xl), 100% - 2 * var(--page-margin));
-  }
-}
-
-/* 4 columns, 8 from 640px, 12 from 1024px. Children span with grid-column. */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
-  column-gap: var(--grid-gutter);
+  padding-inline: var(--gutter);
 }
