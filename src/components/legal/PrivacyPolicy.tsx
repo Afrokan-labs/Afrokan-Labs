@@ -3,7 +3,7 @@ import { TextLink } from "@/components/primitives/TextLink";
 import type { Privacy } from "@/content/schema";
 import styles from "./PrivacyPolicy.module.css";
 
-type Props = Omit<Privacy, "approvedBy"> & {
+type Props = Omit<Privacy, "approvedBy" | "description"> & {
   email: string;
   /** Formatted date, e.g. "2 October 2026". */
   lastUpdatedText: string;

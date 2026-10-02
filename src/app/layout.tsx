@@ -18,10 +18,11 @@ const sans = Schibsted_Grotesk({
   fallback: ["system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
 });
 
-// Per-page titles, descriptions and Open Graph tags come in BUILD_PLAN 3.3.
+// Indexable pages set their own tags through pageMetadata() in src/lib/seo.ts.
+// The template names the site on the rest (404, internal previews).
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
-  title: site.name,
+  title: { default: site.name, template: `%s | ${site.name}` },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
