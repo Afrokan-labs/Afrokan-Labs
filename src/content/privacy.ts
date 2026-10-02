@@ -7,8 +7,8 @@ import type { Privacy } from "./schema";
  * added with BUILD_PLAN 6.1.
  */
 export const privacy = {
-  // Set to who approved it and when, e.g. "Franklin Wiafe, 2026-10-03".
-  approvedBy: "TODO_PRIVACY_COPY_APPROVAL",
+  // Approved as written in docs/content/privacy.md (Draft v2).
+  approvedBy: "Approved in chat, 2026-10-02",
   title: "Privacy",
   // TODO_APPROVE_SEO_DRAFT: drafted in docs/content/seo.md, awaiting approval.
   description:

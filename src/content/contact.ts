@@ -3,12 +3,12 @@ import type { ContactCopy } from "./schema";
 
 /**
  * Contact form copy. Field labels: homepage-copy.md §6. Success line and the
- * "Send us a message" link: architecture §5. Everything else is drafted in
- * docs/content/contact.md (Draft v1), awaiting approval.
+ * "Send us a message" link: architecture §5. Everything else:
+ * docs/content/contact.md (v1, approved 2026-10-02).
  */
 export const contact = {
-  // Set to who approved it and when, e.g. "Franklin Wiafe, 2026-10-03".
-  approvedBy: "TODO_CONTACT_COPY_APPROVAL",
+  // Approved as written in docs/content/contact.md (Draft v1).
+  approvedBy: "Approved in chat, 2026-10-02",
   title: "Send us a message",
   description:
     "Tell Afrokan Labs what your business does and what you need help with. We reply by WhatsApp or email.",

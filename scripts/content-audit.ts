@@ -31,8 +31,10 @@ const APPROVED = [
   "docs/content/case-studies/ese-logistics.md",
   "docs/content/README.md",
   "docs/design-system.md",
+  "docs/content/privacy.md",
+  "docs/content/contact.md",
 ];
-const DRAFTS = ["docs/content/privacy.md", "docs/content/seo.md", "docs/content/contact.md"];
+const DRAFTS = ["docs/content/seo.md"];
 
 const norm = (s: string) =>
   s
@@ -99,7 +101,8 @@ const traced: string[] = [];
 const draft: string[] = [];
 const untraced: string[] = [];
 for (const s of strings) {
-  if (skip(s.text)) continue;
+  // approvedBy records who approved the copy; it is never shown.
+  if (skip(s.text) || s.where.endsWith(".approvedBy")) continue;
   const re = matcher(s.text);
   const line = `${s.where}: ${s.text.length > 100 ? s.text.slice(0, 100) + "…" : s.text}`;
   const hit = approved.find((d) => re.test(d.text));
