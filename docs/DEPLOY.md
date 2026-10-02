@@ -81,10 +81,10 @@ Pages project → Deployments → pick the last good deployment → **Rollback t
 ## Local checks before pushing
 
 ```bash
-pnpm typecheck && pnpm lint && pnpm content:validate && pnpm build && pnpm lhci
+pnpm typecheck && pnpm lint && pnpm content:validate && pnpm build && pnpm lhci && pnpm a11y
 ```
 
-`pnpm lhci` needs Chrome installed. It writes reports to `.lighthouseci/`, which isn't committed.
+`pnpm lhci` and `pnpm a11y` need Chrome installed (set `CHROME_PATH` if `a11y` can't find it). It writes reports to `.lighthouseci/`, which isn't committed.
 
 ### Security headers (BUILD_PLAN 4.2)
 
