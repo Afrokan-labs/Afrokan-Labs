@@ -39,7 +39,7 @@ These don't block development; they block **launch**. Until they're done, the re
   - Accept: every row of the ChatThread visitor table behaves as specified. Test JS disabled, reduced motion, and late hydration (throttle so JS arrives after 4s; the thread must not hide and replay).
 - [x] **2.4 Sections.** FeaturedWork (with the static `ChatThread` below 1024px), OfferBand (rendered only if `site.demoOffer.enabled`), Services (`id="services"`), Process (`id="process"`), About (`id="about"`), Contact (WhatsApp and email only), in page order, with data passed through props.
   - Accept: no hard-coded copy in components (grep for string literals in JSX inside `sections/`). Exactly one chat thread is displayed at 360px and at 1280px. Rendering correct for three fixtures: no published project (no Featured work, proof line or case-study link), anonymised tier, and named tier.
-- [ ] **2.5 StickyActionBar.** Mobile only. It must not cover content or the footer.
+- [x] **2.5 StickyActionBar.** Mobile only. It must not cover content or the footer.
   - Accept: CLS ≤ 0.05 in Lighthouse, and the bar never covers footer content.
 - [ ] **2.6 Image pipeline.** `scripts/optimize-images.ts` (sharp → AVIF and WebP at 2–3 widths, plus a manifest JSON), wired into `ResponsiveImage`.
   - Accept: no output image is over 120 KB, and the build fails clearly if a referenced image is missing from the manifest.

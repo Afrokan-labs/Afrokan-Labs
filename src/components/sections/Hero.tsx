@@ -47,7 +47,7 @@ export function Hero({ headline, subhead, cta, proof, caseStudy, conversation }:
             </p>
           )}
 
-          <div className={styles.actions}>
+          <div id="hero-cta" className={styles.actions}>
             <Button {...ctaLink}>{ctaLabel}</Button>
             {caseStudy && (
               <TextLink standalone arrow href={caseStudy.href} {...caseStudy.tracking}>
