@@ -40,7 +40,7 @@ pnpm launch:check     # fails while any TODO_ placeholder remains
 
 `typecheck`, `lint`, `content:validate` and `build` must all pass before a change is done.
 
-`images` is a stub until BUILD_PLAN 2.6. `lhci` runs Lighthouse against `out/` with the budgets in `lighthouserc.json` (needs Chrome). `launch:check` lists every remaining `TODO_` with its file and line. `build` runs `content:validate` first, so invalid content stops the build.
+`images` converts `assets/images/` into AVIF and WebP in `public/images/` (generated, not committed); `dev` and `build` run it first. `lhci` runs Lighthouse against `out/` with the budgets in `lighthouserc.json` (needs Chrome). `launch:check` lists every remaining `TODO_` with its file and line. `build` runs `content:validate` first, so invalid content stops the build.
 
 Don't run `pnpm build` while `pnpm dev` is running. Both write to `.next/`, and the dev server breaks.
 
@@ -53,7 +53,9 @@ Don't run `pnpm build` while `pnpm dev` is running. Both write to `.next/`, and 
 ## Project structure
 
 ```
-assets/images/   Source images (already redacted); optimised at build time
+assets/images/   Source images (already redacted). pnpm images writes AVIF/WebP to
+                 public/images/ and a manifest to src/generated/; outputs over
+                 120 KB fail the build
 docs/            Architecture, build plan, design system, approved copy
 src/app/         Routes, layout, sitemap, robots
 src/components/  Components (Mark.tsx is the logo; keep its path as is)
