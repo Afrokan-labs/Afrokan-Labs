@@ -27,6 +27,12 @@
   transition: transform var(--dur-base) var(--ease);
 }
 
+/* Decorative arrow after the label; hidden from screen readers. */
+.arrow::before {
+  content: "→";
+  margin-inline-start: var(--space-1);
+}
+
 /* §10: 44px tap target for links that stand on their own line. */
 .standalone {
   display: inline-flex;

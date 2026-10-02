@@ -1,0 +1,82 @@
+/* design-system §8 Dossier. */
+
+.section {
+  padding-block-end: var(--section-y);
+}
+
+.dossier {
+  display: grid;
+  gap: var(--space-7);
+  padding: var(--space-5);
+  border-radius: var(--radius-m);
+  background: var(--surface-2);
+}
+
+.narrative {
+  display: grid;
+  gap: var(--space-6);
+  align-content: start;
+}
+
+.body {
+  font-size: var(--text-body-l);
+  line-height: var(--leading-body-l);
+}
+
+.result {
+  display: grid;
+  gap: var(--space-2);
+  padding-block-start: var(--space-5);
+  border-top: var(--border-hair);
+}
+
+.resultText {
+  font-size: var(--text-statement);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-statement);
+  letter-spacing: var(--tracking-statement);
+}
+
+.chat {
+  margin-block-start: var(--space-7);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-6);
+  margin-block-start: var(--space-7);
+}
+
+/* Tablet keeps the static chat but gets the two-column dossier (§5). */
+@media (min-width: 640px) {
+  .dossier {
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    column-gap: var(--grid-gutter);
+    padding: var(--space-6);
+  }
+
+  .fields {
+    grid-column: 1 / span 3;
+  }
+
+  .narrative {
+    grid-column: 4 / span 5;
+  }
+}
+
+/* Desktop: FieldList in 4 columns, Narrative in 8. The animated chat is in the hero. */
+@media (min-width: 1024px) {
+  .fields {
+    grid-column: 1 / span 4;
+  }
+
+  .narrative {
+    grid-column: 5 / span 8;
+  }
+
+  .chat {
+    display: none;
+  }
+}
