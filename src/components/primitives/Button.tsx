@@ -12,6 +12,12 @@ type CommonProps = Partial<TrackingAttrs> & {
   whatsapp?: boolean;
   /** Visually hidden note after the label, e.g. "(opens WhatsApp)". */
   srNote?: string;
+  /**
+   * Native buttons only: a spinner replaces the label, the button keeps its
+   * width, and screen readers hear `loadingLabel` (design-system §8).
+   */
+  loading?: boolean;
+  loadingLabel?: string;
   className?: string;
   children: ReactNode;
 };
@@ -33,16 +39,38 @@ type NativeButtonProps = CommonProps &
  * so sections don't have to remember them.
  */
 export function Button(props: LinkProps | NativeButtonProps) {
-  const { variant = "primary", fullWidth, whatsapp, srNote, className, children, ...rest } = props;
-  const classes = [styles.button, styles[variant], fullWidth && styles.fullWidth, className]
+  const {
+    variant = "primary",
+    fullWidth,
+    whatsapp,
+    srNote,
+    loading,
+    loadingLabel,
+    className,
+    children,
+    ...rest
+  } = props;
+  const classes = [
+    styles.button,
+    styles[variant],
+    fullWidth && styles.fullWidth,
+    loading && styles.loading,
+    className,
+  ]
     .filter(Boolean)
     .join(" ");
 
   const content = (
     <>
       {whatsapp && <WhatsAppGlyph />}
-      <span>{children}</span>
+      <span className={styles.label}>{children}</span>
       {srNote && <span className="sr-only"> {srNote}</span>}
+      {loading && (
+        <>
+          <span className={styles.spinner} aria-hidden="true" />
+          {loadingLabel && <span className="sr-only">{loadingLabel}</span>}
+        </>
+      )}
     </>
   );
 
@@ -66,6 +94,7 @@ export function Button(props: LinkProps | NativeButtonProps) {
       className={classes}
       disabled={disabled}
       aria-disabled={disabled || undefined}
+      aria-busy={loading || undefined}
       {...attrs}
     >
       {content}

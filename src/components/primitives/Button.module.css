@@ -57,6 +57,41 @@
   }
 }
 
+/* Loading: the label stays in place (keeping the width) but hidden; the spinner sits over it. */
+.loading {
+  position: relative;
+  cursor: progress;
+}
+
+.loading .label {
+  visibility: hidden;
+}
+
+.spinner {
+  position: absolute;
+  inset: 0;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  margin: auto;
+  border: var(--spinner-border) solid currentcolor;
+  border-inline-end-color: transparent;
+  border-radius: 50%;
+  animation: spin var(--spinner-duration) linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* Without motion the ring stays still; aria-busy and the label still say it's sending. */
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
+
 .button:active {
   transform: scale(var(--press-scale));
 }
