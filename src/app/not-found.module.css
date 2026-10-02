@@ -1,12 +1,17 @@
 .page {
   display: grid;
-  gap: var(--space-5);
+  gap: 20px;
   justify-items: start;
-  padding-block: var(--section-y);
+  padding-block: clamp(56px, 8vw, 110px);
+}
+
+.page h1 {
+  font-size: var(--text-h1);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
 }
 
 .body {
-  font-size: var(--text-body-l);
-  line-height: var(--leading-body-l);
-  color: var(--ink-2);
+  color: var(--mute);
+  font-size: 0.9rem;
 }

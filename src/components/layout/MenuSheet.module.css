@@ -1,9 +1,20 @@
-/* design-system §8 MenuSheet: full-screen --paper sheet, below 1024px only. */
+/* Mobile menu: a full-screen dark sheet, 900px and below (reference .x-menu). */
 
-@media (min-width: 1024px) {
+.root {
+  display: none;
+  justify-self: end;
+}
+
+@media (max-width: 900px) {
   .root {
-    display: none;
+    display: block;
   }
+}
+
+.toggle {
+  min-height: 40px;
+  padding: 0 16px;
+  font-size: 0.85rem;
 }
 
 .sheet {
@@ -16,11 +27,11 @@
   margin: 0;
   padding: 0;
   border: 0;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--page);
+  color: var(--white);
 }
 
-/* §7: fades and slides in. Animates only opacity and transform. */
+/* Fades and slides in. Animates only opacity and transform. */
 .sheet[open] {
   display: flex;
   flex-direction: column;
@@ -34,12 +45,12 @@
 @starting-style {
   .sheet[open] {
     opacity: 0;
-    transform: translateY(var(--space-4));
+    transform: translateY(16px);
   }
 }
 
 .sheet::backdrop {
-  background: var(--paper);
+  background: var(--menu-backdrop);
 }
 
 /* The page behind a modal dialog can still scroll on some mobile browsers. */
@@ -51,38 +62,50 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: var(--header-height-mobile);
-  border-bottom: var(--border-hair);
+  min-height: 72px;
+  padding-top: env(safe-area-inset-top);
+  border-bottom: 1px solid var(--line);
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
   min-height: var(--tap-target);
-  color: var(--ink);
+  color: var(--white);
   text-decoration: none;
 }
 
+.brand svg {
+  color: var(--lime);
+}
+
 .list {
-  margin-block-start: var(--space-4);
+  margin-block-start: 16px;
 }
 
 .list li {
-  border-bottom: var(--border-hair);
+  border-bottom: 1px solid var(--line);
 }
 
 .link {
   display: flex;
   align-items: center;
-  min-height: var(--menu-row-height);
-  color: var(--ink);
-  font-size: var(--menu-link-size);
-  font-weight: var(--weight-semibold);
+  min-height: 60px;
+  color: var(--white);
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
   text-decoration: none;
 }
 
-/* §8: WhatsApp button pinned to the bottom, clear of the home indicator. */
+@media (hover: hover) {
+  .link:hover {
+    color: var(--lime);
+  }
+}
+
+/* WhatsApp button pinned to the bottom, clear of the home indicator. */
 .bottom {
   margin-block-start: auto;
-  padding-block: var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom));
+  padding-block: 16px calc(16px + env(safe-area-inset-bottom));
 }

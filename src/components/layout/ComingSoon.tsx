@@ -1,11 +1,11 @@
-import { Wordmark } from "@/components/Mark";
+import { Logo } from "@/components/ui/Logo";
 import styles from "./ComingSoon.module.css";
 
 type Props = {
   siteName: string;
   skipLinkLabel: string;
   headline: string;
-  subhead: string;
+  lede: string;
   contactTitle: string;
   email: string;
   location: string;
@@ -20,7 +20,7 @@ export function ComingSoon({
   siteName,
   skipLinkLabel,
   headline,
-  subhead,
+  lede,
   contactTitle,
   email,
   location,
@@ -34,7 +34,7 @@ export function ComingSoon({
       <header className={styles.header}>
         <div className={`container ${styles.headerInner}`}>
           <span className={styles.brand}>
-            <Wordmark />
+            <Logo name={siteName} />
           </span>
         </div>
       </header>
@@ -42,7 +42,7 @@ export function ComingSoon({
       <main id="top" className={`container ${styles.main}`}>
         <section className={styles.hero} aria-labelledby="headline">
           <h1 id="headline">{headline}</h1>
-          <p className={styles.subhead}>{subhead}</p>
+          <p className={styles.subhead}>{lede}</p>
         </section>
 
         <section className={styles.contact} aria-labelledby="contact-title">

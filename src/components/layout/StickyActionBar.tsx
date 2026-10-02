@@ -22,7 +22,7 @@ type Props = {
 };
 
 /**
- * design-system §8 StickyActionBar, below 1024px only. Render it directly
+ * The mobile WhatsApp bar, 760px and below. Render it directly
  * after the page's <main>; its spacer keeps the last content clear of the bar.
  * IntersectionObserver only, no scroll listeners. Fixed position and
  * transform-only motion, so it never shifts the layout.
