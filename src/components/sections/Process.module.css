@@ -1,0 +1,57 @@
+/*
+ * design-system §8 ProcessStep: topped by --border-strong. Desktop: four
+ * columns. Mobile: a vertical stack with the rule on the left edge forming
+ * one continuous line.
+ */
+
+.section {
+  padding-block-end: var(--section-y);
+}
+
+.steps {
+  display: grid;
+  border-inline-start: var(--border-strong);
+}
+
+.step {
+  display: grid;
+  gap: var(--space-2);
+  padding-block: var(--space-5);
+  padding-inline-start: var(--space-5);
+}
+
+.title {
+  font-size: var(--text-body-l);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-body-l);
+  letter-spacing: 0;
+}
+
+.body {
+  color: var(--ink-2);
+}
+
+.note {
+  margin-block-start: var(--space-7);
+  font-size: var(--text-body-l);
+  line-height: var(--leading-body-l);
+}
+
+.cta {
+  margin-block-start: var(--space-6);
+}
+
+@media (min-width: 1024px) {
+  .steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: var(--grid-gutter);
+    border-inline-start: 0;
+  }
+
+  .step {
+    align-content: start;
+    padding-block: var(--space-5) 0;
+    padding-inline-start: 0;
+    border-top: var(--border-strong);
+  }
+}

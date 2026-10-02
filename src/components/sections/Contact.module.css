@@ -1,0 +1,57 @@
+/* The one dark band on the homepage (design-system §2). */
+
+.band {
+  padding-block: var(--section-y);
+  background: var(--ink);
+  color: var(--on-dark);
+}
+
+.inner {
+  display: grid;
+  gap: var(--space-7);
+}
+
+.title {
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+
+.detail {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+}
+
+.body {
+  font-size: var(--text-body-l);
+  line-height: var(--leading-body-l);
+}
+
+.note {
+  color: var(--on-dark-2);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-6);
+  margin-block: var(--space-3);
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    column-gap: var(--grid-gutter);
+    align-items: end;
+  }
+
+  .title {
+    grid-column: 1 / span 7;
+  }
+
+  .detail {
+    grid-column: 8 / span 5;
+  }
+}

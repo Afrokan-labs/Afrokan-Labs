@@ -37,7 +37,7 @@ These don't block development; they block **launch**. Until they're done, the re
   - Accept: the menu is fully keyboard-operable, focus returns to the toggle on close, and it works at 320px width.
 - [x] **2.3 Hero.** A server-rendered headline, subhead, tier-derived proof line and CTA, with the animated `ChatThread` (≥1024px only) as a client island implementing design-system §8 exactly: CSS pre-paint hiding, the 4s failsafe, the three JS checks, and the displayed-instance check.
   - Accept: every row of the ChatThread visitor table behaves as specified. Test JS disabled, reduced motion, and late hydration (throttle so JS arrives after 4s; the thread must not hide and replay).
-- [ ] **2.4 Sections.** FeaturedWork (with the static `ChatThread` below 1024px), OfferBand (rendered only if `site.demoOffer.enabled`), Services (`id="services"`), Process (`id="process"`), About (`id="about"`), Contact (WhatsApp and email only), in page order, with data passed through props.
+- [x] **2.4 Sections.** FeaturedWork (with the static `ChatThread` below 1024px), OfferBand (rendered only if `site.demoOffer.enabled`), Services (`id="services"`), Process (`id="process"`), About (`id="about"`), Contact (WhatsApp and email only), in page order, with data passed through props.
   - Accept: no hard-coded copy in components (grep for string literals in JSX inside `sections/`). Exactly one chat thread is displayed at 360px and at 1280px. Rendering correct for three fixtures: no published project (no Featured work, proof line or case-study link), anonymised tier, and named tier.
 - [ ] **2.5 StickyActionBar.** Mobile only. It must not cover content or the footer.
   - Accept: CLS ≤ 0.05 in Lighthouse, and the bar never covers footer content.

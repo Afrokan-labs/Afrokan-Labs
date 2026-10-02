@@ -12,6 +12,8 @@ type Props = Partial<TrackingAttrs> & {
    * Links inside running text keep the line height.
    */
   standalone?: boolean;
+  /** Adds a trailing arrow (decorative, drawn in CSS), as in "See the case study →". */
+  arrow?: boolean;
   className?: string;
 } & (
     | { external?: false; externalNote?: never }
@@ -25,6 +27,7 @@ export function TextLink({
   children,
   tone = "default",
   standalone,
+  arrow,
   className,
   external,
   externalNote,
@@ -47,6 +50,7 @@ export function TextLink({
     >
       {/* The underline sits on this span so it hugs the text, whatever the tap area. */}
       <span className={styles.text}>{children}</span>
+      {arrow && <span className={styles.arrow} aria-hidden="true" />}
       {external && <span className="sr-only"> {externalNote}</span>}
     </a>
   );
