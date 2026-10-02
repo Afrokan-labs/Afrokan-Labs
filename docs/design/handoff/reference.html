@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Afrokan Labs Redesign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,700;125,800&family=Schibsted+Grotesk:wght@400;500;600;700&family=Lexend:wght@300;400;500;600&family=Unbounded:wght@700;800&display=swap">
+
+<style>
+/* NEW DESIGN (matches the reference): dark page, white hero card with big rounded bottom, black pill nav, lime accent. Single look, both themes. */
+:root {
+  color-scheme: dark;
+  --x-page: #121212;
+  --x-panel: #1B1B1B;
+  --x-line: #343434;
+  --x-card: #FFFFFF;
+  --x-ink: #0D0D0D;
+  --x-ink-2: #555555;
+  --x-mute: #A3A3A3;
+  --x-white: #FFFFFF;
+  --x-lime: #8CF04A;
+  --x-lime-2: #79DE37;
+  --x-grey: #EDEDED;
+  --x-font: "Lexend", "Segoe UI", system-ui, sans-serif;
+  --x-wide: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --x-max: 1180px;
+  --x-gutter: clamp(16px, 3vw, 32px);
+}
+body { background: var(--x-page); color: var(--x-white); }
+.x { font-family: var(--x-font); }
+.x *, .x *::before, .x *::after { box-sizing: border-box; }
+.x-wrap { width: 100%; max-width: var(--x-max); margin-inline: auto; padding-inline: var(--x-gutter); }
+.x-glow { position: relative; isolation: isolate; overflow-x: clip; }
+.x-glow::before { content: ""; position: absolute; z-index: -1; inset: 30% -10% auto; height: 520px; background: radial-gradient(closest-side, rgba(140,240,74,.10), transparent 70%); pointer-events: none; }
+
+/* Review bar (not part of the design) */
+.x-review { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: #000; color: var(--x-white); font: 400 .8rem/1.3 var(--x-font); border-bottom: 1px solid var(--x-line); }
+.x-review .x-wrap { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; padding-block: 9px; }
+.x-review b { font-weight: 600; color: var(--x-lime); }
+.x-review button { font: 500 .8rem/1 var(--x-font); padding: 7px 12px; border-radius: 99px; border: 1px solid var(--x-line); background: transparent; color: var(--x-white); cursor: pointer; min-height: 32px; }
+.x-review button[aria-pressed="true"] { background: var(--x-lime); color: var(--x-ink); border-color: var(--x-lime); }
+
+/* ---------- 1. HERO CARD ---------- */
+.x-hero-wrap { padding-top: clamp(12px, 2vw, 24px); }
+.x-hero { position: relative; background: var(--x-card); color: var(--x-ink); border-radius: 22px 22px clamp(44px, 7vw, 84px) clamp(44px, 7vw, 84px); padding: clamp(10px, 1.4vw, 18px) clamp(10px, 1.4vw, 18px) 0; overflow: hidden; }
+
+/* nav pill */
+.x-nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; background: var(--x-ink); color: var(--x-white); border-radius: 99px; min-height: 58px; padding: 6px 10px 6px 14px; max-width: 900px; margin-inline: auto; }
+.x-nav-side { display: flex; justify-content: space-around; gap: 8px; }
+.x-nav a { color: inherit; text-decoration: none; }
+.x-nav-side a { font-size: .82rem; font-weight: 400; padding: 10px 14px; border-radius: 99px; opacity: .9; }
+.x-nav-side a:hover { background: #222; opacity: 1; }
+.x-logo { display: inline-flex; align-items: center; gap: 8px; font-family: var(--x-font); font-weight: 500; font-size: 1.25rem; letter-spacing: -.01em; padding-inline: 18px; }
+.x-logo svg { width: 26px; height: 26px; color: var(--x-lime); }
+.x-menu { display: none; justify-self: end; background: var(--x-lime); color: var(--x-ink); border: 0; border-radius: 99px; font: 500 .85rem/1 var(--x-font); padding: 0 16px; min-height: 40px; cursor: pointer; }
+
+/* headline */
+.x-h1-row { position: relative; text-align: center; padding: clamp(36px, 5vw, 64px) 8px 0; }
+.x-h1 { margin: 0; font-family: var(--x-font); font-weight: 500; font-size: clamp(1.9rem, 1rem + 3.4vw, 3.6rem); line-height: 1.12; letter-spacing: -.02em; text-wrap: balance; max-width: 15.5em; margin-inline: auto; }
+.x-h1 .x-tail { display: inline-block; width: .6em; height: .55em; margin-left: .08em; vertical-align: -.02em; color: var(--x-lime); }
+.x-burst { position: absolute; left: clamp(6px, 2vw, 28px); top: clamp(22px, 3vw, 44px); width: clamp(48px, 6vw, 82px); color: var(--x-lime); }
+
+/* stage: left copy · photo · right badge */
+.x-stage { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr); align-items: center; gap: 12px; margin-top: clamp(8px, 1.5vw, 20px); }
+.x-left { display: grid; gap: 22px; justify-items: start; padding-left: clamp(8px, 2.5vw, 34px); position: relative; }
+.x-ticks { width: 26px; height: 20px; color: var(--x-lime); }
+.x-lede { margin: 0; font-size: .86rem; font-weight: 300; line-height: 1.6; color: var(--x-ink-2); max-width: 30ch; }
+.x-ghost { display: inline-flex; align-items: center; min-height: 40px; padding: 0 18px; border-radius: 99px; border: 1px solid var(--x-ink); color: var(--x-ink); font: 400 .8rem/1 var(--x-font); text-decoration: none; }
+.x-ghost:hover { background: var(--x-ink); color: var(--x-white); }
+
+.x-photo { position: relative; justify-self: center; width: min(100%, 470px); aspect-ratio: 1 / 1.02; align-self: end; }
+.x-photo .x-circle { position: absolute; left: 50%; bottom: 0; translate: -50% 0; width: 92%; aspect-ratio: 1; border-radius: 50%; background: var(--x-grey); bottom: 8%; }
+.x-photo .x-person { position: absolute; left: 50%; bottom: 0; translate: -50% 0; width: 70%; height: 96%; border-radius: 999px 999px 0 0; overflow: hidden; background: #d9d9d9; }
+.x-photo .x-person img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; filter: grayscale(1) contrast(1.05); }
+.x-swirl { position: absolute; left: -2%; bottom: 22%; width: 18%; color: var(--x-ink); }
+.x-ctas { position: absolute; left: 50%; bottom: clamp(18px, 3vw, 34px); translate: -50% 0; display: flex; gap: 4px; padding: 5px; border-radius: 99px; background: rgba(20,20,20,.55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.35); white-space: nowrap; }
+.x-ctas a { display: inline-flex; align-items: center; min-height: 38px; padding: 0 18px; border-radius: 99px; font: 400 .78rem/1 var(--x-font); text-decoration: none; color: var(--x-white); }
+.x-ctas .x-go { background: var(--x-lime); color: var(--x-ink); font-weight: 500; }
+.x-ctas a:not(.x-go):hover { background: rgba(255,255,255,.12); }
+
+.x-right { justify-self: end; text-align: right; padding-right: clamp(8px, 2.5vw, 34px); display: grid; gap: 4px; justify-items: end; }
+.x-sparks { display: flex; gap: 3px; color: var(--x-lime); }
+.x-sparks svg { width: 15px; height: 15px; }
+.x-big { font-size: clamp(1.3rem, 1rem + 1vw, 1.9rem); font-weight: 500; letter-spacing: -.02em; line-height: 1.1; }
+.x-small { font-size: .78rem; font-weight: 300; color: var(--x-ink-2); }
+
+/* ---------- 2. STATS STRIP ---------- */
+.x-stats { margin-top: clamp(40px, 6vw, 64px); border: 1px solid var(--x-line); background: var(--x-panel); border-radius: 22px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: clamp(18px, 2.4vw, 28px) clamp(16px, 3vw, 40px); }
+.x-stat { text-align: center; display: grid; gap: 6px; }
+.x-stat b { font-weight: 500; font-size: clamp(1.5rem, 1.1rem + 1.3vw, 2.2rem); letter-spacing: -.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+.x-stat b i { font-style: normal; color: var(--x-lime); }
+.x-stat span { font-size: .8rem; font-weight: 300; color: var(--x-mute); }
+
+
+/* ---------- 3. IDEAS ROW ---------- */
+.x-ideas { margin-top: clamp(48px, 6vw, 80px); padding-inline: clamp(0px, 3vw, 40px); }
+.x-ideas-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px 48px; align-items: start; }
+.x-h2 { margin: 0; font-family: var(--x-font); font-weight: 500; font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.35rem); line-height: 1.15; letter-spacing: -.02em; color: var(--x-white); text-wrap: balance; }
+.x-ideas-head p { margin: 0; font-size: .86rem; font-weight: 300; line-height: 1.65; color: var(--x-mute); max-width: 44ch; justify-self: end; }
+.x-ideas-grid { display: grid; grid-template-columns: minmax(0, 1.68fr) minmax(0, 1fr); gap: 14px; margin-top: clamp(28px, 3vw, 40px); align-items: center; }
+.x-shot { position: relative; border-radius: 16px; overflow: hidden; background: #2a2a2a; max-width: 100%; }
+.x-shot svg.x-img { display: block; width: 100%; height: 100%; }
+.x-shot-wide { aspect-ratio: 1.52 / 1; margin-top: clamp(16px, 3vw, 36px); overflow: visible; }
+.x-shot-wide .x-clip { position: absolute; inset: 0; border-radius: 16px; overflow: hidden; }
+.x-shot-tall { aspect-ratio: 0.68 / 1; }
+.x-star4 { position: absolute; z-index: 2; left: -18px; top: -24px; width: clamp(34px, 3.6vw, 46px); color: var(--x-lime); }
+.x-banner { position: absolute; left: 0; right: 0; bottom: clamp(14px, 2.4vw, 26px); display: flex; align-items: stretch; height: clamp(40px, 5.2vw, 58px); }
+.x-banner span { flex: 0 0 auto; display: flex; align-items: center; background: var(--x-lime); color: var(--x-ink); padding: 0 clamp(70px, 9vw, 120px) 0 clamp(16px, 2.6vw, 30px); font-size: clamp(.62rem, .5rem + .35vw, .78rem); font-weight: 500; line-height: 1.35; text-transform: uppercase; letter-spacing: .02em; }
+.x-banner i { flex: none; width: clamp(5px, .7vw, 8px); background: var(--x-lime); margin-left: clamp(3px, .5vw, 6px); }
+.x-banner i:nth-of-type(2) { width: clamp(3px, .4vw, 5px); }
+.x-banner i:nth-of-type(3) { width: clamp(2px, .3vw, 4px); opacity: .85; }
+.x-banner i:nth-of-type(4) { width: 2px; opacity: .6; }
+.x-bulb { position: absolute; left: 22%; top: 3%; width: 30%; color: #E2453C; }
+.x-stand { display: none; position: absolute; right: 10px; top: 10px; background: rgba(0,0,0,.6); color: var(--x-white); font: 400 .68rem/1 var(--x-font); padding: 6px 9px; border-radius: 99px; z-index: 3; }
+body.notes .x-stand { display: block; }
+@media (max-width: 760px) {
+  .x-ideas-head, .x-ideas-grid { grid-template-columns: 1fr; }
+  .x-ideas-head p { justify-self: start; }
+  .x-star4 { left: -8px; top: -18px; }
+  .x-shot-tall { aspect-ratio: 4 / 5; }
+}
+
+
+.x-ideas { padding-block: 0; }
+/* ---------- 4. SERVICES PANEL ---------- */
+.x-svc { position: relative; margin-top: clamp(64px, 8vw, 100px); background: #1C1C1C; border: 1px solid #2A2A2A; border-radius: 26px; padding: clamp(28px, 4vw, 56px) clamp(18px, 4vw, 56px) clamp(28px, 4vw, 52px) clamp(40px, 6vw, 72px); }
+.x-tab { position: absolute; left: 0; top: clamp(28px, 3vw, 40px); width: 22px; height: 78px; background: var(--x-lime); color: var(--x-ink); border-radius: 0 6px 6px 0; display: grid; place-items: center; }
+.x-tab span { writing-mode: vertical-rl; rotate: 180deg; font: 500 .5rem/1 var(--x-font); letter-spacing: .08em; white-space: nowrap; }
+.x-svc-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) minmax(0, .62fr); gap: 16px clamp(16px, 2vw, 22px); align-items: stretch; }
+.x-svc-left { display: grid; align-content: start; gap: 14px; min-width: 0; }
+.x-hl { display: inline-block; background: var(--x-lime); color: var(--x-ink); border-radius: 8px; padding: 0 .22em .05em; transform: rotate(-2deg); margin-left: .12em; }
+.x-svc-left > p { margin: 0 0 14px; font-size: .78rem; font-weight: 300; line-height: 1.6; color: var(--x-mute); max-width: 38ch; }
+.x-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; max-width: 380px; }
+.x-row { border: 1px solid #4A4A4A; border-radius: 22px; transition: border-color .2s, background .2s; }
+.x-row button { all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 14px; min-height: 52px; padding: 0 20px; color: var(--x-white); font: 400 .86rem/1.2 var(--x-font); }
+.x-row button:focus-visible { outline: 2px solid var(--x-lime); outline-offset: 3px; border-radius: 22px; }
+.x-row .x-n { font-family: var(--x-wide); font-weight: 700; font-size: .8rem; color: var(--x-lime); letter-spacing: .02em; min-width: 22px; }
+.x-row .x-ar { margin-left: auto; width: 16px; height: 16px; transition: rotate .25s; flex: none; }
+.x-row .x-desc { display: none; padding: 0 20px 16px 56px; font-size: .78rem; font-weight: 300; line-height: 1.6; color: var(--x-mute); margin: 0; }
+.x-row.open { border-color: var(--x-lime); background: #222; }
+.x-row.open .x-desc { display: block; }
+.x-row.open .x-ar { rotate: 90deg; color: var(--x-lime); }
+@media (hover: hover) { .x-row:not(.open):hover { border-color: #7a7a7a; } }
+
+.x-svc-photo { position: relative; border-radius: 18px; overflow: hidden; background: #2a2a2a; min-height: 340px; }
+.x-svc-photo > svg.x-img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.x-ring { position: absolute; left: 50%; top: 34%; width: 92%; translate: -50% -50%; color: #4B5BFF; pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) { .x-ring g { animation: x-spin 30s linear infinite; transform-origin: 100px 100px; } }
+
+.x-svc-side { display: grid; grid-template-rows: 1fr 1.15fr; gap: 14px; min-width: 0; }
+.x-mini { position: relative; border-radius: 18px; padding: 18px 16px 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; text-decoration: none; min-height: 150px; }
+.x-mini p { margin: 0; font-size: .72rem; font-weight: 300; line-height: 1.55; }
+.x-mini b { font-weight: 500; font-size: .95rem; line-height: 1.15; display: block; max-width: 7em; }
+.x-mini .x-foot { display: flex; align-items: end; justify-content: space-between; gap: 10px; }
+.x-mini .x-circ { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex: none; transition: rotate .2s; }
+.x-mini .x-circ svg { width: 15px; height: 15px; }
+.x-mini:hover .x-circ { rotate: 45deg; }
+.x-mini-dark { background: #262626; color: var(--x-white); }
+.x-mini-dark p { color: var(--x-mute); }
+.x-mini-dark .x-circ { color: var(--x-white); }
+.x-mini-lime { background: var(--x-lime); color: var(--x-ink); }
+.x-mini-lime p { color: #1f3a10; }
+.x-mini-lime .x-circ { background: var(--x-white); color: var(--x-ink); }
+
+@media (max-width: 960px) {
+  .x-svc-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .x-svc-left { grid-column: 1 / -1; }
+  .x-rows { max-width: none; }
+}
+@media (max-width: 560px) {
+  .x-svc-grid { grid-template-columns: minmax(0, 1fr); }
+  .x-svc-photo { min-height: 300px; }
+  .x-svc-side { grid-template-rows: none; grid-template-columns: 1fr 1fr; }
+}
+
+
+/* ---------- 5. BIG WORDS LINE ---------- */
+.x-words { padding-block: 0; margin-top: clamp(56px, 8vw, 96px); padding-inline: clamp(0px, 1vw, 12px); }
+.x-words svg.x-wordline { display: block; width: 100%; height: auto; }
+.x-words .x-w { font-family: var(--x-wide); font-weight: 800; fill: var(--x-white); }
+.x-divider { display: flex; align-items: center; gap: 14px; margin-top: clamp(18px, 2.4vw, 30px); padding-inline: clamp(0px, 1vw, 12px); color: #9a9a9a; }
+.x-divider::before, .x-divider::after { content: ""; flex: 1; height: 1px; background: #4a4a4a; }
+.x-divider svg { width: 14px; height: 14px; flex: none; }
+
+
+/* ---------- 6. TEAM ---------- */
+.x-team { margin-top: clamp(56px, 8vw, 96px); background: #1C1C1C; border: 1px solid #2A2A2A; border-radius: 26px; padding: clamp(24px, 3.4vw, 44px) clamp(16px, 3.4vw, 44px) clamp(28px, 3.6vw, 48px); }
+.x-team-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: clamp(20px, 3vw, 32px); }
+.x-join { display: inline-flex; align-items: center; gap: 10px; background: var(--x-white); color: var(--x-ink); border-radius: 99px; padding: 5px 5px 5px 14px; font: 400 .74rem/1 var(--x-font); text-decoration: none; }
+.x-join .x-sw { width: 40px; height: 22px; border-radius: 99px; background: var(--x-lime); position: relative; transition: background .2s; }
+.x-join .x-sw::after { content: ""; position: absolute; right: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--x-white); box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: right .2s; }
+.x-join:hover .x-sw::after { right: 21px; }
+.x-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1.6vw, 18px); }
+.x-card { position: relative; background: var(--x-white); color: var(--x-ink); border-radius: 16px; padding: 16px 16px 20px; display: grid; gap: 14px; align-content: start; transition: translate .2s; }
+@media (hover: hover) { .x-card:hover { translate: 0 -3px; } }
+.x-card-top { display: flex; align-items: center; gap: 12px; min-width: 0; padding-right: 30px; }
+.x-av { position: relative; width: 64px; height: 64px; flex: none; }
+.x-av .x-blob { position: absolute; inset: -4px; color: var(--x-lime); }
+.x-av .x-face { position: absolute; inset: 9px; border-radius: 50%; overflow: hidden; background: #cfcfcf; }
+.x-av .x-face img, .x-av .x-face svg { width: 100%; height: 100%; object-fit: cover; object-position: 50% 15%; filter: grayscale(1); display: block; }
+.x-who { display: grid; gap: 2px; min-width: 0; }
+.x-who b { font-weight: 500; font-size: .86rem; line-height: 1.25; }
+.x-who span { font-size: .72rem; font-weight: 300; color: var(--x-ink-2); }
+.x-card p { margin: 0; font-size: .74rem; font-weight: 300; line-height: 1.6; color: #6a6a6a; }
+.x-in { position: absolute; right: 12px; top: 12px; width: 24px; height: 24px; border-radius: 50%; background: var(--x-ink); color: var(--x-white); display: grid; place-items: center; }
+.x-in svg { width: 11px; height: 11px; }
+.x-card.x-empty .x-who b, .x-card.x-empty p { color: #8a8a8a; }
+@media (max-width: 900px) { .x-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .x-cards { grid-template-columns: minmax(0, 1fr); } }
+
+
+/* ---------- 7. TESTIMONIALS ---------- */
+.x-quotes { padding-block: 0; margin-top: clamp(56px, 8vw, 96px); }
+.x-qview { position: relative; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14%, #000 86%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 14%, #000 86%, transparent 100%); }
+.x-qtrack { list-style: none; margin: 0; padding: 0; display: flex; gap: 16px; transition: transform .45s cubic-bezier(.2,.7,.2,1); will-change: transform; }
+.x-q { flex: 0 0 min(360px, 80vw); background: #262626; border: 1px solid #303030; border-radius: 14px; padding: 16px 18px 20px; display: grid; gap: 12px; align-content: start; opacity: .35; transition: opacity .35s; }
+.x-q.on { opacity: 1; }
+.x-q-top { display: flex; align-items: center; gap: 10px; }
+.x-q-av { width: 34px; height: 34px; border-radius: 8px; overflow: hidden; flex: none; background: #3a3a3a; }
+.x-q-av svg { width: 100%; height: 100%; display: block; }
+.x-q-who { display: grid; gap: 1px; min-width: 0; }
+.x-q-who b { font-weight: 500; font-size: .8rem; }
+.x-q-who span { font-size: .66rem; font-weight: 300; color: var(--x-mute); }
+.x-q-mark { margin-left: auto; width: 22px; height: 18px; color: var(--x-lime); flex: none; }
+.x-q blockquote { margin: 0; font-size: .76rem; font-weight: 300; font-style: italic; line-height: 1.65; color: #d6d6d6; }
+.x-qnav { display: flex; justify-content: center; gap: 8px; margin-top: 18px; }
+.x-qnav button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #5a5a5a; background: transparent; color: var(--x-white); display: grid; place-items: center; cursor: pointer; padding: 0; }
+.x-qnav button:hover { border-color: var(--x-lime); color: var(--x-lime); }
+.x-qnav svg { width: 13px; height: 13px; }
+@media (prefers-reduced-motion: reduce) { .x-qtrack { transition: none; } }
+
+
+/* ---------- 8. TILTED TICKER ---------- */
+.x-ticker { width: 100vw; margin-left: calc(50% - 50vw); margin-top: clamp(64px, 9vw, 110px); padding-block: 12px; }
+.x-tband { background: var(--x-white); color: var(--x-ink); rotate: -2.6deg; width: 104%; margin-left: -2%; overflow: hidden; padding-block: clamp(8px, 1vw, 12px); box-shadow: 0 6px 24px rgba(0,0,0,.35); }
+.x-tmove { display: flex; width: max-content; }
+.x-tlist { display: flex; align-items: center; gap: clamp(14px, 1.6vw, 22px); padding-right: clamp(14px, 1.6vw, 22px); margin: 0; list-style: none; flex: none; }
+.x-tlist li { display: inline-flex; align-items: center; gap: clamp(14px, 1.6vw, 22px); font: 500 clamp(1rem, .8rem + .9vw, 1.6rem)/1.1 var(--x-font); letter-spacing: -.01em; white-space: nowrap; }
+.x-tlist li::after { content: ""; width: .7em; height: .7em; background: var(--x-lime); clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%); }
+@media (prefers-reduced-motion: no-preference) {
+  .x-tmove { animation: x-marq 32s linear infinite; }
+  .x-tband:hover .x-tmove { animation-play-state: paused; }
+  @keyframes x-marq { to { transform: translateX(-50%); } }
+}
+
+
+/* ---------- 9. GET IN TOUCH ---------- */
+.x-contact { padding-block: 0; margin-top: clamp(56px, 8vw, 100px); display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: end; gap: 24px; padding-inline: clamp(0px, 3vw, 40px); }
+.x-contact-text { display: grid; gap: 14px; align-content: center; padding-bottom: clamp(24px, 5vw, 70px); min-width: 0; }
+.x-contact-text > p { margin: 0; font-size: .8rem; font-weight: 300; line-height: 1.6; color: var(--x-mute); max-width: 52ch; }
+.x-form { display: flex; align-items: center; gap: 6px; max-width: 420px; padding: 5px 5px 5px 18px; border-radius: 99px; background: #1C1C1C; border: 1px solid #3a3a3a; margin-top: 6px; }
+.x-form:focus-within { border-color: var(--x-lime); }
+.x-form label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.x-form input { flex: 1; min-width: 0; background: transparent; border: 0; outline: 0; color: var(--x-white); font: 300 .82rem/1 var(--x-font); min-height: 38px; }
+.x-form input::placeholder { color: #8a8a8a; }
+.x-form button { flex: none; background: var(--x-lime); color: var(--x-ink); border: 0; border-radius: 99px; min-height: 38px; padding: 0 18px; font: 500 .78rem/1 var(--x-font); cursor: pointer; }
+.x-form button:hover { background: var(--x-lime-2); }
+.x-formmsg { margin: 0; font-size: .74rem; font-weight: 300; color: var(--x-lime); min-height: 1.2em; }
+.x-wa { color: var(--x-white); font-size: .8rem; font-weight: 400; text-decoration: none; display: inline-flex; gap: 8px; align-items: center; }
+.x-wa svg { width: 16px; height: 16px; color: var(--x-lime); }
+.x-wa:hover { color: var(--x-lime); }
+.x-cutout { position: relative; justify-self: center; width: min(100%, 360px); aspect-ratio: 1 / 1.15; }
+.x-cutout > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.x-cutout::before { content: ""; position: absolute; inset: 18% 6% 0; background: radial-gradient(closest-side, rgba(140,240,74,.16), transparent); }
+@media (max-width: 760px) {
+  .x-contact { grid-template-columns: minmax(0, 1fr); }
+  .x-contact-text { padding-bottom: 0; }
+  .x-cutout { width: min(80%, 300px); }
+}
+
+
+/* ---------- 10. LIME FOOTER ---------- */
+.x-footwrap { background: var(--x-page); padding-block: clamp(40px, 6vw, 72px) clamp(16px, 2vw, 24px); }
+.x-foot-card { background: var(--x-lime); color: var(--x-ink); border-radius: 22px; padding: clamp(24px, 3.4vw, 40px) clamp(18px, 3.4vw, 40px) clamp(16px, 2vw, 22px); display: grid; gap: clamp(24px, 3.4vw, 40px); }
+.x-foot-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: start; gap: 16px 40px; }
+.x-foot-logo { display: inline-flex; align-items: center; gap: 10px; font: 500 clamp(1.4rem, 1rem + 1.4vw, 2rem)/1 var(--x-font); letter-spacing: -.02em; color: var(--x-ink); text-decoration: none; }
+.x-foot-logo svg { width: 1.1em; height: 1.1em; }
+.x-foot-top p { margin: 0; font-size: .74rem; font-weight: 300; line-height: 1.6; max-width: 40ch; color: #1d3a0c; }
+.x-foot-cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.6fr); gap: 24px 20px; }
+.x-foot-cols h3 { margin: 0 0 12px; font: 500 .68rem/1.2 var(--x-font); letter-spacing: .08em; text-transform: uppercase; }
+.x-foot-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.x-foot-cols a, .x-foot-cols li { color: #1d3a0c; font-size: .74rem; font-weight: 300; text-decoration: none; overflow-wrap: anywhere; }
+.x-foot-cols a:hover { color: var(--x-ink); text-decoration: underline; text-underline-offset: 3px; }
+.x-news p { margin: 0 0 12px; font-size: .74rem; font-weight: 300; line-height: 1.6; color: #1d3a0c; }
+.x-news form { display: grid; gap: 8px; justify-items: start; }
+.x-news label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.x-news input { width: 100%; min-height: 38px; border-radius: 99px; border: 0; background: rgba(255,255,255,.55); padding: 0 16px; font: 300 .76rem/1 var(--x-font); color: var(--x-ink); outline: 0; }
+.x-news input::placeholder { color: #3f5f2a; }
+.x-news input:focus { background: var(--x-white); }
+.x-news button { min-height: 34px; padding: 0 16px; border-radius: 99px; border: 0; background: var(--x-white); color: var(--x-ink); font: 500 .72rem/1 var(--x-font); cursor: pointer; }
+.x-news button:hover { background: var(--x-ink); color: var(--x-white); }
+.x-news .x-newsmsg { margin: 4px 0 0; font-size: .7rem; min-height: 1.2em; }
+.x-foot-bot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; padding-top: 14px; border-top: 1px solid rgba(13,13,13,.18); font-size: .7rem; font-weight: 300; color: #1d3a0c; }
+.x-social { display: flex; gap: 8px; }
+.x-social a { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; color: var(--x-ink); }
+.x-social a:hover { background: var(--x-ink); color: var(--x-lime); }
+.x-social svg { width: 14px; height: 14px; }
+@media (max-width: 900px) { .x-foot-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } .x-news { grid-column: 1 / -1; } }
+
+
+/* ---------- FEATURED WORK + PROCESS (restyled old sections) ---------- */
+.x-work { margin-top: clamp(20px, 2.4vw, 28px); }
+.x-work-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 28px clamp(24px, 4vw, 56px); align-items: start; }
+.x-work-main { display: grid; gap: 16px; min-width: 0; }
+.x-work-main h3 { margin: 6px 0 0; font: 500 clamp(1.1rem, .95rem + .6vw, 1.45rem)/1.3 var(--x-font); letter-spacing: -.01em; color: var(--x-white); max-width: 30ch; text-wrap: balance; }
+.x-work-main > p { margin: 0; font-size: .8rem; font-weight: 300; line-height: 1.7; color: var(--x-mute); max-width: 56ch; }
+.x-btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.x-pill { display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 20px; border-radius: 99px; font: 500 .78rem/1 var(--x-font); text-decoration: none; }
+.x-pill svg { width: 16px; height: 16px; }
+.x-pill-lime { background: var(--x-lime); color: var(--x-ink); }
+.x-pill-lime:hover { background: var(--x-lime-2); }
+.x-pill-line { border: 1px solid #5a5a5a; color: var(--x-white); }
+.x-pill-line:hover { border-color: var(--x-lime); color: var(--x-lime); }
+.x-facts { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.x-fact { background: #262626; border: 1px solid #303030; border-radius: 16px; padding: 16px 18px; display: grid; gap: 6px; min-width: 0; }
+.x-fact.x-wide { grid-column: 1 / -1; }
+.x-fact dt { font-size: .64rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--x-mute); }
+.x-fact dd { margin: 0; font-size: .9rem; font-weight: 500; line-height: 1.35; color: var(--x-white); }
+.x-fact dd.x-live { display: inline-flex; align-items: center; gap: 8px; }
+.x-fact dd.x-live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--x-lime); box-shadow: 0 0 0 4px rgba(140,240,74,.18); }
+.x-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.x-tags span { background: var(--x-lime); color: var(--x-ink); border-radius: 99px; padding: 6px 12px; font-size: .72rem; font-weight: 500; }
+
+.x-process { padding-block: 0; margin-top: clamp(56px, 8vw, 96px); padding-inline: clamp(0px, 3vw, 40px); }
+.x-steps { list-style: none; margin: clamp(24px, 3vw, 36px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; counter-reset: step; }
+.x-step { position: relative; background: #1C1C1C; border: 1px solid #2A2A2A; border-radius: 18px; padding: 20px 20px 24px; display: grid; gap: 12px; align-content: start; }
+.x-step .x-sn { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--x-lime); color: var(--x-ink); font: 700 .78rem/1 var(--x-wide); }
+.x-step h3 { margin: 6px 0 0; font: 500 .98rem/1.3 var(--x-font); color: var(--x-white); }
+.x-step p { margin: 0; font-size: .76rem; font-weight: 300; line-height: 1.6; color: var(--x-mute); }
+.x-step:not(:last-child)::after { content: ""; position: absolute; top: 39px; right: -15px; width: 16px; height: 1px; background: #4a4a4a; }
+.x-process .x-btns { margin-top: 22px; }
+@media (max-width: 900px) {
+  .x-work-grid { grid-template-columns: minmax(0, 1fr); }
+  .x-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .x-step::after { display: none; }
+}
+@media (max-width: 520px) { .x-steps { grid-template-columns: minmax(0, 1fr); } }
+
+/* review notes */
+.x-note { display: none; margin: 12px auto 0; font: 400 .78rem/1.5 var(--x-font); color: var(--x-mute); border-left: 3px solid var(--x-lime); padding-left: 10px; max-width: 80ch; text-align: left; }
+body.notes .x-note { display: block; }
+.x-hero .x-note { color: var(--x-ink-2); margin: 10px 20px 0; }
+
+/* legacy divider */
+.x-pending { margin-top: clamp(56px, 8vw, 96px); padding-block: 18px; border-block: 1px dashed var(--x-line); color: var(--x-mute); font: 400 .8rem/1.4 var(--x-font); text-align: center; }
+.legacy { background: var(--paper); color: var(--ink); }
+
+:focus-visible { outline: 2px solid var(--x-lime); outline-offset: 3px; }
+
+/* tablet */
+@media (max-width: 900px) {
+  .x-nav-side { display: none; }
+  .x-nav { grid-template-columns: 1fr auto; padding-left: 4px; }
+  .x-menu { display: inline-flex; align-items: center; }
+  .x-stage { grid-template-columns: 1fr; gap: 24px; }
+  .x-left, .x-right { padding-inline: 10px; }
+  .x-left { order: 1; }
+  .x-right { order: 2; justify-self: start; text-align: left; justify-items: start; }
+  .x-photo { order: 3; width: min(100%, 420px); }
+  .x-burst { top: 16px; }
+  .x-h1-row { padding-top: 64px; }
+}
+/* phone */
+@media (max-width: 560px) {
+  .x-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 22px; }
+  .x-ctas a { padding: 0 13px; font-size: .74rem; }
+  .x-h1 .x-tail { display: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .x-burst { animation: x-spin 24s linear infinite; }
+  @keyframes x-spin { to { rotate: 360deg; } }
+}
+</style>
+
+<div class="x-review x" role="region" aria-label="Review controls">
+  <div class="x-wrap">
+    <span><b>Redesign complete</b> · Turn on notes to see which images and text are placeholders</span>
+    <button type="button" id="notes-btn" aria-pressed="false">Show notes</button>
+  </div>
+</div>
+
+<div class="x x-glow">
+  <div class="x-wrap x-hero-wrap">
+    <div class="x-hero" id="top">
+
+      <nav class="x-nav" aria-label="Main">
+        <div class="x-nav-side">
+          <a href="#work">Work</a>
+          <a href="#services-new">Services</a>
+        </div>
+        <a class="x-logo" href="#top" aria-label="Afrokan Labs home">
+          <svg viewBox="105 115 1100 990" aria-hidden="true"><path d="M685 500 L513 212 Q372 598 200 1010 Q482 842 750 645 L993 1003 L1160 922" fill="none" stroke="currentColor" stroke-width="165" stroke-linejoin="round"/></svg>
+          Afrokan Labs
+        </a>
+        <div class="x-nav-side">
+          <a href="#process">Process</a>
+          <a href="#about">About</a>
+        </div>
+        <button class="x-menu" type="button">Menu</button>
+      </nav>
+
+      <div class="x-h1-row">
+        <svg class="x-burst" viewBox="0 0 100 100" aria-hidden="true">
+          <g stroke="currentColor" stroke-width="4.5" stroke-linecap="round">
+            <line x1="50" y1="6" x2="50" y2="36"/><line x1="50" y1="64" x2="50" y2="94"/>
+            <line x1="6" y1="50" x2="36" y2="50"/><line x1="64" y1="50" x2="94" y2="50"/>
+            <g transform="rotate(22.5 50 50)"><line x1="50" y1="6" x2="50" y2="36"/><line x1="50" y1="64" x2="50" y2="94"/><line x1="6" y1="50" x2="36" y2="50"/><line x1="64" y1="50" x2="94" y2="50"/></g>
+            <g transform="rotate(45 50 50)"><line x1="50" y1="6" x2="50" y2="36"/><line x1="50" y1="64" x2="50" y2="94"/><line x1="6" y1="50" x2="36" y2="50"/><line x1="64" y1="50" x2="94" y2="50"/></g>
+            <g transform="rotate(67.5 50 50)"><line x1="50" y1="6" x2="50" y2="36"/><line x1="50" y1="64" x2="50" y2="94"/><line x1="6" y1="50" x2="36" y2="50"/><line x1="64" y1="50" x2="94" y2="50"/></g>
+          </g>
+        </svg>
+        <h1 class="x-h1">Software built for how Ghanaian businesses actually work<svg class="x-tail" viewBox="0 0 30 28" aria-hidden="true"><g stroke="currentColor" stroke-width="3.2" stroke-linecap="round" fill="none"><path d="M4 10 L26 3"/><path d="M4 15 L22 15"/><path d="M4 20 L26 26"/></g></svg></h1>
+      </div>
+
+      <div class="x-stage">
+        <div class="x-left">
+          <svg class="x-ticks" viewBox="0 0 26 20" aria-hidden="true"><g stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M3 18 L6 3"/><path d="M9 18 L17 6"/><path d="M13 19 L24 13"/></g></svg>
+          <p class="x-lede">WhatsApp AI assistants, workflow tools and web platforms for growing businesses. Tell us what slows your team down and we'll build around it.</p>
+          <a class="x-ghost" href="#work">See our work</a>
+        </div>
+
+        <div class="x-photo">
+          <div class="x-circle" aria-hidden="true"></div>
+          <div class="x-person"><img src="data:image/webp;base64,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" alt="Franklin Wiafe, founder of Afrokan Labs" width="480" height="600"></div>
+          <svg class="x-swirl" viewBox="0 0 60 90" aria-hidden="true"><path d="M44 4 C20 10 8 30 22 40 C36 50 46 30 30 30 C10 30 8 58 22 70 C28 75 34 78 38 84 M38 84 L30 82 M38 84 L37 76" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="x-ctas">
+            <a class="x-go" href="#contact">Start your project</a>
+            <a href="#contact">Chat on WhatsApp</a>
+          </div>
+        </div>
+
+        <div class="x-right">
+          <div class="x-sparks" aria-hidden="true">
+            <svg viewBox="0 0 20 20"><path fill="currentColor" d="M10 0 12 8 20 10 12 12 10 20 8 12 0 10 8 8Z"/></svg>
+            <svg viewBox="0 0 20 20"><path fill="currentColor" d="M10 0 12 8 20 10 12 12 10 20 8 12 0 10 8 8Z"/></svg>
+            <svg viewBox="0 0 20 20"><path fill="currentColor" d="M10 0 12 8 20 10 12 12 10 20 8 12 0 10 8 8Z"/></svg>
+            <svg viewBox="0 0 20 20"><path fill="currentColor" d="M10 0 12 8 20 10 12 12 10 20 8 12 0 10 8 8Z"/></svg>
+            <svg viewBox="0 0 20 20"><path fill="currentColor" d="M10 0 12 8 20 10 12 12 10 20 8 12 0 10 8 8Z"/></svg>
+          </div>
+          <span class="x-big">Ghana-first</span>
+          <span class="x-small">AI &amp; software studio, Accra</span>
+        </div>
+      </div>
+      <p class="x-note">Notes: the photo is the interim founder headshot in an arch. For the exact reference look, supply a cut-out portrait (transparent PNG, waist up, arms raised or a confident pose) so the head can rise above the grey circle. The right-hand badge replaces the reference's "10 Years Experience" star rating, since we don't have ratings to show.</p>
+      <div style="height:clamp(0px,1vw,8px)"></div>
+    </div>
+
+    <div class="x-stats" role="list" aria-label="Quick facts">
+      <div class="x-stat" role="listitem"><b>3<i>+</i></b><span>Systems delivered</span></div>
+      <div class="x-stat" role="listitem"><b>24/7</b><span>WhatsApp replies</span></div>
+      <div class="x-stat" role="listitem"><b>100<i>%</i></b><span>Mobile-first builds</span></div>
+      <div class="x-stat" role="listitem"><b>4<i>-step</i></b><span>Clear delivery process</span></div>
+    </div>
+    <p class="x-note">Notes: the reference uses big client/revenue counts. These four are things we can stand behind today; swap in real counts (clients served, messages answered, years running) as they grow.</p>
+
+
+    <section class="x-ideas" id="ideas" aria-labelledby="ideas-title">
+      <div class="x-ideas-head">
+        <h2 class="x-h2" id="ideas-title">Turning ideas into<br>working software</h2>
+        <p>We may be a small team, but we scope, build and support every project ourselves. Working hand-in-hand with you, we turn the problems that slow your business down into tools your staff and customers actually use.</p>
+      </div>
+      <div class="x-ideas-grid">
+        <div class="x-shot x-shot-wide">
+          <svg class="x-star4" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 0C53 36 64 47 100 50 64 53 53 64 50 100 47 64 36 53 0 50 36 47 47 36 50 0Z"/></svg>
+          <div class="x-clip"><svg class="x-img" viewBox="0 0 760 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9e9e9"/><stop offset=".55" stop-color="#bdbdbd"/><stop offset="1" stop-color="#6d6d6d"/></linearGradient>
+<linearGradient id="td" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a9a9a"/><stop offset="1" stop-color="#3a3a3a"/></linearGradient></defs>
+<rect width="760" height="500" fill="url(#tg)"/>
+<rect x="0" y="60" width="760" height="6" fill="#d6d6d6"/><rect x="40" y="0" width="120" height="180" fill="#f4f4f4" opacity=".7"/><rect x="560" y="0" width="160" height="160" fill="#f6f6f6" opacity=".6"/>
+<g fill="#4a4a4a"><circle cx="250" cy="180" r="30"/><path d="M196 300c0-50 24-82 54-82s54 32 54 82z"/></g>
+<g fill="#5a5a5a"><circle cx="470" cy="170" r="27"/><path d="M420 290c0-46 22-76 50-76s50 30 50 76z"/></g>
+<rect x="300" y="210" width="130" height="86" rx="4" fill="#2b2b2b"/><rect x="306" y="216" width="118" height="70" fill="#d9d9d9"/><rect x="312" y="224" width="70" height="6" fill="#9a9a9a"/><rect x="312" y="236" width="96" height="4" fill="#b0b0b0"/><rect x="312" y="246" width="84" height="4" fill="#b0b0b0"/>
+<rect x="540" y="212" width="120" height="80" rx="4" fill="#2b2b2b"/><rect x="546" y="218" width="108" height="64" fill="#cfcfcf"/>
+<rect x="0" y="300" width="760" height="200" fill="url(#td)"/>
+<g fill="#1c1c1c"><circle cx="120" cy="280" r="58"/><path d="M10 500c0-110 50-170 110-170s110 60 110 170z"/></g>
+<g fill="#262626"><circle cx="640" cy="300" r="50"/><path d="M548 500c0-96 40-150 92-150s92 54 92 150z"/></g>
+<g fill="#151515"><circle cx="380" cy="360" r="46"/><path d="M296 500c0-70 36-108 84-108s84 38 84 108z"/></g>
+</svg><span class="x-stand">Stand-in photo: team at work</span></div>
+          <div class="x-banner"><span>An AI &amp; software<br>studio in Accra</span><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="x-shot x-shot-tall"><svg class="x-img" viewBox="0 0 400 590" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<defs><radialGradient id="pg" cx=".6" cy=".35" r=".8"><stop offset="0" stop-color="#8e8e8e"/><stop offset="1" stop-color="#2e2e2e"/></radialGradient></defs>
+<rect width="400" height="590" fill="url(#pg)"/>
+<path d="M120 300c-10-90 30-160 100-160s120 60 108 150c-6 60-30 90-30 90H140s-16-30-20-80z" fill="#2a2a2a"/>
+<ellipse cx="225" cy="290" rx="72" ry="92" fill="#cfcfcf"/>
+<g fill="none" stroke="#1d1d1d" stroke-width="5"><circle cx="196" cy="282" r="22"/><circle cx="256" cy="282" r="22"/><path d="M218 282h16"/></g>
+<path d="M200 340q25 16 50 0" stroke="#6b6b6b" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M60 590c0-120 70-180 165-180s165 60 165 180z" fill="#1f1f1f"/>
+<path d="M150 470c10-50 40-70 70-74l30 6c-20 14-40 40-46 80z" fill="#bdbdbd"/>
+</svg><svg class="x-bulb" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M50 30c-14 0-24 10-24 23 0 9 5 15 10 20 3 3 4 6 4 10h20c0-4 1-7 4-10 5-5 10-11 10-20 0-13-10-23-24-23z" transform="rotate(-14 50 55)"/><path d="M42 88h18M44 94h14" transform="rotate(-14 50 55)"/><path d="M50 18v-12M26 26l-8-8M74 26l8-8M16 46H4M84 46h12"/><path d="M46 60l4-10 4 10" transform="rotate(-14 50 55)"/></g></svg><span class="x-stand">Stand-in photo: teammate portrait</span></div>
+      </div>
+      <p class="x-note">Notes: both images are drawn stand-ins. Replace with (1) a wide black-and-white photo of the team at laptops, about 3:2, and (2) a tall black-and-white portrait, about 2:3. The red bulb doodle stays on top of the real photo.</p>
+    </section>
+
+
+    <section class="x-svc" id="services-new" aria-labelledby="svc-title">
+      <div class="x-tab" aria-hidden="true"><span>WHAT WE DO</span></div>
+      <div class="x-svc-grid">
+        <div class="x-svc-left">
+          <h2 class="x-h2" id="svc-title">Our <span class="x-hl">Services</span></h2>
+          <p>We build AI and software tools that help Ghanaian businesses serve customers faster and run smoother.</p>
+          <ul class="x-rows">
+            <li class="x-row open"><button type="button" aria-expanded="true" aria-controls="svc-0"><span class="x-n">01</span>WhatsApp AI Assistants<svg class="x-ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><p class="x-desc" id="svc-0">Assistants that answer customers on WhatsApp from your own documents and policies, any time of day.</p></li>
+            <li class="x-row"><button type="button" aria-expanded="false" aria-controls="svc-1"><span class="x-n">02</span>Web Platforms<svg class="x-ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><p class="x-desc" id="svc-1">Fast, mobile-first websites and web apps that turn visitors into WhatsApp conversations.</p></li>
+            <li class="x-row"><button type="button" aria-expanded="false" aria-controls="svc-2"><span class="x-n">03</span>Workflow Tools<svg class="x-ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><p class="x-desc" id="svc-2">Checklists, trackers and forms that replace paperwork and spreadsheets, built around how your team already works.</p></li>
+            <li class="x-row"><button type="button" aria-expanded="false" aria-controls="svc-3"><span class="x-n">04</span>Backend Systems<svg class="x-ar" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><p class="x-desc" id="svc-3">The databases, dashboards and integrations that keep everything connected behind the scenes.</p></li>
+          </ul>
+        </div>
+        <div class="x-svc-photo"><svg class="x-img" viewBox="0 0 300 380" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4d4d4"/><stop offset="1" stop-color="#7a7a7a"/></linearGradient></defs>
+<rect width="300" height="380" fill="url(#sg)"/>
+<rect x="190" y="0" width="110" height="140" fill="#ececec" opacity=".7"/>
+<path d="M95 150c-6-50 22-86 62-86s70 34 64 84c-3 30-14 46-14 46H112s-14-16-17-44z" fill="#3a3a3a"/>
+<circle cx="150" cy="55" r="20" fill="#3a3a3a"/>
+<ellipse cx="156" cy="150" rx="44" ry="54" fill="#d8d8d8"/>
+<g fill="none" stroke="#202020" stroke-width="3.5"><circle cx="139" cy="146" r="13"/><circle cx="174" cy="146" r="13"/><path d="M152 146h9"/></g>
+<path d="M140 180q16 12 32 0" stroke="#555" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+<path d="M40 380c0-90 48-150 116-150s116 60 116 150z" fill="#1d1d1d"/>
+<rect x="0" y="318" width="300" height="62" fill="#2b2b2b"/>
+<path d="M30 318l40-46h110l-30 46z" fill="#4a4a4a"/>
+</svg><svg class="x-ring" viewBox="0 0 200 200" aria-hidden="true"><defs><path id="ringp" d="M100 100m-74 0a74 74 0 1 1 148 0a74 74 0 1 1 -148 0"/></defs>
+<g><ellipse cx="100" cy="100" rx="86" ry="86" fill="none" stroke="currentColor" stroke-width=".8" stroke-dasharray="2 5" opacity=".6"/>
+<text font-family="Lexend, system-ui, sans-serif" font-size="11" font-weight="500" fill="currentColor" letter-spacing="1.5"><textPath href="#ringp">Afrokan Labs · Afrokan Labs · Afrokan Labs · Afrokan Labs ·</textPath></text></g></svg><span class="x-stand">Stand-in photo: someone at work</span></div>
+        <div class="x-svc-side">
+          <a class="x-mini x-mini-dark" href="#process">
+            <p>Ever wondered how a project goes from idea to launch?</p>
+            <span class="x-foot"><b>See how we work</b><span class="x-circ"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+          </a>
+          <a class="x-mini x-mini-lime" href="#contact">
+            <p>Looking for a team who can turn your idea into a working product?</p>
+            <span class="x-foot"><b>Talk to our team</b><span class="x-circ"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+          </a>
+        </div>
+      </div>
+      <p class="x-note">Notes: tap a service row to open its description. "Backend Systems" is the fourth row to match the reference's four; drop it if you'd rather show three. The photo is a drawn stand-in: replace with a black-and-white photo of someone working, about 4:5, with the face in the upper third so the rotating ring circles the head.</p>
+    </section>
+
+
+    <section class="x-svc x-work" id="work" aria-labelledby="work-new-title">
+      <div class="x-tab" aria-hidden="true"><span>CASE STUDY</span></div>
+      <div class="x-work-grid">
+        <div class="x-work-main">
+          <h2 class="x-h2" id="work-new-title">Featured <span class="x-hl">Work</span></h2>
+          <h3>Helping a clearing and forwarding firm answer customers faster</h3>
+          <p>Customers kept calling the office with the same questions about clearance documents, which pulled staff away from their work. We built a WhatsApp assistant that answers those questions from the firm's own documents, a checklist generator that tells customers exactly which documents they need, and a website that brings in enquiries.</p>
+          <div class="x-btns">
+            <a class="x-pill x-pill-lime" href="#">Read the full case study</a>
+            <a class="x-pill x-pill-line" href="#contact"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#wa"/></svg>Chat with us on WhatsApp</a>
+          </div>
+        </div>
+        <dl class="x-facts">
+          <div class="x-fact x-wide"><dt>Client</dt><dd>ESE Logistic Solution Limited</dd></div>
+          <div class="x-fact"><dt>Industry</dt><dd>Clearing and forwarding</dd></div>
+          <div class="x-fact"><dt>Status</dt><dd class="x-live">Delivered</dd></div>
+          <div class="x-fact x-wide"><dt>Built</dt><dd class="x-tags"><span>WhatsApp AI assistant</span><span>Internal tool</span><span>Website</span></dd></div>
+        </dl>
+      </div>
+      <p class="x-note">Notes: same copy as before, restyled to match the services panel. A screenshot of the ESE website or the WhatsApp assistant would make this stronger; send one and I'll add it.</p>
+    </section>
+
+    <section class="x-words" aria-label="Innovate, inspire, create">
+      <svg class="x-wordline" viewBox="0 0 1000 104" role="img" aria-label="Innovate. Inspire. Create.">
+        <text class="x-w" x="0" y="82" font-size="78" textLength="300" lengthAdjust="spacingAndGlyphs">Innovate</text>
+        <path fill="var(--x-lime)" transform="translate(315 34) scale(.3)" d="M50 0C53 36 64 47 100 50 64 53 53 64 50 100 47 64 36 53 0 50 36 47 47 36 50 0Z"/>
+        <text class="x-w" x="360" y="82" font-size="78" textLength="268" lengthAdjust="spacingAndGlyphs">Inspire</text>
+        <path fill="var(--x-lime)" transform="translate(643 34) scale(.3)" d="M50 0C53 36 64 47 100 50 64 53 53 64 50 100 47 64 36 53 0 50 36 47 47 36 50 0Z"/>
+        <text class="x-w" x="688" y="82" font-size="78" textLength="312" lengthAdjust="spacingAndGlyphs">Create</text>
+      </svg>
+      <div class="x-divider" aria-hidden="true"><svg viewBox="0 0 100 100"><path fill="currentColor" d="M50 0C53 36 64 47 100 50 64 53 53 64 50 100 47 64 36 53 0 50 36 47 47 36 50 0Z"/></svg></div>
+      <p class="x-note">Notes: the three words are the reference's. Swap them for your own (for example "Build, Automate, Grow") and the line still fits edge to edge on every screen size.</p>
+    </section>
+
+
+    <section class="x-process" id="process" aria-labelledby="process-new-title">
+      <div class="x-ideas-head">
+        <h2 class="x-h2" id="process-new-title">How we <span class="x-hl">work</span></h2>
+        <p>Four steps from first conversation to launch. You always know what's happening, what it costs and what comes next.</p>
+      </div>
+      <ol class="x-steps"><li class="x-step"><span class="x-sn" aria-hidden="true">01</span><h3>Understand</h3><p>We start with a free conversation about the problem, not the technology.</p></li><li class="x-step"><span class="x-sn" aria-hidden="true">02</span><h3>Scope and quote</h3><p>You get a clear plan, timeline and price before any work begins.</p></li><li class="x-step"><span class="x-sn" aria-hidden="true">03</span><h3>Build</h3><p>Regular check-ins, so you see progress along the way, not just at the end.</p></li><li class="x-step"><span class="x-sn" aria-hidden="true">04</span><h3>Hand over and support</h3><p>We train your team and stay available after launch.</p></li></ol>
+      <div class="x-btns"><a class="x-pill x-pill-line" href="#contact"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#wa"/></svg>Start the conversation</a></div>
+    </section>
+
+    <section class="x-team" id="about" aria-labelledby="team-title">
+      <div class="x-team-head">
+        <h2 class="x-h2" id="team-title">Meet <span class="x-hl">the Team</span></h2>
+        <a class="x-join" href="#contact">Join our team <span class="x-sw" aria-hidden="true"></span></a>
+      </div>
+      <ul class="x-cards">
+          <li class="x-card"><span class="x-in" aria-hidden="true"><svg viewBox="0 0 16 16"><path fill="currentColor" d="M3.6 5.6h2.1V13H3.6zM4.6 2.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zM7 5.6h2v1c.3-.6 1.1-1.2 2.2-1.2 2.3 0 2.7 1.5 2.7 3.4V13h-2.1V9.2c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V13H7z"/></svg></span>
+            <div class="x-card-top"><div class="x-av"><svg class="x-blob" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 4c10 0 13 9 21 11s17 1 21 10-3 15-1 24 9 15 4 23-14 6-21 11-9 14-20 13-12-10-21-13-18-2-22-11 3-15 1-23-10-14-5-22 14-6 21-11S39 4 50 4Z"/></svg><div class="x-face"><img src="data:image/webp;base64,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" alt="Franklin Wiafe" width="480" height="600"></div></div>
+              <div class="x-who"><b>Franklin Wiafe</b><span>Founder</span></div></div>
+            <p>Leads product and engineering at Afrokan Labs. Information Technology student at the University of Ghana and researcher in its HCI lab.</p>
+          </li>
+          <li class="x-card x-empty"><span class="x-in" aria-hidden="true"><svg viewBox="0 0 16 16"><path fill="currentColor" d="M3.6 5.6h2.1V13H3.6zM4.6 2.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zM7 5.6h2v1c.3-.6 1.1-1.2 2.2-1.2 2.3 0 2.7 1.5 2.7 3.4V13h-2.1V9.2c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V13H7z"/></svg></span>
+            <div class="x-card-top"><div class="x-av"><svg class="x-blob" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 4c10 0 13 9 21 11s17 1 21 10-3 15-1 24 9 15 4 23-14 6-21 11-9 14-20 13-12-10-21-13-18-2-22-11 3-15 1-23-10-14-5-22 14-6 21-11S39 4 50 4Z"/></svg><div class="x-face"><svg viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" fill="#d4d4d4"/><circle cx="30" cy="24" r="11" fill="#9a9a9a"/><path d="M8 60c0-14 10-22 22-22s22 8 22 22z" fill="#9a9a9a"/></svg></div></div>
+              <div class="x-who"><b>Team member 2</b><span>Role title</span></div></div>
+            <p>One or two lines on what this person does and the experience they bring to client projects.</p>
+          </li>
+          <li class="x-card x-empty"><span class="x-in" aria-hidden="true"><svg viewBox="0 0 16 16"><path fill="currentColor" d="M3.6 5.6h2.1V13H3.6zM4.6 2.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zM7 5.6h2v1c.3-.6 1.1-1.2 2.2-1.2 2.3 0 2.7 1.5 2.7 3.4V13h-2.1V9.2c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V13H7z"/></svg></span>
+            <div class="x-card-top"><div class="x-av"><svg class="x-blob" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 4c10 0 13 9 21 11s17 1 21 10-3 15-1 24 9 15 4 23-14 6-21 11-9 14-20 13-12-10-21-13-18-2-22-11 3-15 1-23-10-14-5-22 14-6 21-11S39 4 50 4Z"/></svg><div class="x-face"><svg viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" fill="#d4d4d4"/><circle cx="30" cy="24" r="11" fill="#9a9a9a"/><path d="M8 60c0-14 10-22 22-22s22 8 22 22z" fill="#9a9a9a"/></svg></div></div>
+              <div class="x-who"><b>Team member 3</b><span>Role title</span></div></div>
+            <p>One or two lines on what this person does and the experience they bring to client projects.</p>
+          </li>
+          <li class="x-card x-empty"><span class="x-in" aria-hidden="true"><svg viewBox="0 0 16 16"><path fill="currentColor" d="M3.6 5.6h2.1V13H3.6zM4.6 2.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zM7 5.6h2v1c.3-.6 1.1-1.2 2.2-1.2 2.3 0 2.7 1.5 2.7 3.4V13h-2.1V9.2c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V13H7z"/></svg></span>
+            <div class="x-card-top"><div class="x-av"><svg class="x-blob" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 4c10 0 13 9 21 11s17 1 21 10-3 15-1 24 9 15 4 23-14 6-21 11-9 14-20 13-12-10-21-13-18-2-22-11 3-15 1-23-10-14-5-22 14-6 21-11S39 4 50 4Z"/></svg><div class="x-face"><svg viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" fill="#d4d4d4"/><circle cx="30" cy="24" r="11" fill="#9a9a9a"/><path d="M8 60c0-14 10-22 22-22s22 8 22 22z" fill="#9a9a9a"/></svg></div></div>
+              <div class="x-who"><b>Team member 4</b><span>Role title</span></div></div>
+            <p>One or two lines on what this person does and the experience they bring to client projects.</p>
+          </li>
+          <li class="x-card x-empty"><span class="x-in" aria-hidden="true"><svg viewBox="0 0 16 16"><path fill="currentColor" d="M3.6 5.6h2.1V13H3.6zM4.6 2.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zM7 5.6h2v1c.3-.6 1.1-1.2 2.2-1.2 2.3 0 2.7 1.5 2.7 3.4V13h-2.1V9.2c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V13H7z"/></svg></span>
+            <div class="x-card-top"><div class="x-av"><svg class="x-blob" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 4c10 0 13 9 21 11s17 1 21 10-3 15-1 24 9 15 4 23-14 6-21 11-9 14-20 13-12-10-21-13-18-2-22-11 3-15 1-23-10-14-5-22 14-6 21-11S39 4 50 4Z"/></svg><div class="x-face"><svg viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" fill="#d4d4d4"/><circle cx="30" cy="24" r="11" fill="#9a9a9a"/><path d="M8 60c0-14 10-22 22-22s22 8 22 22z" fill="#9a9a9a"/></svg></div></div>
+              <div class="x-who"><b>Team member 5</b><span>Role title</span></div></div>
+            <p>One or two lines on what this person does and the experience they bring to client projects.</p>
+          </li>
+          <li class="x-card x-empty"><span class="x-in" aria-hidden="true"><svg viewBox="0 0 16 16"><path fill="currentColor" d="M3.6 5.6h2.1V13H3.6zM4.6 2.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zM7 5.6h2v1c.3-.6 1.1-1.2 2.2-1.2 2.3 0 2.7 1.5 2.7 3.4V13h-2.1V9.2c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V13H7z"/></svg></span>
+            <div class="x-card-top"><div class="x-av"><svg class="x-blob" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 4c10 0 13 9 21 11s17 1 21 10-3 15-1 24 9 15 4 23-14 6-21 11-9 14-20 13-12-10-21-13-18-2-22-11 3-15 1-23-10-14-5-22 14-6 21-11S39 4 50 4Z"/></svg><div class="x-face"><svg viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" fill="#d4d4d4"/><circle cx="30" cy="24" r="11" fill="#9a9a9a"/><path d="M8 60c0-14 10-22 22-22s22 8 22 22z" fill="#9a9a9a"/></svg></div></div>
+              <div class="x-who"><b>Team member 6</b><span>Role title</span></div></div>
+            <p>One or two lines on what this person does and the experience they bring to client projects.</p>
+          </li>
+      </ul>
+      <p class="x-note">Notes: cards 2 to 6 are empty slots. For each person send a square headshot (any background, it's shown in black and white inside the lime blob), their name, role, a one or two line bio and a LinkedIn link. If the team is smaller, we show 3 cards in one row.</p>
+    </section>
+
+
+    <section class="x-quotes" aria-label="What clients say">
+      <div class="x-qview"><ul class="x-qtrack" id="qtrack">
+          <li class="x-q">
+            <div class="x-q-top"><div class="x-q-av"><svg viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" fill="#4a4a4a"/><circle cx="17" cy="14" r="6" fill="#8a8a8a"/><path d="M5 34c0-8 5-12 12-12s12 4 12 12z" fill="#8a8a8a"/></svg></div><div class="x-q-who"><b>Client name</b><span>Role, Company</span></div><svg class="x-q-mark" viewBox="0 0 22 18" aria-hidden="true"><path fill="currentColor" d="M0 18V10C0 4 3 1 9 0v4c-3 1-4 3-4 5h4v9zm13 0V10c0-6 3-9 9-10v4c-3 1-4 3-4 5h4v9z"/></svg></div>
+            <blockquote>Space for a real client quote. One to three sentences on the problem we solved, how working with us felt, and the result for their business.</blockquote>
+          </li>
+          <li class="x-q on">
+            <div class="x-q-top"><div class="x-q-av"><svg viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" fill="#4a4a4a"/><circle cx="17" cy="14" r="6" fill="#8a8a8a"/><path d="M5 34c0-8 5-12 12-12s12 4 12 12z" fill="#8a8a8a"/></svg></div><div class="x-q-who"><b>Client name</b><span>Role, Company</span></div><svg class="x-q-mark" viewBox="0 0 22 18" aria-hidden="true"><path fill="currentColor" d="M0 18V10C0 4 3 1 9 0v4c-3 1-4 3-4 5h4v9zm13 0V10c0-6 3-9 9-10v4c-3 1-4 3-4 5h4v9z"/></svg></div>
+            <blockquote>Space for a real client quote. One to three sentences on the problem we solved, how working with us felt, and the result for their business.</blockquote>
+          </li>
+          <li class="x-q">
+            <div class="x-q-top"><div class="x-q-av"><svg viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" fill="#4a4a4a"/><circle cx="17" cy="14" r="6" fill="#8a8a8a"/><path d="M5 34c0-8 5-12 12-12s12 4 12 12z" fill="#8a8a8a"/></svg></div><div class="x-q-who"><b>Client name</b><span>Role, Company</span></div><svg class="x-q-mark" viewBox="0 0 22 18" aria-hidden="true"><path fill="currentColor" d="M0 18V10C0 4 3 1 9 0v4c-3 1-4 3-4 5h4v9zm13 0V10c0-6 3-9 9-10v4c-3 1-4 3-4 5h4v9z"/></svg></div>
+            <blockquote>Space for a real client quote. One to three sentences on the problem we solved, how working with us felt, and the result for their business.</blockquote>
+          </li>
+          <li class="x-q">
+            <div class="x-q-top"><div class="x-q-av"><svg viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" fill="#4a4a4a"/><circle cx="17" cy="14" r="6" fill="#8a8a8a"/><path d="M5 34c0-8 5-12 12-12s12 4 12 12z" fill="#8a8a8a"/></svg></div><div class="x-q-who"><b>Client name</b><span>Role, Company</span></div><svg class="x-q-mark" viewBox="0 0 22 18" aria-hidden="true"><path fill="currentColor" d="M0 18V10C0 4 3 1 9 0v4c-3 1-4 3-4 5h4v9zm13 0V10c0-6 3-9 9-10v4c-3 1-4 3-4 5h4v9z"/></svg></div>
+            <blockquote>Space for a real client quote. One to three sentences on the problem we solved, how working with us felt, and the result for their business.</blockquote>
+          </li>
+          <li class="x-q">
+            <div class="x-q-top"><div class="x-q-av"><svg viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" fill="#4a4a4a"/><circle cx="17" cy="14" r="6" fill="#8a8a8a"/><path d="M5 34c0-8 5-12 12-12s12 4 12 12z" fill="#8a8a8a"/></svg></div><div class="x-q-who"><b>Client name</b><span>Role, Company</span></div><svg class="x-q-mark" viewBox="0 0 22 18" aria-hidden="true"><path fill="currentColor" d="M0 18V10C0 4 3 1 9 0v4c-3 1-4 3-4 5h4v9zm13 0V10c0-6 3-9 9-10v4c-3 1-4 3-4 5h4v9z"/></svg></div>
+            <blockquote>Space for a real client quote. One to three sentences on the problem we solved, how working with us felt, and the result for their business.</blockquote>
+          </li>
+      </ul></div>
+      <div class="x-qnav"><button type="button" id="qprev" aria-label="Previous testimonial"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3M7 4 3 8l4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" id="qnext" aria-label="Next testimonial"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+      <p class="x-note">Notes: these are empty testimonial slots, not quotes. Send real ones with the client's permission: their words, name, role, company and a small photo or company logo. ESE Logistic is the obvious first ask. Two or three real quotes are enough for the carousel.</p>
+    </section>
+
+
+    <section class="x-ticker" aria-label="What we build">
+      <div class="x-tband"><div class="x-tmove"><ul class="x-tlist"><li>WhatsApp AI</li><li>Web Platforms</li><li>Workflow Tools</li><li>Backend Systems</li><li>Chatbots</li><li>Dashboards</li><li>Websites</li></ul><ul class="x-tlist" aria-hidden="true"><li>WhatsApp AI</li><li>Web Platforms</li><li>Workflow Tools</li><li>Backend Systems</li><li>Chatbots</li><li>Dashboards</li><li>Websites</li></ul></div></div>
+    </section>
+    <p class="x-note">Notes: the ticker scrolls on its own and pauses on hover. Send your own keywords if you want different ones.</p>
+
+
+    <section class="x-contact" id="contact" aria-labelledby="contact-new-title">
+      <div class="x-contact-text">
+        <h2 class="x-h2" id="contact-new-title">Get in Touch Today!</h2>
+        <p>Have a problem in your business we could solve? Whether it's a WhatsApp assistant, a simple internal tool or a full web platform, leave your email and we'll reach out within one working day.</p>
+        <form class="x-form" id="xform" novalidate>
+          <label for="x-email">Your email</label>
+          <input id="x-email" name="email" type="email" placeholder="Enter your email" autocomplete="email">
+          <button type="submit">Contact Us</button>
+        </form>
+        <p class="x-formmsg" id="xformmsg" role="status"></p>
+        <a class="x-wa" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#wa"/></svg>Prefer WhatsApp? Chat with us</a>
+      </div>
+      <div class="x-cutout"><span class="x-stand" style="right:0">Stand-in cut-out</span><svg viewBox="0 0 300 345" aria-hidden="true">
+<path d="M104 120c-10-60 16-100 50-100s62 34 54 92c-4 30-8 60-8 60h-88s-4-24-8-52z" fill="#3a3a3a"/>
+<ellipse cx="154" cy="112" rx="38" ry="46" fill="#e2e2e2"/>
+<g fill="none" stroke="#2a2a2a" stroke-width="3"><circle cx="140" cy="110" r="11"/><circle cx="170" cy="110" r="11"/><path d="M151 110h8"/></g>
+<path d="M140 136q14 10 28 0" stroke="#7a7a7a" stroke-width="3" fill="none" stroke-linecap="round"/>
+<rect x="140" y="152" width="28" height="22" fill="#d6d6d6"/>
+<path d="M60 345c0-110 40-176 94-176s96 66 96 176z" fill="#f2f2f2"/>
+<path d="M150 172v173" stroke="#cfcfcf" stroke-width="2"/>
+<g fill="#bdbdbd"><rect x="120" y="186" width="60" height="10"/><rect x="120" y="206" width="60" height="10"/><rect x="120" y="226" width="60" height="10"/><rect x="120" y="246" width="60" height="10"/></g>
+<rect x="52" y="214" width="96" height="120" rx="6" transform="rotate(-10 100 274)" fill="#b8b8b8"/>
+<rect x="60" y="222" width="80" height="104" rx="4" transform="rotate(-10 100 274)" fill="#d0d0d0"/>
+<path d="M228 210c14-20 20-46 30-58" stroke="#e2e2e2" stroke-width="22" stroke-linecap="round" fill="none"/>
+<circle cx="262" cy="140" r="15" fill="#e2e2e2"/><circle cx="262" cy="140" r="6" fill="none" stroke="#9a9a9a" stroke-width="3"/>
+</svg></div>
+      <p class="x-note" style="grid-column:1/-1">Notes: the person on the right is a drawn stand-in. Replace with a cut-out photo (transparent PNG, waist up, ideally holding a laptop or phone). The email box isn't connected to anything yet; in the Next.js build it should send to your inbox or a form service. "Within one working day" is a promise, so change it if that's not right.</p>
+    </section>
+  </div>
+</div>
+
+
+<footer class="x x-footwrap">
+  <div class="x-wrap">
+    <div class="x-foot-card">
+      <div class="x-foot-top">
+        <a class="x-foot-logo" href="#top"><svg viewBox="105 115 1100 990" aria-hidden="true"><path d="M685 500 L513 212 Q372 598 200 1010 Q482 842 750 645 L993 1003 L1160 922" fill="none" stroke="currentColor" stroke-width="165" stroke-linejoin="round"/></svg>Afrokan Labs</a>
+        <p>AI and software for Ghanaian businesses. WhatsApp assistants, workflow tools and web platforms, built in Accra.</p>
+      </div>
+      <div class="x-foot-cols">
+        <div><h3>Company</h3><ul><li><a href="#about">About us</a></li><li><a href="#about">Our team</a></li><li><a href="#work">Our work</a></li><li><a href="#contact">Contact</a></li></ul></div>
+        <div><h3>Services</h3><ul><li><a href="#services-new">WhatsApp AI</a></li><li><a href="#services-new">Web platforms</a></li><li><a href="#services-new">Workflow tools</a></li><li><a href="#services-new">Backend systems</a></li></ul></div>
+        <div><h3>Resources</h3><ul><li><a href="#work">Case study</a></li><li><a href="#process">How we work</a></li><li><a href="#">Privacy</a></li></ul></div>
+        <div><h3>Contact</h3><ul><li>hello@afrokanlabs.com</li><li><a href="#">WhatsApp</a></li><li>Accra, Ghana</li></ul></div>
+        <div class="x-news"><h3>Subscribe to our newsletter</h3>
+          <p>Occasional notes on AI and software for Ghanaian businesses, plus what we're building.</p>
+          <form id="xnews" novalidate><label for="x-news-email">Your email</label><input id="x-news-email" type="email" placeholder="Enter your email" autocomplete="email"><button type="submit">Subscribe</button><p class="x-newsmsg" id="xnewsmsg" role="status"></p></form>
+        </div>
+      </div>
+      <div class="x-foot-bot"><span>© 2026 Afrokan Labs. All rights reserved.</span><nav class="x-social" aria-label="Social"><a href="#" aria-label="LinkedIn"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M3.6 5.6h2.1V13H3.6zM4.6 2.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zM7 5.6h2v1c.3-.6 1.1-1.2 2.2-1.2 2.3 0 2.7 1.5 2.7 3.4V13h-2.1V9.2c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V13H7z"/></svg></a><a href="#" aria-label="X"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M2 2h3.4l3 4.2L12 2h1.6L9.2 7.2 14 14h-3.4L7.4 9.5 3.6 14H2l4.7-5.4z"/></svg></a><a href="#" aria-label="Instagram"><svg viewBox="0 0 16 16" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="3.5"/><circle cx="8" cy="8" r="2.8"/></g><circle cx="11.6" cy="4.4" r=".9" fill="currentColor"/></svg></a><a href="#" aria-label="WhatsApp"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#wa" width="16" height="16"/></svg></a></nav></div>
+    </div>
+    <p class="x-note">Notes: the social icons and WhatsApp link need your real profile URLs and number. The newsletter box isn't connected; drop it if you won't send a newsletter.</p>
+  </div>
+</footer>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.3 1.2-1.8 1.3-.5 0-1 .3-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c0 .2.1.3 0 .5l-.3.5-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.2.5.1.6 0l.9-1.1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3Z"/></symbol>
+</svg>
+
+<script>
+  const fontBtns = document.querySelectorAll("#fonts button");
+  fontBtns.forEach((b) => b.addEventListener("click", () => {
+    document.body.dataset.font = b.dataset.font;
+    fontBtns.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  }));
+  const notesBtn = document.getElementById("notes-btn");
+  notesBtn.addEventListener("click", () => {
+    const on = document.body.classList.toggle("notes");
+    notesBtn.setAttribute("aria-pressed", String(on));
+    notesBtn.textContent = on ? "Hide notes" : "Show notes";
+  });
+</script>
+<script>
+document.querySelectorAll('.x-row button').forEach(function(b){b.addEventListener('click',function(){
+  var li=b.parentElement, open=!li.classList.contains('open');
+  document.querySelectorAll('.x-row').forEach(function(r){r.classList.remove('open');r.querySelector('button').setAttribute('aria-expanded','false');});
+  if(open){li.classList.add('open');b.setAttribute('aria-expanded','true');}
+});});
+</script>
+<script>
+(function(){
+  var track=document.getElementById('qtrack'); if(!track) return;
+  var cards=[].slice.call(track.children), i=1;
+  function go(n){ i=(n+cards.length)%cards.length;
+    var view=track.parentElement.clientWidth, c=cards[i];
+    track.style.transform='translateX('+(view/2-(c.offsetLeft+c.offsetWidth/2))+'px)';
+    cards.forEach(function(x,k){x.classList.toggle('on',k===i);}); }
+  document.getElementById('qprev').addEventListener('click',function(){go(i-1);});
+  document.getElementById('qnext').addEventListener('click',function(){go(i+1);});
+  window.addEventListener('resize',function(){go(i);});
+  go(i); if(document.fonts) document.fonts.ready.then(function(){go(i);});
+})();
+</script>
+<script>
+(function(){var f=document.getElementById('xform'); if(!f) return;
+f.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('x-email').value.trim(),m=document.getElementById('xformmsg');
+if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){m.textContent='Enter a valid email address, like name@company.com.';return;}
+m.textContent='This form is a preview and isn\u2019t connected yet. Email hello@afrokanlabs.com in the meantime.';});})();
+</script>
+<script>
+(function(){var f=document.getElementById('xnews'); if(!f) return;
+f.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('x-news-email').value.trim(),m=document.getElementById('xnewsmsg');
+m.textContent=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)?'Preview only: the newsletter signup isn\u2019t connected yet.':'Enter a valid email address, like name@company.com.';});})();
+</script>
+
+</html>

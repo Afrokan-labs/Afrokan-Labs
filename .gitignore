@@ -17,3 +17,8 @@ src/generated/
 
 # wrangler pages dev (local header testing)
 .wrangler
+
+# Design references (third-party screenshots; never committed)
+/Design inspirations/
+/afrokan-site-handoff.zip
+/NOTES-AND-ASSETS.md
