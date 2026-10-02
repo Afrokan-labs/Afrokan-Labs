@@ -1,0 +1,22 @@
+/* Mobile: scroll-snap row; each panel leaves a peek of the next one. */
+.strip {
+  display: grid;
+  grid-auto-columns: 85%;
+  grid-auto-flow: column;
+  gap: var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+}
+
+.panel {
+  scroll-snap-align: start;
+}
+
+/* Desktop: full width, panels side by side. */
+@media (min-width: 1024px) {
+  .strip {
+    grid-auto-columns: minmax(0, 1fr);
+    overflow-x: visible;
+  }
+}
