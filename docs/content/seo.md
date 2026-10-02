@@ -9,7 +9,8 @@ These texts appear in search results and link previews. They aren't shown on the
 | `/work` | Description | Projects Afrokan Labs has built for Ghanaian businesses: WhatsApp AI assistants, workflow tools and web platforms. | 114 / 155 |
 | `/work/ese-logistic` | Title | WhatsApp assistant for a clearing firm in Ghana | 47 / 60 |
 | `/work/ese-logistic` | Description | How we built a WhatsApp assistant that answers customers' clearance document questions, and a document checklist generator, for a Ghanaian clearing firm. | 153 / 155 |
-| `/privacy` | Description | What afrokanlabs.com collects: cookieless analytics with no personal data, and only what you choose to send us on WhatsApp or by email. | 135 / 155 |
+| `/privacy` | Description | What afrokanlabs.com collects: cookieless analytics with no personal data, and only what you send us on WhatsApp, by email or with the contact form. | 148 / 155 |
+| `/contact` | Description | Tell Afrokan Labs what your business does and what you need help with. We reply by WhatsApp or email. (Approved with contact.md.) | 101 / 155 |
 
 The homepage title and description are already approved (homepage-copy.md, Meta).
 
