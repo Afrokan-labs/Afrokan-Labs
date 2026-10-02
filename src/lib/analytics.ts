@@ -21,7 +21,8 @@ export type WhatsAppLocation =
   | "process"
   | "contact"
   | "sticky"
-  | "case-study";
+  | "case-study"
+  | "footer";
 
 export type AnalyticsEvents = {
   whatsapp_click: { location: WhatsAppLocation };

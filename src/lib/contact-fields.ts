@@ -31,6 +31,9 @@ export const RESULT_PAGES = { sent: "/contact/sent", failed: "/contact/not-sent"
 
 export const CONTACT_ENDPOINT = "/api/contact";
 
+/** sessionStorage key: the homepage email box hands its address to the /contact form. */
+export const CONTACT_PREFILL_KEY = "afrokan:contact-email";
+
 /**
  * Turnstile's script, in explicit mode. ContactForm adds it, and renders the
  * widget, once the visitor first focuses or taps the form: it stays out of the
