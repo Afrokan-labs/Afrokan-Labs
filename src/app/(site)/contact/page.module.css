@@ -1,0 +1,17 @@
+.page {
+  display: grid;
+  gap: var(--space-7);
+  padding-block: var(--space-8) var(--section-y);
+}
+
+.header {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: start;
+}
+
+.intro {
+  font-size: var(--text-body-l);
+  line-height: var(--leading-body-l);
+  color: var(--ink-2);
+}

@@ -16,6 +16,7 @@ export function getIndexablePaths(): string[] {
   return [
     "/",
     ...(projects.length ? ["/work", ...projects.map((p) => `/work/${p.slug}`)] : []),
+    "/contact",
     "/privacy",
   ];
 }
