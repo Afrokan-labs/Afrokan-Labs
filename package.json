@@ -14,7 +14,8 @@
     "images": "tsx scripts/optimize-images.ts",
     "lhci": "lhci autorun",
     "a11y": "tsx scripts/a11y.ts",
-    "launch:check": "tsx scripts/launch-check.ts"
+    "launch:check": "tsx scripts/launch-check.ts",
+    "content:audit": "tsx scripts/content-audit.ts"
   },
   "dependencies": {
     "@mdx-js/mdx": "^3.1.1",
