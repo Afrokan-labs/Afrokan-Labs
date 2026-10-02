@@ -5,6 +5,7 @@ import { Button } from "@/components/primitives/Button";
 import { track } from "@/lib/analytics";
 import {
   CONTACT_ENDPOINT,
+  CONTACT_PREFILL_KEY,
   FIELD,
   TURNSTILE_SCRIPT,
   type ContactResponse,
@@ -90,7 +91,18 @@ export function ContactForm({
   const widgetId = useRef<string | undefined>(undefined);
 
   // Native validation covers the form before hydration; afterwards ours takes over.
-  useEffect(() => setEnhanced(true), []);
+  // An address typed into the homepage email box arrives here, once.
+  useEffect(() => {
+    setEnhanced(true);
+    try {
+      const email = sessionStorage.getItem(CONTACT_PREFILL_KEY);
+      const input = formRef.current?.elements.namedItem(FIELD.contact);
+      if (email && input instanceof HTMLInputElement && !input.value) input.value = email;
+      sessionStorage.removeItem(CONTACT_PREFILL_KEY);
+    } catch {
+      // Storage blocked: the field just starts empty.
+    }
+  }, []);
   useEffect(() => {
     if (status === "sent") successRef.current?.focus();
   }, [status]);
@@ -181,7 +193,7 @@ export function ContactForm({
           {success.title}
         </h2>
         <p>{success.body}</p>
-        <Button variant="secondary" {...link}>
+        <Button variant="line" {...link}>
           {label}
         </Button>
       </div>

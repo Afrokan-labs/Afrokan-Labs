@@ -24,7 +24,7 @@ export default function ContactPage() {
       <header className={styles.header}>
         <h1>{data.title}</h1>
         <p className={styles.intro}>{data.intro}</p>
-        <Button variant="secondary" {...whatsapp}>
+        <Button variant="line" {...whatsapp}>
           {label}
         </Button>
       </header>

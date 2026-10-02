@@ -1,11 +1,18 @@
 .page {
   display: grid;
-  gap: var(--space-5);
+  gap: 20px;
   justify-items: start;
-  padding-block: var(--space-8) var(--section-y);
+  padding-block: clamp(40px, 6vw, 72px) clamp(56px, 8vw, 96px);
+}
+
+.page h1 {
+  font-size: var(--text-h1);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
 }
 
 .body {
-  font-size: var(--text-body-l);
-  line-height: var(--leading-body-l);
+  color: var(--mute);
+  font-size: 1rem;
+  line-height: 1.6;
 }

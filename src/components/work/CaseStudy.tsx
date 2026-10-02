@@ -72,10 +72,12 @@ export function CaseStudy(props: Props) {
         </div>
       )}
 
-      <section id={cta.id} className={`container ${styles.cta}`} aria-labelledby="cta-title">
-        <h2 id="cta-title">{cta.title}</h2>
-        <Button {...ctaLink}>{ctaLabel}</Button>
-      </section>
+      <div className="container">
+        <section id={cta.id} className={styles.cta} aria-labelledby="cta-title">
+          <h2 id="cta-title">{cta.title}</h2>
+          <Button {...ctaLink}>{ctaLabel}</Button>
+        </section>
+      </div>
     </article>
   );
 }

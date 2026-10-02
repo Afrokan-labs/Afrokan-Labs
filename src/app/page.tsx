@@ -22,7 +22,7 @@ export default function Page() {
         siteName={site.name}
         skipLinkLabel={site.ui.skipLink}
         headline={home.hero.headline}
-        subhead={home.hero.subhead}
+        lede={home.hero.lede}
         contactTitle={home.contact.title}
         email={site.email}
         location={site.location}
