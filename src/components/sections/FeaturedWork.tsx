@@ -4,7 +4,7 @@ import { MetaLabel } from "@/components/primitives/MetaLabel";
 import { SectionHeader } from "@/components/primitives/SectionHeader";
 import { StatusChip } from "@/components/primitives/StatusChip";
 import { TextLink } from "@/components/primitives/TextLink";
-import { FieldList } from "@/components/work/FieldList";
+import { Dossier } from "@/components/work/Dossier";
 import { PullQuote } from "@/components/work/PullQuote";
 import type { HomeData } from "@/lib/home";
 import styles from "./FeaturedWork.module.css";
@@ -25,35 +25,29 @@ export function FeaturedWork(props: Props) {
       <div className="container">
         <SectionHeader id="featured-title" label={eyebrow} title={title} />
 
-        <div className={styles.dossier}>
-          <div className={styles.fields}>
-            <FieldList
-              fields={[
-                ...fields,
-                {
-                  label: status.label,
-                  value: <StatusChip status={status.status} labels={status.labels} />,
-                },
-                { label: built.label, value: built.values.join(", ") },
-              ]}
-            />
-          </div>
+        <Dossier
+          fields={[
+            ...fields,
+            {
+              label: status.label,
+              value: <StatusChip status={status.status} labels={status.labels} />,
+            },
+            { label: built.label, value: built.values.join(", ") },
+          ]}
+        >
+          <p className={styles.body}>{body}</p>
 
-          <div className={styles.narrative}>
-            <p className={styles.body}>{body}</p>
+          {result && (
+            <div className={styles.result}>
+              <MetaLabel as="p" tone="muted">
+                {result.label}
+              </MetaLabel>
+              <p className={styles.resultText}>{result.text}</p>
+            </div>
+          )}
 
-            {result && (
-              <div className={styles.result}>
-                <MetaLabel as="p" tone="muted">
-                  {result.label}
-                </MetaLabel>
-                <p className={styles.resultText}>{result.text}</p>
-              </div>
-            )}
-
-            {testimonial && <PullQuote {...testimonial} />}
-          </div>
-        </div>
+          {testimonial && <PullQuote {...testimonial} />}
+        </Dossier>
 
         {conversation && (
           // The static copy of the conversation: below 1024px only (§8 placement).

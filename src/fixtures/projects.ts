@@ -68,3 +68,31 @@ export const fixtures = {
 };
 
 export type FixtureName = keyof typeof fixtures;
+
+// Stand-in image for the case-study fixtures: a real file, so it is in the image manifest.
+const fixtureImage = (showsClientBranding: boolean) => ({
+  src: "assets/images/franklin-wiafe.jpg",
+  alt: "Stand-in image for the fixture (test data)",
+  piiRedacted: true as const,
+  clientApproved: true as const,
+  showsClientBranding,
+});
+
+/** Case study fixtures (BUILD_PLAN 3.1 acceptance), rendered on /_fixtures/case-study/*. */
+export const caseStudyFixtures = {
+  /** Anonymised: formerBrand is set on purpose, to prove the page does not show it. */
+  anonymised: Project.parse({
+    ...base,
+    formerBrand: "Deuel's Designs",
+    client: { ...fixtures.anonymised[0].client },
+    images: [fixtureImage(false)],
+  }),
+  /** Named (full tier): name, attribution, branded image, result and testimonial. */
+  named: Project.parse({
+    ...fixtures.named[0],
+    formerBrand: "Deuel's Designs",
+    images: [fixtureImage(true)],
+  }),
+};
+
+export type CaseStudyFixtureName = keyof typeof caseStudyFixtures;
