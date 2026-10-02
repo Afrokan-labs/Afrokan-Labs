@@ -9,7 +9,9 @@ export const privacy = {
   // Set to who approved it and when, e.g. "Franklin Wiafe, 2026-10-03".
   approvedBy: "TODO_PRIVACY_COPY_APPROVAL",
   title: "Privacy",
-  description: "TODO_PRIVACY_META_DESCRIPTION",
+  // TODO_APPROVE_SEO_DRAFT: drafted in docs/content/seo.md, awaiting approval.
+  description:
+    "What afrokanlabs.com collects: cookieless analytics with no personal data, and only what you choose to send us on WhatsApp or by email.",
   intro:
     "This site is built to collect as little as possible. Here is everything it collects, and why.",
   sections: [

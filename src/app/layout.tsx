@@ -3,6 +3,7 @@ import { Schibsted_Grotesk } from "next/font/google";
 import "@/styles/tokens.css";
 import "@/styles/base.css";
 import "@/styles/grid.css";
+import { ANALYTICS_SCRIPT } from "@/lib/analytics";
 import { getSite } from "@/lib/content";
 import { env } from "@/lib/env";
 
@@ -28,7 +29,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-GH">
-      <body className={sans.variable}>{children}</body>
+      <body className={sans.variable}>
+        {children}
+        {/* Umami (architecture §7): cookieless, about 2 KB, deferred. Without an ID nothing loads. */}
+        {env.NEXT_PUBLIC_ANALYTICS_ID && (
+          <script defer src={ANALYTICS_SCRIPT} data-website-id={env.NEXT_PUBLIC_ANALYTICS_ID} />
+        )}
+      </body>
     </html>
   );
 }
