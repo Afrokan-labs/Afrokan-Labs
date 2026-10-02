@@ -11,3 +11,4 @@ src/components/Mark.tsx
 .lighthouseci
 src/generated
 public/images
+.wrangler
