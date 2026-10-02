@@ -39,7 +39,7 @@ Settings → Variables and Secrets. Set them separately for **Production** and *
 | Variable | Production | Preview | Notes |
 | --- | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | `https://afrokanlabs.com` | _leave unset_ | Previews fall back to Cloudflare's `CF_PAGES_URL` (see `next.config.ts`). Production never falls back: if it's missing, the build fails. |
-| `NEXT_PUBLIC_ANALYTICS_ID` | Umami website ID (from BUILD_PLAN 4.1) | _leave unset_ | Unset means `track()` does nothing, so test clicks don't pollute the data. |
+| `NEXT_PUBLIC_ANALYTICS_ID` | Umami website ID for afrokanlabs.com (see §6) | _leave unset_ | Unset means no analytics script loads, so test clicks don't pollute the data. Must be a UUID or the build fails. |
 | `NODE_VERSION` | `24` | `24` | Only if the build log shows the wrong Node version. |
 | `PNPM_VERSION` | `10.23.0` | `10.23.0` | Keep in step with `packageManager`. |
 
@@ -61,6 +61,18 @@ DNS on Cloudflare, registrar lock and 2FA are Phase 0 tasks.
 1. Pages project → Custom domains → add `afrokanlabs.com`, then `www.afrokanlabs.com`.
 2. Redirect `www` to the apex domain (Rules → Redirect Rules), so there is one canonical address.
 3. Check `https://afrokanlabs.com/robots.txt` shows `https://afrokanlabs.com/sitemap.xml`.
+
+## 6. Analytics (Umami Cloud, BUILD_PLAN 4.1)
+
+1. Sign up at [cloud.umami.is](https://cloud.umami.is) (the free Hobby plan is enough).
+2. Add two websites: **afrokanlabs.com**, and **afrokanlabs preview test** (domain: your `*.pages.dev` preview host). Copy each one's **Website ID**.
+3. **Test on a preview:** set `NEXT_PUBLIC_ANALYTICS_ID` in **Preview** to the *test* website's ID and retry the preview deployment. Open the preview, click the WhatsApp buttons, the case study links and the email link, then check **Realtime** in Umami: each click shows as an event (`whatsapp_click`, `case_study_click`, `email_click`) with its `location`.
+4. **Remove** the Preview variable afterwards and redeploy. Confirm in DevTools → Network that no request goes to `umami.is`.
+5. Set `NEXT_PUBLIC_ANALYTICS_ID` in **Production** to the afrokanlabs.com website's ID.
+
+The tracker loads from `https://cloud.umami.is` and sends events to `https://gateway.umami.is`. The security headers (BUILD_PLAN 4.2) allow both.
+
+Analytics can't see conversations once a visitor reaches WhatsApp. Both prefilled messages begin "Hi Afrokan Labs,". Log each chat that starts that way in the conversations sheet (architecture §7): Date, Business type, Qualified (Y/N), Became a quote (Y/N).
 
 ## Rollback
 

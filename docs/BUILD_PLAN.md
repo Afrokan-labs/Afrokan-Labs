@@ -55,7 +55,7 @@ These don't block development; they block **launch**. Until they're done, the re
 
 ## Phase 4: Hardening
 
-- [ ] **4.1 Analytics.** Wire every event and location in architecture §7 as a typed union, and use the prefilled messages from the copy doc (both begin "Hi Afrokan Labs," so site-origin chats can be counted).
+- [x] **4.1 Analytics.** Wire every event and location in architecture §7 as a typed union, and use the prefilled messages from the copy doc (both begin "Hi Afrokan Labs," so site-origin chats can be counted).
   - Accept: events fire in preview with a test ID, and nothing loads when the ID is unset.
 - [ ] **4.2 Security headers.** Write `public/_headers` per the CLAUDE.md override #1: HSTS, nosniff, Referrer-Policy, Permissions-Policy, and long cache for hashed assets with short cache for HTML.
   - Accept: the built site runs under the CSP with a clean console (test with `npx wrangler pages dev out`).
