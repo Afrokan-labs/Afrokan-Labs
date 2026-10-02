@@ -3,7 +3,7 @@
  * getHomeData(); sections receive the result as props and never read content.
  *
  * Takes the project list as an argument so the same code renders the real
- * page (/_home) and the tier fixtures (/_fixtures/*).
+ * homepage and the tier fixtures (/_fixtures/*).
  */
 import { trackingAttrs } from "./analytics";
 import {
