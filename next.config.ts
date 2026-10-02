@@ -10,6 +10,21 @@ const isCloudflarePreview = process.env.CF_PAGES === "1" && process.env.CF_PAGES
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL || (isCloudflarePreview ? process.env.CF_PAGES_URL : undefined);
 
+/**
+ * Previews also fall back to Turnstile's published test site key (always
+ * passes), so they need no dashboard variable. Production never falls back:
+ * a missing or test key fails the build (src/lib/env.ts).
+ */
+const TURNSTILE_TEST_SITE_KEY = "1x00000000000000000000AA";
+const turnstileSiteKey =
+  process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ||
+  (isCloudflarePreview ? TURNSTILE_TEST_SITE_KEY : undefined);
+
+const env = {
+  ...(siteUrl ? { NEXT_PUBLIC_SITE_URL: siteUrl } : {}),
+  ...(turnstileSiteKey ? { NEXT_PUBLIC_TURNSTILE_SITE_KEY: turnstileSiteKey } : {}),
+};
+
 const nextConfig: NextConfig = {
   output: "export",
   // Static export has no image server; images go through scripts/optimize-images.ts instead.
@@ -17,7 +32,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   // A stray lockfile in the home folder otherwise makes Next guess the wrong workspace root.
   outputFileTracingRoot: __dirname,
-  ...(siteUrl ? { env: { NEXT_PUBLIC_SITE_URL: siteUrl } } : {}),
+  env,
 };
 
 export default nextConfig;
