@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 import { PrivacyPolicy } from "@/components/legal/PrivacyPolicy";
 import { getPrivacy, getSite } from "@/lib/content";
+import { pageMetadata } from "@/lib/seo";
 
 const privacy = getPrivacy();
 
-export const metadata: Metadata = { title: privacy.title };
+export const metadata: Metadata = pageMetadata({
+  path: "/privacy",
+  title: privacy.title,
+  description: privacy.description,
+});
 
 export default function PrivacyPage() {
   const [y, m, d] = privacy.lastUpdated.date.split("-").map(Number);
