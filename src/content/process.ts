@@ -28,5 +28,6 @@ export const workProcess = {
   // Open decision #3. Approved options:
   //   "Projects are scoped and quoted after a free first conversation."
   //   "Projects start from GH₵[X]."
-  pricingNote: "TODO_PRICING_SIGNAL",
+  // TODO_DUMMY: preview-only dummy value (branch preview/dummy-content). Never merge.
+  pricingNote: "Projects are scoped and quoted after a free first conversation.",
 } satisfies z.input<typeof Process>;

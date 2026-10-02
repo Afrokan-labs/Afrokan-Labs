@@ -14,9 +14,12 @@ export const site = {
   address: { locality: "Accra", country: "GH" },
 
   // Phase 0: dedicated WhatsApp Business number.
-  whatsappNumber: "TODO_WHATSAPP_E164",
+  // TODO_DUMMY: preview-only dummy value (branch preview/dummy-content). Never merge.
+  // +1 555-0100 is reserved for fiction, so it can't reach a real person.
+  whatsappNumber: "+15555550100",
   // Copy §6: "We reply within [X hours] on weekdays."
-  replyWithin: "TODO_REPLY_HOURS",
+  // TODO_DUMMY: preview-only dummy value (branch preview/dummy-content). Never merge.
+  replyWithin: "4 hours",
 
   whatsappPrefill: {
     default: "Hi Afrokan Labs, I run a [type of business] and I'd like to talk about…",
@@ -68,6 +71,7 @@ export const site = {
   social: {
     // Copy §7: show LinkedIn only if the page exists and is kept active.
     // Set the URL, or delete this line to leave it out.
-    linkedin: "TODO_LINKEDIN_URL",
+    // TODO_DUMMY: preview-only dummy value (branch preview/dummy-content). Never merge.
+    linkedin: "https://www.linkedin.com/company/afrokan-labs-dummy",
   },
 } satisfies z.input<typeof Site>;

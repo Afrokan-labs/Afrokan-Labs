@@ -17,6 +17,7 @@ export const team = {
       },
     },
     // Copy §5 lists a second member. Fill in, or delete this entry.
-    { name: "TODO_TEAM_MEMBER_2_NAME", role: "TODO_TEAM_MEMBER_2_ROLE" },
+    // TODO_DUMMY: preview-only dummy value (branch preview/dummy-content). Never merge.
+    { name: "Ama Example", role: "Operations" },
   ],
 } satisfies z.input<typeof Team>;
