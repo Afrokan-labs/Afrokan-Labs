@@ -1,6 +1,6 @@
-# Privacy page copy (Draft v2)
+# Privacy page copy (v2)
 
-**Status:** drafted by Claude from `architecture.md` §7, §12 and §13 on 2026-10-02. **Awaiting Franklin's approval.** Until it is approved, `src/content/privacy.ts` carries `TODO_PRIVACY_COPY_APPROVAL` and `pnpm launch:check` fails.
+**Status: Approved 2026-10-02, as written** (v1 and the v2 contact form changes). Drafted by Claude from `architecture.md` §7, §12 and §13.
 
 Plain language, short, and only what is true of the site. **v2 (2026-10-02, BUILD_PLAN 6.1)** covers the contact form. It adds an item to the analytics list, rewrites the first paragraph of "When you contact us", and adds a section, "The contact form". Architecture §13 requires this to be approved before the form goes live.
 

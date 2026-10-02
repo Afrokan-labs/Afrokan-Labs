@@ -1,6 +1,6 @@
-# Contact form copy (Draft v1)
+# Contact form copy (v1)
 
-**Status:** drafted by Claude on 2026-10-02 for BUILD_PLAN 6.1. **Awaiting Franklin's approval.** Until it is approved, `src/content/contact.ts` carries `TODO_CONTACT_COPY_APPROVAL` and `pnpm launch:check` fails.
+**Status: Approved 2026-10-02, as written** (em dash in the success line kept). Drafted by Claude for BUILD_PLAN 6.1.
 
 Approved wording reused as-is:
 
