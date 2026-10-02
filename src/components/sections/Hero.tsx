@@ -50,8 +50,8 @@ export function Hero({ headline, subhead, cta, proof, caseStudy, conversation }:
           <div className={styles.actions}>
             <Button {...ctaLink}>{ctaLabel}</Button>
             {caseStudy && (
-              <TextLink standalone href={caseStudy.href} {...caseStudy.tracking}>
-                {caseStudy.label} <span aria-hidden="true">→</span>
+              <TextLink standalone arrow href={caseStudy.href} {...caseStudy.tracking}>
+                {caseStudy.label}
               </TextLink>
             )}
           </div>

@@ -1,0 +1,46 @@
+/* design-system §8 ServiceRow: full-width rows separated by hairlines. */
+
+.section {
+  padding-block-end: var(--section-y);
+}
+
+.rows {
+  border-top: var(--border-hair);
+}
+
+.row {
+  display: grid;
+  gap: var(--space-3);
+  padding-block: var(--space-6);
+  border-bottom: var(--border-hair);
+}
+
+.detail {
+  display: grid;
+  gap: var(--space-3);
+  color: var(--ink-2);
+}
+
+.cta {
+  margin-block-start: var(--space-7);
+}
+
+/* Desktop: number in columns 1–2, headline in 3–7, description and Tag in 8–12. */
+@media (min-width: 1024px) {
+  .row {
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    column-gap: var(--grid-gutter);
+  }
+
+  .number {
+    grid-column: 1 / span 2;
+  }
+
+  .headline {
+    grid-column: 3 / span 5;
+  }
+
+  .detail {
+    grid-column: 8 / span 5;
+  }
+}
