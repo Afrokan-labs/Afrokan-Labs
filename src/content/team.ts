@@ -18,6 +18,13 @@ export const team = {
     },
     // Copy §5 lists a second member. Fill in, or delete this entry.
     // TODO_DUMMY: preview-only dummy value (branch preview/dummy-content). Never merge.
-    { name: "Ama Example", role: "Operations" },
+    {
+      name: "Ama Example",
+      role: "Operations",
+      photo: {
+        src: "assets/images/placeholder-member.jpg",
+        alt: "Placeholder photo for a team member",
+      },
+    },
   ],
 } satisfies z.input<typeof Team>;
