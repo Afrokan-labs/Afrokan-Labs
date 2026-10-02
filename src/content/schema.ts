@@ -182,17 +182,23 @@ export const Team = z.object({
   statement: z.string().min(1),
   members: z
     .array(
-      z.object({
-        name: orTodo(z.string().min(1), "a name"),
-        role: orTodo(z.string().min(1), "a role"),
-        photo: z
-          .object({
-            /** Source image in assets/images/; optimised in BUILD_PLAN 2.6. */
-            src: z.string(),
-            alt: z.string().min(10),
-          })
-          .optional(),
-      }),
+      z
+        .object({
+          name: orTodo(z.string().min(1), "a name"),
+          role: orTodo(z.string().min(1), "a role"),
+          photo: z
+            .object({
+              /** Source image in assets/images/; optimised in BUILD_PLAN 2.6. */
+              src: z.string(),
+              alt: z.string().min(10),
+            })
+            .optional(),
+        })
+        // design-system §8 TeamMember: a real photo for every person shown.
+        .refine((m) => m.name.startsWith("TODO_") || m.photo, {
+          error: "A team member needs a photo (design-system §8 TeamMember).",
+          path: ["photo"],
+        }),
     )
     .min(1),
 });
