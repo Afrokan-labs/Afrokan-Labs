@@ -1,0 +1,43 @@
+/* design-system §8 Dossier. */
+
+.dossier {
+  display: grid;
+  gap: var(--space-7);
+  padding: var(--space-5);
+  border-radius: var(--radius-m);
+  background: var(--surface-2);
+}
+
+.narrative {
+  display: grid;
+  gap: var(--space-6);
+  align-content: start;
+}
+
+/* Tablet gets the two-column dossier (§5). */
+@media (min-width: 640px) {
+  .dossier {
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    column-gap: var(--grid-gutter);
+    padding: var(--space-6);
+  }
+
+  .fields {
+    grid-column: 1 / span 3;
+  }
+
+  .narrative {
+    grid-column: 4 / span 5;
+  }
+}
+
+/* Desktop: FieldList in 4 columns, Narrative in 8. */
+@media (min-width: 1024px) {
+  .fields {
+    grid-column: 1 / span 4;
+  }
+
+  .narrative {
+    grid-column: 5 / span 8;
+  }
+}

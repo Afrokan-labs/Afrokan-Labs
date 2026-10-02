@@ -7,7 +7,9 @@
         "/_primitives.html",
         "/_fixtures/none.html",
         "/_fixtures/anonymised.html",
-        "/_fixtures/named.html"
+        "/_fixtures/named.html",
+        "/_fixtures/case-study/anonymised.html",
+        "/_fixtures/case-study/named.html"
       ]
     },
     "assert": {
