@@ -216,8 +216,14 @@ const ACTIVE = `(() => {
   const label = (a.getAttribute("aria-label") || a.textContent || a.getAttribute("href") || a.tagName)
     .trim().replace(/\\s+/g, " ").slice(0, 40);
   if (!a.dataset.a11yId) a.dataset.a11yId = String(Math.random());
+  // Focus is inside something we can't see into: an iframe, or a closed shadow
+  // root (the host is then active although it isn't focusable itself), as with
+  // Turnstile's widget on /contact. Its focus styles are the third party's.
+  const opaque = a.tagName === "IFRAME" ||
+    (a.tabIndex < 0 && !a.matches("a[href], button, input, select, textarea, [tabindex]"));
   return {
     id: a.dataset.a11yId,
+    opaque,
     label: a.tagName.toLowerCase() + ' "' + label + '"',
     skipLink: a.classList.contains("skip-link"),
     visibleRing: (c.outlineStyle !== "none" && parseFloat(c.outlineWidth) >= 2) || c.boxShadow !== "none",
@@ -227,15 +233,20 @@ const ACTIVE = `(() => {
 
 type Active = {
   id: string;
+  opaque: boolean;
   label: string;
   skipLink: boolean;
   visibleRing: boolean;
   hasSize: boolean;
 };
 
-/** Visible, non-inert controls a keyboard user should be able to reach. */
-const REACHABLE = `[...document.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])')]
-  .filter((el) => el.getClientRects().length && !el.closest("[inert], dialog:not([open])") && getComputedStyle(el).visibility !== "hidden")
+/**
+ * Visible, non-inert controls a keyboard user should be able to reach.
+ * tabindex="-1" takes a control out of the Tab order on purpose (the contact
+ * form's honeypot), so those don't count.
+ */
+const REACHABLE = `[...document.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, [tabindex]')]
+  .filter((el) => el.tabIndex >= 0 && el.getClientRects().length && !el.closest("[inert], dialog:not([open])") && getComputedStyle(el).visibility !== "hidden")
   .map((el) => { if (!el.dataset.a11yId) el.dataset.a11yId = String(Math.random()); return el.dataset.a11yId; })`;
 
 async function keyboard(cdp: Cdp, width: number): Promise<string[]> {
@@ -244,14 +255,15 @@ async function keyboard(cdp: Cdp, width: number): Promise<string[]> {
   const seen = new Map<string, Active>();
   const hidDuringPass = new Set<string>();
 
-  for (let i = 0; i < expected.length + 5; i++) {
+  // Extra presses leave room for Tab stops inside third-party frames.
+  for (let i = 0; i < expected.length + 15; i++) {
     await cdp.key("Tab");
     const a = await cdp.ev<Active | null>(ACTIVE);
     const shown = new Set(await cdp.ev<string[]>(REACHABLE));
     for (const id of expected) if (!shown.has(id)) hidDuringPass.add(id);
     if (i === 0 && !a?.skipLink)
       problems.push(`first Tab reached ${a?.label ?? "nothing"}, not the skip link`);
-    if (!a) continue;
+    if (!a || a.opaque) continue;
     if (seen.has(a.id)) break; // wrapped around to the start
     seen.set(a.id, a);
     if (!a.visibleRing) problems.push(`no visible focus indicator on ${a.label}`);

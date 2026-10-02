@@ -21,6 +21,8 @@ jobs:
     env:
       # CI builds use the production URL; previews get their own on Cloudflare.
       NEXT_PUBLIC_SITE_URL: https://afrokanlabs.com
+      # Turnstile's published test key (always passes); production uses the real one.
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: 1x00000000000000000000AA
     steps:
       - uses: actions/checkout@v7
 
@@ -45,6 +47,10 @@ jobs:
 
       - name: Validate content
         run: pnpm content:validate
+
+      # The contact form's Pages Function, with Turnstile and Resend stubbed.
+      - name: Contact function
+        run: pnpm test:contact
 
       - name: Build
         run: pnpm build
