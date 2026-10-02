@@ -23,8 +23,14 @@
 .member {
   display: grid;
   gap: var(--space-1);
-  padding-block-start: var(--space-3);
-  border-top: var(--border-hair);
+  align-content: start;
+}
+
+/* §8 TeamMember: consistent 4:5 crop. */
+.photo {
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  margin-block-end: var(--space-3);
 }
 
 .name {

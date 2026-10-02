@@ -41,7 +41,7 @@ These don't block development; they block **launch**. Until they're done, the re
   - Accept: no hard-coded copy in components (grep for string literals in JSX inside `sections/`). Exactly one chat thread is displayed at 360px and at 1280px. Rendering correct for three fixtures: no published project (no Featured work, proof line or case-study link), anonymised tier, and named tier.
 - [x] **2.5 StickyActionBar.** Mobile only. It must not cover content or the footer.
   - Accept: CLS ≤ 0.05 in Lighthouse, and the bar never covers footer content.
-- [ ] **2.6 Image pipeline.** `scripts/optimize-images.ts` (sharp → AVIF and WebP at 2–3 widths, plus a manifest JSON), wired into `ResponsiveImage`.
+- [x] **2.6 Image pipeline.** `scripts/optimize-images.ts` (sharp → AVIF and WebP at 2–3 widths, plus a manifest JSON), wired into `ResponsiveImage`.
   - Accept: no output image is over 120 KB, and the build fails clearly if a referenced image is missing from the manifest.
 
 ## Phase 3: Remaining pages
