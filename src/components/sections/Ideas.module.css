@@ -1,0 +1,157 @@
+/* reference §3 .x-ideas */
+
+.ideas {
+  margin-top: clamp(48px, 6vw, 80px);
+  padding-inline: clamp(0px, 3vw, 40px);
+}
+
+.head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px 48px;
+  align-items: start;
+}
+
+.h2 {
+  max-width: 14em;
+  font-size: var(--text-h2);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.head p {
+  justify-self: end;
+  max-width: 44ch;
+  color: var(--mute);
+  font-size: 0.86rem;
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.68fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  margin-top: clamp(28px, 3vw, 40px);
+}
+
+.wide,
+.tall {
+  position: relative;
+  max-width: 100%;
+  border-radius: 16px;
+  background: var(--photo-bg);
+}
+
+.wide {
+  aspect-ratio: 1.52 / 1;
+  margin-top: clamp(16px, 3vw, 36px);
+}
+
+.clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.clip picture,
+.tall picture {
+  height: 100%;
+}
+
+.img {
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1);
+}
+
+.tall {
+  overflow: hidden;
+  aspect-ratio: 0.68 / 1;
+}
+
+.star {
+  position: absolute;
+  z-index: 2;
+  left: -18px;
+  top: -24px;
+  width: clamp(34px, 3.6vw, 46px);
+  color: var(--lime);
+}
+
+.banner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(14px, 2.4vw, 26px);
+  display: flex;
+  align-items: stretch;
+  height: clamp(40px, 5.2vw, 58px);
+}
+
+.banner span {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  max-width: 70%;
+  padding: 0 clamp(70px, 9vw, 120px) 0 clamp(16px, 2.6vw, 30px);
+  background: var(--lime);
+  color: var(--ink);
+  font-size: clamp(0.62rem, 0.5rem + 0.35vw, 0.78rem);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.banner i {
+  flex: none;
+  width: clamp(5px, 0.7vw, 8px);
+  margin-left: clamp(3px, 0.5vw, 6px);
+  background: var(--lime);
+}
+
+.banner i:nth-of-type(2) {
+  width: clamp(3px, 0.4vw, 5px);
+}
+
+.banner i:nth-of-type(3) {
+  width: clamp(2px, 0.3vw, 4px);
+  opacity: 0.85;
+}
+
+.banner i:nth-of-type(4) {
+  width: 2px;
+  opacity: 0.6;
+}
+
+.bulb {
+  position: absolute;
+  left: 22%;
+  top: 3%;
+  width: 30%;
+  color: var(--bulb-red);
+}
+
+@media (max-width: 760px) {
+  .head,
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .head p {
+    justify-self: start;
+  }
+
+  .star {
+    left: -8px;
+    top: -18px;
+  }
+
+  .tall {
+    aspect-ratio: 4 / 5;
+  }
+}

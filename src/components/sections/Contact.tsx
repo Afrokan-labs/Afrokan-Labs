@@ -1,51 +1,30 @@
-import { Button } from "@/components/primitives/Button";
-import { MetaLabel } from "@/components/primitives/MetaLabel";
-import { TextLink } from "@/components/primitives/TextLink";
+import { ResponsiveImage } from "@/components/primitives/ResponsiveImage";
+import { WhatsAppGlyph } from "@/components/ui/icons";
 import type { HomeData } from "@/lib/home";
+import { ContactTeaser } from "./ContactTeaser";
 import styles from "./Contact.module.css";
 
 type Props = HomeData["contact"];
 
-/**
- * design-system §8 Contact: the homepage's one dark band. WhatsApp first; the
- * email always sits next to the WhatsApp button (§9). The form itself lives on
- * /contact, never here (architecture §5); the band only links to it.
- */
-export function Contact({
-  title,
-  body,
-  responseNote,
-  cta,
-  email,
-  emailTracking,
-  formLink,
-  location,
-}: Props) {
-  const { label, ...link } = cta;
+/** reference §11 "Get in Touch Today!": the email box, a WhatsApp link and the cut-out image. */
+export function Contact({ id, title, body, form, whatsapp, image }: Props) {
+  const { label, srNote, ...whatsappAttrs } = whatsapp;
   return (
-    <section id="contact" className={styles.band} aria-labelledby="contact-title">
-      <div className={`container ${styles.inner}`}>
-        <h2 id="contact-title" className={styles.title}>
+    <section id={id} className={styles.contact} aria-labelledby="contact-title">
+      <div className={styles.text}>
+        <h2 id="contact-title" className={styles.h2}>
           {title}
         </h2>
-        <div className={styles.detail}>
-          <p className={styles.body}>{body}</p>
-          {responseNote && <p className={styles.note}>{responseNote}</p>}
-          <div className={styles.actions}>
-            <Button variant="onDark" {...link}>
-              {label}
-            </Button>
-            <TextLink standalone tone="onDark" href={`mailto:${email}`} {...emailTracking}>
-              {email}
-            </TextLink>
-          </div>
-          <TextLink standalone arrow tone="onDark" href={formLink.href}>
-            {formLink.label}
-          </TextLink>
-          <MetaLabel as="p" tone="onDark">
-            {location}
-          </MetaLabel>
-        </div>
+        <p>{body}</p>
+        <ContactTeaser {...form} />
+        <a className={styles.wa} {...whatsappAttrs}>
+          <WhatsAppGlyph />
+          {label}
+          <span className="sr-only"> {srNote}</span>
+        </a>
+      </div>
+      <div className={styles.cutout}>
+        <ResponsiveImage {...image} sizes="(max-width: 760px) 80vw, 360px" />
       </div>
     </section>
   );

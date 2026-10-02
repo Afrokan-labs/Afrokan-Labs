@@ -1,46 +1,288 @@
-/* design-system §8 ServiceRow: full-width rows separated by hairlines. */
+/* reference §4 .x-svc */
 
-.section {
-  padding-block-end: var(--section-y);
+.panel {
+  margin-top: clamp(64px, 8vw, 100px);
 }
 
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) minmax(0, 0.62fr);
+  gap: 16px clamp(16px, 2vw, 22px);
+  align-items: stretch;
+}
+
+.left {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-width: 0;
+}
+
+.h2 {
+  font-size: var(--text-h2);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.left > p {
+  max-width: 38ch;
+  margin-bottom: 14px;
+  color: var(--mute);
+  font-size: 0.78rem;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* Accordion rows */
 .rows {
-  border-top: var(--border-hair);
+  display: grid;
+  gap: 12px;
+  max-width: 380px;
 }
 
 .row {
+  border: 1px solid var(--line-2);
+  border-radius: 22px;
+  transition:
+    border-color var(--dur-base),
+    background-color var(--dur-base);
+}
+
+.rowHeading {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.row button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 22px;
+  background: transparent;
+  color: var(--white);
+  font-size: 0.86rem;
+  font-weight: 400;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+}
+
+.n {
+  min-width: 22px;
+  color: var(--lime);
+  font-family: var(--font-wide);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.ar {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  transition: rotate 0.25s;
+}
+
+.desc {
+  display: none;
+  padding: 0 20px 16px 56px;
+  color: var(--mute);
+  font-size: 0.78rem;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.row[data-open="true"] {
+  border-color: var(--lime);
+  background: var(--row-open);
+}
+
+.row[data-open="true"] .desc {
+  display: block;
+}
+
+.row[data-open="true"] .ar {
+  rotate: 90deg;
+  color: var(--lime);
+}
+
+/* Without JavaScript the rows can't open, so every description shows. */
+@media (scripting: none) {
+  .desc {
+    display: block;
+  }
+}
+
+@media (hover: hover) {
+  .row:not([data-open="true"]):hover {
+    border-color: var(--line-hover);
+  }
+}
+
+/* Photo with the rotating ring */
+.photo {
+  position: relative;
+  min-height: 340px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--photo-bg);
+}
+
+.photo picture {
+  position: absolute;
+  inset: 0;
+}
+
+.img {
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+  filter: grayscale(1);
+}
+
+.ring {
+  position: absolute;
+  left: 50%;
+  top: 34%;
+  width: 92%;
+  translate: -50% -50%;
+  color: var(--ring-blue);
+  font-family: var(--font-sans);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ring g {
+    animation: spin 30s linear infinite;
+    transform-origin: 100px 100px;
+  }
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* Two link cards */
+.side {
   display: grid;
-  gap: var(--space-3);
-  padding-block: var(--space-6);
-  border-bottom: var(--border-hair);
+  grid-template-rows: 1fr 1.15fr;
+  gap: 14px;
+  min-width: 0;
 }
 
-.detail {
+.mini {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 150px;
+  padding: 18px 16px 16px;
+  border-radius: 18px;
+  text-decoration: none;
+}
+
+.miniText {
+  font-size: 0.72rem;
+  font-weight: 300;
+  line-height: 1.55;
+}
+
+.mini b {
+  display: block;
+  max-width: 7em;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.circ {
   display: grid;
-  gap: var(--space-3);
-  color: var(--ink-2);
+  flex: none;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  transition: rotate var(--dur-base);
 }
 
-.cta {
-  margin-block-start: var(--space-7);
+.circ svg {
+  width: 15px;
+  height: 15px;
 }
 
-/* Desktop: number in columns 1–2, headline in 3–7, description and Tag in 8–12. */
-@media (min-width: 1024px) {
-  .row {
-    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
-    column-gap: var(--grid-gutter);
+@media (hover: hover) {
+  .mini:hover .circ {
+    rotate: 45deg;
+  }
+}
+
+.miniDark {
+  background: var(--card-dark);
+  color: var(--white);
+}
+
+.miniDark .miniText {
+  color: var(--mute);
+}
+
+.miniLime {
+  background: var(--lime);
+  color: var(--ink);
+}
+
+.miniLime .miniText {
+  color: var(--on-lime-3);
+}
+
+.miniLime .circ {
+  background: var(--white);
+  color: var(--ink);
+}
+
+.miniLime:focus-visible {
+  outline-color: var(--white);
+}
+
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
-  .number {
-    grid-column: 1 / span 2;
+  .left {
+    grid-column: 1 / -1;
   }
 
-  .headline {
-    grid-column: 3 / span 5;
+  .rows {
+    max-width: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .detail {
-    grid-column: 8 / span 5;
+  .photo {
+    min-height: 300px;
+  }
+
+  .side {
+    grid-template-rows: none;
+    grid-template-columns: 1fr 1fr;
   }
 }

@@ -1,43 +1,115 @@
-/* design-system §8 Dossier. */
+/* reference §5 .x-work */
 
-.section {
-  padding-block-end: var(--section-y);
+.panel {
+  margin-top: clamp(20px, 2.4vw, 28px);
 }
 
-.body {
-  font-size: var(--text-body-l);
-  line-height: var(--leading-body-l);
-}
-
-.result {
+.grid {
   display: grid;
-  gap: var(--space-2);
-  padding-block-start: var(--space-5);
-  border-top: var(--border-hair);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 28px clamp(24px, 4vw, 56px);
+  align-items: start;
 }
 
-.resultText {
-  font-size: var(--text-statement);
-  font-weight: var(--weight-medium);
-  line-height: var(--leading-statement);
-  letter-spacing: var(--tracking-statement);
+.main {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
 }
 
-.chat {
-  margin-block-start: var(--space-7);
+.h2 {
+  font-size: var(--text-h2);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
-.actions {
+.title {
+  max-width: 30ch;
+  margin-top: 6px;
+  font-size: clamp(1.1rem, 0.95rem + 0.6vw, 1.45rem);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.main > p {
+  max-width: 56ch;
+  color: var(--mute);
+  font-size: 0.8rem;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.main > .result {
+  color: var(--white);
+}
+
+.resultLabel {
+  color: var(--lime);
+  font-weight: 500;
+}
+
+.btns {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3) var(--space-6);
-  margin-block-start: var(--space-7);
+  gap: 10px;
+  margin-top: 6px;
 }
 
-/* The animated copy of the chat is in the hero from 1024px. */
-@media (min-width: 1024px) {
-  .chat {
-    display: none;
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.fact {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 16px 18px;
+  border: 1px solid var(--card-dark-border);
+  border-radius: 16px;
+  background: var(--card-dark);
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+.fact dt {
+  color: var(--mute);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fact dd {
+  color: var(--white);
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tags span {
+  padding: 6px 12px;
+  border-radius: var(--pill);
+  background: var(--lime);
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
