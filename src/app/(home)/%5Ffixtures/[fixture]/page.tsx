@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 import { StickyActionBar } from "@/components/layout/StickyActionBar";
 import { HomeSections } from "@/components/sections/HomeSections";
 import { fixtures, type FixtureName } from "@/fixtures/projects";
+import { fixtureTestimonials } from "@/fixtures/testimonials";
 import { getHomeData } from "@/lib/home";
 
 export const dynamicParams = false;
@@ -23,8 +24,12 @@ export const metadata: Metadata = {
 export default async function FixturePage({ params }: { params: Promise<{ fixture: string }> }) {
   const { fixture } = await params;
   const projects = fixtures[fixture as FixtureName];
-  // The named fixture also turns the demo offer on, so OfferBand is exercised.
-  const data = getHomeData([...projects], { demoOfferEnabled: fixture === "named" });
+  // The named fixture also turns on the demo offer and the testimonials carousel.
+  const named = fixture === "named";
+  const data = getHomeData([...projects], {
+    demoOfferEnabled: named,
+    testimonials: named ? fixtureTestimonials : undefined,
+  });
   return (
     <>
       <main id="main">
