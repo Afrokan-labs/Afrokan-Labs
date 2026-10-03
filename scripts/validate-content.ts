@@ -7,12 +7,14 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ANALYTICS_ENDPOINT_ORIGIN, ANALYTICS_SCRIPT } from "../src/lib/analytics";
 import { TURNSTILE_ORIGIN } from "../src/lib/contact-fields";
-import { ContentError, validateAllContent } from "../src/lib/content";
+import { ContentError, getHome, validateAllContent } from "../src/lib/content";
+import { UNBOUNDED_GLYPHS } from "../src/lib/fonts";
 import { getIndexablePaths, getOgImage } from "../src/lib/pages";
 
 async function main() {
   const s = await validateAllContent();
   checkCsp();
+  checkWideFontCoversWords();
   // Throws on a file that isn't a 1200×630 PNG. Missing images are launch:check's job.
   const og = getIndexablePaths().filter((path) => getOgImage(path)).length;
   console.log(
@@ -57,6 +59,18 @@ function checkCsp() {
   need("/contact", "frame-src", TURNSTILE_ORIGIN, true);
   need("/*", "script-src", TURNSTILE_ORIGIN, false);
   if (problems.length) throw new Error(`public/_headers CSP:\n  ${problems.join("\n  ")}`);
+}
+
+/** The words line is drawn in the Unbounded subset; every character must be in it. */
+function checkWideFontCoversWords() {
+  const missing = [...new Set(getHome().words.items.join("").replace(/\s/g, ""))].filter(
+    (ch) => !UNBOUNDED_GLYPHS.includes(ch),
+  );
+  if (missing.length)
+    throw new Error(
+      `src/content/home.ts words: "${missing.join("")}" not in the Unbounded subset. ` +
+        "Regenerate src/app/fonts/unbounded-subset.woff2 (see src/lib/fonts.ts).",
+    );
 }
 
 main().catch((error: unknown) => {
