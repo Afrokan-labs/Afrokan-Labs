@@ -157,10 +157,12 @@
   pointer-events: none;
 }
 
+/* Spins the whole (square) svg, not its <g> as the reference does: same
+   centre, but an element animation runs on the compositor instead of
+   repainting the text path every frame. */
 @media (prefers-reduced-motion: no-preference) {
-  .ring g {
+  .ring {
     animation: spin 30s linear infinite;
-    transform-origin: 100px 100px;
   }
 }
 
