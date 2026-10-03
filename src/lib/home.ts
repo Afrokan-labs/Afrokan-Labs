@@ -25,7 +25,18 @@ import { demoOfferLink, whatsappLink, whatsappTextLink } from "./whatsapp";
 
 const stepNumber = (i: number) => String(i + 1).padStart(2, "0");
 
-type Options = { demoOfferEnabled?: boolean };
+type Quote = {
+  quote: string;
+  name: string;
+  role: string;
+  company: string;
+  photo?: { src: string; alt: string };
+};
+type Options = {
+  demoOfferEnabled?: boolean;
+  /** Fixture pages only: quotes that replace the (empty) content list. */
+  testimonials?: Quote[];
+};
 
 /** Section anchors, shared by the nav, the cards that link to sections, and the sticky bar. */
 export const HOME_IDS = {
@@ -156,11 +167,12 @@ export function getHomeData(projects: Project[] = getProjects(), options: Option
   };
 
   // Hidden entirely until a real, approved quote exists (design-system §7).
-  const testimonials = quotes.items.length
+  const quoteItems = options.testimonials ?? quotes.items;
+  const testimonials = quoteItems.length
     ? {
         label: quotes.label,
         labels: quotes.labels,
-        items: quotes.items.map((q) => ({
+        items: quoteItems.map((q) => ({
           quote: q.quote,
           name: q.name,
           role: q.role,
