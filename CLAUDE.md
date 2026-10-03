@@ -78,7 +78,7 @@ Before saying a task is done, run `typecheck`, `lint`, `content:validate` and `b
 2. Sections receive validated data as props. They never read files or import content directly. Only `page.tsx` calls `src/lib/content.ts`.
 3. Every WhatsApp CTA uses `whatsappLink({ location })` from `src/lib/whatsapp.ts`, which builds `https://wa.me/<digits>?text=<encoded prefilled message>` and fires `whatsapp_click`. The number exists in exactly one place, `src/content/site.ts`.
 4. Primitives own accessibility. `Button` handles focus-visible, a 44px minimum target and "(opens WhatsApp)" screen-reader text. `ResponsiveImage` requires `alt` and explicit `width`/`height`.
-5. The LCP element is the hero headline text and must never depend on JS. A product conversation, when approved, is HTML/CSS, never an image.
+5. The LCP element (in the redesign, the hero portrait or headline) is server-rendered HTML, loads eagerly with high priority, and must never depend on JS. A product conversation, when approved, is HTML/CSS, never an image.
 6. Motion is CSS only: transitions, plus the reference's slow decorative loops (hero burst, services ring, ticker). Every loop stops under `prefers-reduced-motion`.
 
 ## Performance budget (CI-enforced)

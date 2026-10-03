@@ -116,7 +116,7 @@ Hover styles sit inside `@media (hover: hover)`.
 
 ## 7. Components
 
-Shared (`src/components/ui`): `Pill` (lime, line, ghost), `Highlight`, `SectionPanel` (dark panel with optional lime side tab), `Spark` (4-point star), `Burst`, `Logo` (the mark, `currentColor`).
+Shared: the brief's `Pill` is `Button` (`src/components/primitives`, variants lime, line, ghost, white). In `src/components/ui`: `Highlight`, `SectionPanel` (dark panel with optional lime side tab), `Logo` (the mark, `currentColor`) and the decorative SVGs in `icons.tsx` (`Star4`, `Spark`, `Burst` and the rest).
 
 | Section | Notes |
 |---|---|
