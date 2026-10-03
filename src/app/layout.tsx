@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Lexend, Unbounded } from "next/font/google";
+import { Lexend } from "next/font/google";
+import localFont from "next/font/local";
 import "@/styles/tokens.css";
 import "@/styles/base.css";
 import "@/styles/grid.css";
@@ -14,17 +15,21 @@ const site = getSite();
 // fallback face, then the design doc's fallback stack.
 const sans = Lexend({
   subsets: ["latin"],
-  display: "swap",
+  display: "optional",
   adjustFontFallback: true,
   variable: "--font-sans",
   fallback: ["Segoe UI", "system-ui", "sans-serif"],
 });
 
-// Display words and step numerals only (design-system §3).
-const wide = Unbounded({
-  subsets: ["latin"],
+// Display words and step numerals only (design-system §3). Self-hosted as a
+// 10 KB subset of just those characters (UNBOUNDED_GLYPHS in
+// src/lib/fonts.ts; content:validate checks the words still fit). The full
+// file was 51 KB on every page. Licence: src/app/fonts/Unbounded-OFL.txt.
+const wide = localFont({
+  src: "./fonts/unbounded-subset.woff2",
+  weight: "700 800",
   display: "swap",
-  adjustFontFallback: true,
+  preload: false,
   variable: "--font-wide",
   fallback: ["Arial Black", "system-ui", "sans-serif"],
 });

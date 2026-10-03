@@ -5,7 +5,7 @@
   "packageManager": "pnpm@10.23.0",
   "scripts": {
     "dev": "tsx scripts/optimize-images.ts && next dev",
-    "build": "tsx scripts/optimize-images.ts && tsx scripts/validate-content.ts && next build && tsx scripts/prune-export.ts",
+    "build": "tsx scripts/optimize-images.ts && tsx scripts/validate-content.ts && next build && tsx scripts/prune-export.ts && tsx scripts/preload-fonts.ts",
     "typecheck": "next typegen && tsc --noEmit",
     "lint": "eslint . && stylelint \"src/**/*.css\"",
     "format": "prettier --write .",
