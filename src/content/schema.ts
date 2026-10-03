@@ -311,7 +311,8 @@ export const Home = z.object({
   ideas: z.object({
     title: z.string().min(1),
     body: z.string().min(1),
-    banner: z.string().min(1),
+    // One entry per line (reference .x-banner breaks after "software").
+    banner: z.array(z.string().min(1)).min(1),
     wide: Picture,
     tall: Picture,
   }),

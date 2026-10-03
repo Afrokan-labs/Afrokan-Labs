@@ -34,7 +34,7 @@ export const home = {
   ideas: {
     title: "Turning ideas into working software",
     body: "We may be a small team, but we scope, build and support every project ourselves. Working hand-in-hand with you, we turn the problems that slow your business down into tools your staff and customers actually use.",
-    banner: "An AI & software studio in Accra",
+    banner: ["An AI & software", "studio in Accra"],
     // PLACEHOLDER images until the real photos arrive (NOTES-AND-ASSETS §3).
     wide: {
       src: "assets/images/PLACEHOLDER-ideas-team-wide.jpg",

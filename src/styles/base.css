@@ -22,7 +22,9 @@ html {
 }
 
 body {
-  margin: 0;
+  /* The reference keeps the browser's default 8px body margin: it frames the
+     hero card and makes the phone gutter 24px. */
+  margin: 8px;
   font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 300;

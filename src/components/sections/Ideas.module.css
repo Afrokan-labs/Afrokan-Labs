@@ -96,7 +96,6 @@
   display: flex;
   flex: 0 0 auto;
   align-items: center;
-  max-width: 70%;
   padding: 0 clamp(70px, 9vw, 120px) 0 clamp(16px, 2.6vw, 30px);
   background: var(--lime);
   color: var(--ink);
