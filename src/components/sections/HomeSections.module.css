@@ -15,7 +15,7 @@
   content: "";
   position: absolute;
   z-index: -1;
-  inset: 0 -10% auto;
+  inset: 30% -10% auto;
   height: 520px;
   background: radial-gradient(closest-side, var(--glow), transparent 70%);
   pointer-events: none;

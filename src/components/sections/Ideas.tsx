@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { ResponsiveImage } from "@/components/primitives/ResponsiveImage";
 import { Bulb, Star4 } from "@/components/ui/icons";
 import type { HomeData } from "@/lib/home";
@@ -26,7 +27,14 @@ export function Ideas({ title, body, banner, wide, tall }: Props) {
             />
           </div>
           <p className={styles.banner}>
-            <span>{banner}</span>
+            <span>
+              {banner.map((line, i) => (
+                <Fragment key={line}>
+                  {i > 0 && <br />}
+                  {line}
+                </Fragment>
+              ))}
+            </span>
             <i aria-hidden="true" />
             <i aria-hidden="true" />
             <i aria-hidden="true" />
