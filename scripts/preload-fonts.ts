@@ -32,7 +32,9 @@ for (const file of pages(OUT)) {
   const missing = fonts.filter((href) => !html.includes(`href="${href}"`));
   if (!missing.length) continue;
   const links = missing
-    .map((href) => `<link rel="preload" href="${href}" as="font" crossorigin="" type="font/woff2"/>`)
+    .map(
+      (href) => `<link rel="preload" href="${href}" as="font" crossorigin="" type="font/woff2"/>`,
+    )
     .join("");
   writeFileSync(file, html.replace(/<head>/, `<head>${links}`));
   added++;
