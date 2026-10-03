@@ -179,7 +179,13 @@ async function launch(): Promise<Cdp> {
       ws.close();
       chrome.kill();
       // Chrome can hold the profile briefly after exit; a leftover temp dir is harmless.
-      setTimeout(() => rmSync(profile, { recursive: true, force: true }), 500).unref();
+      setTimeout(() => {
+        try {
+          rmSync(profile, { recursive: true, force: true });
+        } catch {
+          // Still locked (EBUSY on Windows): leave it for the OS to clean.
+        }
+      }, 500).unref();
     },
   };
 }
@@ -226,7 +232,12 @@ const ACTIVE = `(() => {
     opaque,
     label: a.tagName.toLowerCase() + ' "' + label + '"',
     skipLink: a.classList.contains("skip-link"),
-    visibleRing: (c.outlineStyle !== "none" && parseFloat(c.outlineWidth) >= 2) || c.boxShadow !== "none",
+    // A field inside a pill-shaped box may draw its focus ring on the box (:focus-within).
+    visibleRing: [a, a.parentElement].some((el) => {
+      if (!el) return false;
+      const s = getComputedStyle(el);
+      return (s.outlineStyle !== "none" && parseFloat(s.outlineWidth) >= 2) || s.boxShadow !== "none";
+    }),
     hasSize: r.width > 0 && r.height > 0,
   };
 })()`;

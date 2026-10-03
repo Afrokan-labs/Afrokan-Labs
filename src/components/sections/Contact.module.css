@@ -44,8 +44,10 @@
   background: var(--panel);
 }
 
+/* Focus shows on the whole pill (reference .x-form:focus-within): a 2px lime ring. */
 .form:focus-within {
   border-color: var(--lime);
+  box-shadow: 0 0 0 1px var(--lime);
 }
 
 .form input {
