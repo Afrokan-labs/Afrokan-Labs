@@ -15,7 +15,9 @@ const site = getSite();
 // fallback face, then the design doc's fallback stack.
 const sans = Lexend({
   subsets: ["latin"],
-  display: "optional",
+  // "optional" left a cold first visit (and every dev load) in the fallback
+  // for the whole page view; the adjusted fallback keeps the swap shift ~0.
+  display: "swap",
   adjustFontFallback: true,
   variable: "--font-sans",
   fallback: ["Segoe UI", "system-ui", "sans-serif"],
