@@ -1,7 +1,8 @@
 /**
- * pnpm launch:check — lists every TODO_ placeholder in src/content, and every
- * indexable page without its OG image in public/og/, and exits 1 while any
- * remain. Must pass on the launch PR (architecture §11).
+ * pnpm launch:check — lists every TODO_ placeholder and every PLACEHOLDER-*
+ * image used in src/content, and every indexable page without its OG image in
+ * public/og/, and exits 1 while any remain. Must pass on the launch PR
+ * (architecture §11).
  *
  * Usage: tsx scripts/launch-check.ts [dir]   (default: src/content)
  */
@@ -12,7 +13,7 @@ import { getIndexablePaths, getOgImage, ogImagePath } from "../src/lib/pages";
 const root = process.argv[2] ?? join(process.cwd(), "src", "content");
 // schema.ts defines the placeholder format; it isn't content.
 const SKIP = new Set(["schema.ts"]);
-const PLACEHOLDER = /TODO_[A-Z0-9_]+/g;
+const PLACEHOLDER = /TODO_[A-Z0-9_]+|PLACEHOLDER-[\w.-]+/g;
 
 function files(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
@@ -41,15 +42,18 @@ const problems = [...found, ...missingOg];
 
 if (problems.length === 0) {
   console.log(
-    "launch:check passed: no TODO_ placeholders in src/content, and every OG image exists.",
+    "launch:check passed: no TODO_ facts or PLACEHOLDER- images in src/content, and every OG image exists.",
   );
 } else {
   const width = Math.max(...problems.map((f) => f.where.length));
   if (found.length) {
-    console.error(`launch:check failed: ${found.length} TODO_ placeholder(s) remain.\n`);
+    console.error(
+      `launch:check failed: ${found.length} placeholder(s) remain (TODO_ facts, PLACEHOLDER- images).\n`,
+    );
     for (const f of found) console.error(`  ${f.where.padEnd(width)}  ${f.token}`);
     console.error(
-      "\nConfirm each fact and replace it, or remove the field. See docs/BUILD_PLAN.md Phase 0.\n",
+      "\nConfirm each fact and replace it, or remove the field. Replace each PLACEHOLDER- image with\n" +
+        "the real photo (docs/design/handoff/NOTES-AND-ASSETS.md). See docs/BUILD_PLAN.md Phase 0.\n",
     );
   }
   if (missingOg.length) {

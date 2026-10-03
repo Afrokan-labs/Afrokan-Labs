@@ -22,10 +22,12 @@ import { workProcess } from "../src/content/process";
 import { services } from "../src/content/services";
 import { site } from "../src/content/site";
 import { team } from "../src/content/team";
+import { testimonials } from "../src/content/testimonials";
 import { tierCopy } from "../src/content/tiers";
 
 /** Approved sources, then drafts awaiting approval (see each doc's status line). */
 const APPROVED = [
+  "docs/content/homepage-copy-v2.md",
   "docs/content/homepage-copy.md",
   "docs/content/homepage-strategy.md",
   "docs/content/case-studies/ese-logistics.md",
@@ -71,6 +73,7 @@ collect(
     services,
     process: workProcess,
     team,
+    testimonials,
     tiers: tierCopy,
     caseStudy,
     privacy,
