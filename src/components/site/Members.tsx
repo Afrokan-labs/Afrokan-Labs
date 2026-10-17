@@ -25,11 +25,12 @@ const SHAPES: Record<MemberList[number]["shape"], React.ReactNode> = {
 };
 
 /** About "Members" (site update 1, reference .mb): cut-outs on green shapes. */
-export function Members({ members }: { members: MemberList }) {
+export function Members({ title, members }: { title: string; members: MemberList }) {
   return (
     <section className="mb" aria-labelledby="mb-title">
       <h2 className="mb-title" id="mb-title">
-        Members<sup>{members.length}</sup>
+        {title}
+        <sup>{members.length}</sup>
       </h2>
       <ul className="mb-grid">
         {members.map((m) => (

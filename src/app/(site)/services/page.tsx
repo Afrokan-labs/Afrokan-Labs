@@ -2,6 +2,7 @@ import "@/styles/pages/services.css";
 import { CtaBox } from "@/components/site/CtaBox";
 import { Nav } from "@/components/site/Nav";
 import { getLinks } from "@/lib/links";
+import { getSite } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({ path: "/services", title: "Services" });
@@ -362,7 +363,7 @@ export default function ServicesPage() {
               </li>
             </ol>
           </section>
-          <CtaBox />
+          <CtaBox copy={getSite().ctaBox} />
         </div>
       </div>
     </>

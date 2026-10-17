@@ -14,6 +14,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import matter from "gray-matter";
+import { about } from "../src/content/about";
 import { caseStudy } from "../src/content/case-study";
 import { contact } from "../src/content/contact";
 import { home } from "../src/content/home";
@@ -70,6 +71,7 @@ collect(
   {
     site,
     home,
+    about,
     services,
     process: workProcess,
     members,

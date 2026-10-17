@@ -1,6 +1,7 @@
+import type { About } from "@/content/schema";
 import { Eyebrow } from "./Eyebrow";
 
-const ICON = {
+const ICON: Record<About["philosophy"]["cards"][number]["icon"], React.ReactNode> = {
   audit: (
     <>
       <circle cx="10" cy="10" r="6.5" />
@@ -23,38 +24,18 @@ const ICON = {
   ),
 };
 
-const CARDS = [
-  {
-    title: "Problem audits",
-    icon: ICON.audit,
-    body: "We look at how enquiries, paperwork and data move through your business today and find where time is being lost.",
-  },
-  {
-    title: "Workflow systems",
-    icon: ICON.systems,
-    body: "We build WhatsApp assistants, tools and platforms that connect, so customers and staff get answers without chasing anyone.",
-  },
-  {
-    title: "Measurable results",
-    icon: ICON.results,
-    body: "We agree up front what success looks like, from faster replies to less paperwork, and check it after launch.",
-  },
-];
-
 /** About "Our philosophy" (site update 1, reference .ph): three cards with line icons. */
-export function Philosophy() {
+export function Philosophy({ copy }: { copy: About["philosophy"] }) {
   return (
     <section className="x-sec ph" aria-labelledby="ph-title">
-      <Eyebrow>Our philosophy</Eyebrow>
+      <Eyebrow>{copy.eyebrow}</Eyebrow>
       <h2 id="ph-title">
-        Engineer-led<span>Built on your workflow</span>
+        {copy.heading[0]}
+        <span>{copy.heading[1]}</span>
       </h2>
-      <p>
-        We don&apos;t just make things look good. We build systems around how your business really
-        works, so they keep paying off after launch.
-      </p>
+      <p>{copy.body}</p>
       <ul className="ph-cards">
-        {CARDS.map((c) => (
+        {copy.cards.map((c) => (
           <li key={c.title} className="ph-card">
             <h3>{c.title}</h3>
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -65,7 +46,7 @@ export function Philosophy() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                {c.icon}
+                {ICON[c.icon]}
               </g>
             </svg>
             <p>{c.body}</p>

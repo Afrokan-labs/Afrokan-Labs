@@ -37,6 +37,14 @@ export const site = {
     { label: "Service businesses", icon: "person" },
   ],
 
+  // The closing box on About, Services, Solutions and Work (site handoff reference .x-cta).
+  ctaBox: {
+    heading: { lead: "Have a problem in your business we could ", mark: "solve?" },
+    body: "Tell us what's slowing your team down. The first conversation is free.",
+    whatsapp: "Chat with us on WhatsApp",
+    email: "or email {email}",
+  },
+
   // Interface text. Skip link and landmark names: standard wording, not in the copy docs.
   ui: {
     skipLink: "Skip to content",

@@ -138,6 +138,14 @@ export const Site = z.object({
       }),
     )
     .min(1),
+  /** The closing box on About, Services, Solutions and Work (reference .x-cta). */
+  ctaBox: z.object({
+    heading: z.object({ lead: z.string(), mark: z.string().min(1) }),
+    body: z.string().min(1),
+    whatsapp: z.string().min(1),
+    /** "or email {email}". */
+    email: z.string().includes("{email}"),
+  }),
   ui: z.object({
     skipLink: z.string().min(1),
     opensWhatsApp: z.string().min(1),
@@ -460,6 +468,58 @@ export const Home = z.object({
   }),
 });
 export type Home = z.infer<typeof Home>;
+
+/** The about page (site handoff reference/about.html plus site update 1). */
+export const About = z.object({
+  meta: z.object({ title: text, description: z.string().max(155).optional() }),
+  hero: z.object({
+    eyebrow: text,
+    /** Three lines; the drawn shapes sit between them. The last ends on the marked word. */
+    heading: z.object({ first: text, second: text, third: Heading }),
+    workLink: Link,
+    intro: text,
+    collageLabel: text,
+  }),
+  pile: z.object({ label: text, items: z.array(text).min(3) }),
+  proof: z.object({ caption: text, value: text, lines: Lines }),
+  story: z.object({
+    label: text,
+    /** The statement: plain, then dimmed, then plain, then the green chip. */
+    lead: text,
+    dim: text,
+    then: text,
+    chip: text,
+    facts: z.array(z.object({ label: text, value: text })).min(1),
+  }),
+  members: z.object({ title: text }),
+  philosophy: z.object({
+    eyebrow: text,
+    heading: z.tuple([text, text]),
+    body: text,
+    cards: z
+      .array(z.object({ title: text, icon: z.enum(["audit", "systems", "results"]), body: text }))
+      .length(3),
+  }),
+  values: z.object({
+    heading: Heading,
+    body: text,
+    items: z
+      .array(
+        z.object({
+          icon: z.enum(["whatsapp", "people", "document", "shield"]),
+          title: text,
+          body: text,
+        }),
+      )
+      .min(1),
+  }),
+  road: z.object({
+    heading: Heading,
+    body: text,
+    stops: z.array(z.object({ tag: text, title: text, body: text })).min(1),
+  }),
+});
+export type About = z.infer<typeof About>;
 
 export const CaseStudyCopy = z.object({
   attribution: z.string().includes("{formerBrand}"),

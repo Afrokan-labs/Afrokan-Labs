@@ -2,6 +2,7 @@ import "@/styles/pages/work.css";
 import { CtaBox } from "@/components/site/CtaBox";
 import { Img } from "@/components/site/Img";
 import { Nav } from "@/components/site/Nav";
+import { getSite } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({ path: "/work", title: "Work" });
@@ -385,7 +386,7 @@ export default function WorkPage() {
               </li>
             </ul>
           </section>
-          <CtaBox />
+          <CtaBox copy={getSite().ctaBox} />
         </div>
       </div>
     </>
