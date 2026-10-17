@@ -15,10 +15,10 @@ import { caseStudy } from "../content/case-study";
 import { contact } from "../content/contact";
 import { home } from "../content/home";
 import { privacy } from "../content/privacy";
-import { workProcess } from "../content/process";
 import * as schema from "../content/schema";
 import { services } from "../content/services";
 import { site } from "../content/site";
+import { solutions } from "../content/solutions";
 import { members } from "../content/team";
 import { reviews, testimonials } from "../content/testimonials";
 import { tierCopy } from "../content/tiers";
@@ -48,7 +48,7 @@ export const getCaseStudyCopy = () =>
 export const getPrivacy = () => parse("src/content/privacy.ts", schema.Privacy, privacy);
 export const getContactCopy = () => parse("src/content/contact.ts", schema.ContactCopy, contact);
 export const getServices = () => parse("src/content/services.ts", schema.Services, services);
-export const getProcess = () => parse("src/content/process.ts", schema.Process, workProcess);
+export const getSolutions = () => parse("src/content/solutions.ts", schema.Solutions, solutions);
 export const getTierCopy = () => parse("src/content/tiers.ts", schema.TierCopy, tierCopy);
 export const getMembers = () => parse("src/content/team.ts (members)", schema.Members, members);
 export const getReviews = () =>
@@ -219,7 +219,7 @@ export async function validateAllContent() {
   getTierCopy();
   const quotes = getTestimonials();
   const services = getServices();
-  const processContent = getProcess();
+  getSolutions();
   const team = getMembers();
   const projects = readProjectFiles();
   for (const file of projects) await compileBody(file);
@@ -230,7 +230,6 @@ export async function validateAllContent() {
       src: `assets/images/${i.src}`,
       from: "src/content/home.ts",
     })),
-    { src: services.image.src, from: "src/content/services.ts" },
     ...quotes.items.flatMap((q) =>
       q.photo ? [{ src: q.photo.src, from: "src/content/testimonials.ts" }] : [],
     ),
@@ -249,7 +248,7 @@ export async function validateAllContent() {
 
   return {
     services: services.items.length,
-    steps: processContent.steps.length,
+    steps: home.process.steps.length,
     teamMembers: team.length,
     projects: projects.length,
     published: projects.filter((f) => f.project.published).length,

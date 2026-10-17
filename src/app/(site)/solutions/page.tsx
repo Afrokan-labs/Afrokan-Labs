@@ -1,13 +1,17 @@
 import "@/styles/pages/solutions.css";
+import { Fragment } from "react";
 import { CtaBox } from "@/components/site/CtaBox";
 import { Nav } from "@/components/site/Nav";
 import { imageUrl } from "@/lib/images";
-import { getSite } from "@/lib/content";
+import { getSite, getSolutions } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata = pageMetadata({ path: "/solutions", title: "Solutions" });
+export const metadata = pageMetadata({ path: "/solutions", ...getSolutions().meta });
 
 export default function SolutionsPage() {
+  const { poster, day, industries } = getSolutions();
+  const moments = day.moments;
+  const pillTime = (time: string) => poster.pillTime.replace("{time}", time);
   return (
     <>
       <div className="x x-glow">
@@ -15,12 +19,7 @@ export default function SolutionsPage() {
           <div className="sol-card" id="top">
             <Nav current="solutions" />
             <div className="sol-poster">
-              <svg
-                className="sol-art"
-                viewBox="0 0 1200 760"
-                role="img"
-                aria-label="Four moments in a business day: enquiry answered at 6:42 am, checklist sent at 9:15 am, order tracked at 1:30 pm, daily report ready at 6:00 pm"
-              >
+              <svg className="sol-art" viewBox="0 0 1200 760" role="img" aria-label={poster.label}>
                 <defs>
                   <clipPath id="w0">
                     <path d="M46.6 87.3 A480 480 0 0 1 340.4 128.6 L678.0 -563.5 A1250 1250 0 0 0 -87.1 -671.0Z" />
@@ -111,51 +110,56 @@ export default function SolutionsPage() {
                 <g className="sol-pill" transform="translate(72 30)">
                   <rect width="170" height="52" rx="26" fill="#fff" filter="url(#sh)" />
                   <text x="85" y="22" textAnchor="middle">
-                    Enquiry answered
+                    {moments[0].title}
                   </text>
                   <text x="85" y="40" textAnchor="middle">
-                    @ 6:42 am
+                    {pillTime(moments[0].time)}
                   </text>
                 </g>
                 <g className="sol-pill" transform="translate(400 40)">
                   <rect width="154" height="52" rx="26" fill="#fff" filter="url(#sh)" />
                   <text x="77" y="22" textAnchor="middle">
-                    Checklist sent
+                    {moments[1].title}
                   </text>
                   <text x="77" y="40" textAnchor="middle">
-                    @ 9:15 am
+                    {pillTime(moments[1].time)}
                   </text>
                 </g>
                 <g className="sol-pill" transform="translate(1016 40)">
                   <rect width="145" height="52" rx="26" fill="#fff" filter="url(#sh)" />
                   <text x="73" y="22" textAnchor="middle">
-                    Order tracked
+                    {moments[2].title}
                   </text>
                   <text x="73" y="40" textAnchor="middle">
-                    @ 1:30 pm
+                    {pillTime(moments[2].time)}
                   </text>
                 </g>
                 <g className="sol-pill" transform="translate(624 640)">
                   <rect width="187" height="52" rx="26" fill="#fff" filter="url(#sh)" />
                   <text x="94" y="22" textAnchor="middle">
-                    Daily report ready
+                    {moments[3].title}
                   </text>
                   <text x="94" y="40" textAnchor="middle">
-                    @ 6:00 pm
+                    {pillTime(moments[3].time)}
                   </text>
                 </g>
               </svg>
               <div className="sol-text">
                 <p className="sol-kicker">
-                  Serve customers, run the office,
-                  <br />
-                  sleep well…
+                  {poster.kicker.map((line, i) => (
+                    <Fragment key={i}>
+                      {i > 0 && <br />}
+                      {line}
+                    </Fragment>
+                  ))}
                 </p>
                 <h1 className="sol-h1">
-                  A business day that <b>runs itself</b>
+                  {poster.heading.lead}
+                  <b>{poster.heading.bold}</b>
                 </h1>
                 <p className="sol-tagline">
-                  <span>#BuiltForGhana</span> for the businesses that never stop.
+                  <span>{poster.tagline.tag}</span>
+                  {poster.tagline.rest}
                 </p>
                 <span className="sol-brand">
                   <svg viewBox="105 115 1100 990" aria-hidden="true">
@@ -167,7 +171,7 @@ export default function SolutionsPage() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                  Afrokan Labs
+                  {getSite().name}
                 </span>
               </div>
             </div>
@@ -177,146 +181,49 @@ export default function SolutionsPage() {
           <section className="x-sec" aria-labelledby="day-title">
             <div className="x-head">
               <h2 className="x-h2" id="day-title">
-                One day, <span className="x-hl">four moments</span>
+                {day.heading.lead}
+                <span className="x-hl">{day.heading.mark}</span>
               </h2>
-              <p>
-                Here&apos;s how our tools fit into an ordinary working day. Each moment is something
-                a business owner used to handle by hand.
-              </p>
+              <p>{day.body}</p>
             </div>
             <ol className="sol-day">
-              <li className="sol-moment">
-                <span className="sol-time">6:42 am</span>
-                <h3>Enquiry answered</h3>
-                <dl>
-                  <div>
-                    <dt>Before</dt>
-                    <dd>
-                      A customer messages before the office opens and waits hours for a reply, or
-                      goes elsewhere.
-                    </dd>
-                  </div>
-                  <div className="sol-with">
-                    <dt>With Afrokan</dt>
-                    <dd>
-                      The WhatsApp assistant answers straight away from your own documents and
-                      prices.
-                    </dd>
-                  </div>
-                </dl>
-                <span className="sol-tool">WhatsApp AI Assistant</span>
-              </li>
-              <li className="sol-moment">
-                <span className="sol-time">9:15 am</span>
-                <h3>Checklist sent</h3>
-                <dl>
-                  <div>
-                    <dt>Before</dt>
-                    <dd>
-                      Staff explain the same document requirements on the phone, again and again.
-                    </dd>
-                  </div>
-                  <div className="sol-with">
-                    <dt>With Afrokan</dt>
-                    <dd>
-                      The customer gets an exact checklist of what they need, generated in seconds.
-                    </dd>
-                  </div>
-                </dl>
-                <span className="sol-tool">Workflow Tool</span>
-              </li>
-              <li className="sol-moment">
-                <span className="sol-time">1:30 pm</span>
-                <h3>Order tracked</h3>
-                <dl>
-                  <div>
-                    <dt>Before</dt>
-                    <dd>
-                      Updates live in paper files and someone&apos;s memory, so customers keep
-                      calling to ask.
-                    </dd>
-                  </div>
-                  <div className="sol-with">
-                    <dt>With Afrokan</dt>
-                    <dd>
-                      Every job has a status your team updates once, and everyone sees the same
-                      thing.
-                    </dd>
-                  </div>
-                </dl>
-                <span className="sol-tool">Backend System</span>
-              </li>
-              <li className="sol-moment">
-                <span className="sol-time">6:00 pm</span>
-                <h3>Daily report ready</h3>
-                <dl>
-                  <div>
-                    <dt>Before</dt>
-                    <dd>
-                      The owner pieces the day together from calls and chats, late into the evening.
-                    </dd>
-                  </div>
-                  <div className="sol-with">
-                    <dt>With Afrokan</dt>
-                    <dd>
-                      A short summary of enquiries and jobs is waiting on the owner&apos;s phone.
-                    </dd>
-                  </div>
-                </dl>
-                <span className="sol-tool">Dashboard</span>
-              </li>
+              {moments.map((m) => (
+                <li className="sol-moment" key={m.time}>
+                  <span className="sol-time">{m.time}</span>
+                  <h3>{m.title}</h3>
+                  <dl>
+                    <div>
+                      <dt>{day.labels.before}</dt>
+                      <dd>{m.before}</dd>
+                    </div>
+                    <div className="sol-with">
+                      <dt>{day.labels.with}</dt>
+                      <dd>{m.with}</dd>
+                    </div>
+                  </dl>
+                  <span className="sol-tool">{m.tool}</span>
+                </li>
+              ))}
             </ol>
           </section>
           <section className="x-sec" aria-labelledby="ind-title">
             <div className="x-head">
               <h2 className="x-h2" id="ind-title">
-                Built for businesses <span className="x-hl">like yours</span>
+                {industries.heading.lead}
+                <span className="x-hl">{industries.heading.mark}</span>
               </h2>
-              <p>
-                We&apos;ve delivered for clearing and forwarding. The same tools fit any business
-                that answers the same questions every day.
-              </p>
+              <p>{industries.body}</p>
             </div>
             <ul className="sol-ind">
-              <li className="sol-i">
-                <span className="sol-badge">Delivered</span>
-                <h3>Clearing &amp; forwarding</h3>
-                <p>
-                  WhatsApp assistant, document checklist generator and website for ESE Logistic
-                  Solution Limited.
-                </p>
-              </li>
-              <li className="sol-i">
-                <span className="sol-badge idea">Good fit</span>
-                <h3>Retail &amp; shops</h3>
-                <p>
-                  Answer price and stock questions on WhatsApp and track orders without a notebook.
-                </p>
-              </li>
-              <li className="sol-i">
-                <span className="sol-badge idea">Good fit</span>
-                <h3>Schools</h3>
-                <p>
-                  Handle admissions questions, fees reminders and parent enquiries in one place.
-                </p>
-              </li>
-              <li className="sol-i">
-                <span className="sol-badge idea">Good fit</span>
-                <h3>Clinics &amp; pharmacies</h3>
-                <p>Opening hours, bookings and common questions answered at any time of day.</p>
-              </li>
-              <li className="sol-i">
-                <span className="sol-badge idea">Good fit</span>
-                <h3>Real estate</h3>
-                <p>
-                  Share listings, book viewings and follow up with serious buyers automatically.
-                </p>
-              </li>
-              <li className="sol-i">
-                <span className="sol-badge idea">Good fit</span>
-                <h3>Restaurants &amp; catering</h3>
-                <p>Take orders and event bookings on WhatsApp and see them all in one list.</p>
-              </li>
+              {industries.items.map((item) => (
+                <li className="sol-i" key={item.title}>
+                  <span className={item.delivered ? "sol-badge" : "sol-badge idea"}>
+                    {item.delivered ? industries.badges.delivered : industries.badges.fit}
+                  </span>
+                  <h3>{item.title}</h3>
+                  <p>{item.body}</p>
+                </li>
+              ))}
             </ul>
           </section>
           <CtaBox copy={getSite().ctaBox} />

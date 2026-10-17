@@ -19,9 +19,9 @@ import { caseStudy } from "../src/content/case-study";
 import { contact } from "../src/content/contact";
 import { home } from "../src/content/home";
 import { privacy } from "../src/content/privacy";
-import { workProcess } from "../src/content/process";
 import { services } from "../src/content/services";
 import { site } from "../src/content/site";
+import { solutions } from "../src/content/solutions";
 import { members } from "../src/content/team";
 import { testimonials } from "../src/content/testimonials";
 import { tierCopy } from "../src/content/tiers";
@@ -73,7 +73,7 @@ collect(
     home,
     about,
     services,
-    process: workProcess,
+    solutions,
     members,
     testimonials,
     tiers: tierCopy,

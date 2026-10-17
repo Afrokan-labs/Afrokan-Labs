@@ -200,41 +200,6 @@ export const Site = z.object({
   }),
 });
 
-// ----- Homepage sections (homepage-copy-v2.md) -----
-
-export const Services = z.object({
-  tab: z.string().min(1),
-  heading: Heading,
-  body: z.string().min(1),
-  items: z
-    .array(
-      z.object({
-        /** Links the service to a project's `built` list; its tag labels the case study. */
-        kind: BuiltKind.optional(),
-        tag: z.string().min(1).optional(),
-        name: z.string().min(1),
-        body: z.string().min(1),
-      }),
-    )
-    .min(1),
-  image: Picture,
-  /** Text around the rotating ring. */
-  ring: z.string().min(1),
-  cards: z.object({
-    process: z.object({ text: z.string().min(1), label: z.string().min(1) }),
-    contact: z.object({ text: z.string().min(1), label: z.string().min(1) }),
-  }),
-});
-
-export const Process = z.object({
-  heading: Heading,
-  body: z.string().min(1),
-  steps: z
-    .array(z.object({ title: z.string().min(1), body: z.string().min(1) }))
-    .length(4, "The strategy specifies four steps."),
-  cta: z.string().min(1),
-});
-
 /** About "Members" (site update 1): real people only, each with a transparent cut-out. */
 export const Members = z
   .array(
@@ -299,8 +264,6 @@ export const Testimonials = z.object({
 
 export type Project = z.infer<typeof Project>;
 export type Site = z.infer<typeof Site>;
-export type Services = z.infer<typeof Services>;
-export type Process = z.infer<typeof Process>;
 export type Testimonials = z.infer<typeof Testimonials>;
 export type Members = z.infer<typeof Members>;
 export type Reviews = z.infer<typeof Reviews>;
@@ -520,6 +483,65 @@ export const About = z.object({
   }),
 });
 export type About = z.infer<typeof About>;
+
+/** The services page (site handoff reference/services.html). */
+export const Services = z.object({
+  meta: z.object({ title: text, description: z.string().max(155).optional() }),
+  hero: z.object({
+    badge: z.object({ bold: text, rest: text }),
+    /** "Tools that work" / "the" (script) "way you work". */
+    heading: z.object({ first: text, script: text, rest: text }),
+    lede: text,
+    whatsapp: text,
+    details: Link,
+    /** The two pointer tags around the card fan (decorative). */
+    tags: z.tuple([text, text]),
+    /** On the front card of the fan. */
+    start: text,
+  }),
+  details: z.object({ heading: Heading, body: text }),
+  /** In page order: the n-th item is #svc-n. */
+  items: z
+    .array(
+      z.object({
+        name: text,
+        card: z.object({ title: text, sub: text }),
+        sub: text,
+        goodFor: z.array(text).min(1),
+        points: z.array(text).min(1),
+      }),
+    )
+    .length(5),
+});
+export type Services = z.infer<typeof Services>;
+
+/** The solutions page (site handoff reference/solutions.html). */
+export const Solutions = z.object({
+  meta: z.object({ title: text, description: z.string().max(155).optional() }),
+  poster: z.object({
+    label: z.string().min(10),
+    /** Each moment's pill: "@ {time}" under its title. */
+    pillTime: z.string().includes("{time}"),
+    kicker: Lines,
+    heading: z.object({ lead: text, bold: text }),
+    tagline: z.object({ tag: text, rest: text }),
+  }),
+  day: z.object({
+    heading: Heading,
+    body: text,
+    labels: z.object({ before: text, with: text }),
+    moments: z
+      .array(z.object({ time: text, title: text, before: text, with: text, tool: text }))
+      .length(4),
+  }),
+  industries: z.object({
+    heading: Heading,
+    body: text,
+    badges: z.object({ delivered: text, fit: text }),
+    items: z.array(z.object({ delivered: z.boolean(), title: text, body: text })).min(1),
+  }),
+});
+export type Solutions = z.infer<typeof Solutions>;
 
 export const CaseStudyCopy = z.object({
   attribution: z.string().includes("{formerBrand}"),

@@ -2,13 +2,14 @@ import "@/styles/pages/services.css";
 import { CtaBox } from "@/components/site/CtaBox";
 import { Nav } from "@/components/site/Nav";
 import { getLinks } from "@/lib/links";
-import { getSite } from "@/lib/content";
+import { getServices, getSite } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata = pageMetadata({ path: "/services", title: "Services" });
+export const metadata = pageMetadata({ path: "/services", ...getServices().meta });
 
 export default function ServicesPage() {
   const links = getLinks();
+  const { hero, details, items } = getServices();
   return (
     <>
       <div className="x x-glow">
@@ -16,37 +17,36 @@ export default function ServicesPage() {
           <Nav current="services" dark />
           <section className="s-hero" aria-labelledby="s-title">
             <span className="s-badge">
-              <b>Now taking projects</b> — Accra, Ghana
+              <b>{hero.badge.bold}</b>
+              {hero.badge.rest}
             </span>
             <h1 className="s-h1" id="s-title">
-              <span>Tools that work</span>
+              <span>{hero.heading.first}</span>
               <span className="s-grad">
-                <span className="s-script">the</span> way you work
+                <span className="s-script">{hero.heading.script}</span>
+                {hero.heading.rest}
               </span>
             </h1>
-            <p className="s-lede">
-              WhatsApp assistants, web platforms and workflow tools for Ghanaian businesses. Pick
-              what you need, or tell us the problem and we&apos;ll recommend the right fit.
-            </p>
+            <p className="s-lede">{hero.lede}</p>
             <div className="s-ctas">
               <a className="x-btn x-btn-lime" href={links.whatsapp} {...links.whatsappAttrs}>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <use href="#wa" />
                 </svg>
-                Talk to us on WhatsApp
+                {hero.whatsapp}
               </a>{" "}
-              <a className="x-btn x-btn-line" href="#details">
-                See every service
+              <a className="x-btn x-btn-line" href={hero.details.href}>
+                {hero.details.label}
               </a>
             </div>
             <span className="s-tag s-tag-a" aria-hidden="true">
-              Your customer
+              {hero.tags[0]}
               <svg viewBox="0 0 16 16">
                 <path fill="currentColor" d="M2 1l12 6-5 1.6L7 14z" />
               </svg>
             </span>{" "}
             <span className="s-tag s-tag-b" aria-hidden="true">
-              Your team
+              {hero.tags[1]}
               <svg viewBox="0 0 16 16">
                 <path fill="currentColor" d="M2 1l12 6-5 1.6L7 14z" />
               </svg>
@@ -76,8 +76,8 @@ export default function ServicesPage() {
                 <path d="M62 66l18 8-8 3-3 8z" fill="#0D0D0D" />
               </svg>{" "}
               <a className="s-card" href="#svc-4">
-                <h2>Backend Systems</h2>
-                <small>Databases &amp; integrations</small>{" "}
+                <h2>{items[3].card.title}</h2>
+                <small>{items[3].card.sub}</small>{" "}
                 <svg className="s-art" viewBox="0 0 200 200" aria-hidden="true">
                   <ellipse cx="100" cy="150" rx="62" ry="18" fill="#000" opacity=".25" />
                   <g>
@@ -94,8 +94,8 @@ export default function ServicesPage() {
                 </svg>
               </a>{" "}
               <a className="s-card" href="#svc-2">
-                <h2>Web Platforms</h2>
-                <small>Websites &amp; web apps</small>{" "}
+                <h2>{items[1].card.title}</h2>
+                <small>{items[1].card.sub}</small>{" "}
                 <svg className="s-art" viewBox="0 0 200 200" aria-hidden="true">
                   <ellipse cx="100" cy="166" rx="66" ry="14" fill="#000" opacity=".12" />
                   <rect x="26" y="40" width="148" height="112" rx="16" fill="#fff" />
@@ -128,10 +128,10 @@ export default function ServicesPage() {
                 </svg>
               </a>{" "}
               <a className="s-card" href="#svc-1">
-                <h2>WhatsApp AI</h2>
-                <small>Assistants that answer 24/7</small>{" "}
+                <h2>{items[0].card.title}</h2>
+                <small>{items[0].card.sub}</small>{" "}
                 <span className="s-go">
-                  Get started
+                  {hero.start}
                   <i>
                     <svg viewBox="0 0 16 16">
                       <path
@@ -174,8 +174,8 @@ export default function ServicesPage() {
                 </svg>
               </a>{" "}
               <a className="s-card" href="#svc-3">
-                <h2>Workflow Tools</h2>
-                <small>Checklists, trackers, forms</small>{" "}
+                <h2>{items[2].card.title}</h2>
+                <small>{items[2].card.sub}</small>{" "}
                 <svg className="s-art" viewBox="0 0 200 200" aria-hidden="true">
                   <ellipse cx="100" cy="170" rx="60" ry="12" fill="#000" opacity=".12" />
                   <rect x="44" y="28" width="112" height="136" rx="14" fill="#fff" />
@@ -218,8 +218,8 @@ export default function ServicesPage() {
                 </svg>
               </a>{" "}
               <a className="s-card" href="#svc-5">
-                <h2>AI Chatbots</h2>
-                <small>On your website</small>{" "}
+                <h2>{items[4].card.title}</h2>
+                <small>{items[4].card.sub}</small>{" "}
                 <svg className="s-art" viewBox="0 0 200 200" aria-hidden="true">
                   <ellipse cx="100" cy="170" rx="58" ry="12" fill="#000" opacity=".25" />
                   <line x1="100" y1="34" x2="100" y2="56" stroke="#94DE57" strokeWidth="5" />
@@ -242,125 +242,34 @@ export default function ServicesPage() {
           <section className="x-sec" id="details" aria-labelledby="details-title">
             <div className="x-head">
               <h2 className="x-h2" id="details-title">
-                Every <span className="x-hl">service</span>, in detail
+                {details.heading.lead}
+                <span className="x-hl">{details.heading.mark}</span>
+                {details.heading.tail}
               </h2>
-              <p>
-                Each project starts with a free conversation and a written plan, timeline and price
-                before any work begins.
-              </p>
+              <p>{details.body}</p>
             </div>
             <ol className="s-list">
-              <li className="s-row" id="svc-1">
-                <span className="s-num" aria-hidden="true">
-                  01
-                </span>
-                <div>
-                  <h3>WhatsApp AI Assistants</h3>
-                  <p className="s-sub">
-                    An assistant on your WhatsApp Business number that answers customer questions
-                    from your own documents, prices and policies, any time of day.
-                  </p>
-                  <div className="s-good">
-                    <span>Logistics</span>
-                    <span>Retail</span>
-                    <span>Service businesses</span>
+              {items.map((item, i) => (
+                <li className="s-row" id={`svc-${i + 1}`} key={item.name}>
+                  <span className="s-num" aria-hidden="true">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <h3>{item.name}</h3>
+                    <p className="s-sub">{item.sub}</p>
+                    <div className="s-good">
+                      {item.goodFor.map((g) => (
+                        <span key={g}>{g}</span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-                <ul>
-                  <li>Answers from your real documents, not guesses</li>
-                  <li>Hands the chat to a staff member when it should</li>
-                  <li>Works in the app your customers already use</li>
-                  <li>Trained on your business, updated as things change</li>
-                </ul>
-              </li>
-              <li className="s-row" id="svc-2">
-                <span className="s-num" aria-hidden="true">
-                  02
-                </span>
-                <div>
-                  <h3>Web Platforms</h3>
-                  <p className="s-sub">
-                    Fast, mobile-first websites and web apps that explain what you do and turn
-                    visitors into WhatsApp conversations.
-                  </p>
-                  <div className="s-good">
-                    <span>New businesses</span>
-                    <span>Growing companies</span>
-                  </div>
-                </div>
-                <ul>
-                  <li>Designed for phones first</li>
-                  <li>Clear WhatsApp and contact buttons on every page</li>
-                  <li>Pages you can update without calling us</li>
-                  <li>Hosting and domain set-up handled</li>
-                </ul>
-              </li>
-              <li className="s-row" id="svc-3">
-                <span className="s-num" aria-hidden="true">
-                  03
-                </span>
-                <div>
-                  <h3>Workflow Tools</h3>
-                  <p className="s-sub">
-                    Simple internal tools, such as checklists, trackers and forms, built around the
-                    way your team already runs.
-                  </p>
-                  <div className="s-good">
-                    <span>Operations teams</span>
-                    <span>Offices on paper</span>
-                  </div>
-                </div>
-                <ul>
-                  <li>Replace paper files and scattered spreadsheets</li>
-                  <li>Generate documents and checklists in seconds</li>
-                  <li>Everyone sees the same, up-to-date information</li>
-                  <li>Works on the phones your staff already carry</li>
-                </ul>
-              </li>
-              <li className="s-row" id="svc-4">
-                <span className="s-num" aria-hidden="true">
-                  04
-                </span>
-                <div>
-                  <h3>Backend Systems</h3>
-                  <p className="s-sub">
-                    The databases, dashboards and integrations that keep your tools connected behind
-                    the scenes.
-                  </p>
-                  <div className="s-good">
-                    <span>Multi-tool businesses</span>
-                    <span>Reporting</span>
-                  </div>
-                </div>
-                <ul>
-                  <li>One place for your business data</li>
-                  <li>Dashboards that show what&apos;s happening today</li>
-                  <li>Connects your website, WhatsApp and internal tools</li>
-                  <li>Secure access for the right people</li>
-                </ul>
-              </li>
-              <li className="s-row" id="svc-5">
-                <span className="s-num" aria-hidden="true">
-                  05
-                </span>
-                <div>
-                  <h3>AI Chatbots</h3>
-                  <p className="s-sub">
-                    A chat assistant on your website that answers visitors&apos; questions and
-                    passes serious enquiries to your team.
-                  </p>
-                  <div className="s-good">
-                    <span>Websites with traffic</span>
-                    <span>Customer support</span>
-                  </div>
-                </div>
-                <ul>
-                  <li>Answers common questions instantly</li>
-                  <li>Collects the details your team needs</li>
-                  <li>Sends warm leads straight to WhatsApp</li>
-                  <li>Matches your brand&apos;s tone</li>
-                </ul>
-              </li>
+                  <ul>
+                    {item.points.map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
             </ol>
           </section>
           <CtaBox copy={getSite().ctaBox} />

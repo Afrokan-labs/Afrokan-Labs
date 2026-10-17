@@ -1,50 +1,83 @@
 import type { z } from "zod";
 import type { Services } from "./schema";
 
-/** Copy source: docs/content/homepage-copy-v2.md §4 (approved 2026-10-02). */
+/** Services page copy. Source: the site handoff's reference/services.html (approved). */
 export const services = {
-  tab: "WHAT WE DO",
-  heading: { lead: "Our", mark: "Services" },
-  body: "We build AI and software tools that help Ghanaian businesses serve customers faster and run smoother.",
-  // `kind` links a row to a project's `built` list; `tag` labels it on case studies.
+  meta: { title: "Services" },
+  hero: {
+    badge: { bold: "Now taking projects", rest: " — Accra, Ghana" },
+    heading: { first: "Tools that work", script: "the", rest: " way you work" },
+    lede: "WhatsApp assistants, web platforms and workflow tools for Ghanaian businesses. Pick what you need, or tell us the problem and we'll recommend the right fit.",
+    whatsapp: "Talk to us on WhatsApp",
+    details: { label: "See every service", href: "#details" },
+    tags: ["Your customer", "Your team"],
+    start: "Get started",
+  },
+  details: {
+    heading: { lead: "Every ", mark: "service", tail: ", in detail" },
+    body: "Each project starts with a free conversation and a written plan, timeline and price before any work begins.",
+  },
+  // TODO_CONFIRM_SEPARATE_SERVICES: "Backend Systems" and "AI Chatbots" as separate services (TODO.md).
   items: [
     {
-      kind: "whatsapp-assistant",
-      tag: "WhatsApp AI assistant",
       name: "WhatsApp AI Assistants",
-      body: "Assistants that answer customers on WhatsApp from your own documents and policies, any time of day.",
+      card: { title: "WhatsApp AI", sub: "Assistants that answer 24/7" },
+      sub: "An assistant on your WhatsApp Business number that answers customer questions from your own documents, prices and policies, any time of day.",
+      goodFor: ["Logistics", "Retail", "Service businesses"],
+      points: [
+        "Answers from your real documents, not guesses",
+        "Hands the chat to a staff member when it should",
+        "Works in the app your customers already use",
+        "Trained on your business, updated as things change",
+      ],
     },
     {
-      kind: "website",
-      tag: "Website",
       name: "Web Platforms",
-      body: "Fast, mobile-first websites and web apps that turn visitors into WhatsApp conversations.",
+      card: { title: "Web Platforms", sub: "Websites & web apps" },
+      sub: "Fast, mobile-first websites and web apps that explain what you do and turn visitors into WhatsApp conversations.",
+      goodFor: ["New businesses", "Growing companies"],
+      points: [
+        "Designed for phones first",
+        "Clear WhatsApp and contact buttons on every page",
+        "Pages you can update without calling us",
+        "Hosting and domain set-up handled",
+      ],
     },
     {
-      kind: "workflow-tool",
-      tag: "Internal tool",
       name: "Workflow Tools",
-      body: "Checklists, trackers and forms that replace paperwork and spreadsheets, built around how your team already works.",
+      card: { title: "Workflow Tools", sub: "Checklists, trackers, forms" },
+      sub: "Simple internal tools, such as checklists, trackers and forms, built around the way your team already runs.",
+      goodFor: ["Operations teams", "Offices on paper"],
+      points: [
+        "Replace paper files and scattered spreadsheets",
+        "Generate documents and checklists in seconds",
+        "Everyone sees the same, up-to-date information",
+        "Works on the phones your staff already carry",
+      ],
     },
     {
       name: "Backend Systems",
-      body: "The databases, dashboards and integrations that keep everything connected behind the scenes.",
+      card: { title: "Backend Systems", sub: "Databases & integrations" },
+      sub: "The databases, dashboards and integrations that keep your tools connected behind the scenes.",
+      goodFor: ["Multi-tool businesses", "Reporting"],
+      points: [
+        "One place for your business data",
+        "Dashboards that show what's happening today",
+        "Connects your website, WhatsApp and internal tools",
+        "Secure access for the right people",
+      ],
+    },
+    {
+      name: "AI Chatbots",
+      card: { title: "AI Chatbots", sub: "On your website" },
+      sub: "A chat assistant on your website that answers visitors' questions and passes serious enquiries to your team.",
+      goodFor: ["Websites with traffic", "Customer support"],
+      points: [
+        "Answers common questions instantly",
+        "Collects the details your team needs",
+        "Sends warm leads straight to WhatsApp",
+        "Matches your brand's tone",
+      ],
     },
   ],
-  // PLACEHOLDER until the real photo arrives (NOTES-AND-ASSETS §4).
-  image: {
-    src: "assets/images/PLACEHOLDER-services-at-work.jpg",
-    alt: "Placeholder for a photo of someone at work",
-  },
-  ring: "Afrokan Labs · Afrokan Labs · Afrokan Labs · Afrokan Labs ·",
-  cards: {
-    process: {
-      text: "Ever wondered how a project goes from idea to launch?",
-      label: "See how we work",
-    },
-    contact: {
-      text: "Looking for a team who can turn your idea into a working product?",
-      label: "Talk to our team",
-    },
-  },
 } satisfies z.input<typeof Services>;
