@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 /** reference insights.html: topic filter pills, search box and the (flagged) newsletter box. */
-export function InsightsScripts() {
+export function InsightsScripts({ preview, invalid }: { preview: string; invalid: string }) {
   useEffect(() => {
     const q = document.getElementById("iq") as HTMLInputElement | null;
     const empty = document.getElementById("iempty");
@@ -47,10 +47,7 @@ export function InsightsScripts() {
       e.preventDefault();
       const v = (document.getElementById("inews-email") as HTMLInputElement | null)?.value.trim();
       const m = document.getElementById("inewsmsg");
-      if (m)
-        m.textContent = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v ?? "")
-          ? "Preview only: email signup isn’t connected yet."
-          : "Enter a valid email address, like name@company.com.";
+      if (m) m.textContent = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v ?? "") ? preview : invalid;
     };
     news?.addEventListener("submit", onNews);
 
@@ -59,6 +56,6 @@ export function InsightsScripts() {
       search?.removeEventListener("submit", onSearch);
       news?.removeEventListener("submit", onNews);
     };
-  }, []);
+  }, [preview, invalid]);
   return null;
 }

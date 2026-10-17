@@ -1,21 +1,62 @@
+import type { z } from "zod";
+import type { Articles, Insights } from "./schema";
+
+/** Insights page copy. Source: the site handoff's reference/insights.html (approved). */
+export const insights = {
+  meta: { title: "Insights" },
+  heading:
+    "Afrokan Labs Insights: articles on automation, WhatsApp AI, building and growing businesses in Ghana",
+  board: {
+    automate: ["Aut", "mate"],
+    connect: ["C", "nnect"],
+    build: "Build",
+    grow: "Grow",
+    shine: ["Sh", "ne"],
+    deploy: ["Depl", "y"],
+    small: ["Workflows", "WhatsApp AI", "Ghana first", "Case studies", "Guides"],
+  },
+  search: { label: "Search articles", placeholder: "Search", submit: "Search" },
+  recommended: {
+    heading: "Recommended articles",
+    seeAll: { label: "See all", href: "#all" },
+    soon: "Soon",
+  },
+  comingSoon: "Coming soon",
+  all: {
+    heading: { lead: "All ", mark: "articles" },
+    body: "Practical notes on AI, WhatsApp and software for Ghanaian businesses. We're writing these now; they'll go live one by one.",
+    filterLabel: "Filter by topic",
+    allLabel: "All",
+    categories: {
+      Guides: "Guides",
+      AI: "AI",
+      Workflows: "Workflows",
+      "Case study": "Case studies",
+    },
+  },
+  empty: {
+    lead: "No articles match that search yet. Try another word, or ",
+    link: { label: "ask us directly", href: "/contact" },
+    tail: ".",
+  },
+  // Off until there is a provider (TODO.md "Newsletter: yes or no, and which provider").
+  newsletter: {
+    enabled: false,
+    heading: "Get new articles when they're published",
+    body: "One short email when something new goes live. No spam, and you can unsubscribe any time.",
+    label: "Your email",
+    placeholder: "Enter your email",
+    submit: "Notify me",
+    preview: "Preview only: email signup isn’t connected yet.",
+    invalid: "Enter a valid email address, like name@company.com.",
+  },
+} satisfies z.input<typeof Insights>;
+
 /**
- * Insights articles (reference insights.html "All articles"). None is
- * written yet, so each is "Coming soon"; a published one gets a body (MDX)
- * and a slug later. TODO-CONTENT.md "Later": first Insights articles.
+ * The articles ("All articles"; the first four are also "Recommended").
+ * None is written yet, so each is "Coming soon". TODO.md "Later": the first articles.
  */
-export type ArticleCategory = "Guides" | "AI" | "Workflows" | "Case study";
-
-export type Article = {
-  category: ArticleCategory;
-  title: string;
-  summary: string;
-  status: "soon";
-};
-
-/** The newsletter box under the list stays off until there is a provider (TODO-CONTENT.md). */
-export const SHOW_NEWSLETTER = false;
-
-export const articles: Article[] = [
+export const articles = [
   {
     category: "Guides",
     title: "Why your customers would rather WhatsApp you than visit your website",
@@ -65,4 +106,4 @@ export const articles: Article[] = [
     summary: "The basics every business collecting phone numbers and emails should know.",
     status: "soon",
   },
-];
+] satisfies z.input<typeof Articles>;

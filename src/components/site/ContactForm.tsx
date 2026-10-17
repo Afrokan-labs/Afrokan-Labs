@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useRef, useState } from "react";
+import type { ContactCopy } from "@/content/schema";
 import { track } from "@/lib/analytics";
 import {
   CONTACT_ENDPOINT,
@@ -20,18 +21,12 @@ declare global {
   }
 }
 
-const NEEDS = [
-  "WhatsApp AI assistant",
-  "Website or web app",
-  "Workflow tool",
-  "Backend system",
-  "Not sure yet",
-];
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type Errors = { name?: string; email?: string; message?: string };
 
 type Props = {
+  copy: ContactCopy["form"];
   email: string;
   /** Unset in local builds: the widget is skipped and the server refuses the post. */
   turnstileSiteKey?: string;
@@ -43,7 +38,7 @@ type Props = {
  * contact and message, so company, WhatsApp number and needs travel inside
  * the message. Turnstile loads when the visitor first focuses the form.
  */
-export function ContactForm({ email, turnstileSiteKey }: Props) {
+export function ContactForm({ copy, email, turnstileSiteKey }: Props) {
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState("");
   const [sending, setSending] = useState(false);
@@ -87,11 +82,9 @@ export function ContactForm({ email, turnstileSiteKey }: Props) {
     const data = new FormData(form);
     const get = (k: string) => String(data.get(k) ?? "").trim();
     const next: Errors = {
-      name: get("name") ? undefined : "Enter your name.",
-      email: EMAIL.test(get("email"))
-        ? undefined
-        : "Enter an email address, like name@company.com.",
-      message: get("message").length > 4 ? undefined : "Tell us a little about what you need.",
+      name: get("name") ? undefined : copy.errors.name,
+      email: EMAIL.test(get("email")) ? undefined : copy.errors.email,
+      message: get("message").length > 4 ? undefined : copy.errors.message,
     };
     setErrors(next);
     const firstBad = (["name", "email", "message"] as const).find((k) => next[k]);
@@ -103,9 +96,9 @@ export function ContactForm({ email, turnstileSiteKey }: Props) {
 
     const needs = data.getAll("need").map(String);
     const message = [
-      get("company") && `Company: ${get("company")}`,
-      get("phone") && `WhatsApp: ${get("phone")}`,
-      needs.length > 0 && `Needs: ${needs.join(", ")}`,
+      get("company") && `${copy.messageLines.company}: ${get("company")}`,
+      get("phone") && `${copy.messageLines.phone}: ${get("phone")}`,
+      needs.length > 0 && `${copy.messageLines.needs}: ${needs.join(", ")}`,
       (get("company") || get("phone") || needs.length > 0) && "",
       get("message"),
     ]
@@ -121,7 +114,7 @@ export function ContactForm({ email, turnstileSiteKey }: Props) {
     body.set(FIELD.turnstile, String(data.get(FIELD.turnstile) ?? ""));
 
     setSending(true);
-    setStatus("Sending…");
+    setStatus(copy.sending);
     let ok = false;
     try {
       const res = await fetch(CONTACT_ENDPOINT, {
@@ -137,9 +130,9 @@ export function ContactForm({ email, turnstileSiteKey }: Props) {
     track("contact_form_submit", { result: ok ? "success" : "error" });
     if (ok) {
       form.reset();
-      setStatus("Thanks, we’ll be in touch within one working day.");
+      setStatus(copy.sent);
     } else {
-      setStatus(`Something went wrong. Email ${email} instead.`);
+      setStatus(copy.failed.replace("{email}", email));
       if (widgetId.current) window.turnstile?.reset(widgetId.current);
     }
   }
@@ -157,7 +150,7 @@ export function ContactForm({ email, turnstileSiteKey }: Props) {
       onFocus={() => setEngaged(true)}
     >
       <div className="c-field">
-        <label htmlFor="c-name">Name</label>
+        <label htmlFor="c-name">{copy.labels.name}</label>
         <input
           id="c-name"
           name="name"
@@ -173,12 +166,12 @@ export function ContactForm({ email, turnstileSiteKey }: Props) {
       </div>
       <div className="c-field">
         <label htmlFor="c-company">
-          Company <i>(optional)</i>
+          {copy.labels.company} <i>{copy.optional}</i>
         </label>
         <input id="c-company" name="company" autoComplete="organization" />
       </div>
       <div className="c-field">
-        <label htmlFor="c-email">Email</label>
+        <label htmlFor="c-email">{copy.labels.email}</label>
         <input
           id="c-email"
           name="email"
@@ -195,20 +188,20 @@ export function ContactForm({ email, turnstileSiteKey }: Props) {
       </div>
       <div className="c-field">
         <label htmlFor="c-phone">
-          WhatsApp number <i>(optional)</i>
+          {copy.labels.phone} <i>{copy.optional}</i>
         </label>
         <input
           id="c-phone"
           name="phone"
           type="tel"
           autoComplete="tel"
-          placeholder="e.g. 024 000 0000"
+          placeholder={copy.phonePlaceholder}
         />
       </div>
       <fieldset className="c-needs">
-        <legend>What do you need?</legend>
+        <legend>{copy.needs.legend}</legend>
         <div className="c-chips">
-          {NEEDS.map((n, i) => (
+          {copy.needs.options.map((n, i) => (
             <Fragment key={n}>
               {i > 0 && " "}
               <label>
@@ -220,12 +213,12 @@ export function ContactForm({ email, turnstileSiteKey }: Props) {
         </div>
       </fieldset>
       <div className="c-field full">
-        <label htmlFor="c-msg">Message</label>
+        <label htmlFor="c-msg">{copy.labels.message}</label>
         <textarea
           id="c-msg"
           name="message"
           required
-          placeholder="What's slowing your business down?"
+          placeholder={copy.messagePlaceholder}
           aria-invalid={invalid("message")}
           aria-describedby="e-msg"
         />
@@ -243,9 +236,9 @@ export function ContactForm({ email, turnstileSiteKey }: Props) {
       />
       {turnstileSiteKey && <div ref={widget} className="c-field full" />}
       <div className="c-actions">
-        <small>We only use your details to reply to you.</small>
+        <small>{copy.privacyNote}</small>
         <button className="c-submit" type="submit" disabled={sending}>
-          Submit
+          {copy.submit}
         </button>
       </div>
       <p className="c-status" id="cstatus" role="status">

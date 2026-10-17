@@ -15,6 +15,9 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import matter from "gray-matter";
 import { about } from "../src/content/about";
+import { articles, insights } from "../src/content/articles";
+import { legal } from "../src/content/legal";
+import { work } from "../src/content/work";
 import { caseStudy } from "../src/content/case-study";
 import { contact } from "../src/content/contact";
 import { home } from "../src/content/home";
@@ -72,6 +75,10 @@ collect(
     site,
     home,
     about,
+    work,
+    insights,
+    articles,
+    legal,
     services,
     solutions,
     members,

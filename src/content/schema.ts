@@ -138,6 +138,13 @@ export const Site = z.object({
       }),
     )
     .min(1),
+  /** The 404 page (exported as 404.html). */
+  notFound: z.object({
+    title: z.string().min(1),
+    code: z.string().min(1),
+    heading: z.string().min(1),
+    home: z.string().min(1),
+  }),
   /** The closing box on About, Services, Solutions and Work (reference .x-cta). */
   ctaBox: z.object({
     heading: z.object({ lead: z.string(), mark: z.string().min(1) }),
@@ -543,6 +550,131 @@ export const Solutions = z.object({
 });
 export type Solutions = z.infer<typeof Solutions>;
 
+/** The work page (site handoff reference/work.html). */
+export const Work = z.object({
+  meta: z.object({ title: text, description: z.string().max(155).optional() }),
+  hero: z.object({
+    /** "Software we've shipped" "for" / "Ghanaian businesses". */
+    heading: z.object({ lead: text, for: text, rest: text }),
+    big: text,
+    photo: Photo,
+    intro: text,
+    cases: Link,
+  }),
+  approach: z.object({
+    label: text,
+    statement: text,
+    cols: z
+      .array(z.object({ icon: z.enum(["strategy", "build", "support"]), title: text, body: text }))
+      .length(3),
+  }),
+  cases: z.object({
+    heading: text,
+    year: text,
+    items: z
+      .array(
+        z.object({
+          mock: z.enum(["phone", "checklist", "website"]),
+          href: Href,
+          label: z.string().min(10),
+          title: text,
+          tags: text,
+          background: Decorative,
+        }),
+      )
+      .min(1),
+    open: z.object({ href: Href, title: text, cta: text, name: text, tags: text }),
+    /** Text drawn inside the mock screens (decorative, aria-hidden). */
+    mocks: z.object({
+      checklist: z.object({
+        title: text,
+        field: text,
+        button: text,
+        count: text,
+        countLabel: text,
+      }),
+      website: z.tuple([text, text]),
+    }),
+  }),
+});
+export type Work = z.infer<typeof Work>;
+
+export const ArticleCategory = z.enum(["Guides", "AI", "Workflows", "Case study"]);
+
+/** The insights page (site handoff reference/insights.html). The articles are in articles.ts. */
+export const Insights = z.object({
+  meta: z.object({ title: text, description: z.string().max(155).optional() }),
+  heading: text,
+  /** The word board (decorative, aria-hidden). Split words wrap a drawn glyph. */
+  board: z.object({
+    automate: z.tuple([text, text]),
+    connect: z.tuple([text, text]),
+    build: text,
+    grow: text,
+    shine: z.tuple([text, text]),
+    deploy: z.tuple([text, text]),
+    small: z.tuple([text, text, text, text, text]),
+  }),
+  search: z.object({ label: text, placeholder: text, submit: text }),
+  recommended: z.object({ heading: text, seeAll: Link, soon: text }),
+  comingSoon: text,
+  all: z.object({
+    heading: Heading,
+    body: text,
+    filterLabel: text,
+    allLabel: text,
+    /** The filter buttons, in this order. */
+    categories: z.record(ArticleCategory, text),
+  }),
+  empty: z.object({ lead: text, link: Link, tail: text }),
+  newsletter: z.object({
+    enabled: z.boolean(),
+    heading: text,
+    body: text,
+    label: text,
+    placeholder: text,
+    submit: text,
+    preview: text,
+    invalid: text,
+  }),
+});
+export type Insights = z.infer<typeof Insights>;
+
+/** Insights articles. None is written yet, so each is "soon"; a published one gets a body later. */
+export const Articles = z
+  .array(
+    z.object({ category: ArticleCategory, title: text, summary: text, status: z.literal("soon") }),
+  )
+  .min(1);
+export type Articles = z.infer<typeof Articles>;
+
+/** A legal page. Paragraphs and list items take **bold** and [label](/path); {email} and {domain} are filled in. */
+const LegalDoc = z.object({
+  meta: z.object({ title: text, description: z.string().max(155).optional() }),
+  kicker: text,
+  heading: Heading,
+  intro: text,
+  updated: text,
+  place: text,
+  /** The "Draft" tag; remove it once a Ghanaian lawyer has reviewed the page (TODO.md). */
+  draft: z.string().optional(),
+  tocLabel: text,
+  sections: z
+    .array(
+      z.object({
+        title: text,
+        blocks: z
+          .array(z.union([z.object({ p: text }), z.object({ ul: z.array(text).min(1) })]))
+          .min(1),
+      }),
+    )
+    .min(1),
+  note: text,
+  other: Link,
+});
+export const Legal = z.object({ privacy: LegalDoc, terms: LegalDoc });
+export type LegalDoc = z.infer<typeof LegalDoc>;
+
 export const CaseStudyCopy = z.object({
   attribution: z.string().includes("{formerBrand}"),
   headings: z.object({ howItWorks: z.string().min(1), result: z.string().min(1) }),
@@ -580,52 +712,53 @@ export const Privacy = z.object({
 });
 export type Privacy = z.infer<typeof Privacy>;
 
-const FieldErrors = z.object({
-  required: z.string().min(1),
-  tooLong: z.string().includes("{max}"),
-});
 const ResultPage = z.object({ title: z.string().min(1), body: z.string().min(1) });
 
 /** /contact (BUILD_PLAN 6.1, architecture §5). Field rules: src/lib/contact-form.ts. */
 export const ContactCopy = z.object({
-  /** Who approved the copy and when. TODO_ until approved (launch:check fails). */
-  approvedBy: orTodo(z.string().min(1), "who approved the contact form copy and when"),
-  title: z.string().min(1),
-  /** Meta description. Omitted from the page while TODO_. */
-  description: orTodo(z.string().min(1).max(155), "a meta description of up to 155 characters"),
-  intro: z.string().min(1),
-  whatsappCta: z.string().min(1),
-  fields: z.object({
-    name: z.object({ label: z.string().min(1), errors: FieldErrors }),
-    contact: z.object({
-      label: z.string().min(1),
-      hint: z.string().min(1),
-      errors: FieldErrors.extend({ invalid: z.string().min(1) }),
-    }),
-    message: z.object({ label: z.string().min(1), errors: FieldErrors }),
+  /** /contact (site handoff reference/contact.html). */
+  page: z.object({
+    meta: z.object({ title: text, description: z.string().max(155).optional() }),
+    leftLabel: text,
+    homeLabel: text,
+    big: z.tuple([text, text]),
+    sub: text,
+    body: text,
+    whatsapp: text,
+    closeLabel: text,
+    heading: text,
+    intro: text,
+    direct: z.object({ email: text, based: text }),
   }),
-  /** Label of the hidden honeypot field; only bots and some screen readers ever meet it. */
-  honeypotLabel: z.string().min(1),
-  submit: z.string().min(1),
-  /** Screen-reader text while sending (the button shows a spinner). */
-  sending: z.string().min(1),
-  /** Shown above the button when sending fails for any reason other than a field error. */
-  failed: z.string().min(1),
-  /** Shown only without JavaScript, which Turnstile needs. "{email}" is the site email. */
-  noScript: z.string().includes("{email}"),
+  /** The handoff form. Its post goes to functions/api/contact.ts. */
+  form: z.object({
+    labels: z.object({ name: text, company: text, email: text, phone: text, message: text }),
+    optional: text,
+    phonePlaceholder: text,
+    messagePlaceholder: text,
+    needs: z.object({ legend: text, options: z.array(text).min(1) }),
+    errors: z.object({ name: text, email: text, message: text }),
+    privacyNote: text,
+    submit: text,
+    sending: text,
+    sent: text,
+    /** "{email}" is the site email. */
+    failed: z.string().includes("{email}"),
+    /** How the optional fields travel inside the posted message. */
+    messageLines: z.object({ company: text, phone: text, needs: text }),
+  }),
+  whatsappCta: text,
   success: z.object({
-    title: z.string().min(1),
+    title: text,
     /** {replyWithin} is filled from site.replyWithin; `bodyUnconfirmed` is used until it is set. */
     body: z.string().includes("{replyWithin}"),
-    bodyUnconfirmed: z.string().min(1),
+    bodyUnconfirmed: text,
   }),
   /** Static pages the form lands on when posted without JavaScript. */
   notSent: ResultPage,
-  /** The homepage contact band's link to /contact (architecture §5). */
-  homeLink: z.string().min(1),
   /** The notification email. User input never goes into the subject (architecture §6). */
   email: z.object({
-    subject: z.string().min(1),
+    subject: text,
     labels: z.object({ name: z.string(), contact: z.string(), message: z.string() }),
   }),
 });

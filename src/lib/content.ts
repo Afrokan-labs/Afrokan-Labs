@@ -11,9 +11,11 @@ import matter from "gray-matter";
 import * as runtime from "react/jsx-runtime";
 import { z } from "zod";
 import { about } from "../content/about";
+import { articles, insights } from "../content/articles";
 import { caseStudy } from "../content/case-study";
 import { contact } from "../content/contact";
 import { home } from "../content/home";
+import { legal } from "../content/legal";
 import { privacy } from "../content/privacy";
 import * as schema from "../content/schema";
 import { services } from "../content/services";
@@ -22,6 +24,7 @@ import { solutions } from "../content/solutions";
 import { members } from "../content/team";
 import { reviews, testimonials } from "../content/testimonials";
 import { tierCopy } from "../content/tiers";
+import { work } from "../content/work";
 
 const PROJECTS_DIR = join(process.cwd(), "src", "content", "projects");
 
@@ -43,6 +46,11 @@ function parse<T extends z.ZodType>(source: string, s: T, data: unknown): z.outp
 export const getSite = () => parse("src/content/site.ts", schema.Site, site);
 export const getHome = () => parse("src/content/home.ts", schema.Home, home);
 export const getAbout = () => parse("src/content/about.ts", schema.About, about);
+export const getWork = () => parse("src/content/work.ts", schema.Work, work);
+export const getInsights = () => parse("src/content/articles.ts", schema.Insights, insights);
+export const getArticles = () =>
+  parse("src/content/articles.ts (articles)", schema.Articles, articles);
+export const getLegal = () => parse("src/content/legal.ts", schema.Legal, legal);
 export const getCaseStudyCopy = () =>
   parse("src/content/case-study.ts", schema.CaseStudyCopy, caseStudy);
 export const getPrivacy = () => parse("src/content/privacy.ts", schema.Privacy, privacy);
@@ -213,6 +221,10 @@ export async function validateAllContent() {
   getSite();
   const home = getHome();
   getAbout();
+  const workCopy = getWork();
+  getInsights();
+  getArticles();
+  getLegal();
   getCaseStudyCopy();
   getPrivacy();
   getContactCopy();
@@ -226,6 +238,10 @@ export async function validateAllContent() {
 
   // Every referenced image must exist as a source file (the pipeline needs it).
   const referenced = [
+    ...[workCopy.hero.photo, ...workCopy.cases.items.map((c) => c.background)].map((i) => ({
+      src: `assets/images/${i.src}`,
+      from: "src/content/work.ts",
+    })),
     ...[home.welcome.photo, home.welcome.mini.image, home.ideas.wide, home.ideas.tall].map((i) => ({
       src: `assets/images/${i.src}`,
       from: "src/content/home.ts",

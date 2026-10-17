@@ -1,27 +1,31 @@
 import "@/styles/pages/insights.css";
+import { Fragment } from "react";
 import { Nav } from "@/components/site/Nav";
 import { InsightsScripts } from "@/components/site/InsightsScripts";
-import { articles, SHOW_NEWSLETTER } from "@/content/articles";
+import { getArticles, getInsights } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata = pageMetadata({ path: "/insights", title: "Insights" });
+export const metadata = pageMetadata({ path: "/insights", ...getInsights().meta });
 
 export default function InsightsPage() {
+  const { heading, board, search, recommended, comingSoon, all, empty, newsletter } = getInsights();
+  const articles = getArticles();
+  const rec = articles.slice(0, 4);
+  const cat = (i: number) => `${rec[i].category} · ${recommended.soon}`;
   return (
     <>
-      <InsightsScripts />
+      <InsightsScripts preview={newsletter.preview} invalid={newsletter.invalid} />
       <div className="x x-glow">
         <div className="x-wrap i-top">
           <Nav current="insights" dark />
           <section className="i-board" aria-labelledby="i-title">
             <h1 className="i-h1" id="i-title">
-              Afrokan Labs Insights: articles on automation, WhatsApp AI, building and growing
-              businesses in Ghana
+              {heading}
             </h1>
             <div className="i-words">
               <div className="i-row">
                 <span className="i-big" aria-hidden="true">
-                  Aut
+                  {board.automate[0]}
                   <span className="i-tile">
                     <svg viewBox="0 0 24 24">
                       <path
@@ -32,13 +36,13 @@ export default function InsightsPage() {
                       />
                     </svg>
                   </span>
-                  mate
+                  {board.automate[1]}
                 </span>{" "}
                 <span className="i-small" aria-hidden="true">
-                  Workflows
+                  {board.small[0]}
                 </span>{" "}
                 <span className="i-big" aria-hidden="true">
-                  C
+                  {board.connect[0]}
                   <span className="i-glyph">
                     <svg viewBox="0 0 30 36">
                       <path
@@ -50,18 +54,18 @@ export default function InsightsPage() {
                       />
                     </svg>
                   </span>
-                  nnect
+                  {board.connect[1]}
                 </span>{" "}
                 <span className="i-small" aria-hidden="true">
-                  WhatsApp AI
+                  {board.small[1]}
                 </span>
               </div>
               <div className="i-row">
                 <span className="i-small" aria-hidden="true">
-                  Ghana first
+                  {board.small[2]}
                 </span>{" "}
                 <span className="i-big" aria-hidden="true">
-                  Build
+                  {board.build}
                 </span>
                 <form className="i-search" id="isearch" role="search">
                   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -80,9 +84,14 @@ export default function InsightsPage() {
                       strokeLinecap="round"
                     />
                   </svg>{" "}
-                  <label htmlFor="iq">Search articles</label>
-                  <input id="iq" type="search" placeholder="Search" autoComplete="off" />
-                  <button type="submit" aria-label="Search">
+                  <label htmlFor="iq">{search.label}</label>
+                  <input
+                    id="iq"
+                    type="search"
+                    placeholder={search.placeholder}
+                    autoComplete="off"
+                  />
+                  <button type="submit" aria-label={search.submit}>
                     <svg viewBox="0 0 16 16">
                       <path
                         d="M4 12 12 4M5.5 4H12v6.5"
@@ -96,12 +105,12 @@ export default function InsightsPage() {
                   </button>
                 </form>
                 <span className="i-big" aria-hidden="true">
-                  Grow
+                  {board.grow}
                 </span>
               </div>
               <div className="i-row">
                 <span className="i-big" aria-hidden="true">
-                  Sh
+                  {board.shine[0]}
                   <span className="i-glyph" style={{ width: ".5em" }}>
                     <svg viewBox="0 0 20 36">
                       <path
@@ -114,13 +123,13 @@ export default function InsightsPage() {
                       />
                     </svg>
                   </span>
-                  ne
+                  {board.shine[1]}
                 </span>{" "}
                 <span className="i-small" aria-hidden="true">
-                  Case studies
+                  {board.small[3]}
                 </span>{" "}
                 <span className="i-big" aria-hidden="true">
-                  Depl
+                  {board.deploy[0]}
                   <span className="i-tile r">
                     <svg viewBox="0 0 24 24">
                       <path
@@ -133,20 +142,20 @@ export default function InsightsPage() {
                       />
                     </svg>
                   </span>
-                  y
+                  {board.deploy[1]}
                 </span>{" "}
                 <span className="i-small" aria-hidden="true">
-                  Guides
+                  {board.small[4]}
                 </span>
               </div>
             </div>
             <div className="i-rec-head">
-              <h2>Recommended articles</h2>
-              <a href="#all">See all</a>
+              <h2>{recommended.heading}</h2>
+              <a href={recommended.seeAll.href}>{recommended.seeAll.label}</a>
             </div>
             <ul className="i-rec">
               <li className="i-card i-c1">
-                <span className="i-cat">Guides · Soon</span>{" "}
+                <span className="i-cat">{cat(0)}</span>{" "}
                 <svg
                   className="i-art"
                   viewBox="0 0 200 200"
@@ -163,7 +172,7 @@ export default function InsightsPage() {
                   <circle cx="118" cy="40" r="78" fill="url(#d1)" />
                   <circle cx="100" cy="30" r="40" fill="#fff" />
                 </svg>
-                <h3>Why your customers would rather WhatsApp you than visit your website</h3>
+                <h3>{rec[0].title}</h3>
                 <span className="i-go">
                   <svg viewBox="0 0 16 16">
                     <path
@@ -176,11 +185,11 @@ export default function InsightsPage() {
                     />
                   </svg>
                 </span>
-                <span className="i-soon">Coming soon</span>
+                <span className="i-soon">{comingSoon}</span>
               </li>
               <li className="i-card i-c2">
-                <h3>What a WhatsApp AI assistant can and can&apos;t do for your business</h3>
-                <span className="i-cat">AI · Soon</span>{" "}
+                <h3>{rec[1].title}</h3>
+                <span className="i-cat">{cat(1)}</span>{" "}
                 <svg
                   className="i-art"
                   viewBox="0 0 200 200"
@@ -211,10 +220,10 @@ export default function InsightsPage() {
                     />
                   </svg>
                 </span>
-                <span className="i-soon">Coming soon</span>
+                <span className="i-soon">{comingSoon}</span>
               </li>
               <li className="i-card i-c3">
-                <span className="i-cat">Case study · Soon</span>{" "}
+                <span className="i-cat">{cat(2)}</span>{" "}
                 <svg
                   className="i-art"
                   viewBox="0 0 200 200"
@@ -246,7 +255,7 @@ export default function InsightsPage() {
                     fill="url(#d3)"
                   />
                 </svg>
-                <h3>How we built a document checklist generator for a clearing firm</h3>
+                <h3>{rec[2].title}</h3>
                 <span className="i-go">
                   <svg viewBox="0 0 16 16">
                     <path
@@ -259,11 +268,11 @@ export default function InsightsPage() {
                     />
                   </svg>
                 </span>
-                <span className="i-soon">Coming soon</span>
+                <span className="i-soon">{comingSoon}</span>
               </li>
               <li className="i-card i-c4">
-                <h3>From paper files to a simple tracker: a starter guide</h3>
-                <span className="i-cat">Workflows · Soon</span>{" "}
+                <h3>{rec[3].title}</h3>
+                <span className="i-cat">{cat(3)}</span>{" "}
                 <svg
                   className="i-art"
                   viewBox="0 0 200 200"
@@ -291,7 +300,7 @@ export default function InsightsPage() {
                     />
                   </svg>
                 </span>
-                <span className="i-soon">Coming soon</span>
+                <span className="i-soon">{comingSoon}</span>
               </li>
             </ul>
           </section>
@@ -300,29 +309,23 @@ export default function InsightsPage() {
           <section className="x-sec" id="all" aria-labelledby="all-title">
             <div className="x-head">
               <h2 className="x-h2" id="all-title">
-                All <span className="x-hl">articles</span>
+                {all.heading.lead}
+                <span className="x-hl">{all.heading.mark}</span>
               </h2>
-              <p>
-                Practical notes on AI, WhatsApp and software for Ghanaian businesses. We&apos;re
-                writing these now; they&apos;ll go live one by one.
-              </p>
+              <p>{all.body}</p>
             </div>
-            <div className="i-filter" role="group" aria-label="Filter by topic">
+            <div className="i-filter" role="group" aria-label={all.filterLabel}>
               <button type="button" aria-pressed="true" data-cat="all">
-                All
-              </button>{" "}
-              <button type="button" aria-pressed="false" data-cat="Guides">
-                Guides
-              </button>{" "}
-              <button type="button" aria-pressed="false" data-cat="AI">
-                AI
-              </button>{" "}
-              <button type="button" aria-pressed="false" data-cat="Workflows">
-                Workflows
-              </button>{" "}
-              <button type="button" aria-pressed="false" data-cat="Case study">
-                Case studies
+                {all.allLabel}
               </button>
+              {Object.entries(all.categories).map(([key, label]) => (
+                <Fragment key={key}>
+                  {" "}
+                  <button type="button" aria-pressed="false" data-cat={key}>
+                    {label}
+                  </button>
+                </Fragment>
+              ))}
             </div>
             <ul className="i-list" id="ilist">
               {articles.map((a) => (
@@ -332,36 +335,33 @@ export default function InsightsPage() {
                     <h3>{a.title}</h3>
                     <p>{a.summary}</p>
                   </div>
-                  <span className="i-st">Coming soon</span>
+                  <span className="i-st">{comingSoon}</span>
                 </li>
               ))}
             </ul>
             <p className="i-empty" id="iempty" hidden>
-              No articles match that search yet. Try another word, or{" "}
-              <a href="/contact" style={{ color: "var(--x-lime)" }}>
-                ask us directly
+              {empty.lead}
+              <a href={empty.link.href} style={{ color: "var(--x-lime)" }}>
+                {empty.link.label}
               </a>
-              .
+              {empty.tail}
             </p>
           </section>
-          {SHOW_NEWSLETTER && (
+          {newsletter.enabled && (
             <section className="i-news" aria-labelledby="news-title">
               <div>
-                <h2 id="news-title">Get new articles when they&apos;re published</h2>
-                <p>
-                  One short email when something new goes live. No spam, and you can unsubscribe any
-                  time.
-                </p>
+                <h2 id="news-title">{newsletter.heading}</h2>
+                <p>{newsletter.body}</p>
               </div>
               <form id="inews" noValidate>
-                <label htmlFor="inews-email">Your email</label>
+                <label htmlFor="inews-email">{newsletter.label}</label>
                 <input
                   id="inews-email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={newsletter.placeholder}
                   autoComplete="email"
                 />
-                <button type="submit">Notify me</button>
+                <button type="submit">{newsletter.submit}</button>
               </form>
               <p className="i-msg" id="inewsmsg" role="status" />
             </section>

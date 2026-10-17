@@ -37,6 +37,14 @@ export const site = {
     { label: "Service businesses", icon: "person" },
   ],
 
+  // The 404 page (site handoff brief "Routes").
+  notFound: {
+    title: "Page not found",
+    code: "404",
+    heading: "This page doesn't exist or has moved.",
+    home: "Back home",
+  },
+
   // The closing box on About, Services, Solutions and Work (site handoff reference .x-cta).
   ctaBox: {
     heading: { lead: "Have a problem in your business we could ", mark: "solve?" },

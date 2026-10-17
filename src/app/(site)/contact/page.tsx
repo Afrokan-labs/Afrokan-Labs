@@ -1,18 +1,20 @@
 import "@/styles/pages/contact.css";
 import { ContactForm } from "@/components/site/ContactForm";
 import { env } from "@/lib/env";
+import { getContactCopy, getSite } from "@/lib/content";
 import { getLinks } from "@/lib/links";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata = pageMetadata({ path: "/contact", title: "Contact" });
+export const metadata = pageMetadata({ path: "/contact", ...getContactCopy().page.meta });
 
 export default function ContactPage() {
   const links = getLinks();
+  const { page, form } = getContactCopy();
   return (
     <>
       <div className="x">
         <div className="c-split" id="top">
-          <section className="c-left" aria-label="Why talk to us">
+          <section className="c-left" aria-label={page.leftLabel}>
             <svg
               className="c-art"
               viewBox="0 0 600 900"
@@ -50,7 +52,7 @@ export default function ContactPage() {
                 />
               </g>
             </svg>{" "}
-            <a className="c-logo" href="/" aria-label="Afrokan Labs home">
+            <a className="c-logo" href="/" aria-label={page.homeLabel}>
               <svg viewBox="105 115 1100 990" aria-hidden="true">
                 <path
                   d="M685 500 L513 212 Q372 598 200 1010 Q482 842 750 645 L993 1003 L1160 922"
@@ -60,26 +62,23 @@ export default function ContactPage() {
                   strokeLinejoin="round"
                 />
               </svg>
-              Afrokan Labs
+              {getSite().name}
             </a>
             <h2 className="c-big">
-              <span>Let&apos;s</span>
-              <span>Build</span>
+              <span>{page.big[0]}</span>
+              <span>{page.big[1]}</span>
             </h2>
-            <p className="c-sub">Your next tool starts with a message</p>
-            <p className="c-txt">
-              Tell us what&apos;s slowing your business down. The first conversation is free, and
-              you&apos;ll get a written plan, timeline and price before any work begins.
-            </p>
+            <p className="c-sub">{page.sub}</p>
+            <p className="c-txt">{page.body}</p>
             <a className="c-wa" href={links.whatsapp} {...links.whatsappAttrs}>
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <use href="#wa" />
               </svg>
-              Chat on WhatsApp
+              {page.whatsapp}
             </a>
           </section>
           <section className="c-right" aria-labelledby="c-title">
-            <a className="c-close" href="/" aria-label="Close and go back home">
+            <a className="c-close" href="/" aria-label={page.closeLabel}>
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path
                   d="M5 5l14 14M19 5L5 19"
@@ -89,22 +88,20 @@ export default function ContactPage() {
                 />
               </svg>
             </a>
-            <h1 id="c-title">Contact us</h1>
-            <p className="c-intro">
-              Interested in working with us? Fill in the form below and we&apos;ll get back to you
-              within one working day.
-            </p>
+            <h1 id="c-title">{page.heading}</h1>
+            <p className="c-intro">{page.intro}</p>
             <ContactForm
+              copy={form}
               email={links.email}
               turnstileSiteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
             />
             <div className="c-direct">
               <span>
-                <b>Email</b>
+                <b>{page.direct.email}</b>
                 <a href={links.mailto}>{links.email}</a>
               </span>
               <span>
-                <b>Based in</b>
+                <b>{page.direct.based}</b>
                 {links.location}
               </span>
             </div>
