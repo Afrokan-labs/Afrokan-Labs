@@ -18,8 +18,8 @@ import { workProcess } from "../content/process";
 import * as schema from "../content/schema";
 import { services } from "../content/services";
 import { site } from "../content/site";
-import { team } from "../content/team";
-import { testimonials } from "../content/testimonials";
+import { members, team } from "../content/team";
+import { reviews, testimonials } from "../content/testimonials";
 import { tierCopy } from "../content/tiers";
 
 const PROJECTS_DIR = join(process.cwd(), "src", "content", "projects");
@@ -49,6 +49,9 @@ export const getServices = () => parse("src/content/services.ts", schema.Service
 export const getProcess = () => parse("src/content/process.ts", schema.Process, workProcess);
 export const getTeam = () => parse("src/content/team.ts", schema.Team, team);
 export const getTierCopy = () => parse("src/content/tiers.ts", schema.TierCopy, tierCopy);
+export const getMembers = () => parse("src/content/team.ts (members)", schema.Members, members);
+export const getReviews = () =>
+  parse("src/content/testimonials.ts (reviews)", schema.Reviews, reviews);
 export const getTestimonials = () =>
   parse("src/content/testimonials.ts", schema.Testimonials, testimonials);
 

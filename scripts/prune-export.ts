@@ -8,8 +8,9 @@ import { existsSync, rmSync } from "node:fs";
 import { getProjects } from "../src/lib/content";
 
 if (getProjects().length === 0) {
-  for (const path of ["out/work", "out/work.html", "out/work.txt"]) {
+  // /work itself is a page of the handoff site now; only case-study pages go.
+  for (const path of ["out/work"]) {
     if (existsSync(path)) rmSync(path, { recursive: true });
   }
-  console.log("prune-export: no published project, so /work is not shipped.");
+  console.log("prune-export: no published project, so the case-study pages are not shipped.");
 }

@@ -30,6 +30,35 @@ const config = {
   },
   overrides: [
     {
+      // The site handoff's pages, ported rule for rule from its reference files
+      // (afrokan-site-handoff/reference). Reordering or merging rules to
+      // satisfy these checks would change the cascade, so they're off here,
+      // and the reference's own breakpoints are allowed.
+      files: ["src/styles/pages/**/*.css"],
+      rules: {
+        "no-descending-specificity": null,
+        "no-duplicate-selectors": null,
+        // SVG geometry as CSS (the footer's growing "O": rx/ry).
+        "declaration-property-value-no-unknown": null,
+        // The visually hidden label pattern (clip: rect(0 0 0 0)).
+        "property-no-deprecated": null,
+        "media-feature-name-value-allowed-list": {
+          "max-width": [
+            "480px",
+            "520px",
+            "560px",
+            "600px",
+            "640px",
+            "760px",
+            "860px",
+            "900px",
+            "960px",
+            "1000px",
+          ],
+        },
+      },
+    },
+    {
       files: ["src/styles/tokens.css"],
       rules: { "color-no-hex": null },
     },

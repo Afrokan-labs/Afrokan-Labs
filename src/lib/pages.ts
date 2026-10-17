@@ -5,19 +5,22 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { getProjects } from "./content";
 
 /** Every OG image is one static, designed PNG at this size. */
 export const OG_SIZE = { width: 1200, height: 630 } as const;
 
-/** Paths of the indexable pages. /work and case studies only exist with a visible project. */
+/** Paths of the indexable pages: the site handoff's routes (afrokan-site-handoff/CLAUDE.md "Routes"). */
 export function getIndexablePaths(): string[] {
-  const projects = getProjects();
   return [
     "/",
-    ...(projects.length ? ["/work", ...projects.map((p) => `/work/${p.slug}`)] : []),
+    "/about",
+    "/services",
+    "/solutions",
+    "/work",
+    "/insights",
     "/contact",
     "/privacy",
+    "/terms",
   ];
 }
 

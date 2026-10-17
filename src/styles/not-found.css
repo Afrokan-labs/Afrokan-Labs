@@ -1,0 +1,44 @@
+/* 404: the reference's inner-page look (privacy.css) plus a big numeral and the green pill. */
+
+.nf {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  padding-block: clamp(56px, 10vw, 120px) clamp(24px, 4vw, 48px);
+  text-align: center;
+}
+
+.nf-code {
+  margin: 0;
+  font: 200 clamp(7rem, 3rem + 16vw, 16rem) / 0.82 var(--nf-lexend);
+  letter-spacing: -0.04em;
+  color: var(--x-white);
+}
+
+.nf h1 {
+  margin: 0;
+  font-size: clamp(1.1rem, 0.95rem + 0.6vw, 1.45rem);
+  font-weight: 400;
+  color: var(--x-mute);
+}
+
+.nf-home {
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  margin-top: 8px;
+  padding: 0 24px;
+  border-radius: 99px;
+  background: var(--x-lime);
+  color: var(--x-ink);
+  font: 500 0.82rem/1 var(--nf-lexend);
+  text-decoration: none;
+}
+
+.nf-home:hover {
+  background: var(--x-lime-2);
+}
+
+:root[data-site-theme="light"] .nf-code {
+  color: var(--c-0d0d0d);
+}

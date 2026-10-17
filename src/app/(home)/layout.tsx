@@ -1,15 +1,4 @@
-import { SiteFooter } from "@/components/layout/SiteFooter";
-import { getChromeProps } from "@/lib/chrome";
-
-/**
- * The homepage and its fixtures: the site header lives inside the hero card
- * (src/components/sections/Hero.tsx), so this layout adds only the footer.
- */
+/** The root layout carries the nav-less chrome (footer, theme toggle); the home page draws its own nav. */
 export default function HomeLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      {children}
-      <SiteFooter {...getChromeProps().footer} />
-    </>
-  );
+  return children;
 }

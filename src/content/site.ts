@@ -14,8 +14,8 @@ export const site = {
   // The same fact as `location`, structured for JSON-LD (architecture §8: Accra at city level).
   address: { locality: "Accra", country: "GH" },
 
-  // Phase 0: dedicated WhatsApp Business number.
-  whatsappNumber: "TODO_WHATSAPP_E164",
+  // Confirmed 2026-10-17 (059 606 9011), the number for now.
+  whatsappNumber: "+233596069011",
   // Contact form success line: "we'll reply within [X hours] on weekdays".
   replyWithin: "TODO_REPLY_HOURS",
 
@@ -25,6 +25,17 @@ export const site = {
   },
 
   demoOffer: { enabled: false },
+
+  // Site update 1, Home "Welcome" strip.
+  industries: [
+    { label: "Logistics", icon: "truck" },
+    { label: "Retail", icon: "bag" },
+    { label: "Schools", icon: "cap" },
+    { label: "Healthcare", icon: "cross" },
+    { label: "Real estate", icon: "house" },
+    { label: "Hospitality", icon: "dish" },
+    { label: "Service businesses", icon: "person" },
+  ],
 
   // Interface text. Skip link and landmark names: standard wording, not in the copy docs.
   ui: {

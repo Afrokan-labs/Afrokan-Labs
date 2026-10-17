@@ -34,3 +34,21 @@ export function getImage(src: string) {
   }
   return { src: entry.fallback, width: entry.width, height: entry.height, sources: entry.sources };
 }
+
+/**
+ * One URL for an image, for places a <picture> can't go (an SVG <image>):
+ * the smallest WebP at least `width` wide, else the largest there is.
+ */
+export function imageUrl(src: string, width: number): string {
+  const entry = getImage(src);
+  const webp = entry.sources.find((s) => s.type === "image/webp");
+  if (!webp) return entry.src;
+  const options = webp.srcSet
+    .split(", ")
+    .map((c) => {
+      const [url, w] = c.split(" ");
+      return { url, w: parseInt(w, 10) };
+    })
+    .sort((a, b) => a.w - b.w);
+  return (options.find((o) => o.w >= width) ?? options[options.length - 1]).url;
+}

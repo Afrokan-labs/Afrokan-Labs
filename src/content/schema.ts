@@ -129,6 +129,15 @@ export const Site = z.object({
   }),
   /** Open decision #2 (docs/content/README.md). Off until decided. */
   demoOffer: z.object({ enabled: z.boolean() }),
+  /** Home "Welcome" strip (site update 1): sectors we build for, each with a line icon. */
+  industries: z
+    .array(
+      z.object({
+        label: z.string().min(1),
+        icon: z.enum(["truck", "bag", "cap", "cross", "house", "dish", "person"]),
+      }),
+    )
+    .min(1),
   ui: z.object({
     skipLink: z.string().min(1),
     opensWhatsApp: z.string().min(1),
@@ -240,6 +249,49 @@ export const Team = z.object({
     .min(1),
 });
 
+/** About "Members" (site update 1): real people only, each with a transparent cut-out. */
+export const Members = z
+  .array(
+    z.object({
+      /** Two lines, drawn uppercase: first name, then the rest. */
+      name: z.tuple([z.string().min(1), z.string().min(1)]),
+      abbr: z.string().min(2),
+      title: z.string().min(1),
+      cutout: z.object({ src: z.string().endsWith(".webp"), alt: z.string().min(10) }),
+      shape: z.enum(["circles", "triangles", "diamond"]),
+    }),
+  )
+  .min(1);
+
+/**
+ * Home "What our clients really say" (site update 1). Open slots are
+ * invitations, not reviews. A quote shows only when the client is real and
+ * the quote is approved (`quote`); until then `placeholder` fills the slot.
+ * Never add star ratings, and never pair a person's photo with words they
+ * didn't give.
+ */
+export const Reviews = z
+  .array(
+    z
+      .object({
+        id: z.string().min(1),
+        real: z.boolean(),
+        /** The client's approved words. Only allowed when `real` is true. */
+        quote: z.string().min(1).max(400).optional(),
+        placeholder: z.string().min(1),
+        fact: z.string().min(1),
+        name: z.string().min(1),
+        /** "Sector · Delivered" or "Sector · Open slot". */
+        role: z.string().min(1),
+        /** The thumbnail's caption. */
+        sector: z.string().min(1),
+        image: z.string().endsWith(".webp"),
+        cta: z.object({ label: z.string().min(1), href: z.string().startsWith("/") }),
+      })
+      .refine((r) => r.real || !r.quote, "Only a real client can have a quote"),
+  )
+  .min(1);
+
 /** Real, approved quotes only. An empty list hides the section (design-system §7). */
 export const Testimonials = z.object({
   label: z.string().min(1),
@@ -262,6 +314,8 @@ export type Services = z.infer<typeof Services>;
 export type Process = z.infer<typeof Process>;
 export type Team = z.infer<typeof Team>;
 export type Testimonials = z.infer<typeof Testimonials>;
+export type Members = z.infer<typeof Members>;
+export type Reviews = z.infer<typeof Reviews>;
 export type BuiltKind = z.infer<typeof BuiltKind>;
 
 export const TierCopy = z.object({
