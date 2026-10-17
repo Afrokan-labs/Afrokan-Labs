@@ -18,7 +18,7 @@ import { workProcess } from "../content/process";
 import * as schema from "../content/schema";
 import { services } from "../content/services";
 import { site } from "../content/site";
-import { members, team } from "../content/team";
+import { members } from "../content/team";
 import { reviews, testimonials } from "../content/testimonials";
 import { tierCopy } from "../content/tiers";
 
@@ -47,7 +47,6 @@ export const getPrivacy = () => parse("src/content/privacy.ts", schema.Privacy, 
 export const getContactCopy = () => parse("src/content/contact.ts", schema.ContactCopy, contact);
 export const getServices = () => parse("src/content/services.ts", schema.Services, services);
 export const getProcess = () => parse("src/content/process.ts", schema.Process, workProcess);
-export const getTeam = () => parse("src/content/team.ts", schema.Team, team);
 export const getTierCopy = () => parse("src/content/tiers.ts", schema.TierCopy, tierCopy);
 export const getMembers = () => parse("src/content/team.ts (members)", schema.Members, members);
 export const getReviews = () =>
@@ -218,22 +217,25 @@ export async function validateAllContent() {
   const quotes = getTestimonials();
   const services = getServices();
   const processContent = getProcess();
-  const team = getTeam();
+  const team = getMembers();
   const projects = readProjectFiles();
   for (const file of projects) await compileBody(file);
 
   // Every referenced image must exist as a source file (the pipeline needs it).
   const referenced = [
-    ...[home.hero.photo, home.ideas.wide, home.ideas.tall, home.contact.image].map((i) => ({
-      src: i.src,
+    ...[home.welcome.photo, home.welcome.mini.image, home.ideas.wide, home.ideas.tall].map((i) => ({
+      src: `assets/images/${i.src}`,
       from: "src/content/home.ts",
     })),
     { src: services.image.src, from: "src/content/services.ts" },
     ...quotes.items.flatMap((q) =>
       q.photo ? [{ src: q.photo.src, from: "src/content/testimonials.ts" }] : [],
     ),
-    ...team.members.flatMap((m) =>
-      m.photo ? [{ src: m.photo.src, from: "src/content/team.ts" }] : [],
+    ...team.flatMap((m) =>
+      [m.photo, m.cutout].map((i) => ({
+        src: `assets/images/${i.src}`,
+        from: "src/content/team.ts",
+      })),
     ),
     ...projects.flatMap((f) => f.project.images.map((i) => ({ src: i.src, from: f.source }))),
   ];
@@ -245,7 +247,7 @@ export async function validateAllContent() {
   return {
     services: services.items.length,
     steps: processContent.steps.length,
-    teamMembers: team.members.length,
+    teamMembers: team.length,
     projects: projects.length,
     published: projects.filter((f) => f.project.published).length,
   };

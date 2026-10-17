@@ -21,7 +21,7 @@ import { privacy } from "../src/content/privacy";
 import { workProcess } from "../src/content/process";
 import { services } from "../src/content/services";
 import { site } from "../src/content/site";
-import { team } from "../src/content/team";
+import { members } from "../src/content/team";
 import { testimonials } from "../src/content/testimonials";
 import { tierCopy } from "../src/content/tiers";
 
@@ -72,7 +72,7 @@ collect(
     home,
     services,
     process: workProcess,
-    team,
+    members,
     testimonials,
     tiers: tierCopy,
     caseStudy,

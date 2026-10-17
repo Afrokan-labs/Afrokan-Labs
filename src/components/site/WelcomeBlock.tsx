@@ -1,4 +1,4 @@
-import type { Site } from "@/content/schema";
+import type { Home, Site } from "@/content/schema";
 import { CurveArrow, Eyebrow } from "./Eyebrow";
 import { Img } from "./Img";
 
@@ -47,13 +47,16 @@ function Industry({ item }: { item: Site["industries"][number] }) {
  * .ae-strip): intro headline, the dark "About the team" card beside the CEO
  * photo with two stat cards, then the industry marquee.
  */
-export function WelcomeBlock({ industries }: { industries: Site["industries"] }) {
+type Props = { copy: Home["welcome"]; industries: Site["industries"] };
+
+export function WelcomeBlock({ copy, industries }: Props) {
+  const { team, mini, photo } = copy;
   return (
     <>
       <section className="ae-intro" aria-labelledby="ae-title">
-        <Eyebrow>Welcome to Afrokan Labs</Eyebrow>
+        <Eyebrow>{copy.eyebrow}</Eyebrow>
         <h2 className="ae-h" id="ae-title">
-          Your next best business{" "}
+          {copy.headline.lead}{" "}
           <span className="ae-tile" aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <path
@@ -66,68 +69,54 @@ export function WelcomeBlock({ industries }: { industries: Site["industries"] })
               />
             </svg>
           </span>{" "}
-          <span className="g">decision starts here</span>
+          <span className="g">{copy.headline.tail}</span>
         </h2>
-        <p>
-          We&apos;re a small engineering team in Accra building WhatsApp assistants, web platforms
-          and workflow tools. Look at what we&apos;ve shipped, and let the work do the talking.
-        </p>
+        <p>{copy.intro}</p>
       </section>
       <div className="ae-split">
         <div className="ae-dark">
-          <Eyebrow>About the team</Eyebrow>
+          <Eyebrow>{team.eyebrow}</Eyebrow>
           <h3>
-            Engineering first.
+            {team.heading[0]}
             <br />
-            <span>Always.</span>
+            <span>{team.heading[1]}</span>
           </h3>
-          <p>
-            We start with how your business actually runs, then design and build the tools around
-            it. The people who scope your project are the people who write the code.
-          </p>
+          <p>{team.body}</p>
           <div className="ae-btns">
-            <a className="ae-btn g" href="/about">
-              More about us <CurveArrow />
+            <a className="ae-btn g" href={team.buttons[0].href}>
+              {team.buttons[0].label} <CurveArrow />
             </a>
-            <a className="ae-btn w" href="/services">
-              See services <CurveArrow />
+            <a className="ae-btn w" href={team.buttons[1].href}>
+              {team.buttons[1].label} <CurveArrow />
             </a>
           </div>
-          <a className="ae-mini" href="/work#cases">
-            <Img src="work-bg-port.webp" alt="" sizes="84px" />
+          <a className="ae-mini" href={mini.cta.href}>
+            <Img src={mini.image.src} alt={mini.image.alt} sizes="84px" />
             <span>
-              <b>WhatsApp assistant, checklist tool and website for ESE Logistic</b>
+              <b>{mini.title}</b>
               <small>
-                See details <CurveArrow />
+                {mini.cta.label} <CurveArrow />
               </small>
             </span>
           </a>
         </div>
         <div className="ae-photo">
-          <Img
-            src="team-ceo-franklin.webp"
-            alt="Franklin Asare Wiafe, CEO of Afrokan Labs"
-            sizes="(max-width: 860px) 100vw, 50vw"
-          />
+          <Img src={photo.src} alt={photo.alt} sizes="(max-width: 860px) 100vw, 50vw" />
           <div className="ae-stats">
-            <div className="ae-stat">
-              <b>
-                3<i>×</i>
-              </b>
-              <span>Tools delivered for ESE Logistic</span>
-              <em>↑ One client, three systems</em>
-            </div>
-            <div className="ae-stat">
-              <b>
-                24/7<i>.</i>
-              </b>
-              <span>WhatsApp answers, day or night</span>
-              <em>↑ No extra staff</em>
-            </div>
+            {copy.stats.map((stat) => (
+              <div className="ae-stat" key={stat.label}>
+                <b>
+                  {stat.value}
+                  {stat.unit && <i>{stat.unit}</i>}
+                </b>
+                <span>{stat.label}</span>
+                <em>{stat.note}</em>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-      <div className="ae-strip" aria-label="Industries we build for">
+      <div className="ae-strip" aria-label={copy.stripLabel}>
         <div className="ae-strip-in">
           {industries.map((item) => (
             <Industry key={item.label} item={item} />

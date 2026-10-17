@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { Reviews as ReviewList } from "@/content/schema";
+import type { Home, Reviews as ReviewList } from "@/content/schema";
 import { Eyebrow } from "./Eyebrow";
 
 export type ReviewItem = ReviewList[number] & {
@@ -20,7 +20,7 @@ export type ReviewItem = ReviewList[number] & {
  * A quote shows only for a real client with an approved quote. Until then the
  * slot shows its placeholder line. No star ratings, ever.
  */
-export function Reviews({ items }: { items: ReviewItem[] }) {
+export function Reviews({ copy, items }: { copy: Home["reviews"]; items: ReviewItem[] }) {
   const [active, setActive] = useState(0);
   const [shown, setShown] = useState(0);
   const [fading, setFading] = useState(false);
@@ -44,12 +44,13 @@ export function Reviews({ items }: { items: ReviewItem[] }) {
   return (
     <section className="rv" id="reviews" aria-labelledby="rv-title">
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <Eyebrow block>Clients</Eyebrow>
+        <Eyebrow block>{copy.eyebrow}</Eyebrow>
       </div>
       <h2 className="rv-h" id="rv-title">
-        What our clients
+        {copy.heading.first}
         <br />
-        really <span className="rv-mark">say</span>
+        {copy.heading.lead}
+        <span className="rv-mark">{copy.heading.mark}</span>
       </h2>
       <div className="rv-row">
         <div className="rv-big">
@@ -68,7 +69,7 @@ export function Reviews({ items }: { items: ReviewItem[] }) {
         </div>
         <div className="rv-text" aria-live="polite">
           <div className={r.real ? "rv-tag" : "rv-tag open"} id="rvtag">
-            {r.real ? "Delivered" : "Open slot"}
+            {r.real ? copy.delivered : copy.openSlot}
           </div>
           <p className="rv-q" id="rvq">
             {r.real && r.quote ? r.quote : r.placeholder}
@@ -87,13 +88,13 @@ export function Reviews({ items }: { items: ReviewItem[] }) {
             {r.cta.label} →
           </a>
         </div>
-        <div className="rv-thumbs" role="group" aria-label="Choose a client">
+        <div className="rv-thumbs" role="group" aria-label={copy.choose}>
           {items.map((item, i) => (
             <button
               key={item.id}
               type="button"
               className="rv-th"
-              aria-label={`Show ${item.name}`}
+              aria-label={copy.show.replace("{name}", item.name)}
               aria-pressed={i === active}
               onClick={() => select(i)}
             >

@@ -70,25 +70,3 @@ export function organizationJsonLd() {
     ...(confirmed(site.social.linkedin) ? { sameAs: [site.social.linkedin] } : {}),
   };
 }
-
-/**
- * Case study: an Article written and published by the company. No dates
- * until the content has a confirmed one to use.
- */
-export function articleJsonLd({ path, title, description }: Omit<PageSeo, "type">) {
-  const site = getSite();
-  const org = { "@type": "Organization", "@id": absolute(ORGANIZATION_ID), name: site.name };
-  const image = getOgImage(path);
-  return {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: title,
-    ...(confirmed(description) ? { description } : {}),
-    url: absolute(path),
-    mainEntityOfPage: absolute(path),
-    inLanguage: "en-GH",
-    author: org,
-    publisher: org,
-    ...(image ? { image: [absolute(image.url)] } : {}),
-  };
-}

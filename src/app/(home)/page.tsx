@@ -1,19 +1,40 @@
 import "@/styles/pages/home.css";
+import { Fragment } from "react";
 import { Img } from "@/components/site/Img";
 import { Eyebrow } from "@/components/site/Eyebrow";
 import { HomeScripts } from "@/components/site/HomeScripts";
 import { Nav } from "@/components/site/Nav";
 import { Reviews } from "@/components/site/Reviews";
 import { WelcomeBlock } from "@/components/site/WelcomeBlock";
-import { getReviews, getSite } from "@/lib/content";
+import { JsonLd } from "@/components/seo/JsonLd";
+import {
+  clientDisplayName,
+  getHome,
+  getMembers,
+  getProjects,
+  getReviews,
+  getSite,
+  getStatusLabels,
+} from "@/lib/content";
+import { confirmed } from "@/lib/confirmed";
 import { getImage, imageUrl } from "@/lib/images";
 import { getLinks } from "@/lib/links";
-import { pageMetadata } from "@/lib/seo";
+import { organizationJsonLd, pageMetadata } from "@/lib/seo";
 
-export const metadata = pageMetadata({
-  path: "/",
-  title: "Afrokan Labs: AI and software studio in Accra",
-});
+export const metadata = pageMetadata({ path: "/", ...getHome().meta });
+
+/** Where each orbit slider's knob starts (reference); HomeScripts moves them. */
+const SLIDER_START = [".15", ".55", ".1"];
+
+/** Heading lines with the reference's <br> between them. */
+function lines(items: readonly string[]) {
+  return items.map((line, i) => (
+    <Fragment key={i}>
+      {i > 0 && <br />}
+      {line}
+    </Fragment>
+  ));
+}
 
 /** Reviews with their pipeline image URLs (the client component can't read the manifest). */
 function reviewItems() {
@@ -26,9 +47,24 @@ function reviewItems() {
 
 export default function HomePage() {
   const links = getLinks();
+  const home = getHome();
+  const { hero, welcome, ideas, orbit, services, work, words, process, team, ticker, contact } =
+    home;
+  const v = process.visuals;
+  // Featured work (architecture §4): omitted without a featured project, and the
+  // client's real name only when approved.
+  const project = getProjects().find((p) => p.featured);
+  const members = getMembers();
   return (
     <>
-      <HomeScripts />
+      <JsonLd data={organizationJsonLd()} />
+      <HomeScripts
+        chat={hero.phone.chat}
+        online={hero.phone.online}
+        typing={hero.phone.typing}
+        tiles={orbit.tiles}
+        invalidEmail={contact.invalid}
+      />
       <div className="x x-glow">
         <div className="x-wrap x-hero-wrap">
           <div className="x-hero" id="top">
@@ -61,7 +97,7 @@ export default function HomePage() {
                 </g>
               </svg>
               <h1 className="x-h1">
-                Software built for how Ghanaian businesses actually work
+                {hero.headline}
                 <svg className="x-tail" viewBox="0 0 30 28" aria-hidden="true">
                   <g stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" fill="none">
                     <path d="M4 10 L26 3" />
@@ -80,21 +116,14 @@ export default function HomePage() {
                     <path d="M13 19 L24 13" />
                   </g>
                 </svg>
-                <p className="x-lede">
-                  WhatsApp AI assistants, workflow tools and web platforms for growing businesses.
-                  Tell us what slows your team down and we&apos;ll build around it.
-                </p>
-                <a className="x-ghost" href="#work">
-                  See our work
+                <p className="x-lede">{hero.lede}</p>
+                <a className="x-ghost" href={hero.workLink.href}>
+                  {hero.workLink.label}
                 </a>
               </div>
               <div className="x-photo">
                 <div className="x-circle" aria-hidden="true" />
-                <div
-                  className="x-phone"
-                  aria-label="Example: an AI assistant answering a customer on WhatsApp"
-                  role="img"
-                >
+                <div className="x-phone" aria-label={hero.phone.label} role="img">
                   <div className="x-screen">
                     <div className="x-wa-top">
                       <span className="x-wa-av">
@@ -109,8 +138,8 @@ export default function HomePage() {
                         </svg>
                       </span>
                       <span className="x-wa-name">
-                        <b>Your Business</b>
-                        <small id="wastatus">online</small>
+                        <b>{hero.phone.name}</b>
+                        <small id="wastatus">{hero.phone.online}</small>
                       </span>
                     </div>
                     <div className="x-wa-chat" id="wachat" aria-hidden="true" />
@@ -127,11 +156,11 @@ export default function HomePage() {
                   />
                 </svg>
                 <div className="x-ctas">
-                  <a className="x-go" href="#contact">
-                    Start your project
+                  <a className="x-go" href={hero.startProject.href}>
+                    {hero.startProject.label}
                   </a>{" "}
                   <a href={links.whatsapp} {...links.whatsappAttrs}>
-                    Chat on WhatsApp
+                    {hero.whatsapp}
                   </a>
                 </div>
               </div>
@@ -153,51 +182,31 @@ export default function HomePage() {
                     <path fill="currentColor" d="M10 0 12 8 20 10 12 12 10 20 8 12 0 10 8 8Z" />
                   </svg>
                 </div>
-                <span className="x-big">Ghana-first</span>{" "}
-                <span className="x-small">AI &amp; software studio, Accra</span>
+                <span className="x-big">{hero.badge.big}</span>{" "}
+                <span className="x-small">{hero.badge.small}</span>
               </div>
             </div>
             <div style={{ height: "clamp(0px,1vw,8px)" }} />
           </div>
-          <div className="x-stats" role="list" aria-label="Quick facts">
-            <div className="x-stat" role="listitem">
-              <b>
-                3<i>+</i>
-              </b>
-              <span>Systems delivered</span>
-            </div>
-            <div className="x-stat" role="listitem">
-              <b>24/7</b>
-              <span>WhatsApp replies</span>
-            </div>
-            <div className="x-stat" role="listitem">
-              <b>
-                100
-                <i>%</i>
-              </b>
-              <span>Mobile-first builds</span>
-            </div>
-            <div className="x-stat" role="listitem">
-              <b>
-                4<i>-step</i>
-              </b>
-              <span>Clear delivery process</span>
-            </div>
+          <div className="x-stats" role="list" aria-label={home.stats.label}>
+            {home.stats.items.map((stat) => (
+              <div className="x-stat" role="listitem" key={stat.label}>
+                <b>
+                  {stat.value}
+                  {stat.unit && <i>{stat.unit}</i>}
+                </b>
+                <span>{stat.label}</span>
+              </div>
+            ))}
           </div>
-          <WelcomeBlock industries={getSite().industries} />
+          <WelcomeBlock copy={welcome} industries={getSite().industries} />
           <section className="x-ideas" id="ideas" aria-labelledby="ideas-title">
             <div className="x-ideas-head">
-              <Eyebrow block>Who we are</Eyebrow>
+              <Eyebrow block>{ideas.eyebrow}</Eyebrow>
               <h2 className="x-h2" id="ideas-title">
-                Turning ideas into
-                <br />
-                working software
+                {lines(ideas.heading)}
               </h2>
-              <p>
-                We may be a small team, but we scope, build and support every project ourselves.
-                Working hand-in-hand with you, we turn the problems that slow your business down
-                into tools your staff and customers actually use.
-              </p>
+              <p>{ideas.body}</p>
             </div>
             <div className="x-ideas-grid">
               <div className="x-shot x-shot-wide">
@@ -208,18 +217,10 @@ export default function HomePage() {
                   />
                 </svg>
                 <div className="x-clip">
-                  <Img
-                    src="home-ideas-team.webp"
-                    className="x-img"
-                    alt="Franklin, Kwabena and Samuel of Afrokan Labs working together at laptops"
-                  />
+                  <Img src={ideas.wide.src} className="x-img" alt={ideas.wide.alt} />
                 </div>
                 <div className="x-banner">
-                  <span>
-                    An AI &amp; software
-                    <br />
-                    studio in Accra
-                  </span>
+                  <span>{lines(ideas.banner)}</span>
                   <i />
                   <i />
                   <i />
@@ -227,7 +228,7 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="x-shot x-shot-tall">
-                <Img src="home-ideas-thinker.webp" className="x-img" alt="" />
+                <Img src={ideas.tall.src} className="x-img" alt={ideas.tall.alt} />
                 <svg className="x-bulb" viewBox="0 0 100 100" aria-hidden="true">
                   <g
                     fill="none"
@@ -250,17 +251,14 @@ export default function HomePage() {
           </section>
           <section className="o-sec" id="orbit" aria-labelledby="orbit-title">
             <div className="o-text">
-              <span className="o-eyebrow">One studio, every piece</span>
+              <span className="o-eyebrow">{orbit.eyebrow}</span>
               <h2 className="x-h2 o-h2" id="orbit-title">
-                Everything your business runs on, <span className="x-hl">working together</span>
+                {orbit.heading.lead}
+                <span className="x-hl">{orbit.heading.mark}</span>
               </h2>
-              <p>
-                WhatsApp assistants, websites, workflow tools and the systems behind them. We design
-                each piece to fit the others, so moving from manual to automated feels like one
-                smooth change.
-              </p>
-              <a className="o-btn" href="/services">
-                Explore our services
+              <p>{orbit.body}</p>
+              <a className="o-btn" href={orbit.cta.href}>
+                {orbit.cta.label}
                 <span>
                   <svg viewBox="0 0 16 16" aria-hidden="true">
                     <path
@@ -277,284 +275,174 @@ export default function HomePage() {
             </div>
             <div className="o-stage" id="ostage" aria-hidden="true">
               <div className="o-ctrl">
-                <div className="o-sl">
-                  <span>Manual</span>
-                  <i>
-                    <b style={{ "--p": ".15" } as React.CSSProperties} />
-                  </i>
-                  <span>Automated</span>
-                </div>
-                <div className="o-sl">
-                  <span>Slow</span>
-                  <i>
-                    <b style={{ "--p": ".55" } as React.CSSProperties} />
-                  </i>
-                  <span>Instant</span>
-                </div>
-                <div className="o-sl">
-                  <span>Paper</span>
-                  <i>
-                    <b style={{ "--p": ".1" } as React.CSSProperties} />
-                  </i>
-                  <span>Digital</span>
-                </div>
+                {orbit.sliders.map(([from, to], k) => (
+                  <div className="o-sl" key={from}>
+                    <span>{from}</span>
+                    <i>
+                      <b style={{ "--p": SLIDER_START[k] } as React.CSSProperties} />
+                    </i>
+                    <span>{to}</span>
+                  </div>
+                ))}
               </div>
               <div className="o-ring" id="oring" />
             </div>
           </section>
           <section className="sv" id="services-new" aria-labelledby="sv-title">
             <div className="sv-top">
-              <span>
-                Our services:
-                <br />
-                what we build
-              </span>
+              <span>{lines(services.side)}</span>
               <h2 id="sv-title" className="sv-h2">
-                Four ways we help
-                <br />
-                your business run
+                {lines(services.heading)}
               </h2>
-              <span className="sv-r">
-                A short guide
-                <br />
-                for new clients
-              </span>
+              <span className="sv-r">{lines(services.guide)}</span>
             </div>
             <ol className="sv-list">
-              <li className="sv-row boxed">
-                <a className="sv-link" href="/services#svc-1">
-                  <span className="sv-num" aria-hidden="true">
-                    01
-                  </span>{" "}
-                  <span className="sv-text">
-                    <span className="sv-title">
-                      <span>WhatsApp</span>
-                      <span className="sv-l2">
-                        <small>00 - 1&nbsp;&nbsp;&nbsp;&nbsp;Service</small>
-                        AI
-                      </span>
-                      <span>assistants</span>
+              {services.items.map((item, k) => (
+                <li className={`sv-row ${k % 2 ? "open" : "boxed"}`} key={item.href}>
+                  <a className="sv-link" href={item.href}>
+                    <span className="sv-num" aria-hidden="true">
+                      {String(k + 1).padStart(2, "0")}
                     </span>{" "}
-                    <span className="sv-desc">
-                      Answers customer questions on your WhatsApp Business number from your own
-                      documents and prices, any time of day.
-                    </span>
-                  </span>{" "}
-                  <svg className="sv-arrow" viewBox="0 0 60 60" aria-hidden="true">
-                    <path
-                      d="M12 48 48 12M20 12h28v28"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="3"
-                    />
-                  </svg>
-                </a>
-              </li>
-              <li className="sv-row open">
-                <a className="sv-link" href="/services#svc-2">
-                  <span className="sv-num" aria-hidden="true">
-                    02
-                  </span>{" "}
-                  <span className="sv-text">
-                    <span className="sv-title">
-                      <span>Web</span>
-                      <span className="sv-l2">
-                        <small>00 - 2&nbsp;&nbsp;&nbsp;&nbsp;Service</small>
-                        platforms
-                      </span>
-                      <span>that sell</span>
+                    <span className="sv-text">
+                      <span className="sv-title">
+                        <span>{item.title[0]}</span>
+                        <span className="sv-l2">
+                          <small>
+                            00 - {k + 1}&nbsp;&nbsp;&nbsp;&nbsp;{services.tag}
+                          </small>
+                          {item.title[1]}
+                        </span>
+                        <span>{item.title[2]}</span>
+                      </span>{" "}
+                      <span className="sv-desc">{item.body}</span>
                     </span>{" "}
-                    <span className="sv-desc">
-                      Fast, mobile-first websites and web apps that explain what you do and turn
-                      visitors into WhatsApp conversations.
-                    </span>
-                  </span>{" "}
-                  <svg className="sv-arrow" viewBox="0 0 60 60" aria-hidden="true">
-                    <path
-                      d="M12 48 48 12M20 12h28v28"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="3"
-                    />
-                  </svg>
-                </a>
-              </li>
-              <li className="sv-row boxed">
-                <a className="sv-link" href="/services#svc-3">
-                  <span className="sv-num" aria-hidden="true">
-                    03
-                  </span>{" "}
-                  <span className="sv-text">
-                    <span className="sv-title">
-                      <span>Workflow</span>
-                      <span className="sv-l2">
-                        <small>00 - 3&nbsp;&nbsp;&nbsp;&nbsp;Service</small>
-                        tools
-                      </span>
-                      <span>for your team</span>
-                    </span>{" "}
-                    <span className="sv-desc">
-                      Checklists, trackers and forms that replace paper files and scattered
-                      spreadsheets, built around how your team already works.
-                    </span>
-                  </span>{" "}
-                  <svg className="sv-arrow" viewBox="0 0 60 60" aria-hidden="true">
-                    <path
-                      d="M12 48 48 12M20 12h28v28"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="3"
-                    />
-                  </svg>
-                </a>
-              </li>
-              <li className="sv-row open">
-                <a className="sv-link" href="/services#svc-4">
-                  <span className="sv-num" aria-hidden="true">
-                    04
-                  </span>{" "}
-                  <span className="sv-text">
-                    <span className="sv-title">
-                      <span>Backend</span>
-                      <span className="sv-l2">
-                        <small>00 - 4&nbsp;&nbsp;&nbsp;&nbsp;Service</small>
-                        systems
-                      </span>
-                      <span>that connect</span>
-                    </span>{" "}
-                    <span className="sv-desc">
-                      The databases, dashboards and integrations that keep your website, WhatsApp
-                      and internal tools working together.
-                    </span>
-                  </span>{" "}
-                  <svg className="sv-arrow" viewBox="0 0 60 60" aria-hidden="true">
-                    <path
-                      d="M12 48 48 12M20 12h28v28"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="3"
-                    />
-                  </svg>
-                </a>
-              </li>
+                    <svg className="sv-arrow" viewBox="0 0 60 60" aria-hidden="true">
+                      <path
+                        d="M12 48 48 12M20 12h28v28"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                      />
+                    </svg>
+                  </a>
+                </li>
+              ))}
             </ol>
             <div className="sv-foot">
-              <a className="hw-btn" href="/services">
-                See every service in detail
+              <a className="hw-btn" href={services.cta.href}>
+                {services.cta.label}
               </a>
             </div>
           </section>
-          <section className="x-svc x-work" id="work" aria-labelledby="work-new-title">
-            <div className="x-wm" aria-hidden="true">
-              <span>Delivered</span>
-              <span>Delivered</span>
-              <span>Delivered</span>
-            </div>
-            <div className="x-notch">
-              <div className="x-dots" aria-hidden="true">
-                <span className="d1">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <use href="#wa" />
-                  </svg>
-                </span>
-                <span className="d2">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <rect
-                      x="5"
-                      y="3"
-                      width="14"
-                      height="18"
-                      rx="2"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    />
-                    <path
-                      d="M8 8l1.5 1.5L12 7M8 13l1.5 1.5L12 12M14 8.5h2.5M14 13.5h2.5"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </span>
-                <span className="d3">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <rect
-                      x="3"
-                      y="4"
-                      width="18"
-                      height="16"
-                      rx="2.5"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    />
-                    <path d="M3 9h18" stroke="currentColor" strokeWidth="2" />
-                  </svg>
-                </span>
+          {project && (
+            <section className="x-svc x-work" id="work" aria-labelledby="work-new-title">
+              <div className="x-wm" aria-hidden="true">
+                <span>{work.watermark}</span>
+                <span>{work.watermark}</span>
+                <span>{work.watermark}</span>
               </div>
-              <p>Three tools, one delivery</p>
-            </div>
-            <div className="x-tab" aria-hidden="true">
-              <span>CASE STUDY</span>
-            </div>
-            <div className="x-work-grid">
-              <div className="x-work-main">
-                <h2 className="x-h2" id="work-new-title">
-                  Featured <span className="x-hl">Work</span>
-                </h2>
-                <h3>Helping a clearing and forwarding firm answer customers faster</h3>
-                <p>
-                  Customers kept calling the office with the same questions about clearance
-                  documents, which pulled staff away from their work. We built a WhatsApp assistant
-                  that answers those questions from the firm&apos;s own documents, a checklist
-                  generator that tells customers exactly which documents they need, and a website
-                  that brings in enquiries.
-                </p>
-                <div className="x-btns">
-                  <a className="x-pill x-pill-lime" href="/work#cases">
-                    Read the full case study
-                  </a>{" "}
-                  <a className="x-pill x-pill-line" href={links.whatsapp} {...links.whatsappAttrs}>
+              <div className="x-notch">
+                <div className="x-dots" aria-hidden="true">
+                  <span className="d1">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                       <use href="#wa" />
                     </svg>
-                    Chat with us on WhatsApp
-                  </a>
+                  </span>
+                  <span className="d2">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <rect
+                        x="5"
+                        y="3"
+                        width="14"
+                        height="18"
+                        rx="2"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                      <path
+                        d="M8 8l1.5 1.5L12 7M8 13l1.5 1.5L12 12M14 8.5h2.5M14 13.5h2.5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </span>
+                  <span className="d3">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <rect
+                        x="3"
+                        y="4"
+                        width="18"
+                        height="16"
+                        rx="2.5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                      <path d="M3 9h18" stroke="currentColor" strokeWidth="2" />
+                    </svg>
+                  </span>
                 </div>
+                <p>{work.notch}</p>
               </div>
-              <dl className="x-facts">
-                <div className="x-fact x-wide">
-                  <dt>Client</dt>
-                  <dd>ESE Logistic Solution Limited</dd>
+              <div className="x-tab" aria-hidden="true">
+                <span>{work.tab}</span>
+              </div>
+              <div className="x-work-grid">
+                <div className="x-work-main">
+                  <h2 className="x-h2" id="work-new-title">
+                    {work.heading.lead}
+                    <span className="x-hl">{work.heading.mark}</span>
+                  </h2>
+                  <h3>{work.titles[project.slug]}</h3>
+                  <p>
+                    {project.summary.problem} {project.summary.solution}
+                  </p>
+                  <div className="x-btns">
+                    <a className="x-pill x-pill-lime" href={work.caseStudy.href}>
+                      {work.caseStudy.label}
+                    </a>{" "}
+                    <a
+                      className="x-pill x-pill-line"
+                      href={links.whatsapp}
+                      {...links.whatsappAttrs}
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="#wa" />
+                      </svg>
+                      {work.whatsapp}
+                    </a>
+                  </div>
                 </div>
-                <div className="x-fact">
-                  <dt>Industry</dt>
-                  <dd>Clearing and forwarding</dd>
-                </div>
-                <div className="x-fact">
-                  <dt>Status</dt>
-                  <dd className="x-live">Delivered</dd>
-                </div>
-                <div className="x-fact x-wide">
-                  <dt>Built</dt>
-                  <dd className="x-tags">
-                    <span>WhatsApp AI assistant</span>
-                    <span>Internal tool</span>
-                    <span>Website</span>
-                  </dd>
-                </div>
-              </dl>
-            </div>
-          </section>
-          <section className="x-words" aria-label="Innovate, inspire, create">
-            <svg
-              className="x-wordline"
-              viewBox="0 0 1000 104"
-              role="img"
-              aria-label="Innovate. Inspire. Create."
-            >
+                <dl className="x-facts">
+                  <div className="x-fact x-wide">
+                    <dt>{work.fields.client}</dt>
+                    <dd>{clientDisplayName(project)}</dd>
+                  </div>
+                  <div className="x-fact">
+                    <dt>{work.fields.industry}</dt>
+                    <dd>{project.industry}</dd>
+                  </div>
+                  <div className="x-fact">
+                    <dt>{work.fields.status}</dt>
+                    <dd className="x-live">{getStatusLabels(project)[project.status]}</dd>
+                  </div>
+                  <div className="x-fact x-wide">
+                    <dt>{work.fields.built}</dt>
+                    <dd className="x-tags">
+                      {project.built.map((kind) => (
+                        <span key={kind}>{work.builtLabels[kind]}</span>
+                      ))}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </section>
+          )}
+          <section className="x-words" aria-label={words.label}>
+            <svg className="x-wordline" viewBox="0 0 1000 104" role="img" aria-label={words.label}>
               <text
                 className="x-w"
                 x="0"
@@ -563,7 +451,7 @@ export default function HomePage() {
                 textLength="300"
                 lengthAdjust="spacingAndGlyphs"
               >
-                Innovate
+                {words.items[0]}
               </text>
               <path
                 fill="var(--x-lime)"
@@ -578,7 +466,7 @@ export default function HomePage() {
                 textLength="268"
                 lengthAdjust="spacingAndGlyphs"
               >
-                Inspire
+                {words.items[1]}
               </text>
               <path
                 fill="var(--x-lime)"
@@ -593,7 +481,7 @@ export default function HomePage() {
                 textLength="312"
                 lengthAdjust="spacingAndGlyphs"
               >
-                Create
+                {words.items[2]}
               </text>
             </svg>
             <div className="x-divider" aria-hidden="true">
@@ -615,30 +503,24 @@ export default function HomePage() {
               <path d="M-40 120 C 300 -40, 620 80, 760 260 S 1100 640, 1640 470" />
             </svg>
             <div className="x-ideas-head">
-              <Eyebrow block>Process</Eyebrow>
+              <Eyebrow block>{process.eyebrow}</Eyebrow>
               <h2 className="x-h2" id="process-new-title">
-                How we <span className="x-hl">work</span>
+                {process.heading.lead}
+                <span className="x-hl">{process.heading.mark}</span>
               </h2>
-              <p>
-                Four steps from first conversation to launch. You always know what&apos;s happening,
-                what it costs and what comes next.
-              </p>
+              <p>{process.body}</p>
             </div>
             <ol className="hw-rows">
               <li className="hw-row">
                 <div className="hw-text">
                   <span className="hw-chip">
                     <b>01</b>
-                    Free first conversation
+                    {process.steps[0].chip}
                   </span>
-                  <h3>Understand the problem</h3>
-                  <p>
-                    We start with a conversation about what&apos;s slowing your business down, not
-                    about technology. We listen to how your team and customers actually work today,
-                    on WhatsApp, on the phone and on paper.
-                  </p>
-                  <a className="hw-btn" href="#contact">
-                    Start the conversation
+                  <h3>{process.steps[0].title}</h3>
+                  <p>{process.steps[0].body}</p>
+                  <a className="hw-btn" href={process.steps[0].link.href}>
+                    {process.steps[0].link.label}
                   </a>
                 </div>
                 <div className="hw-vis v1">
@@ -735,9 +617,9 @@ export default function HomePage() {
                           transform="rotate(-90 50 50)"
                         />
                       </svg>
-                      <b>GH₵0</b>
-                      <span>First call</span>
-                      <em>Free</em>
+                      <b>{v.gauge.value}</b>
+                      <span>{v.gauge.label}</span>
+                      <em>{v.gauge.note}</em>
                     </div>
                   </div>
                 </div>
@@ -746,16 +628,12 @@ export default function HomePage() {
                 <div className="hw-text">
                   <span className="hw-chip">
                     <b>02</b>
-                    Clear plan before work starts
+                    {process.steps[1].chip}
                   </span>
-                  <h3>Scope and quote</h3>
-                  <p>
-                    You get a written plan with what we&apos;ll build, how long it takes and exactly
-                    what it costs. Nothing starts until you&apos;re happy with it, so there are no
-                    surprises halfway through.
-                  </p>
-                  <a className="hw-btn" href="/services">
-                    See our services
+                  <h3>{process.steps[1].title}</h3>
+                  <p>{process.steps[1].body}</p>
+                  <a className="hw-btn" href={process.steps[1].link.href}>
+                    {process.steps[1].link.label}
                   </a>
                 </div>
                 <div className="hw-vis v2">
@@ -773,10 +651,10 @@ export default function HomePage() {
                           </g>
                           <rect x="104" y="220" width="122" height="1.5" fill="#CFCFC8" />
                           <text x="104" y="250" fontSize="13" fill="#555">
-                            Total price
+                            {v.quote.total}
                           </text>
                           <text x="104" y="272" fontWeight="600" fontSize="18" fill="#0D0D0D">
-                            Fixed
+                            {v.quote.fixed}
                           </text>
                           <rect x="104" y="280" width="70" height="22" rx="11" fill="#94DE57" />
                         </g>
@@ -798,7 +676,7 @@ export default function HomePage() {
                     <ul className="hw-list">
                       <li>
                         <i>1</i>
-                        Problem defined
+                        {v.checklist.items[0]}
                         <span>
                           <svg viewBox="0 0 24 24">
                             <path
@@ -813,7 +691,7 @@ export default function HomePage() {
                       </li>
                       <li>
                         <i>2</i>
-                        Timeline agreed
+                        {v.checklist.items[1]}
                         <span>
                           <svg viewBox="0 0 24 24">
                             <rect
@@ -837,7 +715,7 @@ export default function HomePage() {
                       </li>
                       <li className="on">
                         <i>3</i>
-                        Price fixed
+                        {v.checklist.items[2]}
                         <span>
                           <svg viewBox="0 0 24 24">
                             <path
@@ -861,7 +739,7 @@ export default function HomePage() {
                               strokeLinejoin="round"
                             />
                           </svg>{" "}
-                          Ready to start
+                          {v.checklist.ready}
                         </small>
                       </li>
                     </ul>
@@ -872,16 +750,12 @@ export default function HomePage() {
                 <div className="hw-text">
                   <span className="hw-chip">
                     <b>03</b>
-                    Check-ins every week
+                    {process.steps[2].chip}
                   </span>
-                  <h3>Build, with you watching</h3>
-                  <p>
-                    We build in short steps and show you progress along the way, not just at the
-                    end. You test early versions with your own team and tell us what to change while
-                    it&apos;s still easy to change.
-                  </p>
-                  <a className="hw-btn" href="#work">
-                    See a project we built
+                  <h3>{process.steps[2].title}</h3>
+                  <p>{process.steps[2].body}</p>
+                  <a className="hw-btn" href={process.steps[2].link.href}>
+                    {process.steps[2].link.label}
                   </a>
                 </div>
                 <div className="hw-vis v3">
@@ -945,11 +819,11 @@ export default function HomePage() {
                       <div className="hw-pin-top">
                         <span className="hw-sq" />
                         <div>
-                          <b>Week 3 check-in</b>
-                          <small>WhatsApp assistant</small>
+                          <b>{v.checkIn.title}</b>
+                          <small>{v.checkIn.sub}</small>
                         </div>
                       </div>
-                      <span className="hw-tag">Progress 60%</span>
+                      <span className="hw-tag">{v.checkIn.progress}</span>
                       <i className="hw-bar">
                         <b style={{ width: "60%" }} />
                       </i>
@@ -961,15 +835,12 @@ export default function HomePage() {
                 <div className="hw-text">
                   <span className="hw-chip">
                     <b>04</b>
-                    We stay after launch
+                    {process.steps[3].chip}
                   </span>
-                  <h3>Hand over and support</h3>
-                  <p>
-                    We train your team on what we built, hand over everything you need, and stay
-                    available to fix, adjust and improve it as your business grows.
-                  </p>
-                  <a className="hw-btn" href="/about">
-                    Meet the team
+                  <h3>{process.steps[3].title}</h3>
+                  <p>{process.steps[3].body}</p>
+                  <a className="hw-btn" href={process.steps[3].link.href}>
+                    {process.steps[3].link.label}
                   </a>
                 </div>
                 <div className="hw-vis v4">
@@ -1035,7 +906,7 @@ export default function HomePage() {
                             />
                           </svg>
                         </b>
-                        Team trained
+                        {v.handover.items[0]}
                         <span>
                           <svg viewBox="0 0 24 24">
                             <path
@@ -1061,7 +932,7 @@ export default function HomePage() {
                             />
                           </svg>
                         </b>
-                        Guides handed over
+                        {v.handover.items[1]}
                         <span>
                           <svg viewBox="0 0 24 24">
                             <path
@@ -1101,7 +972,7 @@ export default function HomePage() {
                             />
                           </svg>
                         </b>
-                        Ongoing support
+                        {v.handover.items[2]}
                         <span>
                           <svg viewBox="0 0 24 24">
                             <path
@@ -1116,8 +987,8 @@ export default function HomePage() {
                         </span>
                       </li>
                       <li className="live">
-                        <em>Live</em>
-                        Launched &amp; supported
+                        <em>{v.handover.live}</em>
+                        {v.handover.launched}
                       </li>
                     </ul>
                   </div>
@@ -1128,97 +999,63 @@ export default function HomePage() {
           <section className="x-crew" id="about" aria-labelledby="team-title">
             <div className="x-crew-head">
               <h2 className="x-crew-h" id="team-title">
-                <b>The people</b>
+                <b>{team.heading.first}</b>
                 <span>
-                  building{" "}
+                  {team.heading.middle}{" "}
                   <span className="x-lime" style={{ display: "inline" }}>
-                    Afrokan
+                    {team.heading.brand}
                   </span>
                 </span>
-                <span>Labs</span>
+                <span>{team.heading.last}</span>
               </h2>
               <div className="x-crew-side">
-                <p>
-                  We&apos;re a small team in Accra. The people who scope your project are the people
-                  who build it, so you always know who you&apos;re talking to.
-                </p>
-                <a className="x-crew-btn" href="#contact">
-                  Join our team
+                <p>{team.body}</p>
+                <a className="x-crew-btn" href={team.join.href}>
+                  {team.join.label}
                 </a>
               </div>
             </div>
             <ul className="x-arches">
-              <li className="x-arch">
-                <b>Franklin Asare Wiafe</b>
-                <span className="x-role">CEO</span>{" "}
-                <a className="x-ln" href="#" aria-label="Franklin Asare Wiafe on LinkedIn">
-                  <svg viewBox="0 0 16 16" aria-hidden="true">
-                    <path
-                      fill="currentColor"
-                      d="M3.6 5.6h2.1V13H3.6zM4.6 2.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zM7 5.6h2v1c.3-.6 1.1-1.2 2.2-1.2 2.3 0 2.7 1.5 2.7 3.4V13h-2.1V9.2c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V13H7z"
-                    />
-                  </svg>
-                </a>
-                <div className="x-pic">
-                  <Img
-                    src="team-ceo-franklin.webp"
-                    alt="Franklin Asare Wiafe, CEO of Afrokan Labs"
-                  />
-                </div>
-              </li>
-              <li className="x-arch">
-                <b>Kwabena Mawuli</b>
-                <span className="x-role">CTO</span>{" "}
-                <a className="x-ln" href="#" aria-label="Kwabena Mawuli on LinkedIn">
-                  <svg viewBox="0 0 16 16" aria-hidden="true">
-                    <path
-                      fill="currentColor"
-                      d="M3.6 5.6h2.1V13H3.6zM4.6 2.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zM7 5.6h2v1c.3-.6 1.1-1.2 2.2-1.2 2.3 0 2.7 1.5 2.7 3.4V13h-2.1V9.2c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V13H7z"
-                    />
-                  </svg>
-                </a>
-                <div className="x-pic">
-                  <Img src="team-cto-kwabena.webp" alt="Kwabena Mawuli, CTO of Afrokan Labs" />
-                </div>
-              </li>
-              <li className="x-arch">
-                <b>Samuel Antwi</b>
-                <span className="x-role">CIO</span>{" "}
-                <a className="x-ln" href="#" aria-label="Samuel Antwi on LinkedIn">
-                  <svg viewBox="0 0 16 16" aria-hidden="true">
-                    <path
-                      fill="currentColor"
-                      d="M3.6 5.6h2.1V13H3.6zM4.6 2.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zM7 5.6h2v1c.3-.6 1.1-1.2 2.2-1.2 2.3 0 2.7 1.5 2.7 3.4V13h-2.1V9.2c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V13H7z"
-                    />
-                  </svg>
-                </a>
-                <div className="x-pic">
-                  <Img src="team-cio-samuel.webp" alt="Samuel Antwi, CIO of Afrokan Labs" />
-                </div>
-              </li>
+              {members.map((m) => {
+                const name = m.name.join(" ");
+                return (
+                  <li className="x-arch" key={name}>
+                    <b>{name}</b>
+                    <span className="x-role">{m.abbr}</span>{" "}
+                    {/* An unconfirmed (TODO_) profile is an inert "#" link until it's set. */}
+                    <a
+                      className="x-ln"
+                      href={confirmed(m.linkedin) ? m.linkedin : "#"}
+                      aria-label={team.linkedinLabel.replace("{name}", name)}
+                    >
+                      <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path
+                          fill="currentColor"
+                          d="M3.6 5.6h2.1V13H3.6zM4.6 2.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zM7 5.6h2v1c.3-.6 1.1-1.2 2.2-1.2 2.3 0 2.7 1.5 2.7 3.4V13h-2.1V9.2c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V13H7z"
+                        />
+                      </svg>
+                    </a>
+                    <div className="x-pic">
+                      <Img src={m.photo.src} alt={m.photo.alt} />
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           </section>
-          <Reviews items={reviewItems()} />
-          <section className="x-ticker" aria-label="What we build">
+          <Reviews copy={home.reviews} items={reviewItems()} />
+          <section className="x-ticker" aria-label={ticker.label}>
             <div className="x-tband">
               <div className="x-tmove">
                 <ul className="x-tlist">
-                  <li>WhatsApp AI</li>
-                  <li>Web Platforms</li>
-                  <li>Workflow Tools</li>
-                  <li>Backend Systems</li>
-                  <li>Chatbots</li>
-                  <li>Dashboards</li>
-                  <li>Websites</li>
+                  {ticker.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
                 </ul>
                 <ul className="x-tlist" aria-hidden="true">
-                  <li>WhatsApp AI</li>
-                  <li>Web Platforms</li>
-                  <li>Workflow Tools</li>
-                  <li>Backend Systems</li>
-                  <li>Chatbots</li>
-                  <li>Dashboards</li>
-                  <li>Websites</li>
+                  {ticker.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -1226,30 +1063,26 @@ export default function HomePage() {
           <section className="x-contact" id="contact" aria-labelledby="contact-new-title">
             <div className="x-contact-text">
               <h2 className="x-h2" id="contact-new-title">
-                Get in Touch Today!
+                {contact.heading}
               </h2>
-              <p>
-                Have a problem in your business we could solve? Whether it&apos;s a WhatsApp
-                assistant, a simple internal tool or a full web platform, leave your email and
-                we&apos;ll reach out within one working day.
-              </p>
+              <p>{contact.body}</p>
               <form className="x-form" id="xform" noValidate>
-                <label htmlFor="x-email">Your email</label>
+                <label htmlFor="x-email">{contact.emailLabel}</label>
                 <input
                   id="x-email"
                   name="email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={contact.emailPlaceholder}
                   autoComplete="email"
                 />
-                <button type="submit">Contact Us</button>
+                <button type="submit">{contact.submit}</button>
               </form>
               <p className="x-formmsg" id="xformmsg" role="status" />
               <a className="x-wa" href={links.whatsapp} {...links.whatsappAttrs}>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <use href="#wa" />
                 </svg>
-                Prefer WhatsApp? Chat with us
+                {contact.whatsapp}
               </a>
             </div>
             <div className="x-cutout x-mapwrap">
@@ -1264,19 +1097,13 @@ export default function HomePage() {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <span>
-                  Based in Accra,
-                  <br />
-                  building for
-                  <br />
-                  all of Ghana
-                </span>
+                <span>{lines(contact.callout)}</span>
               </div>
               <svg
                 className="x-map"
                 viewBox="0 0 311 432"
                 role="img"
-                aria-label="Map of Ghana with Accra marked"
+                aria-label={contact.map.label}
               >
                 <defs>
                   <radialGradient id="mg" cx=".45" cy=".42" r=".7">
@@ -1311,7 +1138,7 @@ export default function HomePage() {
                       fontWeight="500"
                       fill="#fff"
                     >
-                      Accra
+                      {contact.map.pin}
                     </text>
                   </g>
                 </g>

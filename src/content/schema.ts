@@ -227,28 +227,6 @@ export const Process = z.object({
   cta: z.string().min(1),
 });
 
-export const Team = z.object({
-  heading: Heading,
-  join: z.string().min(1),
-  members: z
-    .array(
-      z.object({
-        name: orTodo(z.string().min(1), "a name"),
-        role: orTodo(z.string().min(1), "a role"),
-        bio: orTodo(z.string().min(1).max(220), "a one or two line bio").optional(),
-        linkedin: orTodo(z.url(), "their LinkedIn URL").optional(),
-        photo: z
-          .object({
-            /** Source image in assets/images/; optimised in BUILD_PLAN 2.6. */
-            src: z.string(),
-            alt: z.string().min(10),
-          })
-          .optional(),
-      }),
-    )
-    .min(1),
-});
-
 /** About "Members" (site update 1): real people only, each with a transparent cut-out. */
 export const Members = z
   .array(
@@ -258,6 +236,9 @@ export const Members = z
       abbr: z.string().min(2),
       title: z.string().min(1),
       cutout: z.object({ src: z.string().endsWith(".webp"), alt: z.string().min(10) }),
+      /** The home page's arch portrait. */
+      photo: z.object({ src: z.string().endsWith(".webp"), alt: z.string().min(10) }),
+      linkedin: orTodo(z.url(), "their LinkedIn URL"),
       shape: z.enum(["circles", "triangles", "diamond"]),
     }),
   )
@@ -312,7 +293,6 @@ export type Project = z.infer<typeof Project>;
 export type Site = z.infer<typeof Site>;
 export type Services = z.infer<typeof Services>;
 export type Process = z.infer<typeof Process>;
-export type Team = z.infer<typeof Team>;
 export type Testimonials = z.infer<typeof Testimonials>;
 export type Members = z.infer<typeof Members>;
 export type Reviews = z.infer<typeof Reviews>;
@@ -337,64 +317,146 @@ export const TierCopy = z.object({
 });
 export type TierCopy = z.infer<typeof TierCopy>;
 
+const text = z.string().min(1);
+/** A heading drawn over several lines (the reference breaks with <br>). */
+const Lines = z.array(text).min(1);
+/** A site-relative link or an in-page anchor, e.g. "/services" or "#contact". */
+const Href = z.string().regex(/^(\/(?!\/)|#)/, "Links start with a single / or #");
+const Link = z.object({ label: text, href: Href });
+/** An image in assets/images/ (by file name, as Img takes it) and its alt text. */
+const Photo = z.object({ src: z.string().endsWith(".webp"), alt: z.string().min(10) });
+/** A decorative image: alt is empty on purpose. */
+const Decorative = z.object({ src: z.string().endsWith(".webp"), alt: z.literal("") });
+/** A stat with its unit drawn small, e.g. "3" + "+". */
+const Stat = z.object({ value: text, unit: z.string().optional(), label: text });
+
+/** The home page (site handoff reference/index.html plus site update 1). */
 export const Home = z.object({
-  meta: z.object({ title: z.string().min(1), description: z.string().max(155) }),
+  meta: z.object({ title: text, description: z.string().max(155) }),
   hero: z.object({
-    headline: z.string().min(1),
-    lede: z.string().min(1),
-    /** "Chat with us on WhatsApp": the sticky bar and other full-length CTAs. */
-    primaryCta: z.string().min(1),
-    workLink: z.string().min(1),
-    startProject: z.string().min(1),
-    whatsapp: z.string().min(1),
-    badge: z.object({ title: z.string().min(1), line: z.string().min(1) }),
-    photo: Picture,
+    headline: text,
+    lede: text,
+    workLink: Link,
+    startProject: Link,
+    whatsapp: text,
+    badge: z.object({ big: text, small: text }),
+    /** The phone demo: a made-up conversation for "Your Business", clearly an example. */
+    phone: z.object({
+      label: z.string().min(10),
+      name: text,
+      online: text,
+      typing: text,
+      chat: z.array(z.tuple([z.enum(["in", "out"]), text])).min(2),
+    }),
   }),
-  stats: z.object({
-    label: z.string().min(1),
+  stats: z.object({ label: text, items: z.array(Stat).min(1) }),
+  welcome: z.object({
+    eyebrow: text,
+    headline: z.object({ lead: text, tail: text }),
+    intro: text,
+    team: z.object({
+      eyebrow: text,
+      heading: z.tuple([text, text]),
+      body: text,
+      buttons: z.tuple([Link, Link]),
+    }),
+    mini: z.object({ title: text, cta: Link, image: Decorative }),
+    photo: Photo,
+    stats: z.array(Stat.extend({ note: text })).length(2),
+    stripLabel: text,
+  }),
+  ideas: z.object({
+    eyebrow: text,
+    heading: Lines,
+    body: text,
+    banner: Lines,
+    wide: Photo,
+    tall: Decorative,
+  }),
+  orbit: z.object({
+    eyebrow: text,
+    heading: Heading,
+    body: text,
+    cta: Link,
+    sliders: z.array(z.tuple([text, text])).length(3),
+    /** The text tiles in the orbit animation (decorative, aria-hidden). */
+    tiles: z.object({
+      ai: text,
+      hello: text,
+      always: text,
+      ghana: text,
+      card: z.tuple([text, text]),
+    }),
+  }),
+  services: z.object({
+    side: Lines,
+    heading: Lines,
+    guide: Lines,
+    tag: text,
     items: z
       .array(
         z.object({
-          value: z.string().min(1),
-          suffix: z.string().optional(),
-          label: z.string().min(1),
+          href: Href,
+          /** Three parts: the middle one carries the "00 - n Service" tag. */
+          title: z.tuple([text, text, text]),
+          body: text,
         }),
       )
-      .min(1),
+      .length(4),
+    cta: Link,
   }),
-  ideas: z.object({
-    title: z.string().min(1),
-    body: z.string().min(1),
-    // One entry per line (reference .x-banner breaks after "software").
-    banner: z.array(z.string().min(1)).min(1),
-    wide: Picture,
-    tall: Picture,
-  }),
-  featured: z.object({
-    tab: z.string().min(1),
+  work: z.object({
+    watermark: text,
+    notch: text,
+    tab: text,
     heading: Heading,
-    titles: z.record(z.string(), z.string().min(1)),
-    caseStudyLink: z.string().min(1),
-    whatsappCta: z.string().min(1),
-    fields: z.object({
-      client: z.string().min(1),
-      industry: z.string().min(1),
-      status: z.string().min(1),
-      built: z.string().min(1),
-    }),
-    resultLabel: z.string().min(1),
+    /** Section title per project slug. */
+    titles: z.record(z.string(), text),
+    caseStudy: Link,
+    whatsapp: text,
+    fields: z.object({ client: text, industry: text, status: text, built: text }),
+    builtLabels: z.record(BuiltKind, text),
   }),
-  words: z.object({ label: z.string().min(1), items: z.array(z.string().min(1)).length(3) }),
-  offer: z.object({ title: z.string().min(1), body: z.string().min(1), cta: z.string().min(1) }),
+  words: z.object({ label: text, items: z.array(text).length(3) }),
+  process: z.object({
+    eyebrow: text,
+    heading: Heading,
+    body: text,
+    steps: z.array(z.object({ chip: text, title: text, body: text, link: Link })).length(4),
+    /** Text inside the drawn step visuals (decorative, aria-hidden). */
+    visuals: z.object({
+      gauge: z.object({ value: text, label: text, note: text }),
+      quote: z.object({ total: text, fixed: text }),
+      checklist: z.object({ items: z.tuple([text, text, text]), ready: text }),
+      checkIn: z.object({ title: text, sub: text, progress: text }),
+      handover: z.object({ items: z.tuple([text, text, text]), live: text, launched: text }),
+    }),
+  }),
+  team: z.object({
+    heading: z.object({ first: text, middle: text, brand: text, last: text }),
+    body: text,
+    join: Link,
+    linkedinLabel: text,
+  }),
+  reviews: z.object({
+    eyebrow: text,
+    heading: z.object({ first: text, lead: text, mark: text }),
+    delivered: text,
+    openSlot: text,
+    choose: text,
+    show: text,
+  }),
+  ticker: z.object({ label: text, items: z.array(text).min(3) }),
   contact: z.object({
-    title: z.string().min(1),
-    body: z.string().min(1),
-    emailLabel: z.string().min(1),
-    emailPlaceholder: z.string().min(1),
-    submit: z.string().min(1),
-    invalid: z.string().min(1),
-    whatsapp: z.string().min(1),
-    image: Picture,
+    heading: text,
+    body: text,
+    emailLabel: text,
+    emailPlaceholder: text,
+    submit: text,
+    invalid: text,
+    whatsapp: text,
+    callout: Lines,
+    map: z.object({ label: z.string().min(10), pin: text }),
   }),
 });
 export type Home = z.infer<typeof Home>;

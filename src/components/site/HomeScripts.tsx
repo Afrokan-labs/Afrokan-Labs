@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import type { Home } from "@/content/schema";
 import { CONTACT_PREFILL_KEY } from "@/lib/contact-fields";
 
 const A =
@@ -23,31 +24,36 @@ const WAVE =
 
 type Stack = { x: number; y: number; s: number; r: number; front?: number };
 
+/** Content strings go into innerHTML, so escape them. */
+const esc = (t: string) => t.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
+type Tiles = Home["orbit"]["tiles"];
+
 /** The orbit tiles: class, content, and where each lands when they stack (fractions of the stage). */
-function tiles(founder: string): [string, string, Stack][] {
+function tiles(founder: string, t: Tiles): [string, string, Stack][] {
   return [
     ["o-t-ink", A, { x: 0.2, y: -0.06, s: 0.34, r: 4 }],
     ["o-t-white", WA, { x: -0.24, y: -0.24, s: 0.22, r: -6 }],
     ["o-t-lime", WAVE, { x: -0.2, y: -0.3, s: 0.3, r: -3 }],
     ["o-t-sand", CHAT, { x: 0.24, y: -0.28, s: 0.26, r: 5 }],
     ["o-t-grey", GEAR, { x: 0.3, y: 0.1, s: 0.2, r: -4 }],
-    ["o-t-ink", '<span class="o-word">AI</span>', { x: -0.32, y: 0.06, s: 0.2, r: 6 }],
+    ["o-t-ink", `<span class="o-word">${esc(t.ai)}</span>`, { x: -0.32, y: 0.06, s: 0.2, r: 6 }],
     [
       "o-t-white",
-      '<span class="o-word big" style="color:var(--c-0d0d0d)">Akwaaba.</span>',
+      `<span class="o-word big" style="color:var(--c-0d0d0d)">${esc(t.hello)}</span>`,
       { x: 0, y: 0.04, s: 0.46, r: 0, front: 1 },
     ],
     ["o-t-sage", LIST, { x: -0.12, y: 0.26, s: 0.26, r: -5 }],
     [
       "o-t-ink",
-      '<div class="o-card"><b>Afrokan Labs</b>An AI and software studio in Accra, building tools that fit how Ghanaian businesses already work.</div>',
+      `<div class="o-card"><b>${esc(t.card[0])}</b>${esc(t.card[1])}</div>`,
       { x: -0.08, y: 0.3, s: 0.38, r: 0, front: 2 },
     ],
     ["o-t-white", WEB, { x: 0.3, y: 0.3, s: 0.22, r: 4 }],
     ["o-t-lime", CODE, { x: 0.14, y: 0.36, s: 0.22, r: -4 }],
     [
       "o-t-ink",
-      '<span class="o-word" style="font-size:calc(var(--s)*.22)">24/7</span>',
+      `<span class="o-word" style="font-size:calc(var(--s)*.22)">${esc(t.always)}</span>`,
       { x: -0.34, y: -0.04, s: 0.18, r: 3 },
     ],
     ["o-t-sand", DB, { x: 0.06, y: -0.32, s: 0.2, r: -2 }],
@@ -58,22 +64,29 @@ function tiles(founder: string): [string, string, Stack][] {
     ],
     [
       "o-t-lime",
-      '<span class="o-word" style="font-size:calc(var(--s)*.24)">GH</span>',
+      `<span class="o-word" style="font-size:calc(var(--s)*.24)">${esc(t.ghana)}</span>`,
       { x: -0.3, y: 0.3, s: 0.18, r: -6 },
     ],
     ["o-t-grey", WA, { x: 0.34, y: -0.34, s: 0.16, r: 6 }],
   ];
 }
 
-const CHAT_SCRIPT: ["in" | "out", string][] = [
-  ["out", "Hi, are you open this Saturday?"],
-  ["in", "Yes! We’re open 9am to 2pm on Saturdays. Would you like me to book you a slot?"],
-  ["out", "Yes please, 10am"],
-  ["in", "Done ✅ You’re booked for Saturday at 10am. We’ll send a reminder on Friday."],
-];
+type Props = {
+  chat: Home["hero"]["phone"]["chat"];
+  online: string;
+  typing: string;
+  tiles: Tiles;
+  invalidEmail: string;
+};
 
 /** The home page's scripts from reference/index.html: hero chat loop, orbit, email box. */
-export function HomeScripts() {
+export function HomeScripts({
+  chat: CHAT_SCRIPT,
+  online,
+  typing,
+  tiles: tileCopy,
+  invalidEmail,
+}: Props) {
   useEffect(() => {
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const timers = new Set<ReturnType<typeof setTimeout>>();
@@ -119,14 +132,14 @@ export function HomeScripts() {
           }
           const [kind, text] = CHAT_SCRIPT[i++];
           if (kind === "in") {
-            status.textContent = "typing…";
+            status.textContent = typing;
             const ty = document.createElement("div");
             ty.className = "x-typing";
             ty.innerHTML = "<i></i><i></i><i></i>";
             chat.appendChild(ty);
             later(() => {
               ty.remove();
-              status.textContent = "online";
+              status.textContent = online;
               add("in", text);
               later(step, 1600);
             }, 1300);
@@ -146,7 +159,7 @@ export function HomeScripts() {
     const ring = document.getElementById("oring");
     if (stage && ring) {
       const founder = document.querySelector<HTMLImageElement>(".x-arch img")?.currentSrc ?? "";
-      const T = tiles(founder);
+      const T = tiles(founder, tileCopy);
       ring.innerHTML = "";
       const els = T.map(([cls, html]) => {
         const d = document.createElement("div");
@@ -216,7 +229,7 @@ export function HomeScripts() {
       const msg = document.getElementById("xformmsg");
       const v = input?.value.trim() ?? "";
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
-        if (msg) msg.textContent = "Enter a valid email address, like name@company.com.";
+        if (msg) msg.textContent = invalidEmail;
         input?.focus();
         return;
       }
@@ -234,6 +247,6 @@ export function HomeScripts() {
       cancelAnimationFrame(raf);
       form?.removeEventListener("submit", onSubmit);
     };
-  }, []);
+  }, [CHAT_SCRIPT, online, typing, tileCopy, invalidEmail]);
   return null;
 }
