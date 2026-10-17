@@ -24,7 +24,7 @@ export function getIndexablePaths(): string[] {
   ];
 }
 
-/** "/" -> "/og/home.png", "/work/ese-logistic" -> "/og/work-ese-logistic.png". */
+/** "/" -> "/og/home.png", "/privacy" -> "/og/privacy.png". */
 export function ogImagePath(pagePath: string): string {
   const name = pagePath === "/" ? "home" : pagePath.slice(1).replaceAll("/", "-");
   return `/og/${name}.png`;

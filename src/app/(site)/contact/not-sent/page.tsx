@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ContactResult } from "@/components/forms/ContactResult";
+import { ContactResult } from "@/components/site/ContactResult";
 import { getContactData } from "@/lib/contact";
 
 const { notSent, whatsapp } = getContactData();

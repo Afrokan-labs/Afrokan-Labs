@@ -111,7 +111,7 @@ export const site = {
       resources: {
         title: "Resources",
         links: [
-          { label: "Case study", href: "/work/ese-logistic" },
+          { label: "Case study", href: "/work" },
           { label: "How we work", href: "/#process" },
           { label: "Privacy", href: "/privacy" },
         ],
