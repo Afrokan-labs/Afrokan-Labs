@@ -10,7 +10,15 @@ import {
   TURNSTILE_SCRIPT,
 } from "@/lib/contact-fields";
 
-// window.turnstile is typed in src/components/forms/ContactForm.tsx.
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (el: HTMLElement, options: Record<string, string>) => string;
+      reset: (widgetId: string) => void;
+      remove: (widgetId: string) => void;
+    };
+  }
+}
 
 const NEEDS = [
   "WhatsApp AI assistant",
