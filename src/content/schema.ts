@@ -575,7 +575,10 @@ export const Work = z.object({
       .array(
         z.object({
           mock: z.enum(["phone", "checklist", "website"]),
-          href: Href,
+          /** A page on this site, or the live product (opens in a new tab). */
+          href: Href.or(z.string().url().startsWith("https://")),
+          /** A screenshot of the live product, shown in place of the drawn mock. */
+          screenshot: Photo.optional(),
           label: z.string().min(10),
           title: text,
           tags: text,
@@ -583,6 +586,8 @@ export const Work = z.object({
         }),
       )
       .min(1),
+    /** Added to the label of a card that opens the live product. */
+    newTab: text,
     open: z.object({ href: Href, title: text, cta: text, name: text, tags: text }),
     /** Text drawn inside the mock screens (decorative, aria-hidden). */
     mocks: z.object({

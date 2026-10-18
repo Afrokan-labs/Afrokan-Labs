@@ -2268,6 +2268,12 @@ html {
   border-radius: 20px;
 }
 
+/* A screenshot of the live product in place of the drawn mock. */
+.w-mock.w-real {
+  display: block;
+  height: auto;
+}
+
 .w-shot:hover .w-bg {
   transform: scale(1.05);
 }

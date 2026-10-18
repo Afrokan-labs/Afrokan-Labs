@@ -72,7 +72,7 @@ const PHONE_MOCK = (
 export default function WorkPage() {
   const { hero, approach, cases } = getWork();
   const { checklist, website } = cases.mocks;
-  // The drawn mock for each case card (decorative; real screenshots stay off the site).
+  // The drawn mock for a case card without a screenshot (decorative).
   const CHECKLIST_MOCK = (
     <svg className="w-mock" viewBox="0 0 420 280" aria-hidden="true">
       <rect width="420" height="280" rx="10" fill="#fff" />
@@ -271,18 +271,42 @@ export default function WorkPage() {
               <span>{cases.year}</span>
             </div>
             <ul className="w-grid">
-              {cases.items.map((item) => (
-                <li className="w-card" key={item.title}>
-                  <a className="w-shot" href={item.href} aria-label={item.label}>
-                    <Img src={item.background.src} className="w-bg" alt={item.background.alt} />{" "}
-                    {MOCKS[item.mock]}
-                  </a>
-                  <div className="w-meta">
-                    <h3>{item.title}</h3>
-                    <span>{item.tags}</span>
-                  </div>
-                </li>
-              ))}
+              {cases.items.map((item) => {
+                // A live product opens in a new tab; site pages open in place.
+                const external = item.href.startsWith("https://");
+                return (
+                  <li className="w-card" key={item.title}>
+                    <a
+                      className="w-shot"
+                      href={item.href}
+                      aria-label={external ? `${item.label} ${cases.newTab}` : item.label}
+                      {...(external && { target: "_blank", rel: "noopener" })}
+                    >
+                      <Img src={item.background.src} className="w-bg" alt={item.background.alt} />{" "}
+                      {item.screenshot ? (
+                        <Img
+                          src={item.screenshot.src}
+                          className={
+                            item.mock === "phone" ? "w-mock w-real phone" : "w-mock w-real"
+                          }
+                          sizes={
+                            item.mock === "phone"
+                              ? "(max-width: 760px) 30vw, 200px"
+                              : "(max-width: 760px) 62vw, 420px"
+                          }
+                          alt={item.screenshot.alt}
+                        />
+                      ) : (
+                        MOCKS[item.mock]
+                      )}
+                    </a>
+                    <div className="w-meta">
+                      <h3>{item.title}</h3>
+                      <span>{item.tags}</span>
+                    </div>
+                  </li>
+                );
+              })}
               <li className="w-card w-open">
                 <a className="w-shot" href={cases.open.href}>
                   <span className="w-open-in">

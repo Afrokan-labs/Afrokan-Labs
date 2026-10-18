@@ -3,7 +3,8 @@ import type { Work } from "./schema";
 
 /**
  * Work page copy. Source: the site handoff's reference/work.html (approved).
- * The case cards show drawn mocks, not screenshots (decided 2026-10-17, TODO.md).
+ * The case cards link to ESE's live pages and show screenshots of them (2026-10-18,
+ * replacing the drawn mocks; ESE approved naming and screenshots in writing).
  */
 export const work = {
   meta: { title: "Work" },
@@ -46,7 +47,11 @@ export const work = {
     items: [
       {
         mock: "phone",
-        href: "/#work",
+        href: "https://eselogisticssolutions.com/assistant",
+        screenshot: {
+          src: "work-ese-assistant.webp",
+          alt: "ESE's assistant page on a phone: a customer asks which documents clear cosmetics, and the assistant answers",
+        },
         label: "ESE Logistic WhatsApp AI assistant",
         title: "ESE Logistic: WhatsApp AI assistant",
         tags: "AI · WhatsApp · Logistics",
@@ -54,7 +59,11 @@ export const work = {
       },
       {
         mock: "checklist",
-        href: "/#work",
+        href: "https://eselogisticssolutions.com/tools/document-checklist?entry=acc",
+        screenshot: {
+          src: "work-ese-checklist.webp",
+          alt: "ESE's document checklist with Vehicles & spare parts picked, listing the documents needed at Accra airport",
+        },
         label: "ESE Logistic document checklist generator",
         title: "ESE Logistic: Checklist generator",
         tags: "Workflow tool · Internal",
@@ -62,13 +71,18 @@ export const work = {
       },
       {
         mock: "website",
-        href: "/#work",
+        href: "https://eselogisticssolutions.com/",
+        screenshot: {
+          src: "work-ese-website.webp",
+          alt: 'The ESE Logistics home page: "The world, delivered responsibly" over a cargo plane being loaded',
+        },
         label: "ESE Logistic website",
         title: "ESE Logistic: Company website",
         tags: "Web platform · Marketing",
         background: { src: "work-bg-skyline.webp", alt: "" },
       },
     ],
+    newTab: "(opens in a new tab)",
     open: {
       href: "/contact",
       title: "Your project could be next",
