@@ -206,7 +206,7 @@ const SETTLE = `new Promise((resolve) => {
 })`;
 
 /**
- * Waits for finite animations to end (the body's fx-enter fade). Mid-fade, axe
+ * Waits for finite animations to end (the reveals' fades). Mid-fade, axe
  * measures blended colours and reports contrast failures the page doesn't have.
  * Infinite loops (hero burst, ticker) are left running.
  */

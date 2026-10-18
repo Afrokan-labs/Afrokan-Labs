@@ -4576,20 +4576,8 @@ html {
 
 /* ---------- MOTION EFFECTS (reveals, page transitions, expanding arches) ---------- */
 @media (prefers-reduced-motion: no-preference) {
-  body {
-    animation: fx-enter 0.55s ease-out both;
-  }
-
-  @keyframes fx-enter {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
+  /* No fade-in on arrival: a page that starts at opacity 0 hides its first
+     paint from Lighthouse (NO_FCP) and delays LCP. The fade-out on leaving stays. */
   html.fx-leave body {
     opacity: 0;
     transition: opacity 0.28s ease-in;
