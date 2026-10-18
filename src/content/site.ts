@@ -16,8 +16,8 @@ export const site = {
 
   // Confirmed 2026-10-17 (059 606 9011), the number for now.
   whatsappNumber: "+233596069011",
-  // Contact form success line: "we'll reply within [X hours] on weekdays".
-  replyWithin: "TODO_REPLY_HOURS",
+  // Contact form success line: "we'll reply within [X hours]".
+  replyWithin: "24 hours",
 
   whatsappPrefill: {
     default: "Hi Afrokan Labs, I run a [type of business] and I'd like to talk about…",

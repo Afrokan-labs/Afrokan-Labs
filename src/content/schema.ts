@@ -117,7 +117,7 @@ export const Site = z.object({
     z.string().regex(/^\+[1-9]\d{7,14}$/),
     "an E.164 number such as +233201234567",
   ),
-  /** Fills the contact form's "we'll reply within ___ on weekdays". */
+  /** Fills the contact form's "we'll reply within ___". */
   replyWithin: orTodo(z.string().min(1), 'a reply time such as "4 hours"'),
   /**
    * Prefilled WhatsApp messages. Brackets are prompts for the visitor and ship as written.

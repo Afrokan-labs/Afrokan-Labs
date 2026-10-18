@@ -17,9 +17,8 @@ export const contact = {
     whatsapp: "Chat on WhatsApp",
     closeLabel: "Close and go back home",
     heading: "Contact us",
-    // TODO_CONFIRM_REPLY_TIME: "within one working day" (TODO.md "Copy to confirm").
     intro:
-      "Interested in working with us? Fill in the form below and we'll get back to you within one working day.",
+      "Interested in working with us? Fill in the form below and we'll get back to you within 24 hours.",
     direct: { email: "Email", based: "Based in" },
   },
   form: {
@@ -51,14 +50,14 @@ export const contact = {
     privacyNote: "We only use your details to reply to you.",
     submit: "Submit",
     sending: "Sending…",
-    sent: "Thanks, we’ll be in touch within one working day.",
+    sent: "Thanks, we’ll be in touch within 24 hours.",
     failed: "Something went wrong. Email {email} instead.",
     messageLines: { company: "Company", phone: "WhatsApp", needs: "Needs" },
   },
   whatsappCta: "Chat with us on WhatsApp",
   success: {
     title: "Message sent",
-    body: "Thanks — we'll reply within {replyWithin} on weekdays.",
+    body: "Thanks — we'll reply within {replyWithin}.",
     bodyUnconfirmed: "Thanks — we'll reply as soon as we can.",
   },
   notSent: {

@@ -97,8 +97,8 @@ export const legal = {
         title: "How long we keep it",
         blocks: [
           {
-            // TODO_CONFIRM_RETENTION: 24 months (TODO.md "Privacy").
-            p: "We keep enquiry details for up to 24 months after our last contact, and project records for as long as needed to support the work and meet legal and tax obligations. After that we delete or anonymise them.",
+            // Retention follows Act 843 instead of a fixed period (decided 2026-10-18).
+            p: "As the Data Protection Act, 2012 (Act 843) requires, we keep personal information only for as long as we need it for the purpose we collected it for, unless the law or a contract requires us to keep it longer, or you agree that we can. Project records, for example, are kept for as long as needed to support the work and meet legal and tax obligations. After that we delete or anonymise them.",
           },
         ],
       },
