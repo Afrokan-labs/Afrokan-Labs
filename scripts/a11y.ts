@@ -205,7 +205,20 @@ const SETTLE = `new Promise((resolve) => {
   tick();
 })`;
 
+/**
+ * Waits for finite animations to end (the body's fx-enter fade). Mid-fade, axe
+ * measures blended colours and reports contrast failures the page doesn't have.
+ * Infinite loops (hero burst, ticker) are left running.
+ */
+const ANIMATIONS_DONE = `Promise.race([
+  Promise.all(document.getAnimations()
+    .filter((a) => a.effect && a.effect.getComputedTiming().endTime !== Infinity)
+    .map((a) => a.finished.catch(() => 0))),
+  new Promise((r) => setTimeout(r, 3000)),
+]).then(() => 0)`;
+
 async function axe(cdp: Cdp): Promise<AxeViolation[]> {
+  await cdp.ev(ANIMATIONS_DONE);
   if (!(await cdp.ev<boolean>("typeof window.axe === 'object'"))) await cdp.ev(AXE_SOURCE + ";0");
   return cdp.ev<AxeViolation[]>(
     `axe.run(document, { resultTypes: ["violations"] }).then((r) => r.violations.map((v) => ({

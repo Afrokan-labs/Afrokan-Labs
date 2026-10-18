@@ -22,7 +22,7 @@ export function Footer() {
         </a>
         <div className="f-cols">
           <div className="f-col f-nav">
-            <h3>Navigation</h3>
+            <h2>Navigation</h2>
             <ul>
               {NAV.all.map((l) => (
                 <li key={l.href}>
@@ -32,7 +32,7 @@ export function Footer() {
             </ul>
           </div>
           <div className="f-col">
-            <h3>Socials</h3>
+            <h2>Socials</h2>
             <ul>
               <li>
                 <a href={links.linkedin}>LinkedIn</a>
@@ -51,7 +51,7 @@ export function Footer() {
             </ul>
           </div>
           <div className="f-col">
-            <h3>Contact</h3>
+            <h2>Contact</h2>
             <ul>
               <li>
                 <a href={links.mailto}>{links.email}</a>
@@ -76,7 +76,7 @@ export function Footer() {
             </p>
           </div>
           <div className="f-time">
-            <h3>Local time</h3>
+            <h2>Local time</h2>
             <span id="ftime">Accra, GMT+0</span>
           </div>
           <a className="f-top" href="#top" aria-label="Back to top">

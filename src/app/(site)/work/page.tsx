@@ -249,9 +249,9 @@ export default function WorkPage() {
         </div>
         <div className="x-wrap">
           <section className="w-phil" aria-labelledby="phil-title">
-            <span className="w-label" id="phil-title">
+            <h2 className="w-label" id="phil-title">
               {approach.label}
-            </span>
+            </h2>
             <p className="w-statement">{approach.statement}</p>
             <div className="w-cols">
               {approach.cols.map((col) => (

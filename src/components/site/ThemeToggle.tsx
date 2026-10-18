@@ -4,7 +4,8 @@
  */
 export function ThemeToggle() {
   return (
-    <div className="x-theme" role="group" aria-label="Colour theme">
+    // An <aside> landmark, so the fixed switch isn't content outside every landmark.
+    <aside className="x-theme" aria-label="Colour theme">
       <button type="button" data-t="dark" aria-pressed="true">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="currentColor" />
@@ -23,7 +24,7 @@ export function ThemeToggle() {
         </svg>
         Light
       </button>
-    </div>
+    </aside>
   );
 }
 
