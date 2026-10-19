@@ -14,6 +14,7 @@ export const home = {
   },
   hero: {
     headline: "Software built for how Ghanaian businesses actually work",
+    bigWord: "AFROKAN",
     lede: "WhatsApp AI assistants, workflow tools and web platforms for growing businesses. Tell us what slows your team down and we'll build around it.",
     workLink: { label: "See our work", href: "#work" },
     startProject: { label: "Start your project", href: "#contact" },
@@ -78,6 +79,7 @@ export const home = {
     stripLabel: "Industries we build for",
   },
   ideas: {
+    badge: "AI · SOFTWARE · ACCRA · GHANA · BUILT FOR GHANA ·",
     eyebrow: "Who we are",
     heading: ["Turning ideas into", "working software"],
     body: "We may be a small team, but we scope, build and support every project ourselves. Working hand-in-hand with you, we turn the problems that slow your business down into tools your staff and customers actually use.",
@@ -216,17 +218,15 @@ export const home = {
     choose: "Choose a client",
     show: "Show {name}",
   },
-  ticker: {
-    label: "What we build",
-    items: [
-      "WhatsApp AI",
-      "Web Platforms",
-      "Workflow Tools",
-      "Backend Systems",
-      "Chatbots",
-      "Dashboards",
-      "Websites",
-    ],
+  project: {
+    heading: { lead: "Start your project", mark: "journey" },
+    // "Free first call" restates the GH₵0 first call (TODO.md "Copy to confirm").
+    steps: ["Free first call", "Written plan & price", "We build, you watch"],
+    start: { label: "Start your project", href: "/contact" },
+    whatsapp: "Chat on WhatsApp",
+    word: "BUILD",
+    chip: ["The team who", "scopes it builds it"],
+    badge: "LET'S BUILD · LET'S BUILD · LET'S BUILD ·",
   },
   contact: {
     heading: "Get in Touch Today!",

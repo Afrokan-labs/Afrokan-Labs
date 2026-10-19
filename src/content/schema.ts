@@ -117,6 +117,11 @@ export const Site = z.object({
     z.string().regex(/^\+[1-9]\d{7,14}$/),
     "an E.164 number such as +233201234567",
   ),
+  /**
+   * The home project banner's status pill (update 2 §5), e.g. "Taking new
+   * projects this month". Empty hides the pill.
+   */
+  availability: z.string(),
   /** Fills the contact form's "we'll reply within ___". */
   replyWithin: orTodo(z.string().min(1), 'a reply time such as "4 hours"'),
   /**
@@ -178,8 +183,18 @@ export const Site = z.object({
   }),
   /** Header pill: two links each side of the logo. */
   nav: z.object({ items: z.array(NavLink).length(4), cta: z.string().min(1) }),
-  /** Tilted ticker keywords (homepage-copy-v2 §10). */
-  ticker: z.object({ label: z.string().min(1), items: z.array(z.string().min(1)).min(3) }),
+  /** The home page's crossing bands (update 2 §3): each item with its line icon. */
+  ticker: z.object({
+    label: z.string().min(1),
+    items: z
+      .array(
+        z.object({
+          label: z.string().min(1),
+          icon: z.enum(["chat", "browser", "checklist", "database", "chart", "bot"]),
+        }),
+      )
+      .min(3),
+  }),
   footer: z.object({
     blurb: z.string().min(1),
     columns: z.object({
@@ -313,6 +328,8 @@ export const Home = z.object({
   meta: z.object({ title: text, description: z.string().max(155) }),
   hero: z.object({
     headline: text,
+    /** Update 2 §2: the giant outlined word behind the hero card (decorative). */
+    bigWord: text,
     lede: text,
     workLink: Link,
     startProject: Link,
@@ -344,6 +361,8 @@ export const Home = z.object({
     stripLabel: text,
   }),
   ideas: z.object({
+    /** Update 2 §4: the words round the rotating badge at the section's top right. */
+    badge: text,
     eyebrow: text,
     heading: Lines,
     body: text,
@@ -424,7 +443,21 @@ export const Home = z.object({
     choose: text,
     show: text,
   }),
-  ticker: z.object({ label: text, items: z.array(text).min(3) }),
+  /** Update 2 §5: "Start your project journey", just before Get in Touch. */
+  project: z.object({
+    /** "Start your project" then the tilted green word. */
+    heading: z.object({ lead: text, mark: text }),
+    /** The three numbered step pills. */
+    steps: z.array(text).length(3),
+    start: Link,
+    whatsapp: text,
+    /** The giant outlined word behind the team (decorative). */
+    word: text,
+    /** The white chip over the photo, in two lines. */
+    chip: Lines,
+    /** The words round the black rotating badge. */
+    badge: text,
+  }),
   contact: z.object({
     heading: text,
     body: text,

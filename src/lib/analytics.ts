@@ -20,6 +20,7 @@ export type WhatsAppLocation =
   | "services"
   | "process"
   | "contact"
+  | "project-banner"
   | "sticky"
   | "case-study"
   | "footer";

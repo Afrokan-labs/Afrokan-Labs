@@ -1,12 +1,15 @@
 import "@/styles/pages/home.css";
 import { Fragment } from "react";
 import { Img } from "@/components/site/Img";
+import { LogoMark, WaIcon } from "@/components/site/LogoMark";
 import { Eyebrow } from "@/components/site/Eyebrow";
 import { HomeScripts } from "@/components/site/HomeScripts";
 import { Nav } from "@/components/site/Nav";
 import { Reviews } from "@/components/site/Reviews";
+import { RotatingBadge } from "@/components/site/RotatingBadge";
 import { WelcomeBlock } from "@/components/site/WelcomeBlock";
 import { JsonLd } from "@/components/seo/JsonLd";
+import type { Site } from "@/content/schema";
 import {
   clientDisplayName,
   getHome,
@@ -19,9 +22,42 @@ import {
 import { confirmed } from "@/lib/confirmed";
 import { getImage, imageUrl } from "@/lib/images";
 import { getLinks } from "@/lib/links";
+import { whatsappTextLink } from "@/lib/whatsapp";
 import { organizationJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({ path: "/", ...getHome().meta });
+
+/** The crossing bands' line icons (update 2 §3, reference .xb). */
+const BAND_ICONS: Record<Site["ticker"]["items"][number]["icon"], React.ReactNode> = {
+  chat: (
+    <path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />
+  ),
+  browser: (
+    <>
+      <rect x="3" y="4" width="18" height="16" rx="2.5" />
+      <path d="M3 9h18" />
+    </>
+  ),
+  checklist: (
+    <>
+      <rect x="5" y="3" width="14" height="18" rx="2" />
+      <path d="M8 9l1.5 1.5L12 8M8 14l1.5 1.5L12 13M14 9.5h2M14 14.5h2" />
+    </>
+  ),
+  database: (
+    <>
+      <ellipse cx="12" cy="6" rx="7" ry="3" />
+      <path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3" />
+    </>
+  ),
+  chart: <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />,
+  bot: (
+    <>
+      <rect x="5" y="8" width="14" height="11" rx="4" />
+      <path d="M12 8V4M9 13h.01M15 13h.01" />
+    </>
+  ),
+};
 
 /** Where each orbit slider's knob starts (reference); HomeScripts moves them. */
 const SLIDER_START = [".15", ".55", ".1"];
@@ -47,14 +83,44 @@ function reviewItems() {
 
 export default function HomePage() {
   const links = getLinks();
+  const members = getMembers();
   const home = getHome();
-  const { hero, welcome, ideas, orbit, services, work, words, process, team, ticker, contact } =
-    home;
+  const {
+    hero,
+    welcome,
+    ideas,
+    orbit,
+    services,
+    work,
+    words,
+    process,
+    team,
+    project: banner,
+    contact,
+  } = home;
+  const site = getSite();
+  const ticker = site.ticker;
+  // Tracked under its own location; like links.whatsapp, only the data-* attributes.
+  const { href: bannerWaHref, ...bannerWa } = whatsappTextLink({ location: "project-banner" });
+  const bannerWaAttrs = Object.fromEntries(
+    Object.entries(bannerWa).filter(([k]) => k.startsWith("data-")),
+  );
+  // The banner's team, by role: CTO left, CIO right, CEO centre and in front.
+  const byRole = (abbr: string) => members.find((m) => m.abbr === abbr);
+  const bannerTeam = [
+    { cls: "p1", member: byRole("CTO") },
+    { cls: "p3", member: byRole("CIO") },
+    { cls: "p2", member: byRole("CEO") },
+  ];
+  // Band 2 runs the list the other way; the chip colours cycle c0–c3 in each band.
+  const bands = [
+    { cls: "b1", items: ticker.items },
+    { cls: "b2", items: [...ticker.items].reverse() },
+  ];
   const v = process.visuals;
   // Featured work (architecture §4): omitted without a featured project, and the
   // client's real name only when approved.
   const project = getProjects().find((p) => p.featured);
-  const members = getMembers();
   return (
     <>
       <JsonLd data={organizationJsonLd()} />
@@ -68,6 +134,9 @@ export default function HomePage() {
       <div className="x x-glow">
         <div className="x-wrap x-hero-wrap">
           <div className="x-hero" id="top">
+            <div className="x-bigword" aria-hidden="true">
+              {hero.bigWord}
+            </div>
             <Nav logoHref="#top" />
             <div className="x-h1-row">
               <svg className="x-burst" viewBox="0 0 100 100" aria-hidden="true">
@@ -201,6 +270,7 @@ export default function HomePage() {
           </div>
           <WelcomeBlock copy={welcome} industries={getSite().industries} />
           <section className="x-ideas" id="ideas" aria-labelledby="ideas-title">
+            <RotatingBadge className="rbadge" text={ideas.badge} />
             <div className="x-ideas-head">
               <Eyebrow block>{ideas.eyebrow}</Eyebrow>
               <h2 className="x-h2" id="ideas-title">
@@ -1044,20 +1114,102 @@ export default function HomePage() {
             </ul>
           </section>
           <Reviews copy={home.reviews} items={reviewItems()} />
-          <section className="x-ticker" aria-label={ticker.label}>
-            <div className="x-tband">
-              <div className="x-tmove">
-                <ul className="x-tlist">
-                  {ticker.items.map((item) => (
-                    <li key={item}>{item}</li>
+          <section
+            className="xb"
+            aria-label={`${ticker.label}: ${ticker.items.map((i) => i.label).join(", ")}`}
+          >
+            {bands.map((band) => (
+              <div className={`xb-band ${band.cls}`} key={band.cls}>
+                <div className="xb-move">
+                  {/* The list twice, for a seamless loop; the copy is hidden. */}
+                  {[false, true].map((copy) => (
+                    <ul key={String(copy)} aria-hidden={copy || undefined}>
+                      {band.items.map((item, i) => (
+                        <li className={`c${i % 4}`} key={item.label}>
+                          {item.label}
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <g
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              {BAND_ICONS[item.icon]}
+                            </g>
+                          </svg>
+                        </li>
+                      ))}
+                    </ul>
                   ))}
-                </ul>
-                <ul className="x-tlist" aria-hidden="true">
-                  {ticker.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
+                </div>
               </div>
+            ))}
+          </section>
+          <section className="bb2" aria-labelledby="bb-title">
+            <div className="bb2-text">
+              {site.availability && (
+                <span className="bb2-eye">
+                  <i />
+                  {site.availability}
+                </span>
+              )}
+              <h2 id="bb-title">
+                {banner.heading.lead} <span className="bb2-hl">{banner.heading.mark}</span>
+              </h2>
+              <ol className="bb2-steps">
+                {banner.steps.map((step, i) => (
+                  <li key={step}>
+                    <b>{String(i + 1).padStart(2, "0")}</b>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+              <div className="bb2-btns">
+                <a className="bb2-btn g" href={banner.start.href}>
+                  {banner.start.label}
+                  <span>
+                    <svg viewBox="0 0 16 16" aria-hidden="true">
+                      <path
+                        d="M4 12 12 4M5.5 4H12v6.5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.9"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </a>
+                <a className="bb2-btn o" href={bannerWaHref} {...bannerWaAttrs}>
+                  <WaIcon />
+                  {banner.whatsapp}
+                </a>
+              </div>
+            </div>
+            <div className="bb2-vis">
+              <div className="bb2-word" aria-hidden="true">
+                {banner.word}
+              </div>
+              {bannerTeam.map(
+                ({ cls, member }) =>
+                  member && (
+                    <Img
+                      key={cls}
+                      src={member.cutout.src}
+                      className={cls}
+                      sizes="(max-width: 860px) 45vw, 300px"
+                      alt={member.cutout.alt}
+                    />
+                  ),
+              )}
+              <div className="bb2-chip">
+                <span>
+                  <LogoMark />
+                </span>
+                <b>{lines(banner.chip)}</b>
+              </div>
+              <RotatingBadge className="bb2-badge" text={banner.badge} tone="black" radius={72} />
             </div>
           </section>
           <section className="x-contact" id="contact" aria-labelledby="contact-new-title">

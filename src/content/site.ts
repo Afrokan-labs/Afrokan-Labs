@@ -18,6 +18,8 @@ export const site = {
   whatsappNumber: "+233596069011",
   // Contact form success line: "we'll reply within [X hours]".
   replyWithin: "24 hours",
+  // The home project banner's status pill (update 2 §5). Set to "" to hide it.
+  availability: "Taking new projects this month",
 
   whatsappPrefill: {
     default: "Hi Afrokan Labs, I run a [type of business] and I'd like to talk about…",
@@ -87,17 +89,16 @@ export const site = {
     cta: "Chat with us on WhatsApp",
   },
 
-  // homepage-copy-v2 §10.
+  // The home page's crossing bands (update 2 §3). Band 2 runs the list in reverse.
   ticker: {
     label: "What we build",
     items: [
-      "WhatsApp AI",
-      "Web Platforms",
-      "Workflow Tools",
-      "Backend Systems",
-      "Chatbots",
-      "Dashboards",
-      "Websites",
+      { label: "WhatsApp AI", icon: "chat" },
+      { label: "Web platforms", icon: "browser" },
+      { label: "Workflow tools", icon: "checklist" },
+      { label: "Backend systems", icon: "database" },
+      { label: "Dashboards", icon: "chart" },
+      { label: "Chatbots", icon: "bot" },
     ],
   },
 
