@@ -98,6 +98,7 @@ export function HomeScripts({
       timers.add(id);
     };
     let raf = 0;
+    let stopOrbit = () => {};
 
     // Hero phone: customer asks, AI types and replies, booking confirmed, loop.
     const chat = document.getElementById("wachat");
@@ -175,7 +176,40 @@ export function HomeScripts({
       let phaseT = 0;
       let last = performance.now();
       let knobTick = -1;
+      // The stage's width comes from a ResizeObserver: reading clientWidth in
+      // every frame forced a layout per frame, right after the last frame's writes.
+      let W = stage.clientWidth;
+      const sized = new ResizeObserver(() => (W = stage.clientWidth));
+      sized.observe(stage);
+      // Frames run only while the orbit is on screen; off screen they laid out
+      // the page ~60 times a second for nothing, from the first second of load.
+      // One frame is ever queued (pending), so the observer and the loop can't
+      // start two chains and spin the ring at double speed.
+      let visible = false;
+      let pending = false;
+      const schedule = () => {
+        if (pending) return;
+        pending = true;
+        raf = requestAnimationFrame(frame);
+      };
+      const seen = new IntersectionObserver(([entry]) => {
+        const was = visible;
+        visible = entry.isIntersecting;
+        if (visible && !was) {
+          last = performance.now();
+          schedule();
+        } else if (!visible) {
+          cancelAnimationFrame(raf);
+          pending = false;
+        }
+      });
+      seen.observe(stage);
+      stopOrbit = () => {
+        sized.disconnect();
+        seen.disconnect();
+      };
       const frame = (now: number) => {
+        pending = false;
         const dt = Math.min(0.05, (now - last) / 1000);
         last = now;
         if (!reduce) {
@@ -186,7 +220,6 @@ export function HomeScripts({
         const target = phaseT % 9.2 > 6 ? 1 : 0;
         mix += (target - mix) * Math.min(1, dt * 2.6);
         stage.classList.toggle("stacked", mix > 0.5);
-        const W = stage.clientWidth;
         const R = W * 0.4;
         const n = els.length;
         const m = ease(Math.max(0, Math.min(1, mix)));
@@ -215,9 +248,10 @@ export function HomeScripts({
           knobTick = Math.floor(now / 1600);
           knobs.forEach((k) => k.style.setProperty("--p", (Math.random() * 0.8 + 0.1).toFixed(2)));
         }
-        if (!reduce) raf = requestAnimationFrame(frame);
+        if (!reduce && visible) schedule();
       };
-      raf = requestAnimationFrame(frame);
+      // One frame now places the tiles; the observer starts the loop on screen.
+      schedule();
     }
 
     // Email box: validate, then carry the address to the /contact form
@@ -245,6 +279,7 @@ export function HomeScripts({
     return () => {
       timers.forEach(clearTimeout);
       cancelAnimationFrame(raf);
+      stopOrbit();
       form?.removeEventListener("submit", onSubmit);
     };
   }, [CHAT_SCRIPT, online, typing, tileCopy, invalidEmail]);

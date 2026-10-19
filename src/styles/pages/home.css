@@ -4619,9 +4619,9 @@ html {
     transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s;
   }
 
-  .x-hero .x-h1,
+  /* The hero headline and portrait (the LCP candidates) don't animate in, so
+     they paint in the first frame; the rest of the hero still rises in. */
   .x-hero .x-left,
-  .x-hero .x-photo,
   .x-hero .x-right,
   .x-stats,
   .s-hero > *,
@@ -4637,7 +4637,6 @@ html {
     animation-delay: 0.12s;
   }
 
-  .x-hero .x-photo,
   .s-hero > :nth-child(3) {
     animation-delay: 0.2s;
   }
