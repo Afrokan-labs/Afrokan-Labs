@@ -2011,9 +2011,59 @@ html {
 }
 
 .sol-art {
+  position: relative;
+  aspect-ratio: 1200 / 760;
+  overflow: hidden;
+}
+
+.sol-layer,
+.sol-photo {
+  position: absolute;
   display: block;
+}
+
+.sol-layer {
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+}
+
+/* Each photo sits where its <image> sat in the 1200×760 artwork (as % of it)
+   and is clipped to its wedge; object-fit: cover is preserveAspectRatio slice. */
+.sol-photo {
+  object-fit: cover;
+}
+
+.sol-ph0 {
+  left: calc(24 / 1200 * 100%);
+  top: calc(-8 / 760 * 100%);
+  width: calc(384 / 1200 * 100%);
+  height: calc(136 / 760 * 100%);
+  clip-path: url("#sol-w0");
+}
+
+.sol-ph1 {
+  left: calc(336 / 1200 * 100%);
+  top: calc(-8 / 760 * 100%);
+  width: calc(768 / 1200 * 100%);
+  height: calc(328 / 760 * 100%);
+  clip-path: url("#sol-w1");
+}
+
+.sol-ph2 {
+  left: calc(544 / 1200 * 100%);
+  top: calc(-8 / 760 * 100%);
+  width: calc(656 / 1200 * 100%);
+  height: calc(648 / 760 * 100%);
+  clip-path: url("#sol-w2");
+}
+
+.sol-ph3 {
+  left: calc(568 / 1200 * 100%);
+  top: calc(592 / 760 * 100%);
+  width: calc(632 / 1200 * 100%);
+  height: calc(168 / 760 * 100%);
+  clip-path: url("#sol-w3");
 }
 
 .sol-pill text {
