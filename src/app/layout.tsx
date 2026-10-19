@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Archivo, Instrument_Serif, Lexend, Unbounded } from "next/font/google";
+import { Instrument_Serif, Lexend } from "next/font/google";
+import localFont from "next/font/local";
 import "@/styles/tokens.css";
 import "@/styles/site.css";
 import { Footer } from "@/components/site/Footer";
@@ -20,20 +21,29 @@ const lexend = Lexend({
   variable: "--nf-lexend",
   fallback: ["Segoe UI", "system-ui", "sans-serif"],
 });
-// "Innovate ✦ Inspire ✦ Create" and the 01–04 badges.
-const unbounded = Unbounded({
-  subsets: ["latin"],
-  weight: ["700", "800"],
+// "Innovate ✦ Inspire ✦ Create" and the 01–05 badges: only digits and those
+// letters, so a 10 KB subset (src/lib/fonts.ts) instead of the 51 KB latin file.
+// Licence: src/app/fonts/Unbounded-OFL.txt.
+const unbounded = localFont({
+  src: "./fonts/unbounded-subset.woff2",
+  weight: "700 800",
   display: "swap",
   preload: false,
   variable: "--nf-unbounded",
   fallback: ["Arial Black", "system-ui", "sans-serif"],
 });
-// Footer "GET IN TOUCH" and "© 2026 AFROKAN LABS", plus the home page's plain
-// h2s (reference: Archivo at font-stretch 125%), so variable with its width axis.
-const archivo = Archivo({
-  subsets: ["latin"],
-  axes: ["wdth"],
+// Footer "GET IN TOUCH" and "© 2026 AFROKAN LABS" (800, normal width), plus the
+// home page's plain h2s (400 and 600 at font-stretch 125%). Each weight is used
+// at one width only, so these are static instances cut from Google Fonts'
+// variable latin Archivo with fontTools (~14 KB each, against 90 KB for the
+// variable file); a page downloads only the weights it uses. 400 and 600 are
+// the 125%-wide cuts. Licence: src/app/fonts/Archivo-OFL.txt.
+const archivo = localFont({
+  src: [
+    { path: "./fonts/archivo-400-125.woff2", weight: "400" },
+    { path: "./fonts/archivo-600-125.woff2", weight: "600" },
+    { path: "./fonts/archivo-800-100.woff2", weight: "800" },
+  ],
   display: "swap",
   preload: false,
   variable: "--nf-archivo",
