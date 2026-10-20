@@ -152,7 +152,7 @@ export default function ServicesPage() {
               </ul>
               <div className="sd-panels">
                 {items.map((item, i) => (
-                  <article
+                  <div
                     className="sd-panel"
                     role="tabpanel"
                     id={`svc-${i + 1}`}
@@ -198,7 +198,7 @@ export default function ServicesPage() {
                         </a>
                       </div>
                     </div>
-                  </article>
+                  </div>
                 ))}
               </div>
             </div>
