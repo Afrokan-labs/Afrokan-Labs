@@ -555,6 +555,42 @@ export const Services = z.object({
 });
 export type Services = z.infer<typeof Services>;
 
+/** Update 2 §6: "Our packages" and the CEO line on Services, before the closing box. No prices. */
+export const Packages = z.object({
+  heading: text,
+  note: text,
+  /** The second line of every card title: "Starter" / "package". */
+  suffix: text,
+  href: Href,
+  items: z
+    .array(
+      z.object({
+        name: text,
+        /** The filled green card. */
+        featured: z.boolean(),
+        for: text,
+        /** Joined with " · " on the card. */
+        includes: z.array(text).min(1),
+        /** The drawing on the card's bottom tab. */
+        art: z.enum(["site", "whatsapp", "dashboard"]),
+      }),
+    )
+    .length(3)
+    .refine((items) => items.filter((i) => i.featured).length <= 1, "At most one featured package"),
+  /** "Keep [building] until your / business [runs itself.]" */
+  quote: z.object({
+    label: text,
+    before: text,
+    pill: text,
+    after: text,
+    line2: text,
+    highlight: text,
+    name: text,
+    role: text,
+  }),
+});
+export type Packages = z.infer<typeof Packages>;
+
 /** The solutions page (site handoff reference/solutions.html). */
 export const Solutions = z.object({
   meta: z.object({ title: text, description: z.string().max(155).optional() }),

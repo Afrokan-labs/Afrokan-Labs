@@ -16,6 +16,7 @@ import { caseStudy } from "../content/case-study";
 import { contact } from "../content/contact";
 import { home } from "../content/home";
 import { legal } from "../content/legal";
+import { packages } from "../content/packages";
 import { privacy } from "../content/privacy";
 import * as schema from "../content/schema";
 import { services } from "../content/services";
@@ -56,6 +57,7 @@ export const getCaseStudyCopy = () =>
 export const getPrivacy = () => parse("src/content/privacy.ts", schema.Privacy, privacy);
 export const getContactCopy = () => parse("src/content/contact.ts", schema.ContactCopy, contact);
 export const getServices = () => parse("src/content/services.ts", schema.Services, services);
+export const getPackages = () => parse("src/content/packages.ts", schema.Packages, packages);
 export const getSolutions = () => parse("src/content/solutions.ts", schema.Solutions, solutions);
 export const getTierCopy = () => parse("src/content/tiers.ts", schema.TierCopy, tierCopy);
 export const getMembers = () => parse("src/content/team.ts (members)", schema.Members, members);
@@ -231,6 +233,7 @@ export async function validateAllContent() {
   getTierCopy();
   const quotes = getTestimonials();
   const services = getServices();
+  getPackages();
   getSolutions();
   const team = getMembers();
   const projects = readProjectFiles();

@@ -2,7 +2,7 @@ import "@/styles/pages/services.css";
 import { CtaBox } from "@/components/site/CtaBox";
 import { Nav } from "@/components/site/Nav";
 import { getLinks } from "@/lib/links";
-import { getServices, getSite } from "@/lib/content";
+import { getPackages, getServices, getSite } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({ path: "/services", ...getServices().meta });
@@ -10,6 +10,8 @@ export const metadata = pageMetadata({ path: "/services", ...getServices().meta 
 export default function ServicesPage() {
   const links = getLinks();
   const { hero, details, items } = getServices();
+  const packages = getPackages();
+  const { quote } = packages;
   return (
     <>
       <div className="x x-glow">
@@ -272,9 +274,145 @@ export default function ServicesPage() {
               ))}
             </ol>
           </section>
+          <section className="pk-panel" id="packages" aria-labelledby="pk-title">
+            <div className="pk-head">
+              <h2 id="pk-title">{packages.heading}</h2>
+              <p>{packages.note}</p>
+            </div>
+            <ul className="pk-grid">
+              {packages.items.map((pk) => (
+                <li className={pk.featured ? "pk-card on" : "pk-card"} key={pk.name}>
+                  <a href={packages.href} className="pk-link">
+                    <div className="pk-top">
+                      <h3>
+                        {pk.name}
+                        <br />
+                        {packages.suffix}
+                      </h3>
+                      <span className="pk-go" aria-hidden="true">
+                        {ARROW}
+                      </span>
+                    </div>
+                    <p className="pk-for">{pk.for}</p>
+                    <p className="pk-inc">{pk.includes.join(" · ")}</p>
+                    <div className="pk-art">{PACKAGE_ART[pk.art]}</div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section className="pk-quote" aria-label={quote.label}>
+            <span className="pk-sp a">{ASTERISK}</span>
+            <span className="pk-sp b">{SPARKLE}</span>
+            <span className="pk-sp c">{SPARKLE}</span>
+            <span className="pk-sp d">{ASTERISK}</span>
+            <p className="pk-q">
+              {quote.before}
+              <span className="pk-pill">{quote.pill}</span>
+              {quote.after}
+              <br />
+              {quote.line2}
+              <span className="pk-g">{quote.highlight}</span>
+            </p>
+            <p className="pk-by">
+              <b>{quote.name}</b>
+              <br />
+              {quote.role}
+            </p>
+          </section>
           <CtaBox copy={getSite().ctaBox} />
         </div>
       </div>
     </>
   );
 }
+
+const ARROW = (
+  <svg viewBox="0 0 16 16">
+    <path
+      d="M4 12 12 4M5.5 4H12v6.5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const ASTERISK = (
+  <svg viewBox="0 0 40 40" aria-hidden="true">
+    <g stroke="currentColor" strokeWidth="5" strokeLinecap="round">
+      <path d="M20 4v32M4 20h32M8.7 8.7l22.6 22.6M31.3 8.7 8.7 31.3" />
+    </g>
+  </svg>
+);
+
+const SPARKLE = (
+  <svg viewBox="0 0 40 40" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M20 2c1.6 11 7 16.4 18 18-11 1.6-16.4 7-18 18-1.6-11-7-16.4-18-18 11-1.6 16.4-7 18-18Z"
+    />
+  </svg>
+);
+
+/** The drawings on the package cards' bottom tabs (reference .pk-art). */
+const PACKAGE_ART = {
+  site: (
+    <svg viewBox="0 0 220 120" aria-hidden="true">
+      <rect x="30" y="16" width="160" height="104" rx="10" fill="#fff" />
+      <rect x="30" y="16" width="160" height="22" rx="10" fill="#0D0D0D" />
+      <circle cx="44" cy="27" r="4" fill="#94DE57" />
+      <circle cx="56" cy="27" r="4" fill="#fff" />
+      <rect x="46" y="52" width="70" height="10" rx="5" fill="#0D0D0D" />
+      <rect x="46" y="70" width="110" height="6" rx="3" fill="#cfcfcf" />
+      <rect x="46" y="82" width="90" height="6" rx="3" fill="#cfcfcf" />
+      <rect x="46" y="96" width="54" height="14" rx="7" fill="#94DE57" />
+      <rect x="132" y="50" width="44" height="40" rx="6" fill="#E5DED3" />
+    </svg>
+  ),
+  whatsapp: (
+    <svg viewBox="0 0 220 120" aria-hidden="true">
+      <rect x="18" y="22" width="120" height="98" rx="10" fill="#fff" />
+      <rect x="18" y="22" width="120" height="18" rx="9" fill="#1F3A2C" />
+      <rect x="30" y="54" width="70" height="8" rx="4" fill="#0D0D0D" />
+      <rect x="30" y="68" width="92" height="5" rx="2.5" fill="#cfcfcf" />
+      <rect x="30" y="80" width="80" height="5" rx="2.5" fill="#cfcfcf" />
+      <rect x="128" y="10" width="74" height="110" rx="14" fill="#0D0D0D" />
+      <rect x="134" y="18" width="62" height="102" rx="9" fill="#ECE5DD" />
+      <rect x="134" y="18" width="62" height="18" rx="9" fill="#1F3A2C" />
+      <rect x="160" y="44" width="30" height="12" rx="5" fill="#D9FDD3" />
+      <rect x="140" y="62" width="40" height="18" rx="5" fill="#fff" />
+      <rect x="156" y="86" width="34" height="12" rx="5" fill="#D9FDD3" />
+    </svg>
+  ),
+  dashboard: (
+    <svg viewBox="0 0 220 120" aria-hidden="true">
+      <rect x="22" y="18" width="176" height="102" rx="10" fill="#fff" />
+      <rect x="22" y="18" width="40" height="102" rx="10" fill="#0D0D0D" />
+      <rect x="32" y="34" width="20" height="5" rx="2.5" fill="#94DE57" />
+      <g fill="#fff" opacity=".6">
+        <rect x="32" y="48" width="20" height="5" rx="2.5" />
+        <rect x="32" y="60" width="20" height="5" rx="2.5" />
+      </g>
+      <rect x="74" y="32" width="54" height="34" rx="6" fill="#E5DED3" />
+      <rect x="134" y="32" width="54" height="34" rx="6" fill="#D9E8C8" />
+      <g textAnchor="middle" fontSize="13" fontWeight="600" fill="#0D0D0D">
+        <text x="101" y="55">
+          24
+        </text>
+        <text x="161" y="55">
+          98%
+        </text>
+      </g>
+      <g fill="#94DE57">
+        <rect x="80" y="100" width="12" height="12" rx="2" />
+        <rect x="98" y="88" width="12" height="24" rx="2" />
+        <rect x="116" y="80" width="12" height="32" rx="2" />
+        <rect x="134" y="92" width="12" height="20" rx="2" />
+        <rect x="152" y="76" width="12" height="36" rx="2" />
+      </g>
+    </svg>
+  ),
+};
