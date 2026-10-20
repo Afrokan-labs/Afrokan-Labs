@@ -494,9 +494,7 @@ export const About = z.object({
     old: z.object({
       label: text,
       /** Struck through, one by one, when the row scrolls into view. */
-      items: z
-        .array(z.object({ label: text, icon: z.enum(["chat", "phone", "paper"]) }))
-        .min(1),
+      items: z.array(z.object({ label: text, icon: z.enum(["chat", "phone", "paper"]) })).min(1),
       tail: text,
     }),
     new: z.object({ label: text, big: Lines }),
@@ -675,7 +673,16 @@ export const Industries = z.object({
           .array(
             z.object({
               label: text,
-              icon: z.enum(["chat", "checklist", "browser", "box", "bell", "form", "calendar", "chart"]),
+              icon: z.enum([
+                "chat",
+                "checklist",
+                "browser",
+                "box",
+                "bell",
+                "form",
+                "calendar",
+                "chart",
+              ]),
             }),
           )
           .min(1),

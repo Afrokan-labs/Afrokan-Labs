@@ -318,7 +318,9 @@ const ARROW = (
 
 /** Line icons for the industry index's tool lists (reference .bi-tools). */
 const TOOL_ICONS: Record<Industries["items"][number]["tools"][number]["icon"], React.ReactNode> = {
-  chat: <path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />,
+  chat: (
+    <path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />
+  ),
   checklist: (
     <>
       <rect x="5" y="3" width="14" height="18" rx="2" />

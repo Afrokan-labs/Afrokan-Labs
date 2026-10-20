@@ -81,13 +81,11 @@ export default function ServicesPage() {
               </svg>{" "}
               <a className="s-card" href="#svc-4">
                 <h2>{items[3].card.title}</h2>
-                <small>{items[3].card.sub}</small>{" "}
-                {serviceArt(3, "s-art")}
+                <small>{items[3].card.sub}</small> {serviceArt(3, "s-art")}
               </a>{" "}
               <a className="s-card" href="#svc-2">
                 <h2>{items[1].card.title}</h2>
-                <small>{items[1].card.sub}</small>{" "}
-                {serviceArt(1, "s-art")}
+                <small>{items[1].card.sub}</small> {serviceArt(1, "s-art")}
               </a>{" "}
               <a className="s-card" href="#svc-1">
                 <h2>{items[0].card.title}</h2>
@@ -111,13 +109,11 @@ export default function ServicesPage() {
               </a>{" "}
               <a className="s-card" href="#svc-3">
                 <h2>{items[2].card.title}</h2>
-                <small>{items[2].card.sub}</small>{" "}
-                {serviceArt(2, "s-art")}
+                <small>{items[2].card.sub}</small> {serviceArt(2, "s-art")}
               </a>{" "}
               <a className="s-card" href="#svc-5">
                 <h2>{items[4].card.title}</h2>
-                <small>{items[4].card.sub}</small>{" "}
-                {serviceArt(4, "s-art")}
+                <small>{items[4].card.sub}</small> {serviceArt(4, "s-art")}
               </a>
             </div>
           </section>
@@ -386,13 +382,7 @@ const SERVICE_ART = [
         <circle cx="64" cy="80" r="7" />
         <circle cx="104" cy="80" r="7" />
       </g>
-      <path
-        d="M70 98q14 10 28 0"
-        stroke="#fff"
-        strokeWidth="5"
-        fill="none"
-        strokeLinecap="round"
-      />
+      <path d="M70 98q14 10 28 0" stroke="#fff" strokeWidth="5" fill="none" strokeLinecap="round" />
       <path
         d="M118 104h50a16 16 0 0 1 16 16v26a16 16 0 0 1-16 16h-6v16l-18-16h-26a16 16 0 0 1-16-16v-26a16 16 0 0 1 16-16z"
         fill="#fff"
@@ -415,14 +405,7 @@ const SERVICE_ART = [
       <rect x="40" y="98" width="110" height="7" rx="3.5" fill="#cfcfcf" />
       <rect x="40" y="112" width="90" height="7" rx="3.5" fill="#cfcfcf" />
       <rect x="40" y="128" width="54" height="14" rx="7" fill="#94DE57" />
-      <circle
-        cx="148"
-        cy="124"
-        r="16"
-        fill="#E5DED3"
-        stroke="#0D0D0D"
-        strokeWidth="3"
-      />
+      <circle cx="148" cy="124" r="16" fill="#E5DED3" stroke="#0D0D0D" strokeWidth="3" />
       <g fill="#0D0D0D">
         <circle cx="143" cy="121" r="2.4" />
         <circle cx="153" cy="121" r="2.4" />
