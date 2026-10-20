@@ -639,12 +639,6 @@ a {
   padding-inline: 0;
 }
 
-.x-story {
-  display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 2fr);
-  gap: 24px clamp(24px, 4vw, 56px);
-}
-
 .x-label {
   display: inline-flex;
   align-items: center;
@@ -662,59 +656,6 @@ a {
   height: 10px;
   background: var(--x-lime);
   clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
-}
-
-.x-statement {
-  margin: 0;
-  font-size: clamp(1.3rem, 1rem + 1.3vw, 2.1rem);
-  font-weight: 400;
-  line-height: 1.35;
-  letter-spacing: -0.02em;
-  color: var(--x-white);
-  text-wrap: pretty;
-}
-
-.x-statement .x-dim {
-  color: var(--c-7d7d7d);
-}
-
-.x-statement .x-chip {
-  display: inline-block;
-  background: var(--x-lime);
-  color: var(--x-ink);
-  border-radius: 99px;
-  padding: 0 0.4em;
-  line-height: 1.25;
-}
-
-.x-facts {
-  margin: clamp(28px, 4vw, 40px) 0 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.x-fact {
-  background: var(--x-panel);
-  border: 1px solid var(--c-2a2a2a);
-  border-radius: 16px;
-  padding: 16px 18px;
-  display: grid;
-  gap: 6px;
-}
-
-.x-fact dt {
-  font-size: 0.64rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--x-mute);
-}
-
-.x-fact dd {
-  margin: 0;
-  font-size: 0.95rem;
-  font-weight: 500;
 }
 
 /* VALUES */
@@ -821,59 +762,6 @@ a {
   line-height: 1.6;
   color: var(--c-2b2b2b);
   max-width: 46ch;
-}
-
-/* ROADMAP */
-.x-road {
-  list-style: none;
-  margin: clamp(24px, 3vw, 36px) 0 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  position: relative;
-}
-
-.x-stop {
-  background: var(--x-panel);
-  border: 1px solid var(--c-2a2a2a);
-  border-radius: 18px;
-  padding: 20px;
-  display: grid;
-  gap: 10px;
-  align-content: start;
-}
-
-.x-stop .x-tag {
-  justify-self: start;
-  font-size: 0.66rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 6px 10px;
-  border-radius: 99px;
-  border: 1px solid var(--c-4a4a4a);
-  color: var(--x-mute);
-}
-
-.x-stop.now .x-tag {
-  background: var(--x-lime);
-  border-color: var(--x-lime);
-  color: var(--x-ink);
-}
-
-.x-stop h3 {
-  margin: 4px 0 0;
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.x-stop p {
-  margin: 0;
-  font-size: 0.78rem;
-  font-weight: 300;
-  line-height: 1.6;
-  color: var(--x-mute);
 }
 
 /* CTA */
@@ -1331,7 +1219,6 @@ a {
 
   .x-hero-grid,
   .x-lower,
-  .x-story,
   .x-head,
   .x-cta {
     grid-template-columns: minmax(0, 1fr);
@@ -1344,15 +1231,10 @@ a {
   .x-pile {
     margin-inline: auto;
   }
-
-  .x-road {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 
 @media (max-width: 600px) {
-  .x-values,
-  .x-facts {
+  .x-values {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -1819,18 +1701,12 @@ html {
 }
 
 :root[data-site-theme="light"] .x-step h3,
-:root[data-site-theme="light"] .x-work-main h3,
-:root[data-site-theme="light"] .x-fact dd {
+:root[data-site-theme="light"] .x-work-main h3 {
   color: var(--c-0d0d0d);
 }
 
 :root[data-site-theme="light"] .x-step:not(:last-child)::after {
   background: var(--c-cfcfc8);
-}
-
-:root[data-site-theme="light"] .x-fact {
-  background: var(--c-f1f1ec);
-  border-color: var(--c-e2e2dc);
 }
 
 :root[data-site-theme="light"] .x-pill-line,
@@ -1906,24 +1782,6 @@ html {
 }
 
 /* about */
-:root[data-site-theme="light"] .x-statement {
-  color: var(--c-0d0d0d);
-}
-
-:root[data-site-theme="light"] .x-statement .x-dim {
-  color: var(--c-8a8a84);
-}
-
-:root[data-site-theme="light"] .x-stop {
-  background: var(--c-ffffff);
-  border-color: var(--c-e2e2dc);
-}
-
-:root[data-site-theme="light"] .x-stop .x-tag {
-  border-color: var(--c-cfcfc8);
-  color: var(--c-5e5e5a);
-}
-
 :root[data-site-theme="light"] .x-value:nth-child(4) {
   box-shadow: inset 0 0 0 1px var(--c-e2e2dc);
 }
@@ -2211,5 +2069,582 @@ html {
 
   .x-arches .x-arch:hover {
     flex-grow: 1.55;
+  }
+}
+
+/* ---------- OUR STORY (update 4 §2, reference "OUR STORY (revamp)") ---------- */
+.st-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.st-from {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 99px;
+  border: 1px solid var(--c-3a3a3a);
+  font-size: 0.74rem;
+  color: var(--c-cfcfcb);
+}
+
+.st-from svg {
+  width: 16px;
+  height: 16px;
+  color: var(--c-94de57);
+}
+
+.st-lead {
+  margin: clamp(18px, 2.4vw, 28px) 0 0;
+  max-width: 24ch;
+  font-weight: 500;
+  font-size: clamp(1.6rem, 1rem + 2.2vw, 2.8rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--x-white);
+}
+
+.st-flow {
+  margin-top: clamp(24px, 3vw, 36px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+.st-k {
+  display: block;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.st-old {
+  background: var(--x-panel);
+  border: 1px dashed var(--c-4a4a4a);
+  border-radius: 22px;
+  padding: clamp(18px, 2.4vw, 28px);
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.st-old .st-k {
+  color: var(--x-mute);
+}
+
+.st-old ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.st-old li {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--c-262626);
+  color: var(--c-cfcfcb);
+  font-size: 0.86rem;
+}
+
+.st-old li svg {
+  width: 18px;
+  height: 18px;
+  color: var(--c-8a8a86);
+}
+
+.st-old li::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 50%;
+  height: 2px;
+  background: var(--c-e2453c);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.st-flow.fx-in .st-old li::after,
+.st:hover .st-old li::after {
+  transform: scaleX(1);
+}
+
+.st-old li:nth-child(2)::after {
+  transition-delay: 0.15s;
+}
+
+.st-old li:nth-child(3)::after {
+  transition-delay: 0.3s;
+}
+
+.st-old p {
+  margin: 0;
+  font-size: 0.84rem;
+  font-weight: 300;
+  color: var(--x-mute);
+}
+
+.st-arrow {
+  align-self: center;
+  width: clamp(48px, 6vw, 80px);
+  color: var(--c-94de57);
+}
+
+.st-arrow svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.st-new {
+  position: relative;
+  overflow: hidden;
+  background: var(--c-94de57);
+  color: var(--c-0d0d0d);
+  border-radius: 22px;
+  padding: clamp(18px, 2.4vw, 28px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 220px;
+}
+
+.st-new .st-k {
+  color: var(--c-1d3a0c);
+}
+
+.st-big {
+  margin: 0;
+  font-weight: 600;
+  font-size: clamp(2rem, 1.2rem + 3vw, 3.8rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+
+.st-mark {
+  position: absolute;
+  right: -6%;
+  bottom: -14%;
+  width: 52%;
+  color: rgb(13 13 13 / 0.1);
+}
+
+.st-mark svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* The reference's <dl> holds an icon and chips, which a <dl> can't; a list with the same grid. */
+.st-facts {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.st-fact {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 14px;
+  align-items: center;
+  background: var(--x-panel);
+  border: 1px solid var(--c-2a2a2a);
+  border-radius: 18px;
+  padding: 18px 20px;
+}
+
+.st-ic {
+  grid-row: 1 / 3;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--c-0d0d0d);
+  border: 1px solid var(--c-333333);
+  color: var(--c-94de57);
+  display: grid;
+  place-items: center;
+}
+
+.st-ic svg {
+  width: 20px;
+  height: 20px;
+}
+
+.st-dt {
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--x-mute);
+}
+
+.st-dd {
+  margin: 2px 0 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--x-white);
+}
+
+.st-mini {
+  grid-column: 1 / -1;
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.st-mini li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 99px;
+  background: var(--c-232323);
+  font-size: 0.72rem;
+  color: var(--c-dcdcdc);
+}
+
+.st-mini svg {
+  width: 14px;
+  height: 14px;
+  color: var(--c-94de57);
+}
+
+:root[data-site-theme="light"] .st-lead,
+:root[data-site-theme="light"] .st-dd {
+  color: var(--c-0d0d0d);
+}
+
+:root[data-site-theme="light"] .st-from {
+  border-color: var(--c-cfcfc8);
+  color: var(--c-444444);
+}
+
+:root[data-site-theme="light"] .st-from svg,
+:root[data-site-theme="light"] .st-arrow,
+:root[data-site-theme="light"] .st-ic,
+:root[data-site-theme="light"] .st-mini svg {
+  color: var(--c-3f7e20);
+}
+
+:root[data-site-theme="light"] .st-old {
+  border-color: var(--c-cfcfc8);
+}
+
+:root[data-site-theme="light"] .st-old li,
+:root[data-site-theme="light"] .st-mini li {
+  background: var(--c-f1f1ec);
+  color: var(--c-333333);
+}
+
+:root[data-site-theme="light"] .st-fact {
+  border-color: var(--c-e2e2dc);
+}
+
+:root[data-site-theme="light"] .st-ic {
+  background: var(--c-f1f1ec);
+  border-color: var(--c-e2e2dc);
+}
+
+@media (max-width: 760px) {
+  .st-flow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .st-arrow {
+    justify-self: center;
+    rotate: 90deg;
+    width: 44px;
+  }
+
+  .st-facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-old li::after {
+    transform: scaleX(1);
+    transition: none;
+  }
+}
+
+/* ---------- WHERE WE'RE HEADED (update 4 §3, reference "WHERE WE'RE HEADED (revamp)") ---------- */
+.rd-panel {
+  position: relative;
+  margin-top: clamp(24px, 3vw, 36px);
+  background: var(--x-panel);
+  border: 1px solid var(--c-2a2a2a);
+  border-radius: 26px;
+  padding: clamp(24px, 3.4vw, 44px);
+  overflow: hidden;
+}
+
+.rd-line {
+  position: absolute;
+  left: calc(clamp(24px, 3.4vw, 44px) + 60px);
+  right: calc(clamp(24px, 3.4vw, 44px) + 60px);
+  top: calc(clamp(24px, 3.4vw, 44px) + 50px);
+  width: auto;
+  height: 20px;
+}
+
+.rd-line line {
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.rd-line .bg {
+  stroke: var(--c-3a3a3a);
+  stroke-dasharray: 6 8;
+}
+
+.rd-line .fg {
+  stroke: var(--c-94de57);
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  transition: stroke-dashoffset 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s;
+}
+
+.rd-panel.fx-in .rd-line .fg,
+.rd-panel:not(.fx-pre) .rd-line .fg {
+  stroke-dashoffset: 760;
+}
+
+.rd-stops {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 3vw, 40px);
+}
+
+.rd-stop {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  justify-items: start;
+}
+
+.rd-vis {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-top: -10px;
+}
+
+.rd-vis svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.rd-vis circle {
+  fill: none;
+  stroke: var(--c-4a4a4a);
+  stroke-width: 1.2;
+  stroke-dasharray: 3 4;
+}
+
+.rd-stop.now .rd-vis circle {
+  stroke: var(--c-94de57);
+  stroke-dasharray: none;
+  opacity: 0.5;
+}
+
+.rd-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--c-4a4a4a);
+  border: 4px solid var(--x-panel);
+  display: grid;
+  place-items: center;
+}
+
+.rd-stop.now .rd-dot {
+  width: 40px;
+  height: 40px;
+  background: var(--c-94de57);
+  color: var(--c-0d0d0d);
+  border: 0;
+  box-shadow: 0 0 0 8px rgb(148 222 87 / 0.18);
+}
+
+.rd-dot svg {
+  width: 52%;
+  height: 52%;
+}
+
+.rd-place {
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  translate: -50% 0;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--x-mute);
+  background: var(--x-panel);
+  padding: 0 6px;
+}
+
+.rd-tag {
+  margin-top: 12px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font: 800 clamp(1.8rem, 1.2rem + 1.8vw, 2.8rem) / 1 var(--nf-archivo);
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1.2px var(--c-6a6a66);
+}
+
+.rd-stop.now .rd-tag {
+  color: var(--c-94de57);
+  -webkit-text-stroke: 0;
+}
+
+.rd-tag i {
+  font: 600 0.6rem/1 var(--x-font);
+  letter-spacing: 0.08em;
+  color: var(--c-0d0d0d);
+  background: var(--c-94de57);
+  padding: 5px 9px;
+  border-radius: 99px;
+  font-style: normal;
+  white-space: nowrap;
+  -webkit-text-stroke: 0;
+}
+
+.rd-k {
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--x-mute);
+}
+
+.rd-stop h3 {
+  margin: 0;
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--x-white);
+}
+
+.rd-stop p {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--x-mute);
+  max-width: 36ch;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rd-stop.now .rd-vis circle {
+    animation: rd-pulse 3s ease-in-out infinite;
+    transform-origin: 60px 60px;
+  }
+
+  .rd-stop.now .rd-vis circle:nth-child(2) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes rd-pulse {
+    50% {
+      opacity: 0.15;
+      transform: scale(1.06);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rd-line .fg {
+    transition: none;
+    stroke-dashoffset: 760;
+  }
+}
+
+:root[data-site-theme="light"] .rd-panel {
+  border-color: var(--c-e2e2dc);
+}
+
+:root[data-site-theme="light"] .rd-stop h3 {
+  color: var(--c-0d0d0d);
+}
+
+:root[data-site-theme="light"] .rd-stop.now .rd-tag {
+  color: var(--c-3f7e20);
+}
+
+/* Not the "now" stop: in the reference these also greyed its green dot and rings. */
+:root[data-site-theme="light"] .rd-line .bg,
+:root[data-site-theme="light"] .rd-stop:not(.now) .rd-vis circle {
+  stroke: var(--c-cfcfc8);
+}
+
+:root[data-site-theme="light"] .rd-stop:not(.now) .rd-dot {
+  background: var(--c-cfcfc8);
+}
+
+:root[data-site-theme="light"] .rd-tag {
+  -webkit-text-stroke-color: var(--c-9a9a96);
+}
+
+@media (max-width: 760px) {
+  .rd-stops {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  /* The stops stack, so the horizontal line goes (update 4 §3). */
+  .rd-line {
+    display: none;
+  }
+
+  .rd-stop {
+    grid-template-columns: 120px minmax(0, 1fr);
+    column-gap: 16px;
+  }
+
+  .rd-vis {
+    grid-row: 1 / 6;
+  }
+
+  .rd-tag {
+    margin-top: 18px;
   }
 }

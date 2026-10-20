@@ -3,7 +3,9 @@ import { Fragment } from "react";
 import { CtaBox } from "@/components/site/CtaBox";
 import { Nav } from "@/components/site/Nav";
 import { Img } from "@/components/site/Img";
-import { getSite, getSolutions } from "@/lib/content";
+import { SolutionsScripts } from "@/components/site/SolutionsScripts";
+import type { Industries } from "@/content/schema";
+import { getIndustries, getSite, getSolutions } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({ path: "/solutions", ...getSolutions().meta });
@@ -19,6 +21,7 @@ const PHOTOS = [
 
 export default function SolutionsPage() {
   const { poster, day, industries } = getSolutions();
+  const index = getIndustries();
   const moments = day.moments;
   const pillTime = (time: string) => poster.pillTime.replace("{time}", time);
   return (
@@ -196,7 +199,7 @@ export default function SolutionsPage() {
               ))}
             </ol>
           </section>
-          <section className="x-sec" aria-labelledby="ind-title">
+          <section className="x-sec bi" aria-labelledby="ind-title">
             <div className="x-head">
               <h2 className="x-h2" id="ind-title">
                 {industries.heading.lead}
@@ -204,17 +207,88 @@ export default function SolutionsPage() {
               </h2>
               <p>{industries.body}</p>
             </div>
-            <ul className="sol-ind">
-              {industries.items.map((item) => (
-                <li className="sol-i" key={item.title}>
-                  <span className={item.delivered ? "sol-badge" : "sol-badge idea"}>
-                    {item.delivered ? industries.badges.delivered : industries.badges.fit}
-                  </span>
-                  <h3>{item.title}</h3>
-                  <p>{item.body}</p>
-                </li>
-              ))}
-            </ul>
+            <ol className="bi-list">
+              {index.items.map((item, i) => {
+                const delivered = item.status === "delivered";
+                return (
+                  <li className={i === 0 ? "bi-row open" : "bi-row"} key={item.name}>
+                    <h3>
+                      <button
+                        type="button"
+                        className="bi-btn"
+                        aria-expanded={i === 0}
+                        aria-controls={`bi-${i}`}
+                        id={`bib-${i}`}
+                      >
+                        <span className="bi-n">{String(i + 1).padStart(2, "0")}</span>
+                        <span className="bi-name">{item.name}</span>
+                        <span className={delivered ? "bi-st real" : "bi-st"}>
+                          {index.status[item.status]}
+                        </span>
+                        <span className="bi-pl">{PLUS}</span>
+                      </button>
+                    </h3>
+                    <div
+                      className="bi-panel"
+                      id={`bi-${i}`}
+                      role="region"
+                      aria-labelledby={`bib-${i}`}
+                    >
+                      <div className="bi-in">
+                        <div className="bi-chat" role="group" aria-label={index.labels.chat}>
+                          <span className="bi-lab">{index.labels.question}</span>
+                          <p className="bi-msg in">{item.question}</p>
+                          <p className="bi-msg out">
+                            <b>{index.labels.assistant}</b>
+                            {item.reply}
+                          </p>
+                        </div>
+                        <div className="bi-tools">
+                          <span className="bi-lab">
+                            {delivered ? index.labels.built : index.labels.wouldBuild}
+                          </span>
+                          <ul>
+                            {item.tools.map((tool) => (
+                              <li key={tool.label}>
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                  <g
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.9"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    {TOOL_ICONS[tool.icon]}
+                                  </g>
+                                </svg>
+                                {tool.label}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="bi-change">
+                          <span className="bi-lab">{index.labels.changes}</span>
+                          <p>{item.changes}</p>
+                          {item.note && <p className="bi-note">{item.note}</p>}
+                          <a className="bi-cta" href={item.cta.href}>
+                            {item.cta.label}
+                            <span aria-hidden="true">{ARROW}</span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+            {/* Without JavaScript the rows can't open, so every row shows open. */}
+            <noscript
+              dangerouslySetInnerHTML={{
+                __html:
+                  "<style>.bi-panel{grid-template-rows:1fr}.bi-in{padding-bottom:clamp(20px,2.6vw,30px)}.bi-pl{display:none}</style>",
+              }}
+            />
+            <SolutionsScripts />
           </section>
           <CtaBox copy={getSite().ctaBox} />
         </div>
@@ -222,3 +296,54 @@ export default function SolutionsPage() {
     </>
   );
 }
+
+const PLUS = (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+  </svg>
+);
+
+const ARROW = (
+  <svg viewBox="0 0 16 16">
+    <path
+      d="M4 12 12 4M5.5 4H12v6.5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+/** Line icons for the industry index's tool lists (reference .bi-tools). */
+const TOOL_ICONS: Record<Industries["items"][number]["tools"][number]["icon"], React.ReactNode> = {
+  chat: <path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />,
+  checklist: (
+    <>
+      <rect x="5" y="3" width="14" height="18" rx="2" />
+      <path d="M8 9l1.5 1.5L12 8M8 14l1.5 1.5L12 13M14 9.5h2M14 14.5h2" />
+    </>
+  ),
+  browser: (
+    <>
+      <rect x="3" y="4" width="18" height="16" rx="2.5" />
+      <path d="M3 9h18" />
+    </>
+  ),
+  box: <path d="M3 7l9-4 9 4-9 4zM3 7v10l9 4 9-4V7M12 11v10" />,
+  bell: <path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0" />,
+  form: (
+    <>
+      <rect x="4" y="3" width="16" height="18" rx="2" />
+      <path d="M8 8h8M8 12h8M8 16h5" />
+    </>
+  ),
+  calendar: (
+    <>
+      <rect x="4" y="5" width="16" height="15" rx="2" />
+      <path d="M4 10h16M9 3v4M15 3v4" />
+    </>
+  ),
+  chart: <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />,
+};

@@ -35,15 +35,31 @@ export const about = {
   },
   story: {
     label: "Our story",
+    from: "Started at the University of Ghana, Legon",
     // TODO_CONFIRM_ORIGIN_STORY: "started as a group of students at the University of Ghana" (TODO.md).
-    lead: "Afrokan Labs started as a group of students at the University of Ghana who kept seeing the same thing:",
-    dim: "businesses running on WhatsApp chats, phone calls and paper files, with software that wasn't built for them.",
-    then: "So we started building",
-    chip: "for how Ghana works.",
+    lead: "Afrokan Labs started as a group of students at the University of Ghana who kept seeing the same thing.",
+    old: {
+      label: "How businesses were running",
+      items: [
+        { label: "WhatsApp chats", icon: "chat" },
+        { label: "Phone calls", icon: "phone" },
+        { label: "Paper files", icon: "paper" },
+      ],
+      tail: "…with software that wasn't built for them.",
+    },
+    new: { label: "So we started building", big: ["for how", "Ghana works."] },
     facts: [
-      { label: "Based in", value: "Accra, Ghana" },
-      { label: "We build", value: "AI, web & workflow tools" },
-      { label: "First client", value: "ESE Logistic Solution Ltd" },
+      { label: "Based in", value: "Accra, Ghana", icon: "pin" },
+      {
+        label: "We build",
+        value: "AI, web & workflow tools",
+        icon: "code",
+        chips: [
+          { label: "AI", icon: "chat" },
+          { label: "Web", icon: "browser" },
+          { label: "Workflow", icon: "checklist" },
+        ],
+      },
     ],
   },
   members: { title: "Members" },
@@ -97,20 +113,27 @@ export const about = {
   },
   road: {
     heading: { lead: "Where we're ", mark: "headed" },
-    body: "We're starting at home and growing step by step.",
+    body: "We're starting at home and growing step by step: from one city, to one country, to a continent.",
+    here: "You are here",
     stops: [
       {
         tag: "Now",
+        place: "Accra",
+        kicker: "Today",
         title: "Web solutions for Ghanaian companies",
         body: "Websites, AI chatbots and workflow systems for businesses that want to serve customers faster.",
       },
       {
         tag: "Next",
+        place: "Ghana",
+        kicker: "Building towards",
         title: "AI products for the Ghanaian market",
         body: "Turning what we learn from client work into AI tools built for local businesses.",
       },
       {
         tag: "Later",
+        place: "Africa",
+        kicker: "The bigger picture",
         title: "Across Africa",
         body: "Taking what works in Ghana to businesses in other African markets.",
       },

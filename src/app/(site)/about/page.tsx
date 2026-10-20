@@ -2,6 +2,7 @@ import "@/styles/pages/about.css";
 import { Fragment } from "react";
 import { CtaBox } from "@/components/site/CtaBox";
 import { Img } from "@/components/site/Img";
+import { LogoMark } from "@/components/site/LogoMark";
 import { Members } from "@/components/site/Members";
 import { Nav } from "@/components/site/Nav";
 import { Philosophy } from "@/components/site/Philosophy";
@@ -173,28 +174,88 @@ export default function AboutPage() {
           </div>
         </div>
         <div className="x-wrap">
-          <section className="x-sec" aria-labelledby="story-title">
-            <div className="x-story">
-              <div>
-                <span className="x-label" id="story-title">
-                  {story.label}
-                </span>
-              </div>
-              <div>
-                <p className="x-statement">
-                  {story.lead} <span className="x-dim">{story.dim}</span> {story.then}{" "}
-                  <span className="x-chip">{story.chip}</span>
-                </p>
-                <dl className="x-facts">
-                  {story.facts.map((fact) => (
-                    <div className="x-fact" key={fact.label}>
-                      <dt>{fact.label}</dt>
-                      <dd>{fact.value}</dd>
-                    </div>
+          <section className="x-sec st" aria-labelledby="story-title">
+            <div className="st-top">
+              <span className="x-label" id="story-title">
+                {story.label}
+              </span>
+              <span className="st-from">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <g {...LINE}>
+                    <path d="M2 9l10-5 10 5-10 5zM6 11v5c3 2 9 2 12 0v-5" />
+                  </g>
+                </svg>
+                {story.from}
+              </span>
+            </div>
+            <p className="st-lead">{story.lead}</p>
+            <div className="st-flow">
+              <div className="st-old">
+                <span className="st-k">{story.old.label}</span>
+                <ul>
+                  {story.old.items.map((item) => (
+                    <li key={item.label}>
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <g {...LINE}>{STORY_ICONS[item.icon]}</g>
+                      </svg>
+                      {item.label}
+                    </li>
                   ))}
-                </dl>
+                </ul>
+                <p>{story.old.tail}</p>
+              </div>
+              <span className="st-arrow" aria-hidden="true">
+                <svg viewBox="0 0 80 24">
+                  <path
+                    d="M2 12h70M62 4l10 8-10 8"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+              <div className="st-new">
+                <span className="st-mark" aria-hidden="true">
+                  <LogoMark />
+                </span>
+                <span className="st-k">{story.new.label}</span>
+                <p className="st-big">
+                  {story.new.big.map((line, i) => (
+                    <Fragment key={line}>
+                      {i > 0 && <br />}
+                      {line}
+                    </Fragment>
+                  ))}
+                </p>
               </div>
             </div>
+            <ul className="st-facts">
+              {story.facts.map((fact) => (
+                <li className="st-fact" key={fact.label}>
+                  <span className="st-ic">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <g {...LINE}>{STORY_ICONS[fact.icon]}</g>
+                    </svg>
+                  </span>
+                  <span className="st-dt">{fact.label}</span>{" "}
+                  <span className="st-dd">{fact.value}</span>
+                  {fact.chips && (
+                    <ul className="st-mini">
+                      {fact.chips.map((chip) => (
+                        <li key={chip.label}>
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <g {...LINE}>{STORY_ICONS[chip.icon]}</g>
+                          </svg>
+                          {chip.label}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
           </section>
           <Members title={members.title} members={team} />
           <Philosophy copy={philosophy} />
@@ -220,7 +281,7 @@ export default function AboutPage() {
               ))}
             </ul>
           </section>
-          <section className="x-sec" aria-labelledby="road-title">
+          <section className="x-sec rd" aria-labelledby="road-title">
             <div className="x-head">
               <h2 className="x-h2" id="road-title">
                 {road.heading.lead}
@@ -228,15 +289,45 @@ export default function AboutPage() {
               </h2>
               <p>{road.body}</p>
             </div>
-            <ol className="x-road">
-              {road.stops.map((stop, i) => (
-                <li className={i === 0 ? "x-stop now" : "x-stop"} key={stop.tag}>
-                  <span className="x-tag">{stop.tag}</span>
-                  <h3>{stop.title}</h3>
-                  <p>{stop.body}</p>
-                </li>
-              ))}
-            </ol>
+            <div className="rd-panel">
+              <svg
+                className="rd-line"
+                viewBox="0 0 1000 20"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <line x1="0" y1="10" x2="1000" y2="10" className="bg" />
+                <line x1="0" y1="10" x2="1000" y2="10" className="fg" />
+              </svg>
+              <ol className="rd-stops">
+                {road.stops.map((stop, i) => (
+                  <li className={i === 0 ? "rd-stop now" : "rd-stop"} key={stop.tag}>
+                    <div className="rd-vis" aria-hidden="true">
+                      {/* Reach grows by a ring a stop: 2, 3, then 4. */}
+                      <svg viewBox="0 0 120 120">
+                        {RING_RADII.slice(0, i + 2).map((r) => (
+                          <circle cx="60" cy="60" r={r} key={r} />
+                        ))}
+                      </svg>
+                      <span className="rd-dot">{i === 0 && <LogoMark />}</span>
+                      <span className="rd-place">{stop.place}</span>
+                    </div>
+                    <span className="rd-tag">
+                      {stop.tag}
+                      {i === 0 && (
+                        <>
+                          {" "}
+                          <i>{road.here}</i>
+                        </>
+                      )}
+                    </span>
+                    <span className="rd-k">{stop.kicker}</span>
+                    <h3>{stop.title}</h3>
+                    <p>{stop.body}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </section>
           <CtaBox copy={getSite().ctaBox} />
         </div>
@@ -244,3 +335,42 @@ export default function AboutPage() {
     </>
   );
 }
+
+/** The story's line icons (24-unit box, drawn with LINE). */
+const LINE = {
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.9,
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+} as const;
+
+const STORY_ICONS = {
+  chat: <path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />,
+  phone: (
+    <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" />
+  ),
+  paper: <path d="M6 3h9l4 4v14H6zM15 3v4h4M9 12h7M9 16h5" />,
+  pin: (
+    <>
+      <path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z" />
+      <circle cx="12" cy="9" r="2.5" />
+    </>
+  ),
+  code: <path d="M8 7l-5 5 5 5M16 7l5 5-5 5" />,
+  browser: (
+    <>
+      <rect x="3" y="4" width="18" height="16" rx="2.5" />
+      <path d="M3 9h18" />
+    </>
+  ),
+  checklist: (
+    <>
+      <rect x="5" y="3" width="14" height="18" rx="2" />
+      <path d="M8 9l1.5 1.5L12 8M8 14l1.5 1.5L12 13" />
+    </>
+  ),
+};
+
+/** The roadmap's dashed rings, inner to outer. */
+const RING_RADII = [12, 26, 40, 54];

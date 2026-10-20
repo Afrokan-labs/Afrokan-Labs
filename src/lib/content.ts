@@ -15,6 +15,7 @@ import { articles, insights } from "../content/articles";
 import { caseStudy } from "../content/case-study";
 import { contact } from "../content/contact";
 import { home } from "../content/home";
+import { industries } from "../content/industries";
 import { legal } from "../content/legal";
 import { packages } from "../content/packages";
 import { privacy } from "../content/privacy";
@@ -59,6 +60,8 @@ export const getContactCopy = () => parse("src/content/contact.ts", schema.Conta
 export const getServices = () => parse("src/content/services.ts", schema.Services, services);
 export const getPackages = () => parse("src/content/packages.ts", schema.Packages, packages);
 export const getSolutions = () => parse("src/content/solutions.ts", schema.Solutions, solutions);
+export const getIndustries = () =>
+  parse("src/content/industries.ts", schema.Industries, industries);
 export const getTierCopy = () => parse("src/content/tiers.ts", schema.TierCopy, tierCopy);
 export const getMembers = () => parse("src/content/team.ts (members)", schema.Members, members);
 export const getReviews = () =>
@@ -235,6 +238,7 @@ export async function validateAllContent() {
   const services = getServices();
   getPackages();
   getSolutions();
+  getIndustries();
   const team = getMembers();
   const projects = readProjectFiles();
   for (const file of projects) await compileBody(file);

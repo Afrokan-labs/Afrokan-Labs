@@ -485,14 +485,33 @@ export const About = z.object({
   }),
   pile: z.object({ label: text, items: z.array(text).min(3) }),
   proof: z.object({ caption: text, value: text, lines: Lines }),
+  /** Update 4 §2: "Our story", before → after (reference "OUR STORY (revamp)"). */
   story: z.object({
     label: text,
-    /** The statement: plain, then dimmed, then plain, then the green chip. */
+    /** The outlined pill by the label, with a graduation-cap icon. */
+    from: text,
     lead: text,
-    dim: text,
-    then: text,
-    chip: text,
-    facts: z.array(z.object({ label: text, value: text })).min(1),
+    old: z.object({
+      label: text,
+      /** Struck through, one by one, when the row scrolls into view. */
+      items: z
+        .array(z.object({ label: text, icon: z.enum(["chat", "phone", "paper"]) }))
+        .min(1),
+      tail: text,
+    }),
+    new: z.object({ label: text, big: Lines }),
+    facts: z
+      .array(
+        z.object({
+          label: text,
+          value: text,
+          icon: z.enum(["pin", "code"]),
+          chips: z
+            .array(z.object({ label: text, icon: z.enum(["chat", "browser", "checklist"]) }))
+            .optional(),
+        }),
+      )
+      .min(1),
   }),
   members: z.object({ title: text }),
   philosophy: z.object({
@@ -516,10 +535,15 @@ export const About = z.object({
       )
       .min(1),
   }),
+  /** Update 4 §3: the reach timeline. The first stop is "now"; each stop adds a ring. */
   road: z.object({
     heading: Heading,
     body: text,
-    stops: z.array(z.object({ tag: text, title: text, body: text })).min(1),
+    /** The pill after the first stop's word. */
+    here: text,
+    stops: z
+      .array(z.object({ tag: text, place: text, kicker: text, title: text, body: text }))
+      .length(3),
   }),
 });
 export type About = z.infer<typeof About>;
@@ -621,14 +645,48 @@ export const Solutions = z.object({
       .array(z.object({ time: text, title: text, before: text, with: text, tool: text }))
       .length(4),
   }),
-  industries: z.object({
-    heading: Heading,
-    body: text,
-    badges: z.object({ delivered: text, fit: text }),
-    items: z.array(z.object({ delivered: z.boolean(), title: text, body: text })).min(1),
-  }),
+  /** "Built for businesses like yours": the rows are in src/content/industries.ts. */
+  industries: z.object({ heading: Heading, body: text }),
 });
 export type Solutions = z.infer<typeof Solutions>;
+
+/** Update 4 §1: the Solutions industry index (an accordion; the first row starts open). */
+export const Industries = z.object({
+  status: z.object({ delivered: text, fit: text }),
+  labels: z.object({
+    /** Screen-reader name of the chat box: the chats are illustrative. */
+    chat: text,
+    question: text,
+    assistant: text,
+    /** "What we built" on a delivered row, "What we'd build" on the rest. */
+    built: text,
+    wouldBuild: text,
+    changes: text,
+  }),
+  items: z
+    .array(
+      z.object({
+        name: text,
+        /** "delivered" only for an industry we've actually delivered for. */
+        status: z.enum(["delivered", "fit"]),
+        question: text,
+        reply: text,
+        tools: z
+          .array(
+            z.object({
+              label: text,
+              icon: z.enum(["chat", "checklist", "browser", "box", "bell", "form", "calendar", "chart"]),
+            }),
+          )
+          .min(1),
+        changes: text,
+        note: text.optional(),
+        cta: Link,
+      }),
+    )
+    .min(1),
+});
+export type Industries = z.infer<typeof Industries>;
 
 /** The work page (site handoff reference/work.html). */
 export const Work = z.object({
