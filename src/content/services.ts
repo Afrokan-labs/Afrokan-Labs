@@ -15,7 +15,14 @@ export const services = {
   },
   details: {
     heading: { lead: "Every ", mark: "service", tail: ", in detail" },
-    body: "Each project starts with a free conversation and a written plan, timeline and price before any work begins.",
+    body: "Pick a service to see what's included. Each project starts with a free conversation and a written plan, timeline and price before any work begins.",
+    tabs: {
+      label: "Services",
+      counter: "Service {n} / {total}",
+      features: "What you get",
+      goodFor: "Good for",
+      ask: { label: "Ask about this", href: "/contact" },
+    },
   },
   // TODO_CONFIRM_SEPARATE_SERVICES: "Backend Systems" and "AI Chatbots" as separate services (TODO.md).
   items: [

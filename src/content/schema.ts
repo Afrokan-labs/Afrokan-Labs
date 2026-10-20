@@ -539,8 +539,19 @@ export const Services = z.object({
     /** On the front card of the fan. */
     start: text,
   }),
-  details: z.object({ heading: Heading, body: text }),
-  /** In page order: the n-th item is #svc-n. */
+  details: z.object({
+    heading: Heading,
+    body: text,
+    /** Update 3: the tab panel's labels. "{n}" and "{total}" fill "Service 01 / 05". */
+    tabs: z.object({
+      label: text,
+      counter: z.string().includes("{n}").includes("{total}"),
+      features: text,
+      goodFor: text,
+      ask: Link,
+    }),
+  }),
+  /** In page order: the n-th item is tab and panel #svc-n. */
   items: z
     .array(
       z.object({
