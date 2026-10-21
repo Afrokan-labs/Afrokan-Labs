@@ -2,9 +2,9 @@
 #
 # CSP: Next's static export emits inline scripts (the RSC payload) and there is
 # no server to issue nonces, so script-src needs 'unsafe-inline'. Everything
-# else stays strict. Analytics: Umami loads from cloud.umami.is and sends to
-# gateway.umami.is (ANALYTICS_SCRIPT / ANALYTICS_ENDPOINT_ORIGIN in
-# src/lib/analytics.ts; keep them in step).
+# else stays strict. Analytics: Cloudflare Web Analytics injects its beacon at
+# the edge; it loads from static.cloudflareinsights.com and reports to
+# cloudflareinsights.com (src/lib/analytics.ts; keep them in step).
 #
 # Cloudflare joins repeated headers with a comma, so a later rule that
 # replaces Cache-Control first removes it with "! Cache-Control".
@@ -12,7 +12,7 @@
 # Every response. Cache-Control here is for HTML and RSC payloads: always
 # revalidate, so a deploy shows at once.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cloud.umami.is; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://gateway.umami.is; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
   Strict-Transport-Security: max-age=31536000
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
@@ -30,7 +30,7 @@
 # Cloudflare would comma-join two CSPs, and browsers enforce both.
 /contact
   ! Content-Security-Policy
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cloud.umami.is https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://gateway.umami.is; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
 
 # Optimised images keep their names across rebuilds, so cache them for a day.
 /images/*

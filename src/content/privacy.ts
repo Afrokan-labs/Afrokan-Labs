@@ -4,7 +4,9 @@ import type { Privacy } from "./schema";
 /**
  * Privacy page. Source: docs/content/privacy.md (Draft v1, drafted from
  * architecture §7, §12 and §13). The contact form wording (Draft v2) was
- * added with BUILD_PLAN 6.1.
+ * added with BUILD_PLAN 6.1. Analytics changed from Umami to Cloudflare Web
+ * Analytics on 2026-10-21 (wording awaiting approval). Links: [label](url),
+ * as in legal.ts.
  */
 export const privacy = {
   // Approved as written in docs/content/privacy.md (Draft v2).
@@ -19,16 +21,18 @@ export const privacy = {
     {
       heading: "Analytics",
       paragraphs: [
-        "We use Umami, a privacy-friendly analytics service, to count how the site is used. It doesn't use cookies and doesn't collect personal data. It can't identify you, and we don't try to.",
-        "It records:",
+        "We use Cloudflare Web Analytics to count how the site is used. It doesn't use cookies, and it only gives us aggregated page-view data: totals, never a record of an individual visitor. Cloudflare processes this data for us.",
+        "It counts:",
       ],
       list: [
         "which pages are visited, and which site linked to them",
         "the type of browser and device, and the country the visit came from",
-        "clicks on our WhatsApp, email and case study links",
-        "whether a contact form message was sent, but never what it says",
+        "how quickly pages load",
       ],
-      after: ["We use these counts to improve the site."],
+      after: [
+        "This data is aggregated and does not identify you. Cloudflare decides how long it is kept, under its [privacy policy](https://www.cloudflare.com/privacypolicy/).",
+        "We use these counts to improve the site.",
+      ],
     },
     {
       heading: "When you contact us",
@@ -56,5 +60,5 @@ export const privacy = {
       paragraphs: ["Email {email} and we'll answer any question about your data."],
     },
   ],
-  lastUpdated: { label: "Last updated:", date: "2026-10-02" },
+  lastUpdated: { label: "Last updated:", date: "2026-10-21" },
 } satisfies z.input<typeof Privacy>;

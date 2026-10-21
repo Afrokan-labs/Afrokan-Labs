@@ -26,7 +26,7 @@ export function CtaBox({ copy }: { copy: Site["ctaBox"] }) {
       </h2>
       <div className="x-side">
         <p>{copy.body}</p>
-        <a className="x-btn x-btn-lime" href={links.whatsapp} {...links.whatsappAttrs}>
+        <a className="x-btn x-btn-lime" href={links.whatsapp}>
           <WaIcon />
           {copy.whatsapp}
         </a>{" "}

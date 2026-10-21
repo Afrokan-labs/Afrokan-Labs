@@ -32,20 +32,13 @@ export const NAV = {
 
 export function getLinks() {
   const site = getSite();
-  const wa = whatsappTextLink({ location: "contact" });
-  const whatsapp = wa.href;
-  // srNote is for Button; these links take only the data-umami-* tracking attributes.
-  const whatsappAttrs = Object.fromEntries(
-    Object.entries(wa).filter(([k]) => k.startsWith("data-")),
-  );
+  const whatsapp = whatsappTextLink().href;
   return {
     email: site.email,
     mailto: `mailto:${site.email}`,
     location: site.location,
     /** wa.me link with the prefilled message (an inert anchor until the number is set). */
     whatsapp,
-    /** Umami click tracking for WhatsApp links. */
-    whatsappAttrs,
     /** X, Instagram, LinkedIn: confirmed profiles only, with their logos and accessible names. */
     social: socialLinks(site.social, site.name, site.ui.socialLabel),
     /** Screen-reader note for links that open in a new tab. */

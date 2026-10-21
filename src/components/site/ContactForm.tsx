@@ -2,7 +2,6 @@
 
 import { Fragment, type ReactNode, useEffect, useRef, useState } from "react";
 import type { ContactCopy } from "@/content/schema";
-import { track } from "@/lib/analytics";
 import {
   CONTACT_ENDPOINT,
   CONTACT_PREFILL_KEY,
@@ -39,8 +38,8 @@ const ORDER = ["name", "email", "message"] as const;
 type Props = {
   copy: ContactCopy["form"];
   email: string;
-  /** The site's WhatsApp link and its tracking attributes, for the success and error messages. */
-  whatsapp: { href: string; attrs: Record<string, string> };
+  /** The site's WhatsApp link, for the success and error messages. */
+  whatsapp: string;
   /** How soon we reply (site.replyWithin), for the success message. */
   replyWithin: string;
   /** Unset in local builds: the widget is skipped and the server refuses the post. */
@@ -143,7 +142,6 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
     const token = String(data.get(FIELD.turnstile) ?? "");
     // No token: the widget was blocked or hasn't finished, and the server would refuse the post.
     if (turnstileSiteKey && !token) {
-      track("contact_form_submit", { result: "error" });
       setSendError("verification");
       return;
     }
@@ -181,7 +179,6 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
     }
     busy.current = false;
     setSending(false);
-    track("contact_form_submit", { result: reply.ok ? "success" : "error" });
 
     if (reply.ok) {
       setSent({ name: get("name"), email: get("email") });
@@ -203,11 +200,7 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
     setSendError("error" in reply && reply.error === "verification" ? "verification" : "failed");
   }
 
-  const waLink = (
-    <a href={whatsapp.href} {...whatsapp.attrs}>
-      {copy.whatsappLabel}
-    </a>
-  );
+  const waLink = <a href={whatsapp}>{copy.whatsappLabel}</a>;
   const links = { whatsapp: waLink, email: <a href={`mailto:${email}`}>{email}</a> };
 
   // Rendered from the start, so screen readers announce the panel when it fills.

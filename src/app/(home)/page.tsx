@@ -100,11 +100,7 @@ export default function HomePage() {
   } = home;
   const site = getSite();
   const ticker = site.ticker;
-  // Tracked under its own location; like links.whatsapp, only the data-* attributes.
-  const { href: bannerWaHref, ...bannerWa } = whatsappTextLink({ location: "project-banner" });
-  const bannerWaAttrs = Object.fromEntries(
-    Object.entries(bannerWa).filter(([k]) => k.startsWith("data-")),
-  );
+  const bannerWaHref = whatsappTextLink().href;
   // The banner's team, by role: CTO left, CIO right, CEO centre and in front.
   const byRole = (abbr: string) => members.find((m) => m.abbr === abbr);
   const bannerTeam = [
@@ -228,9 +224,7 @@ export default function HomePage() {
                   <a className="x-go" href={hero.startProject.href}>
                     {hero.startProject.label}
                   </a>{" "}
-                  <a href={links.whatsapp} {...links.whatsappAttrs}>
-                    {hero.whatsapp}
-                  </a>
+                  <a href={links.whatsapp}>{hero.whatsapp}</a>
                 </div>
               </div>
               <div className="x-right">
@@ -474,11 +468,7 @@ export default function HomePage() {
                     <a className="x-pill x-pill-lime" href={work.caseStudy.href}>
                       {work.caseStudy.label}
                     </a>{" "}
-                    <a
-                      className="x-pill x-pill-line"
-                      href={links.whatsapp}
-                      {...links.whatsappAttrs}
-                    >
+                    <a className="x-pill x-pill-line" href={links.whatsapp}>
                       <svg viewBox="0 0 24 24" aria-hidden="true">
                         <use href="#wa" />
                       </svg>
@@ -1181,7 +1171,7 @@ export default function HomePage() {
                     </svg>
                   </span>
                 </a>
-                <a className="bb2-btn o" href={bannerWaHref} {...bannerWaAttrs}>
+                <a className="bb2-btn o" href={bannerWaHref}>
                   <WaIcon />
                   {banner.whatsapp}
                 </a>
@@ -1230,7 +1220,7 @@ export default function HomePage() {
                 <button type="submit">{contact.submit}</button>
               </form>
               <p className="x-formmsg" id="xformmsg" role="status" />
-              <a className="x-wa" href={links.whatsapp} {...links.whatsappAttrs}>
+              <a className="x-wa" href={links.whatsapp}>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <use href="#wa" />
                 </svg>

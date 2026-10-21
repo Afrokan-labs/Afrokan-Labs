@@ -9,7 +9,7 @@ import { whatsappLink } from "./whatsapp";
 export function getContactData() {
   const copy = getContactCopy();
   const site = getSite();
-  const whatsapp = { ...whatsappLink({ location: "contact" }), label: copy.whatsappCta };
+  const whatsapp = { ...whatsappLink(), label: copy.whatsappCta };
   return {
     whatsapp,
     success: {

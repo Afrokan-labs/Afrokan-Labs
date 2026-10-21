@@ -49,9 +49,7 @@ export function Footer() {
                 </li>
               ))}
               <li>
-                <a href={links.whatsapp} {...links.whatsappAttrs}>
-                  WhatsApp
-                </a>
+                <a href={links.whatsapp}>WhatsApp</a>
               </li>
             </ul>
           </div>

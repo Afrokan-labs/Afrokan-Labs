@@ -18,10 +18,6 @@ const PublicEnv = z.object({
   NEXT_PUBLIC_SITE_URL: z
     .url({ error: "NEXT_PUBLIC_SITE_URL must be a full URL, e.g. https://afrokanlabs.com" })
     .transform((url) => url.replace(/\/+$/, "")),
-  /** Umami website ID. Unset in previews and locally, so track() does nothing. */
-  NEXT_PUBLIC_ANALYTICS_ID: z
-    .uuid({ error: "NEXT_PUBLIC_ANALYTICS_ID must be the Umami website ID (a UUID)" })
-    .optional(),
   /**
    * Cloudflare Turnstile site key for the /contact form (Phase 6). Previews,
    * CI and local builds use Turnstile's published test key; production
@@ -39,7 +35,6 @@ const PublicEnv = z.object({
 // Each variable is referenced by its full name so Next can inline it.
 const result = PublicEnv.safeParse({
   NEXT_PUBLIC_SITE_URL: blankToUndefined(process.env.NEXT_PUBLIC_SITE_URL),
-  NEXT_PUBLIC_ANALYTICS_ID: blankToUndefined(process.env.NEXT_PUBLIC_ANALYTICS_ID),
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: blankToUndefined(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY),
 });
 

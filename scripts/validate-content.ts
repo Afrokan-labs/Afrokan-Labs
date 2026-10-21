@@ -5,7 +5,7 @@
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { ANALYTICS_ENDPOINT_ORIGIN, ANALYTICS_SCRIPT } from "../src/lib/analytics";
+import { CF_ANALYTICS_ENDPOINT_ORIGIN, CF_ANALYTICS_SCRIPT_ORIGIN } from "../src/lib/analytics";
 import { TURNSTILE_ORIGIN } from "../src/lib/contact-fields";
 import { ContentError, getHome, validateAllContent } from "../src/lib/content";
 import { UNBOUNDED_GLYPHS } from "../src/lib/fonts";
@@ -25,8 +25,9 @@ async function main() {
 }
 
 /**
- * public/_headers: every CSP must allow the origins src/lib/analytics.ts loads
- * from and sends to, and only /contact may allow Turnstile (architecture §13).
+ * public/_headers: every CSP must allow the Cloudflare Web Analytics beacon
+ * (src/lib/analytics.ts) and no Umami origin, and only /contact may allow
+ * Turnstile (architecture §13).
  */
 function checkCsp() {
   const headers = readFileSync(join(process.cwd(), "public", "_headers"), "utf8");
@@ -52,8 +53,9 @@ function checkCsp() {
       problems.push(`${path}: ${name} must ${wanted ? "" : "not "}allow ${origin}`);
   };
   for (const path of ["/*", "/contact"]) {
-    need(path, "script-src", new URL(ANALYTICS_SCRIPT).origin, true);
-    need(path, "connect-src", ANALYTICS_ENDPOINT_ORIGIN, true);
+    need(path, "script-src", CF_ANALYTICS_SCRIPT_ORIGIN, true);
+    need(path, "connect-src", CF_ANALYTICS_ENDPOINT_ORIGIN, true);
+    if (/umami/i.test(csps.get(path) ?? "")) problems.push(`${path}: remove the Umami origins`);
   }
   need("/contact", "script-src", TURNSTILE_ORIGIN, true);
   need("/contact", "frame-src", TURNSTILE_ORIGIN, true);

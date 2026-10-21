@@ -5,13 +5,12 @@
  * Server-side: it reads content through src/lib/content.ts. Pages call it and
  * pass the result to client components as props.
  *
- *   <Button {...whatsappLink({ location: "hero" })}>{hero.primaryCta}</Button>
+ *   <Button {...whatsappLink()}>{hero.primaryCta}</Button>
  */
-import { trackingAttrs, type TrackingAttrs, type WhatsAppLocation } from "./analytics";
 import { getSite } from "./content";
 import { waMeUrl } from "./wa-me";
 
-export type WhatsAppLinkProps = TrackingAttrs & {
+export type WhatsAppLinkProps = {
   href: string;
   /** Tells Button to show the WhatsApp glyph. */
   whatsapp: true;
@@ -27,37 +26,34 @@ function waHref(message: string): string {
   return waMeUrl(whatsappNumber, message);
 }
 
-/** A WhatsApp CTA with the default prefilled message, tracked as whatsapp_click. */
-export function whatsappLink({ location }: { location: WhatsAppLocation }): WhatsAppLinkProps {
+/** A WhatsApp CTA with the default prefilled message. */
+export function whatsappLink(): WhatsAppLinkProps {
   const site = getSite();
   return {
     href: waHref(site.whatsappPrefill.default),
     whatsapp: true,
     srNote: site.ui.opensWhatsApp,
-    ...trackingAttrs("whatsapp_click", { location }),
   };
 }
 
 /**
  * A plain WhatsApp text link (no Button glyph flag), for footers and inline
- * links that draw their own icon. Same href, note and tracking as whatsappLink().
+ * links that draw their own icon. Same href and note as whatsappLink().
  */
-export function whatsappTextLink({ location }: { location: WhatsAppLocation }) {
+export function whatsappTextLink() {
   const site = getSite();
   return {
     href: waHref(site.whatsappPrefill.default),
     srNote: site.ui.opensWhatsApp,
-    ...trackingAttrs("whatsapp_click", { location }),
   };
 }
 
-/** The demo-offer CTA (OfferBand), with the demo prefill, tracked as demo_offer_click. */
+/** The demo-offer CTA (OfferBand), with the demo prefill. */
 export function demoOfferLink(): WhatsAppLinkProps {
   const site = getSite();
   return {
     href: waHref(site.whatsappPrefill.demo),
     whatsapp: true,
     srNote: site.ui.opensWhatsApp,
-    ...trackingAttrs("demo_offer_click"),
   };
 }

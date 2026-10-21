@@ -17,8 +17,7 @@ type Props = {
  */
 export function ContactResult({ title, body, whatsapp }: Props) {
   // Drop `whatsapp: true` (a Button flag): this pill draws no glyph.
-  const { label, srNote, href, ...rest } = whatsapp;
-  const tracking = Object.fromEntries(Object.entries(rest).filter(([k]) => k.startsWith("data-")));
+  const { label, srNote, href } = whatsapp;
   return (
     <div className="x x-glow">
       <div className="x-wrap lg-top">
@@ -28,7 +27,7 @@ export function ContactResult({ title, body, whatsapp }: Props) {
             {title}
           </h1>
           <p className="nf-body">{body}</p>
-          <a className="nf-home" href={href} {...tracking}>
+          <a className="nf-home" href={href}>
             {label}
             <span className="sr-only"> {srNote}</span>
           </a>

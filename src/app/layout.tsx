@@ -7,7 +7,6 @@ import { Footer } from "@/components/site/Footer";
 import { WaSprite } from "@/components/site/LogoMark";
 import { SiteScripts } from "@/components/site/SiteScripts";
 import { THEME_INIT, ThemeToggle } from "@/components/site/ThemeToggle";
-import { ANALYTICS_SCRIPT } from "@/lib/analytics";
 import { getSite } from "@/lib/content";
 import { env } from "@/lib/env";
 
@@ -83,10 +82,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <WaSprite />
         <ThemeToggle />
         <SiteScripts />
-        {/* Umami (architecture §7): cookieless, about 2 KB, deferred. Without an ID nothing loads. */}
-        {env.NEXT_PUBLIC_ANALYTICS_ID && (
-          <script defer src={ANALYTICS_SCRIPT} data-website-id={env.NEXT_PUBLIC_ANALYTICS_ID} />
-        )}
       </body>
     </html>
   );

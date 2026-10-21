@@ -33,7 +33,7 @@ export default function ServicesPage() {
             </h1>
             <p className="s-lede">{hero.lede}</p>
             <div className="s-ctas">
-              <a className="x-btn x-btn-lime" href={links.whatsapp} {...links.whatsappAttrs}>
+              <a className="x-btn x-btn-lime" href={links.whatsapp}>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <use href="#wa" />
                 </svg>

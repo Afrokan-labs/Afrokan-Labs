@@ -71,7 +71,7 @@ export default function ContactPage() {
             </h2>
             <p className="c-sub">{page.sub}</p>
             <p className="c-txt">{page.body}</p>
-            <a className="c-wa" href={links.whatsapp} {...links.whatsappAttrs}>
+            <a className="c-wa" href={links.whatsapp}>
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <use href="#wa" />
               </svg>
@@ -94,7 +94,7 @@ export default function ContactPage() {
             <ContactForm
               copy={form}
               email={links.email}
-              whatsapp={{ href: links.whatsapp, attrs: links.whatsappAttrs }}
+              whatsapp={links.whatsapp}
               replyWithin={getSite().replyWithin}
               turnstileSiteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
             />
