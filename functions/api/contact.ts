@@ -51,8 +51,11 @@ const TURNSTILE_VERIFY = "https://challenges.cloudflare.com/turnstile/v0/sitever
 const RESEND_SEND = "https://api.resend.com/emails";
 /** Where the emails load the logo from: the live site, so the image works in any inbox. */
 const ASSET_ORIGIN = `https://${site.domain}`;
-/** Three fields of at most 2,354 characters, URL-encoded, plus the token. */
-const MAX_BODY_BYTES = 32 * 1024;
+/**
+ * Multipart form data: the fields' limits (about 5,700 characters, at most
+ * three bytes each in UTF-8), the token and the part headers, with room to spare.
+ */
+const MAX_BODY_BYTES = 64 * 1024;
 
 export async function onRequest({ request, env }: Context): Promise<Response> {
   if (request.method !== "POST")

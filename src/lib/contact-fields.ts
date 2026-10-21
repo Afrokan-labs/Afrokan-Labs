@@ -8,7 +8,7 @@
 export const LIMITS = {
   name: 100,
   contact: 254,
-  message: 2000,
+  message: 5000,
   company: 100,
   phone: 40,
   /** A site path: the form's page, or the page the visitor came from. */

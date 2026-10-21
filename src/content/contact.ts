@@ -47,7 +47,9 @@ export const contact = {
       email: "Enter an email address, like name@company.com.",
       message: "Tell us a little about what you need.",
     },
-    privacyNote: "We only use your details to reply to you.",
+    /** {privacy} renders as a link to the privacy policy. */
+    privacyNote: "We'll only use your details to reply to your message. See our {privacy}.",
+    privacyLink: { label: "Privacy Policy", href: "/privacy" },
     submit: "Submit",
     sending: "Sending…",
     sent: {

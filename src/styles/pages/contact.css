@@ -2288,6 +2288,7 @@ html {
 }
 
 .c-actions small {
+  flex-basis: 100%;
   font-size: 0.7rem;
   font-weight: 300;
   color: var(--c-1d2e12);
@@ -2373,6 +2374,7 @@ html {
   margin-top: 10px;
 }
 
+.c-actions small a,
 .c-alert a,
 .c-done a {
   color: inherit;

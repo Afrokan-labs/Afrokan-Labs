@@ -81,6 +81,9 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
   const busy = useRef(false);
   const doneRef = useRef<HTMLDivElement>(null);
   const alertRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  /** The first invalid field, focused once its error text has rendered. */
+  const [focusField, setFocusField] = useState<keyof Errors | null>(null);
 
   // Bring whichever panel just appeared into view (on phones the form runs below the fold) and focus it.
   useEffect(() => {
@@ -89,6 +92,12 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
   useEffect(() => {
     if (sendError) reveal(alertRef.current);
   }, [sendError]);
+  // Focus after render, so a screen reader reads the field's new error (its aria-describedby) with it.
+  useEffect(() => {
+    if (!focusField) return;
+    formRef.current?.querySelector<HTMLElement>(`[name="${focusField}"]`)?.focus();
+    setFocusField(null);
+  }, [focusField]);
 
   // An address typed into the home page's email box arrives here.
   useEffect(() => {
@@ -135,7 +144,7 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
     setSendError(null);
     const firstBad = ORDER.find((k) => next[k]);
     if (firstBad) {
-      form.querySelector<HTMLElement>(`[name="${firstBad}"]`)?.focus();
+      setFocusField(firstBad);
       return;
     }
 
@@ -149,7 +158,7 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
     const body = new FormData();
     body.set(FIELD.name, get("name"));
     body.set(FIELD.contact, get("email"));
-    body.set(FIELD.message, get("message").slice(0, LIMITS.message));
+    body.set(FIELD.message, get("message"));
     body.set(FIELD.company, get("company"));
     body.set(FIELD.phone, get("phone"));
     for (const need of data.getAll("need")) body.append(FIELD.needs, String(need));
@@ -193,7 +202,7 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
       setErrors(fields);
       const bad = ORDER.find((k) => fields[k]);
       if (bad) {
-        form.querySelector<HTMLElement>(`[name="${bad}"]`)?.focus();
+        setFocusField(bad);
         return;
       }
     }
@@ -227,6 +236,7 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
       <form
         className="c-form"
         id="cform"
+        ref={formRef}
         noValidate
         method="post"
         action={CONTACT_ENDPOINT}
@@ -252,7 +262,12 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
           <label htmlFor="c-company">
             {copy.labels.company} <i>{copy.optional}</i>
           </label>
-          <input id="c-company" name="company" autoComplete="organization" />
+          <input
+            id="c-company"
+            name="company"
+            autoComplete="organization"
+            maxLength={LIMITS.company}
+          />
         </div>
         <div className="c-field">
           <label htmlFor="c-email">{copy.labels.email}</label>
@@ -279,6 +294,7 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
             name="phone"
             type="tel"
             autoComplete="tel"
+            maxLength={LIMITS.phone}
             placeholder={copy.phonePlaceholder}
           />
         </div>
@@ -302,6 +318,7 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
             id="c-msg"
             name="message"
             required
+            maxLength={LIMITS.message}
             placeholder={copy.messagePlaceholder}
             aria-invalid={invalid("message")}
             aria-describedby="e-msg"
@@ -320,10 +337,14 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
         />
         {turnstileSiteKey && <div ref={widget} className="c-field full" />}
         <div className="c-actions">
-          <small>{copy.privacyNote}</small>
           <button className="c-submit" type="submit" disabled={sending}>
             {sending ? copy.sending : copy.submit}
           </button>
+          <small>
+            {fill(copy.privacyNote, {
+              privacy: <a href={copy.privacyLink.href}>{copy.privacyLink.label}</a>,
+            })}
+          </small>
         </div>
         <p className="c-status" id="cstatus" role="status">
           {sending ? copy.sending : ""}

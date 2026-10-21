@@ -847,7 +847,8 @@ export const ContactCopy = z.object({
     messagePlaceholder: text,
     needs: z.object({ legend: text, options: z.array(text).min(1) }),
     errors: z.object({ name: text, email: text, message: text }),
-    privacyNote: text,
+    privacyNote: z.string().includes("{privacy}"),
+    privacyLink: z.object({ label: text, href: z.string().startsWith("/") }),
     submit: text,
     sending: text,
     /** Replaces the form once sent. {name} and {email} are what the visitor typed. */

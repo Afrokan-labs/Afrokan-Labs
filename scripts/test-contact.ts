@@ -125,11 +125,11 @@ const tests: [string, () => Promise<void>][] = [
     },
   ],
   [
-    "a WhatsApp number sets no Reply-To and gets no auto-reply",
+    "a phone number instead of an email: 422, nothing sent",
     async () => {
-      await post({ ...VALID, contact: "+233 00 000 0000" });
-      assert.equal((sent[1].body as Record<string, unknown>).reply_to, undefined);
-      assert.equal(sent.length, 2);
+      const r = await post({ ...VALID, contact: "+233 00 000 0000" });
+      assert.deepEqual([r.status, r.body], [422, { ok: false, errors: { contact: "invalid" } }]);
+      assert.equal(sent.length, 1);
     },
   ],
   [
@@ -171,7 +171,7 @@ const tests: [string, () => Promise<void>][] = [
   [
     "invalid fields: 422 with error keys, no email",
     async () => {
-      const r = await post({ ...VALID, name: " ", contact: "123", message: "x".repeat(2001) });
+      const r = await post({ ...VALID, name: " ", contact: "123", message: "x".repeat(5001) });
       assert.equal(r.status, 422);
       assert.deepEqual(r.body, {
         ok: false,

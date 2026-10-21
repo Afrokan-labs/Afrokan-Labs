@@ -14,18 +14,15 @@ import { FIELD, LIMITS, type Field, type FieldErrors } from "./contact-fields";
 
 const email = z.email();
 
-/** An email address, or a phone number of 9–15 digits (spaces, dashes, brackets and a leading + allowed). */
-export function isEmailOrPhone(value: string): boolean {
-  if (value.includes("@")) return z.safeParse(email, value).success;
-  return /^\+?[\d\s()-]+$/.test(value) && /^\d{9,15}$/.test(value.replace(/\D/g, ""));
-}
+/** A well-formed email address. The form posts it as "contact". */
+export const isEmail = (value: string): boolean => z.safeParse(email, value).success;
 
 const text = (max: number) =>
   z.string().check(z.trim(), z.minLength(1, "required"), z.maxLength(max, "tooLong"));
 
 export const ContactSubmission = z.object({
   name: text(LIMITS.name),
-  contact: text(LIMITS.contact).check(z.refine(isEmailOrPhone, "invalid")),
+  contact: text(LIMITS.contact).check(z.refine(isEmail, "invalid")),
   message: text(LIMITS.message),
 });
 export type ContactSubmission = z.infer<typeof ContactSubmission>;
