@@ -26,7 +26,6 @@ import { site } from "../src/content/site";
 import { solutions } from "../src/content/solutions";
 import { members } from "../src/content/team";
 import { testimonials } from "../src/content/testimonials";
-import { tierCopy } from "../src/content/tiers";
 
 /** Approved sources, then drafts awaiting approval (see each doc's status line). */
 const APPROVED = [
@@ -82,7 +81,6 @@ collect(
     solutions,
     members,
     testimonials,
-    tiers: tierCopy,
     caseStudy,
     contact,
   },

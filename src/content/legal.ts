@@ -11,7 +11,11 @@ import type { Legal } from "./schema";
  */
 export const legal = {
   privacy: {
-    meta: { title: "Privacy Policy" },
+    meta: {
+      title: "Privacy Policy",
+      description:
+        "How Afrokan Labs collects, uses and protects your information when you visit our website, contact us on WhatsApp or by email, or work with us.",
+    },
     kicker: "Legal · Privacy",
     heading: { lead: "Privacy ", mark: "policy" },
     intro:
@@ -160,7 +164,11 @@ export const legal = {
     other: { label: "Read our Terms of Use →", href: "/terms" },
   },
   terms: {
-    meta: { title: "Terms of Service" },
+    meta: {
+      title: "Terms of Service",
+      description:
+        "The rules for using the Afrokan Labs website, what its content does and doesn’t promise, and how our written project agreements fit in.",
+    },
     kicker: "Legal · Terms",
     heading: { lead: "Terms of ", mark: "use" },
     intro: "The rules for using the Afrokan Labs website, and how our project agreements fit in.",

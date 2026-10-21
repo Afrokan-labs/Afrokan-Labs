@@ -24,7 +24,6 @@ import { site } from "../content/site";
 import { solutions } from "../content/solutions";
 import { members } from "../content/team";
 import { reviews, testimonials } from "../content/testimonials";
-import { tierCopy } from "../content/tiers";
 import { work } from "../content/work";
 
 const PROJECTS_DIR = join(process.cwd(), "src", "content", "projects");
@@ -60,7 +59,6 @@ export const getPackages = () => parse("src/content/packages.ts", schema.Package
 export const getSolutions = () => parse("src/content/solutions.ts", schema.Solutions, solutions);
 export const getIndustries = () =>
   parse("src/content/industries.ts", schema.Industries, industries);
-export const getTierCopy = () => parse("src/content/tiers.ts", schema.TierCopy, tierCopy);
 export const getMembers = () => parse("src/content/team.ts (members)", schema.Members, members);
 export const getReviews = () =>
   parse("src/content/testimonials.ts (reviews)", schema.Reviews, reviews);
@@ -161,41 +159,9 @@ export function getNav() {
 
 // ----- Tier-derived copy (architecture §4) -----
 
-const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
-
 /** The name shown for a client: real name at the named tier, else the anonymised label. */
 export function clientDisplayName(p: schema.Project): string {
   return p.client.nameApproved ? p.client.name : p.client.anonymisedLabel;
-}
-
-/** Hero proof line, e.g. "Built and running for a Ghanaian clearing and forwarding firm." */
-export function getProofLine(p: schema.Project): string {
-  const copy = getTierCopy().proofLine;
-  const who = p.client.nameApproved ? p.client.name : lowerFirst(p.client.anonymisedLabel);
-  return (p.status === "live" ? copy.live : copy.delivered).replace("{client}", who);
-}
-
-/** Caption under the HTML conversation. Undefined when the project has no approved conversation. */
-export function getConversationCaption(p: schema.Project): string | undefined {
-  if (!p.conversation) return undefined;
-  const copy = getTierCopy();
-  if (p.status !== "live") return copy.conversationCaption.delivered;
-  if (!p.client.nameApproved) return copy.conversationCaption.anonymised;
-  const short = copy.shortNames[p.slug];
-  if (!short)
-    throw new ContentError("src/content/tiers.ts", `shortNames has no entry for "${p.slug}".`);
-  return copy.conversationCaption.named.replace("{short}", short);
-}
-
-/** Screen-reader speaker labels for the conversation, by tier. */
-export function getSpeakerLabels(p: schema.Project) {
-  const copy = getTierCopy();
-  const short = copy.shortNames[p.slug];
-  const assistant =
-    p.client.nameApproved && short
-      ? copy.speakerLabels.assistantNamed.replace("{short}", short)
-      : copy.speakerLabels.assistantAnonymised;
-  return { customer: copy.speakerLabels.customer, assistant };
 }
 
 /** StatusChip labels, e.g. { live: "Live since May 2026", delivered: "Delivered" }. */
@@ -230,7 +196,6 @@ export async function validateAllContent() {
   getLegal();
   getCaseStudyCopy();
   getContactCopy();
-  getTierCopy();
   const quotes = getTestimonials();
   const services = getServices();
   getPackages();

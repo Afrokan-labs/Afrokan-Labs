@@ -294,25 +294,6 @@ export type Members = z.infer<typeof Members>;
 export type Reviews = z.infer<typeof Reviews>;
 export type BuiltKind = z.infer<typeof BuiltKind>;
 
-export const TierCopy = z.object({
-  proofLine: z.object({
-    live: z.string().includes("{client}"),
-    delivered: z.string().includes("{client}"),
-  }),
-  conversationCaption: z.object({
-    named: z.string().includes("{short}"),
-    anonymised: z.string().min(1),
-    delivered: orTodo(z.string().min(1), "a caption for a delivered (not live) system"),
-  }),
-  speakerLabels: z.object({
-    customer: z.string().min(1),
-    assistantNamed: z.string().includes("{short}"),
-    assistantAnonymised: z.string().min(1),
-  }),
-  shortNames: z.record(z.string(), z.string()),
-});
-export type TierCopy = z.infer<typeof TierCopy>;
-
 const text = z.string().min(1);
 /** A heading drawn over several lines (the reference breaks with <br>). */
 const Lines = z.array(text).min(1);
