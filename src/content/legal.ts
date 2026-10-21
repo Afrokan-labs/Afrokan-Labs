@@ -4,7 +4,9 @@ import type { Legal } from "./schema";
 /**
  * Privacy Policy and Terms of Use. Source: the site handoff's
  * reference/privacy.html and terms.html: plain-language drafts, pending review
- * by a Ghanaian lawyer (TODO.md). Remove `draft` once reviewed.
+ * by a Ghanaian lawyer (TODO.md). Remove `draft` once reviewed. The only
+ * source for /privacy; analytics wording (Cloudflare Web Analytics) added
+ * 2026-10-21.
  * In text: **bold**, [label](/path), and {email} / {domain} from site.ts.
  */
 export const legal = {
@@ -14,7 +16,7 @@ export const legal = {
     heading: { lead: "Privacy ", mark: "policy" },
     intro:
       "How Afrokan Labs collects, uses and protects your personal information when you visit our website or work with us.",
-    updated: "Last updated: 3 October 2026",
+    updated: "Last updated: 21 October 2026",
     place: "Afrokan Labs · Accra, Ghana",
     draft: "Draft: pending legal review",
     tocLabel: "On this page",
@@ -35,12 +37,30 @@ export const legal = {
             ul: [
               "**Details you give us**: your name, company, email address, WhatsApp number and the message you send through our contact form, by email or on WhatsApp.",
               "**Project information**: documents, requirements and other material you share with us so we can scope or build a project.",
-              "**Basic technical data**: information your browser sends automatically, such as device type, pages visited and approximate location, collected through standard server logs or privacy-friendly analytics.",
+              "**Basic technical data**: information your browser sends automatically, such as device type, pages visited and approximate location. We count visits with Cloudflare Web Analytics (see Analytics below).",
               "**Your theme choice**: if you switch between light and dark mode, your browser remembers the choice locally. It is not sent to us.",
             ],
           },
           {
             p: "We do not knowingly collect information from children, and we do not ask for sensitive information such as health or financial details through this website.",
+          },
+        ],
+      },
+      {
+        title: "Analytics",
+        blocks: [
+          {
+            p: "We use **Cloudflare Web Analytics** to see how the site is used. It doesn’t use cookies, and it gives us aggregated page-view data only, processed by Cloudflare:",
+          },
+          {
+            ul: [
+              "which pages are visited, and which site linked to them",
+              "the type of browser and device, and the country the visit came from",
+              "how quickly pages load",
+            ],
+          },
+          {
+            p: "This data is aggregated and does not identify you. Cloudflare decides how long it is kept, under its [privacy policy](https://www.cloudflare.com/privacypolicy/).",
           },
         ],
       },

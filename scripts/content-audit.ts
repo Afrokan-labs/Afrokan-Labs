@@ -21,7 +21,6 @@ import { work } from "../src/content/work";
 import { caseStudy } from "../src/content/case-study";
 import { contact } from "../src/content/contact";
 import { home } from "../src/content/home";
-import { privacy } from "../src/content/privacy";
 import { services } from "../src/content/services";
 import { site } from "../src/content/site";
 import { solutions } from "../src/content/solutions";
@@ -85,7 +84,6 @@ collect(
     testimonials,
     tiers: tierCopy,
     caseStudy,
-    privacy,
     contact,
   },
   "",

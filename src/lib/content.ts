@@ -18,7 +18,6 @@ import { home } from "../content/home";
 import { industries } from "../content/industries";
 import { legal } from "../content/legal";
 import { packages } from "../content/packages";
-import { privacy } from "../content/privacy";
 import * as schema from "../content/schema";
 import { services } from "../content/services";
 import { site } from "../content/site";
@@ -55,7 +54,6 @@ export const getArticles = () =>
 export const getLegal = () => parse("src/content/legal.ts", schema.Legal, legal);
 export const getCaseStudyCopy = () =>
   parse("src/content/case-study.ts", schema.CaseStudyCopy, caseStudy);
-export const getPrivacy = () => parse("src/content/privacy.ts", schema.Privacy, privacy);
 export const getContactCopy = () => parse("src/content/contact.ts", schema.ContactCopy, contact);
 export const getServices = () => parse("src/content/services.ts", schema.Services, services);
 export const getPackages = () => parse("src/content/packages.ts", schema.Packages, packages);
@@ -231,7 +229,6 @@ export async function validateAllContent() {
   getArticles();
   getLegal();
   getCaseStudyCopy();
-  getPrivacy();
   getContactCopy();
   getTierCopy();
   const quotes = getTestimonials();

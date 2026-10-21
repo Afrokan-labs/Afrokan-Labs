@@ -840,31 +840,6 @@ export const CaseStudyCopy = z.object({
 });
 export type CaseStudyCopy = z.infer<typeof CaseStudyCopy>;
 
-export const Privacy = z.object({
-  /** Who approved the copy and when. TODO_ until approved (launch:check fails). */
-  approvedBy: orTodo(z.string().min(1), "who approved the privacy copy and when"),
-  title: z.string().min(1),
-  /** Meta description. Omitted from the page while TODO_. */
-  description: orTodo(z.string().min(1).max(155), "a meta description of up to 155 characters"),
-  intro: z.string().min(1),
-  sections: z
-    .array(
-      z.object({
-        heading: z.string().min(1),
-        /** "{email}" is replaced with the site email and linked. */
-        paragraphs: z.array(z.string().min(1)).min(1),
-        list: z.array(z.string().min(1)).optional(),
-        after: z.array(z.string().min(1)).optional(),
-      }),
-    )
-    .min(1),
-  lastUpdated: z.object({
-    label: z.string().min(1),
-    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "YYYY-MM-DD"),
-  }),
-});
-export type Privacy = z.infer<typeof Privacy>;
-
 const ResultPage = z.object({ title: z.string().min(1), body: z.string().min(1) });
 
 /** /contact (BUILD_PLAN 6.1, architecture §5). Field rules: src/lib/contact-form.ts. */
