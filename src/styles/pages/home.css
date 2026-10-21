@@ -4661,16 +4661,21 @@ html {
     transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s;
   }
 
-  /* The hero headline and portrait (the LCP candidates) don't animate in, so
-     they paint in the first frame; the rest of the hero still rises in. */
+  /* The home hero's headline doesn't animate in, so it paints in the first
+     frame; the blocks beside it fade and rise in. */
   .x-hero .x-left,
   .x-hero .x-right,
-  .x-stats,
+  .x-stats {
+    animation: fx-up 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  /* The other pages' heroes hold their headline and photos (the LCP
+     element), so they rise in without fading: visible from the first frame. */
   .s-hero > *,
   .x-hero-grid > *,
   .sol-text,
   .i-words {
-    animation: fx-up 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation: fx-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
 
   .x-hero .x-left,
@@ -4697,6 +4702,16 @@ html {
 
     to {
       opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes fx-rise {
+    from {
+      transform: translateY(26px);
+    }
+
+    to {
       transform: none;
     }
   }

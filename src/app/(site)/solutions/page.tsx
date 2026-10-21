@@ -12,10 +12,11 @@ export const metadata = pageMetadata({ path: "/solutions", ...getSolutions().met
 
 // The poster's photos, in wedge order. sizes: each photo's share of the
 // 1200-wide artwork, which spans the viewport up to about 1240px.
+/** The collage. Only the LCP photo (yard, measured with Lighthouse) gets high priority. */
 const PHOTOS = [
   { src: "solutions-morning.webp", sizes: "(max-width: 1240px) 32vw, 400px" },
   { src: "solutions-office.webp", sizes: "(max-width: 1240px) 64vw, 800px" },
-  { src: "solutions-yard.webp", sizes: "(max-width: 1240px) 55vw, 680px" },
+  { src: "solutions-yard.webp", sizes: "(max-width: 1240px) 55vw, 680px", lcp: true },
   { src: "solutions-evening.webp", sizes: "(max-width: 1240px) 53vw, 660px" },
 ];
 
@@ -58,7 +59,8 @@ export default function SolutionsPage() {
                 {PHOTOS.map((photo, i) => (
                   <Img
                     key={photo.src}
-                    priority
+                    priority={"lcp" in photo}
+                    eager
                     src={photo.src}
                     className={`sol-photo sol-ph${i}`}
                     sizes={photo.sizes}
