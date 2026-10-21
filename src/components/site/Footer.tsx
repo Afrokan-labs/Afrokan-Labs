@@ -1,5 +1,5 @@
 import { getLinks, NAV } from "@/lib/links";
-import { LogoMark } from "./LogoMark";
+import { LogoMark, SocialIcon } from "./LogoMark";
 
 /** reference footer (every page): GET IN TOUCH, three columns, © line, Accra clock, back to top. */
 export function Footer() {
@@ -34,15 +34,20 @@ export function Footer() {
           <div className="f-col">
             <h2>Socials</h2>
             <ul>
-              <li>
-                <a href={links.linkedin}>LinkedIn</a>
-              </li>
-              <li>
-                <a href={links.x}>X</a>
-              </li>
-              <li>
-                <a href={links.instagram}>Instagram</a>
-              </li>
+              {links.social.map((p) => (
+                <li key={p.key}>
+                  <a
+                    className="f-social"
+                    href={p.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${p.label} ${links.opensNewTab}`}
+                  >
+                    <SocialIcon className="social-icon" path={p.path} />
+                    {p.name}
+                  </a>
+                </li>
+              ))}
               <li>
                 <a href={links.whatsapp} {...links.whatsappAttrs}>
                   WhatsApp

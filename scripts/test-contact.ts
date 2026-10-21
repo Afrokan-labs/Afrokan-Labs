@@ -5,7 +5,27 @@
  */
 import assert from "node:assert/strict";
 import { onRequest } from "../functions/api/contact";
+import { readFileSync } from "node:fs";
 import { autoReplyText, ghanaTime, notificationText } from "../src/lib/contact-email";
+import { signatureHtml } from "../src/lib/email-signature";
+
+const ICONS = [
+  ["x", "X", "https://x.com/afrokanlabs"],
+  ["instagram", "Instagram", "https://instagram.com/afrokanlabs"],
+  ["linkedin", "LinkedIn", "https://linkedin.com/company/afrokanlabs"],
+] as const;
+
+/** Every social icon: a linked 20 × 20 PNG from the live site, with its platform as alt text. */
+function assertSocialIcons(html: string) {
+  for (const [key, alt, href] of ICONS)
+    assert.match(
+      html,
+      new RegExp(
+        `<a href="${href}"[^>]*><img src="https://afrokanlabs\\.com/email/icons/${key}\\.png" width="20" height="20" alt="${alt}"`,
+      ),
+      key,
+    );
+}
 
 const ORIGIN = "https://afrokanlabs.com";
 const ENV = {
@@ -288,6 +308,38 @@ const tests: [string, () => Promise<void>][] = [
         ghanaTime(new Date("2026-12-31T23:05:00Z")),
         "Thursday, 31 December 2026, 23:05 GMT",
       );
+    },
+  ],
+  [
+    "both email footers link X, Instagram and LinkedIn with PNG icons",
+    async () => {
+      await post(VALID);
+      for (const i of [1, 2]) assertSocialIcons((sent[i].body as Record<string, string>).html);
+      assert.match(autoReplyText(), /^Instagram: https:\/\/instagram\.com\/afrokanlabs$/m);
+    },
+  ],
+  [
+    "signatures: compact team markup, PNGs only, and the files in docs/ are up to date",
+    async () => {
+      for (const named of [false, true]) {
+        const html = signatureHtml({ named });
+        assert.doesNotMatch(html, /class=|<svg|\.svg|<link|@import|<style|font-face/);
+        assert.match(html, /max-width:400px/);
+        assert.match(
+          html,
+          /<img src="https:\/\/afrokanlabs\.com\/email\/logo\.png" width="88" height="88" alt="Afrokan Labs"/,
+        );
+        assert.match(html, /border-left:2px solid #94de57/);
+        assert.match(html, />The Afrokan Labs Team</);
+        assert.match(html, />AI and software studio in Accra</);
+        assert.match(html, /href="https:\/\/wa\.me\/233596069011"[^>]*>\+233 59 606 9011</);
+        assert.match(html, /href="mailto:hello@afrokanlabs\.com"/);
+        assert.match(html, /href="https:\/\/afrokanlabs\.com"[^>]*>afrokanlabs\.com</);
+        assert.equal(/\[First name\] &middot; Afrokan Labs/.test(html), named);
+        assertSocialIcons(html);
+        const file = `docs/email-signatures/email-signature-${named ? "named" : "team"}.html`;
+        assert.equal(readFileSync(file, "utf8"), `${html}\n`, `${file}: run pnpm email:signatures`);
+      }
     },
   ],
   [

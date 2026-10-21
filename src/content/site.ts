@@ -60,6 +60,8 @@ export const site = {
     skipLink: "Skip to content",
     opensWhatsApp: "(opens WhatsApp)",
     opensNewTab: "(opens in a new tab)",
+    // Each social link's accessible name, e.g. "Afrokan Labs on Instagram".
+    socialLabel: "{name} on {platform}",
     // Copy §2: "Live since [Month Year]"; {date} is filled from the project's liveSince.
     status: { live: "Live", liveSince: "Live since {date}", delivered: "Delivered" },
     nav: {
@@ -146,10 +148,16 @@ export const site = {
     },
   },
 
-  // Each icon appears once its URL is set. Delete a line to leave that profile out.
+  // The one place for the social profiles: site footer, Contact page, JSON-LD
+  // sameAs, both contact emails and the email signatures. Each appears once its
+  // URL is set; delete a line to leave that profile out.
   social: {
-    linkedin: "TODO_LINKEDIN_URL",
-    x: "TODO_X_URL",
-    instagram: "TODO_INSTAGRAM_URL",
+    x: "https://x.com/afrokanlabs",
+    instagram: "https://instagram.com/afrokanlabs",
+    linkedin: "https://linkedin.com/company/afrokanlabs",
   },
+  // Email signature tagline: the homepage meta title (home.meta.title), after the name.
+  tagline: "AI and software studio in Accra",
+  // The hello@ email signatures (src/lib/email-signature.ts).
+  emailSignature: { team: "The {name} Team", whatsapp: "WhatsApp" },
 } satisfies z.input<typeof Site>;

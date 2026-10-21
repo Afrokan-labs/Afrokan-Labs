@@ -192,3 +192,52 @@ svg text {
     transition: opacity 0.2s;
   }
 }
+
+/*
+ * Social profile logos (src/lib/social.ts). One neutral colour, the link's
+ * own: light on the dark footer, dark on the light theme and the Contact page.
+ */
+.social-icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.f-col a.f-social {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.c-social {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.c-social b {
+  margin-right: 4px;
+}
+
+.c-direct .c-social a {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--c-0d0d0d);
+}
+
+.c-direct .c-social a:hover {
+  background: rgb(0 0 0 / 0.08);
+}
+
+.c-direct .c-social a:focus-visible {
+  outline: 2px solid var(--c-0d0d0d);
+  outline-offset: 1px;
+}
+
+.c-social .social-icon {
+  width: 18px;
+  height: 18px;
+}

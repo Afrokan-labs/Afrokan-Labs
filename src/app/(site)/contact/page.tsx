@@ -1,5 +1,6 @@
 import "@/styles/pages/contact.css";
 import { ContactForm } from "@/components/site/ContactForm";
+import { SocialIcon } from "@/components/site/LogoMark";
 import { env } from "@/lib/env";
 import { getContactCopy, getSite } from "@/lib/content";
 import { getLinks } from "@/lib/links";
@@ -106,6 +107,22 @@ export default function ContactPage() {
                 <b>{page.direct.based}</b>
                 {links.location}
               </span>
+              {links.social.length > 0 && (
+                <span className="c-social">
+                  <b>{page.direct.follow}</b>
+                  {links.social.map((p) => (
+                    <a
+                      key={p.key}
+                      href={p.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${p.label} ${links.opensNewTab}`}
+                    >
+                      <SocialIcon className="social-icon" path={p.path} />
+                    </a>
+                  ))}
+                </span>
+              )}
             </div>
           </section>
         </div>

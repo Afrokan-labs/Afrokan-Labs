@@ -162,6 +162,7 @@ export const Site = z.object({
     skipLink: z.string().min(1),
     opensWhatsApp: z.string().min(1),
     opensNewTab: z.string().min(1),
+    socialLabel: z.string().includes("{name}").includes("{platform}"),
     status: z.object({
       live: z.string().min(1),
       liveSince: z.string().includes("{date}"),
@@ -216,10 +217,12 @@ export const Site = z.object({
   }),
   /** Profiles; each icon shows only once its URL is confirmed. */
   social: z.object({
-    linkedin: orTodo(z.url(), "the LinkedIn page URL").optional(),
     x: orTodo(z.url(), "the X profile URL").optional(),
     instagram: orTodo(z.url(), "the Instagram profile URL").optional(),
+    linkedin: orTodo(z.url(), "the LinkedIn page URL").optional(),
   }),
+  tagline: z.string().min(1),
+  emailSignature: z.object({ team: z.string().includes("{name}"), whatsapp: z.string().min(1) }),
 });
 
 /** About "Members" (site update 1): real people only, each with a transparent cut-out. */
@@ -878,7 +881,7 @@ export const ContactCopy = z.object({
     closeLabel: text,
     heading: text,
     intro: text,
-    direct: z.object({ email: text, based: text }),
+    direct: z.object({ email: text, based: text, follow: text }),
   }),
   /** The handoff form. Its post goes to functions/api/contact.ts. */
   form: z.object({

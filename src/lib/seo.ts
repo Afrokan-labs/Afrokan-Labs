@@ -53,6 +53,7 @@ const ORGANIZATION_ID = "/#organization";
 /** Homepage: the company as an Organization and a ProfessionalService, at city level. */
 export function organizationJsonLd() {
   const site = getSite();
+  const sameAs = Object.values(site.social).filter(confirmed);
   return {
     "@context": "https://schema.org",
     "@type": ["Organization", "ProfessionalService"],
@@ -67,6 +68,6 @@ export function organizationJsonLd() {
       addressLocality: site.address.locality,
       addressCountry: site.address.country,
     },
-    ...(confirmed(site.social.linkedin) ? { sameAs: [site.social.linkedin] } : {}),
+    ...(sameAs.length ? { sameAs } : {}),
   };
 }

@@ -14,10 +14,11 @@
 import { contact as copy } from "../content/contact";
 import { site } from "../content/site";
 import { replyToFor, type ContactExtras, type ContactSubmission } from "./contact-form";
+import { emailIconPath, socialLinks } from "./social";
 import { waMeUrl } from "./wa-me";
 
 /** tokens.css: --c-0d0d0d, --c-94de57, --c-1d3a0c, --c-f3f3ef, --c-444444, --c-dadad3, --c-ffffff. */
-const C = {
+export const C = {
   ink: "#0d0d0d",
   accent: "#94de57",
   accentDeep: "#1d3a0c",
@@ -26,7 +27,7 @@ const C = {
   rule: "#dadad3",
   white: "#ffffff",
 } as const;
-const FONT = "Arial, Helvetica, sans-serif";
+export const FONT = "Arial, Helvetica, sans-serif";
 
 /** The 2x logo mark (public/email/logo-mark.png, 80 × 72), shown at 40 × 36. */
 export const LOGO_PATH = "/email/logo-mark.png";
@@ -73,6 +74,22 @@ export function ghanaTime(date: Date): string {
   return `${text.replace(" at ", ", ")} GMT`;
 }
 
+/**
+ * The X, Instagram and LinkedIn icons as linked PNGs: 40 × 40, shown at 20 × 20,
+ * each on its own small dark rounded tile so it reads on light and dark
+ * backgrounds alike. Empty when no profile is confirmed.
+ */
+export function socialIconsHtml(assetOrigin: string): string {
+  const cells = socialLinks(site.social, site.name, site.ui.socialLabel).map(
+    (p, i) =>
+      `<td style="padding:0 0 0 ${i ? 8 : 0}px;"><a href="${esc(p.href)}" title="${esc(p.label)}" style="text-decoration:none;"><img src="${esc(assetOrigin + emailIconPath(p.key))}" width="20" height="20" alt="${esc(p.name)}" style="display:block;border:0;width:20px;height:20px;"></a></td>`,
+  );
+  // A one-row table, so Outlook keeps the icons side by side.
+  return cells.length
+    ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr>${cells.join("")}</tr></table>`
+    : "";
+}
+
 /** The letterhead: logo bar, accent rule, content, footer. `body` is trusted HTML. */
 function letterhead({
   title,
@@ -86,6 +103,7 @@ function letterhead({
   assetOrigin: string;
 }): string {
   const siteUrl = `https://${site.domain}`;
+  const socials = socialIconsHtml(assetOrigin);
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -110,7 +128,12 @@ function letterhead({
 ${body}
 </td></tr>
 <tr><td style="background:${C.white};padding:16px 24px;font:12px/1.6 ${FONT};color:${C.muted};border-top:1px solid ${C.rule};">
-<a href="mailto:${esc(site.email)}" style="color:${C.ink};">${esc(site.email)}</a> &nbsp;·&nbsp; <a href="${esc(siteUrl)}" style="color:${C.ink};">${esc(site.domain)}</a> &nbsp;·&nbsp; ${esc(site.location)}
+<a href="mailto:${esc(site.email)}" style="color:${C.ink};">${esc(site.email)}</a> &nbsp;·&nbsp; <a href="${esc(siteUrl)}" style="color:${C.ink};">${esc(site.domain)}</a> &nbsp;·&nbsp; ${esc(site.location)}${
+    socials
+      ? `
+<div style="margin-top:10px;">${socials}</div>`
+      : ""
+  }
 </td></tr>
 </table>
 </td></tr>
@@ -229,5 +252,6 @@ export function autoReplyText(): string {
     "--",
     site.name,
     `${site.email} · ${site.domain} · ${site.location}`,
+    ...socialLinks(site.social, site.name, site.ui.socialLabel).map((p) => `${p.name}: ${p.href}`),
   ].join("\n");
 }

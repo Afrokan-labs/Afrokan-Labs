@@ -19,7 +19,7 @@ export const contact = {
     heading: "Contact us",
     intro:
       "Interested in working with us? Fill in the form below and we'll get back to you within 24 hours.",
-    direct: { email: "Email", based: "Based in" },
+    direct: { email: "Email", based: "Based in", follow: "Follow us" },
   },
   form: {
     labels: {

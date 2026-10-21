@@ -19,6 +19,15 @@ export function LogoMark({
   );
 }
 
+/** A platform logo from src/lib/social.ts, in currentColor at the size CSS gives it. */
+export function SocialIcon({ path, className }: { path: string; className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d={path} fill="currentColor" />
+    </svg>
+  );
+}
+
 /** The WhatsApp glyph from the page's <symbol id="wa"> (WaSprite). */
 export function WaIcon({ className }: { className?: string }) {
   return (

@@ -1,11 +1,12 @@
 /**
  * pnpm email:test — sends one test copy of each contact email (the notification
- * and the auto-reply) to an address of your choice, through Resend, using the
- * same templates as functions/api/contact.ts. The enquiry is made up.
+ * and the auto-reply) and of both hello@ signatures to an address of your
+ * choice, through Resend, using the same templates as functions/api/contact.ts
+ * and docs/email-signatures/. The enquiry is made up.
  *
  *   pnpm email:test you@example.com
  *   pnpm email:test you@example.com --assets https://<preview>.afrokan-labs.pages.dev
- *   pnpm email:test --preview <dir>     writes both as .html files, sends nothing
+ *   pnpm email:test --preview <dir>     writes them all as .html files, sends nothing
  *
  * RESEND_API_KEY comes from the environment or from .dev.vars (gitignored).
  * --assets sets where the logo loads from (default: the live site), for
@@ -23,6 +24,11 @@ import {
   notificationText,
 } from "../src/lib/contact-email";
 import { contact as copy } from "../src/content/contact";
+import { signatureHtml } from "../src/lib/email-signature";
+
+/** A short reply with the signature under it, as it would leave hello@. No colours of its own. */
+const signatureTest = (named: boolean, assets: string) =>
+  `<!doctype html><html><body><div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;">Hello,<br><br>This is a test of the ${named ? "named" : "team"} signature, as it appears under a reply from ${site.email}.<br><br></div>${signatureHtml({ named, assetOrigin: assets })}</body></html>`;
 
 const args = process.argv.slice(2);
 const option = (name: string) => {
@@ -73,6 +79,8 @@ async function main() {
     writeFileSync(join(preview, "notification.txt"), notificationText(SAMPLE, now));
     writeFileSync(join(preview, "auto-reply.html"), autoReplyHtml(assets));
     writeFileSync(join(preview, "auto-reply.txt"), autoReplyText());
+    writeFileSync(join(preview, "signature-team.html"), signatureTest(false, assets));
+    writeFileSync(join(preview, "signature-named.html"), signatureTest(true, assets));
     console.log(`Wrote previews to ${preview}`);
     return;
   }
@@ -94,7 +102,19 @@ async function main() {
     text: autoReplyText(),
     reply_to: site.email,
   });
-  console.log(`Sent to ${to}: notification ${notification}, auto-reply ${reply}.`);
+  const signatures = [];
+  for (const named of [false, true])
+    signatures.push(
+      await send(key, {
+        to: [to],
+        subject: `[TEST] Email signature (${named ? "named" : "team"})`,
+        html: signatureTest(named, assets),
+        reply_to: site.email,
+      }),
+    );
+  console.log(
+    `Sent to ${to}: notification ${notification}, auto-reply ${reply}, signatures ${signatures.join(", ")}.`,
+  );
 }
 
 main().catch((error: unknown) => {
