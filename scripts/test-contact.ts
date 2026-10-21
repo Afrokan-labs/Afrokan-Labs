@@ -4,7 +4,8 @@
  * every request the function makes is checked. Exits 1 on any failure.
  */
 import assert from "node:assert/strict";
-import { autoReplyText, notificationText, onRequest } from "../functions/api/contact";
+import { onRequest } from "../functions/api/contact";
+import { autoReplyText, ghanaTime, notificationText } from "../src/lib/contact-email";
 
 const ORIGIN = "https://afrokanlabs.com";
 const ENV = {
@@ -43,7 +44,7 @@ globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
 console.error = console.warn = () => {};
 
 async function post(
-  fields: Record<string, string>,
+  fields: Record<string, string> | [string, string][],
   opts: { json?: boolean; origin?: string } = {},
 ) {
   sent = [];
@@ -64,7 +65,7 @@ async function post(
 
 const tests: [string, () => Promise<void>][] = [
   [
-    "valid post sends one email with a fixed subject and Reply-To",
+    "valid post: one notification (HTML + text) with the name in the subject and Reply-To",
     async () => {
       const r = await post(VALID);
       assert.deepEqual([r.status, r.body], [200, { ok: true }]);
@@ -75,11 +76,12 @@ const tests: [string, () => Promise<void>][] = [
         remoteip: "203.0.113.7",
       });
       const email = sent[1].body as Record<string, unknown>;
-      assert.equal(email.subject, "New message from the website contact form");
+      assert.equal(email.subject, "New enquiry: Test Person");
       assert.deepEqual(email.to, ["hello@afrokanlabs.com"]);
       assert.equal(email.from, "Afrokan Labs website <notify@notify.afrokanlabs.com>");
       assert.equal(email.reply_to, "test@example.com");
       assert.match(String(email.text), /Name: Test Person/);
+      assert.match(String(email.html), /<td[^>]*>Test Person<\/td>/);
     },
   ],
   [
@@ -204,15 +206,100 @@ const tests: [string, () => Promise<void>][] = [
     },
   ],
   [
-    "the email body is plain text, input kept as typed",
+    "optional details: own rows, needs in the subject, unknown needs and odd paths dropped",
     async () => {
-      const text = notificationText({
-        name: "<b>Ama</b>",
-        contact: "a@b.co",
-        message: "Line 1\nLine 2",
-      });
-      assert.match(text, /^Name: <b>Ama<\/b>\n/);
-      assert.match(text, /Message:\nLine 1\nLine 2$/);
+      await post([
+        ...Object.entries(VALID),
+        ["company", "Test Shop Ltd"],
+        ["phone", "024 000 0000"],
+        ["need", "Website or web app"],
+        ["need", "Free money"],
+        ["page", "/contact"],
+        ["from", "javascript:alert(1)"],
+      ]);
+      const email = sent[1].body as Record<string, string>;
+      assert.equal(email.subject, "New enquiry: Test Person (Website or web app)");
+      for (const row of ["Company: Test Shop Ltd", "WhatsApp: 024 000 0000", "Page: /contact"])
+        assert.ok(email.text.includes(row), row);
+      assert.doesNotMatch(email.text + email.html, /Free money|javascript/);
+      assert.match(email.text, /^Sent: \w+day, \d+ \w+ \d{4}, \d\d:\d\d GMT$/m);
+    },
+  ],
+  [
+    "the page the visitor came from is shown beside the form's page",
+    async () => {
+      await post([...Object.entries(VALID), ["page", "/contact"], ["from", "/services"]]);
+      assert.match(
+        (sent[1].body as Record<string, string>).text,
+        /Page: \/contact \(came from \/services\)/,
+      );
+    },
+  ],
+  [
+    "HTML escapes everything the visitor typed; the subject stays on one line",
+    async () => {
+      await post([
+        ...Object.entries({
+          ...VALID,
+          name: 'Ama\r\nBcc: x@example.com <img src=x onerror="alert(1)">',
+          message: "<script>alert('x')</script>\nLine 2 & more",
+        }),
+        ["company", '"><b>Co</b>'],
+      ]);
+      const email = sent[1].body as Record<string, string>;
+      assert.doesNotMatch(email.html, /<img src=x|<script>|<b>Co<\/b>/);
+      assert.ok(
+        email.html.includes("&lt;script&gt;alert(&#39;x&#39;)&lt;/script&gt;<br>Line 2 &amp; more"),
+      );
+      assert.ok(email.html.includes("&quot;&gt;&lt;b&gt;Co&lt;/b&gt;"));
+      assert.doesNotMatch(email.subject, /[\r\n]/);
+      assert.ok(email.subject.startsWith("New enquiry: Ama Bcc: x@example.com"));
+    },
+  ],
+  [
+    "both emails load the logo as a PNG from the live site, never SVG",
+    async () => {
+      await post(VALID);
+      for (const i of [1, 2]) {
+        const html = (sent[i].body as Record<string, string>).html;
+        assert.match(html, /<img src="https:\/\/afrokanlabs\.com\/email\/logo-mark\.png"/);
+        assert.doesNotMatch(html, /<svg|\.svg/);
+      }
+    },
+  ],
+  [
+    "the auto-reply HTML repeats nothing the visitor typed",
+    async () => {
+      await post({ ...VALID, name: "Visit spam.example", message: "Buy at spam.example" });
+      const html = (sent[2].body as Record<string, string>).html;
+      assert.doesNotMatch(html, /spam|Visit|Buy/);
+      assert.match(html, /href="https:\/\/wa\.me\/\d+"/);
+      assert.match(html, /hello@afrokanlabs\.com/);
+    },
+  ],
+  [
+    "Ghana time is GMT all year",
+    async () => {
+      assert.equal(
+        ghanaTime(new Date("2026-07-01T09:30:00Z")),
+        "Wednesday, 1 July 2026, 09:30 GMT",
+      );
+      assert.equal(
+        ghanaTime(new Date("2026-12-31T23:05:00Z")),
+        "Thursday, 31 December 2026, 23:05 GMT",
+      );
+    },
+  ],
+  [
+    "the plain-text part keeps input as typed",
+    async () => {
+      const text = notificationText(
+        { name: "<b>Ama</b>", contact: "a@b.co", message: "Line 1\nLine 2", needs: [] },
+        new Date("2026-07-01T09:30:00Z"),
+      );
+      assert.match(text, /^Name: <b>Ama<\/b>$/m);
+      assert.match(text, /^Email: a@b\.co$/m);
+      assert.match(text, /Message:\nLine 1\nLine 2\n/);
     },
   ],
 ];

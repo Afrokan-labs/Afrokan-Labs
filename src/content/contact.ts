@@ -56,13 +56,13 @@ export const contact = {
       urgent: "Anything urgent? Message us on {whatsapp}.",
     },
     sendErrors: {
+      title: "Message not sent",
       verification:
         "We couldn’t verify you’re human. Please try again, or message us on {whatsapp} or email {email}.",
       failed:
         "Something went wrong on our side, so your message wasn’t sent. Please try again, or message us on {whatsapp} or email {email}.",
     },
     whatsappLabel: "WhatsApp",
-    messageLines: { company: "Company", phone: "WhatsApp", needs: "Needs" },
   },
   whatsappCta: "Chat with us on WhatsApp",
   success: {
@@ -74,9 +74,27 @@ export const contact = {
     title: "Your message wasn't sent",
     body: "Go back to check your message and try again, or message us on WhatsApp.",
   },
+  /** The notification email to hello@ (site update: branded enquiry email). */
   email: {
-    subject: "New message from the website contact form",
-    labels: { name: "Name", contact: "WhatsApp or email", message: "Message" },
+    /** {name} is the visitor's name, cleaned to one line; {needs} the ticked options. */
+    subject: "New enquiry: {name}",
+    subjectWithNeeds: "New enquiry: {name} ({needs})",
+    heading: "New enquiry from the website",
+    labels: {
+      name: "Name",
+      /** The contact row: "email" when it's an address, else "contact". */
+      email: "Email",
+      contact: "WhatsApp or email",
+      phone: "WhatsApp",
+      company: "Company",
+      needs: "Needs",
+      message: "Message",
+      sent: "Sent",
+      page: "Page",
+    },
+    /** After the page path, when the visitor arrived from another page of the site. */
+    cameFrom: "came from {path}",
+    replyHint: "Reply to this email to answer {name} directly.",
   },
   /**
    * The auto-reply to a visitor who gave an email address. Fixed text only:
@@ -85,15 +103,11 @@ export const contact = {
    */
   autoReply: {
     subject: "We’ve received your message",
-    lines: [
-      "Hello,",
-      "",
-      "Thanks for contacting Afrokan Labs. Your message has reached us, and we’ll reply within {replyWithin}.",
-      "",
-      "If it’s urgent, message us on WhatsApp: {whatsapp}",
-      "",
-      "Afrokan Labs",
-      "{location}",
-    ],
+    heading: "Thanks for getting in touch",
+    intro: "Your message has reached Afrokan Labs.",
+    nextTitle: "What happens next",
+    next: "We’ll reply within {replyWithin}. The first conversation is free, and you’ll get a written plan, timeline and price before any work begins.",
+    urgent: "If it’s urgent, message us on WhatsApp.",
+    whatsappCta: "Chat on WhatsApp",
   },
 } satisfies z.input<typeof ContactCopy>;

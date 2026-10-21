@@ -899,12 +899,11 @@ export const ContactCopy = z.object({
     }),
     /** {whatsapp} and {email} render as links (the label is `whatsappLabel`, then the site email). */
     sendErrors: z.object({
+      title: text,
       verification: z.string().includes("{whatsapp}").includes("{email}"),
       failed: z.string().includes("{whatsapp}").includes("{email}"),
     }),
     whatsappLabel: text,
-    /** How the optional fields travel inside the posted message. */
-    messageLines: z.object({ company: text, phone: text, needs: text }),
   }),
   whatsappCta: text,
   success: z.object({
@@ -915,17 +914,37 @@ export const ContactCopy = z.object({
   }),
   /** Static pages the form lands on when posted without JavaScript. */
   notSent: ResultPage,
-  /** The notification email. User input never goes into the subject (architecture §6). */
+  /**
+   * The notification email. The subject carries the visitor's name and needs
+   * (cleaned to one line); everything they typed is escaped in the HTML.
+   */
   email: z.object({
-    subject: text,
-    labels: z.object({ name: z.string(), contact: z.string(), message: z.string() }),
+    subject: z.string().includes("{name}"),
+    subjectWithNeeds: z.string().includes("{name}").includes("{needs}"),
+    heading: text,
+    labels: z.object({
+      name: text,
+      email: text,
+      contact: text,
+      phone: text,
+      company: text,
+      needs: text,
+      message: text,
+      sent: text,
+      page: text,
+    }),
+    cameFrom: z.string().includes("{path}"),
+    replyHint: z.string().includes("{name}"),
   }),
-  /** Plain-text auto-reply: fixed copy, never the visitor's input. */
+  /** The auto-reply: fixed copy, never the visitor's input. */
   autoReply: z.object({
     subject: text,
-    lines: z
-      .array(z.string())
-      .refine((l) => l.some((line) => line.includes("{whatsapp}")), "needs a {whatsapp} line"),
+    heading: text,
+    intro: text,
+    nextTitle: text,
+    next: z.string().includes("{replyWithin}"),
+    urgent: text,
+    whatsappCta: text,
   }),
 });
 export type ContactCopy = z.infer<typeof ContactCopy>;

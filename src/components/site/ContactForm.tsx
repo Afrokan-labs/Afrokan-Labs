@@ -47,6 +47,13 @@ type Props = {
   turnstileSiteKey?: string;
 };
 
+function reveal(el: HTMLElement | null) {
+  if (!el) return;
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el.scrollIntoView({ block: "center", behavior: still ? "auto" : "smooth" });
+  el.focus({ preventScroll: true });
+}
+
 /** Fills {placeholders} in a copy string with text or links. */
 function fill(template: string, parts: Record<string, ReactNode>): ReactNode[] {
   return template
@@ -56,13 +63,13 @@ function fill(template: string, parts: Record<string, ReactNode>): ReactNode[] {
 
 /**
  * reference contact.html form: inline errors, then a post to the contact
- * Pages Function (functions/api/contact.ts). The function takes name,
- * contact and message, so company, WhatsApp number and needs travel inside
- * the message. Turnstile loads when the visitor first focuses the form.
+ * Pages Function (functions/api/contact.ts), which emails every field on its
+ * own row. Turnstile loads when the visitor first focuses the form.
  *
- * Once sent, the form is replaced by a confirmation. A failed send keeps
- * everything the visitor typed and offers WhatsApp and email instead. Both
- * messages sit in live regions and take focus when they appear.
+ * Once sent, the form is replaced by a success panel. A failed send keeps
+ * everything the visitor typed and shows an error panel offering WhatsApp and
+ * email instead. Both panels sit in live regions, scroll into view and take
+ * focus when they appear.
  */
 export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteKey }: Props) {
   const [errors, setErrors] = useState<Errors>({});
@@ -76,12 +83,12 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
   const doneRef = useRef<HTMLDivElement>(null);
   const alertRef = useRef<HTMLDivElement>(null);
 
-  // Move focus to whichever message just appeared.
+  // Bring whichever panel just appeared into view (on phones the form runs below the fold) and focus it.
   useEffect(() => {
-    if (sent) doneRef.current?.focus();
+    if (sent) reveal(doneRef.current);
   }, [sent]);
   useEffect(() => {
-    if (sendError) alertRef.current?.focus();
+    if (sendError) reveal(alertRef.current);
   }, [sendError]);
 
   // An address typed into the home page's email box arrives here.
@@ -133,18 +140,6 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
       return;
     }
 
-    const needs = data.getAll("need").map(String);
-    const message = [
-      get("company") && `${copy.messageLines.company}: ${get("company")}`,
-      get("phone") && `${copy.messageLines.phone}: ${get("phone")}`,
-      needs.length > 0 && `${copy.messageLines.needs}: ${needs.join(", ")}`,
-      (get("company") || get("phone") || needs.length > 0) && "",
-      get("message"),
-    ]
-      .filter((l) => l !== false && l !== undefined)
-      .join("\n")
-      .slice(0, LIMITS.message);
-
     const token = String(data.get(FIELD.turnstile) ?? "");
     // No token: the widget was blocked or hasn't finished, and the server would refuse the post.
     if (turnstileSiteKey && !token) {
@@ -156,7 +151,18 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
     const body = new FormData();
     body.set(FIELD.name, get("name"));
     body.set(FIELD.contact, get("email"));
-    body.set(FIELD.message, message);
+    body.set(FIELD.message, get("message").slice(0, LIMITS.message));
+    body.set(FIELD.company, get("company"));
+    body.set(FIELD.phone, get("phone"));
+    for (const need of data.getAll("need")) body.append(FIELD.needs, String(need));
+    body.set(FIELD.page, location.pathname);
+    // The site page the visitor came from, if any: the email shows it beside this one.
+    try {
+      const from = new URL(document.referrer);
+      if (from.origin === location.origin) body.set(FIELD.from, from.pathname);
+    } catch {
+      // No referrer.
+    }
     body.set(FIELD.honeypot, get(FIELD.honeypot));
     body.set(FIELD.turnstile, token);
 
@@ -204,131 +210,140 @@ export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteK
   );
   const links = { whatsapp: waLink, email: <a href={`mailto:${email}`}>{email}</a> };
 
-  if (sent)
-    return (
-      <div className="c-done-live" aria-live="polite">
+  // Rendered from the start, so screen readers announce the panel when it fills.
+  const done = (
+    <div className="c-done-live" aria-live="polite">
+      {sent && (
         <div className="c-done" ref={doneRef} tabIndex={-1}>
-          <h2>{copy.sent.title}</h2>
+          <h2>
+            {copy.sent.title} <span aria-hidden="true">✓</span>
+          </h2>
           <p>{fill(copy.sent.body, { name: sent.name, email: sent.email, replyWithin })}</p>
           <p>{fill(copy.sent.urgent, { whatsapp: waLink })}</p>
         </div>
-      </div>
-    );
+      )}
+    </div>
+  );
+  if (sent) return done;
 
   const invalid = (k: keyof Errors) => (errors[k] ? true : undefined);
 
   return (
-    <form
-      className="c-form"
-      id="cform"
-      noValidate
-      method="post"
-      action={CONTACT_ENDPOINT}
-      onSubmit={onSubmit}
-      onFocus={() => setEngaged(true)}
-    >
-      <div className="c-field">
-        <label htmlFor="c-name">{copy.labels.name}</label>
-        <input
-          id="c-name"
-          name="name"
-          autoComplete="name"
-          required
-          maxLength={LIMITS.name}
-          aria-invalid={invalid("name")}
-          aria-describedby="e-name"
-        />
-        <span className="c-err" id="e-name">
-          {errors.name}
-        </span>
-      </div>
-      <div className="c-field">
-        <label htmlFor="c-company">
-          {copy.labels.company} <i>{copy.optional}</i>
-        </label>
-        <input id="c-company" name="company" autoComplete="organization" />
-      </div>
-      <div className="c-field">
-        <label htmlFor="c-email">{copy.labels.email}</label>
-        <input
-          id="c-email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          required
-          maxLength={LIMITS.contact}
-          aria-invalid={invalid("email")}
-          aria-describedby="e-email"
-        />
-        <span className="c-err" id="e-email">
-          {errors.email}
-        </span>
-      </div>
-      <div className="c-field">
-        <label htmlFor="c-phone">
-          {copy.labels.phone} <i>{copy.optional}</i>
-        </label>
-        <input
-          id="c-phone"
-          name="phone"
-          type="tel"
-          autoComplete="tel"
-          placeholder={copy.phonePlaceholder}
-        />
-      </div>
-      <fieldset className="c-needs">
-        <legend>{copy.needs.legend}</legend>
-        <div className="c-chips">
-          {copy.needs.options.map((n, i) => (
-            <Fragment key={n}>
-              {i > 0 && " "}
-              <label>
-                <input type="checkbox" name="need" value={n} />
-                <span>{n}</span>
-              </label>
-            </Fragment>
-          ))}
+    <>
+      {done}
+      <form
+        className="c-form"
+        id="cform"
+        noValidate
+        method="post"
+        action={CONTACT_ENDPOINT}
+        onSubmit={onSubmit}
+        onFocus={() => setEngaged(true)}
+      >
+        <div className="c-field">
+          <label htmlFor="c-name">{copy.labels.name}</label>
+          <input
+            id="c-name"
+            name="name"
+            autoComplete="name"
+            required
+            maxLength={LIMITS.name}
+            aria-invalid={invalid("name")}
+            aria-describedby="e-name"
+          />
+          <span className="c-err" id="e-name">
+            {errors.name}
+          </span>
         </div>
-      </fieldset>
-      <div className="c-field full">
-        <label htmlFor="c-msg">{copy.labels.message}</label>
-        <textarea
-          id="c-msg"
-          name="message"
-          required
-          placeholder={copy.messagePlaceholder}
-          aria-invalid={invalid("message")}
-          aria-describedby="e-msg"
-        />
-        <span className="c-err" id="e-msg">
-          {errors.message}
-        </span>
-      </div>
-      <input
-        className="c-hp"
-        type="text"
-        name={FIELD.honeypot}
-        tabIndex={-1}
-        autoComplete="off"
-        aria-hidden="true"
-      />
-      {turnstileSiteKey && <div ref={widget} className="c-field full" />}
-      <div className="c-actions">
-        <small>{copy.privacyNote}</small>
-        <button className="c-submit" type="submit" disabled={sending}>
-          {sending ? copy.sending : copy.submit}
-        </button>
-      </div>
-      <p className="c-status" id="cstatus" role="status">
-        {sending ? copy.sending : ""}
-      </p>
-      <div className="c-alert-live" role="alert">
-        {sendError && (
-          <div className="c-alert" ref={alertRef} tabIndex={-1}>
-            {fill(copy.sendErrors[sendError], links)}
+        <div className="c-field">
+          <label htmlFor="c-company">
+            {copy.labels.company} <i>{copy.optional}</i>
+          </label>
+          <input id="c-company" name="company" autoComplete="organization" />
+        </div>
+        <div className="c-field">
+          <label htmlFor="c-email">{copy.labels.email}</label>
+          <input
+            id="c-email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            maxLength={LIMITS.contact}
+            aria-invalid={invalid("email")}
+            aria-describedby="e-email"
+          />
+          <span className="c-err" id="e-email">
+            {errors.email}
+          </span>
+        </div>
+        <div className="c-field">
+          <label htmlFor="c-phone">
+            {copy.labels.phone} <i>{copy.optional}</i>
+          </label>
+          <input
+            id="c-phone"
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            placeholder={copy.phonePlaceholder}
+          />
+        </div>
+        <fieldset className="c-needs">
+          <legend>{copy.needs.legend}</legend>
+          <div className="c-chips">
+            {copy.needs.options.map((n, i) => (
+              <Fragment key={n}>
+                {i > 0 && " "}
+                <label>
+                  <input type="checkbox" name="need" value={n} />
+                  <span>{n}</span>
+                </label>
+              </Fragment>
+            ))}
           </div>
-        )}
-      </div>
-    </form>
+        </fieldset>
+        <div className="c-field full">
+          <label htmlFor="c-msg">{copy.labels.message}</label>
+          <textarea
+            id="c-msg"
+            name="message"
+            required
+            placeholder={copy.messagePlaceholder}
+            aria-invalid={invalid("message")}
+            aria-describedby="e-msg"
+          />
+          <span className="c-err" id="e-msg">
+            {errors.message}
+          </span>
+        </div>
+        <input
+          className="c-hp"
+          type="text"
+          name={FIELD.honeypot}
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+        />
+        {turnstileSiteKey && <div ref={widget} className="c-field full" />}
+        <div className="c-actions">
+          <small>{copy.privacyNote}</small>
+          <button className="c-submit" type="submit" disabled={sending}>
+            {sending ? copy.sending : copy.submit}
+          </button>
+        </div>
+        <p className="c-status" id="cstatus" role="status">
+          {sending ? copy.sending : ""}
+        </p>
+        <div className="c-alert-live" role="alert">
+          {sendError && (
+            <div className="c-alert" ref={alertRef} tabIndex={-1}>
+              <h2>{copy.sendErrors.title}</h2>
+              <p>{fill(copy.sendErrors[sendError], links)}</p>
+            </div>
+          )}
+        </div>
+      </form>
+    </>
   );
 }

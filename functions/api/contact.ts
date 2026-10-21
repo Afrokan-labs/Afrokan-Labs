@@ -9,8 +9,10 @@
  *   6. Reply: JSON for the enhanced form, a redirect for a plain form post
  *
  * Stores nothing. Secrets come from context.env and are validated on each
- * request (architecture §12). User input never goes into the From or Subject
- * headers; the bodies are plain text, and the auto-reply carries none of it.
+ * request (architecture §12). Both emails are HTML with a plain-text part
+ * (src/lib/contact-email.ts). User input is escaped in the HTML, never goes
+ * into From, and reaches the notification's Subject only as one cleaned line.
+ * The auto-reply carries none of it.
  *
  * Rate limiting is a Cloudflare dashboard rule, not code (docs/DEPLOY.md).
  */
@@ -18,18 +20,20 @@ import * as z from "zod/mini";
 import { contact as copy } from "../../src/content/contact";
 import { site } from "../../src/content/site";
 import {
+  autoReplyHtml,
+  autoReplyText,
+  type Enquiry,
+  notificationHtml,
+  notificationSubject,
+  notificationText,
+} from "../../src/lib/contact-email";
+import {
   FIELD,
   RESULT_PAGES,
   type ContactResponse,
   type SendError,
 } from "../../src/lib/contact-fields";
-import {
-  readFields,
-  replyToFor,
-  validateContact,
-  type ContactSubmission,
-} from "../../src/lib/contact-form";
-import { waMeUrl } from "../../src/lib/wa-me";
+import { readExtras, readFields, replyToFor, validateContact } from "../../src/lib/contact-form";
 
 /** The parts of Cloudflare's EventContext this function uses. */
 type Context = { request: Request; env: Record<string, unknown> };
@@ -45,6 +49,8 @@ type Secrets = z.infer<typeof Secrets>;
 const FROM = `${site.name} website <notify@notify.${site.domain}>`;
 const TURNSTILE_VERIFY = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 const RESEND_SEND = "https://api.resend.com/emails";
+/** Where the emails load the logo from: the live site, so the image works in any inbox. */
+const ASSET_ORIGIN = `https://${site.domain}`;
 /** Three fields of at most 2,354 characters, URL-encoded, plus the token. */
 const MAX_BODY_BYTES = 32 * 1024;
 
@@ -96,11 +102,19 @@ export async function onRequest({ request, env }: Context): Promise<Response> {
   const result = validateContact(readFields(form));
   if (!result.ok) return reply({ ok: false, errors: result.errors }, 422);
 
+  const extras = readExtras(form);
+  const enquiry: Enquiry = {
+    ...result.data,
+    ...extras,
+    // Only the form's own options: anything else in "needs" is dropped.
+    needs: extras.needs.filter((n) => copy.form.needs.options.includes(n)),
+  };
+
   // 4. Notification.
-  if (!(await sendNotification(secrets.data, result.data))) return failed(502);
+  if (!(await sendNotification(secrets.data, enquiry, new Date()))) return failed(502);
 
   // 5. Auto-reply. The message already reached us, so a failure here still counts as sent.
-  const visitor = replyToFor(result.data.contact);
+  const visitor = replyToFor(enquiry.contact);
   if (visitor) await sendAutoReply(secrets.data, visitor);
 
   return reply({ ok: true }, 200);
@@ -122,36 +136,17 @@ async function verifyTurnstile(secrets: Secrets, token: string, ip?: string): Pr
   }
 }
 
-/** The notification body: plain text, so nothing the visitor types can become markup. */
-export function notificationText(data: ContactSubmission): string {
-  const { labels } = copy.email;
-  return [
-    `${labels.name}: ${data.name}`,
-    `${labels.contact}: ${data.contact}`,
-    "",
-    `${labels.message}:`,
-    data.message,
-  ].join("\n");
-}
-
-/** The auto-reply body: the fixed copy with site facts filled in, nothing from the visitor. */
-export function autoReplyText(): string {
-  const fill: Record<string, string> = {
-    replyWithin: site.replyWithin,
-    whatsapp: waMeUrl(site.whatsappNumber),
-    location: site.location,
-  };
-  return copy.autoReply.lines
-    .map((line) => line.replace(/\{(\w+)\}/g, (_, key: string) => fill[key] ?? ""))
-    .join("\n");
-}
-
-async function sendNotification(secrets: Secrets, data: ContactSubmission): Promise<boolean> {
-  const replyTo = replyToFor(data.contact);
+async function sendNotification(
+  secrets: Secrets,
+  enquiry: Enquiry,
+  sentAt: Date,
+): Promise<boolean> {
+  const replyTo = replyToFor(enquiry.contact);
   return sendEmail(secrets, "notification", {
     to: [secrets.CONTACT_TO_EMAIL],
-    subject: copy.email.subject,
-    text: notificationText(data),
+    subject: notificationSubject(enquiry),
+    html: notificationHtml(enquiry, sentAt, ASSET_ORIGIN),
+    text: notificationText(enquiry, sentAt),
     // Replying goes straight to the lead when they gave an email (§6).
     ...(replyTo ? { reply_to: replyTo } : {}),
   });
@@ -162,6 +157,7 @@ function sendAutoReply(secrets: Secrets, to: string): Promise<boolean> {
   return sendEmail(secrets, "auto-reply", {
     to: [to],
     subject: copy.autoReply.subject,
+    html: autoReplyHtml(ASSET_ORIGIN),
     text: autoReplyText(),
     reply_to: site.email,
   });
@@ -170,7 +166,7 @@ function sendAutoReply(secrets: Secrets, to: string): Promise<boolean> {
 async function sendEmail(
   secrets: Secrets,
   kind: string,
-  email: { to: string[]; subject: string; text: string; reply_to?: string },
+  email: { to: string[]; subject: string; html: string; text: string; reply_to?: string },
 ): Promise<boolean> {
   try {
     const res = await fetch(RESEND_SEND, {

@@ -56,3 +56,35 @@ export const readFields = (form: FormData): Record<Field, unknown> => ({
   contact: form.get(FIELD.contact),
   message: form.get(FIELD.message),
 });
+
+/** The optional details: trimmed and cut to length. Empty values are left out. */
+export type ContactExtras = {
+  company?: string;
+  phone?: string;
+  needs: string[];
+  page?: string;
+  from?: string;
+};
+
+const SITE_PATH = /^\/[\w\-./]*$/;
+
+/** Reads the optional details. Paths that aren't plain site paths are dropped. */
+export function readExtras(form: FormData): ContactExtras {
+  const text = (key: string, max: number) => {
+    const value = String(form.get(key) ?? "")
+      .trim()
+      .slice(0, max);
+    return value || undefined;
+  };
+  const path = (key: string) => {
+    const value = text(key, LIMITS.path);
+    return value && SITE_PATH.test(value) ? value : undefined;
+  };
+  return {
+    company: text(FIELD.company, LIMITS.company),
+    phone: text(FIELD.phone, LIMITS.phone),
+    needs: [...new Set(form.getAll(FIELD.needs).map((n) => String(n).trim()))].filter(Boolean),
+    page: path(FIELD.page),
+    from: path(FIELD.from),
+  };
+}

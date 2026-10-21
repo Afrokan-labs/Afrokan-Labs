@@ -17,7 +17,8 @@
     "launch:check": "tsx scripts/launch-check.ts",
     "content:audit": "tsx scripts/content-audit.ts",
     "test:contact": "tsx scripts/test-contact.ts",
-    "test:contact-form": "tsx scripts/test-contact-form.ts"
+    "test:contact-form": "tsx scripts/test-contact-form.ts",
+    "email:test": "tsx scripts/email-test.ts"
   },
   "dependencies": {
     "@mdx-js/mdx": "^3.1.1",

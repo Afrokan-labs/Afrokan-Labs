@@ -2319,55 +2319,53 @@ html {
   background: var(--c-2a2a2a);
 }
 
-/* Send failures: next to the button, with WhatsApp and email as the way out. */
+/*
+ * Outcome panels. Success replaces the form in deep green; a failed send shows
+ * in deep red next to the button, with WhatsApp and email as the way out.
+ * Both are scrolled into view and focused (ContactForm).
+ */
 .c-alert-live {
   grid-column: 1 / -1;
 }
 
+.c-done,
 .c-alert {
-  padding: 12px 14px;
-  border-left: 3px solid var(--c-8a1c1c);
-  background: var(--c-ffffff);
-  color: var(--c-0d0d0d);
-  font-size: 0.8rem;
-  line-height: 1.5;
+  max-width: 560px;
+  padding: clamp(20px, 3vw, 28px);
+  color: var(--c-ffffff);
+  border-radius: 4px;
+  scroll-margin: 24px;
 }
 
-.c-alert a,
-.c-done a {
-  color: inherit;
-  font-weight: 500;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.c-alert:focus,
-.c-done:focus {
-  outline: 2px solid var(--c-0d0d0d);
-  outline-offset: 2px;
-}
-
-/* Replaces the form once the message is sent. */
 .c-done {
   margin-top: clamp(22px, 3vw, 32px);
-  max-width: 560px;
-  padding: clamp(18px, 2.4vw, 26px);
-  background: var(--c-0d0d0d);
-  color: var(--c-ffffff);
+  background: var(--c-1d3a0c);
+  border-left: 6px solid var(--c-0d0d0d);
+}
+
+.c-alert {
+  background: var(--c-6b1414);
+  border-left: 6px solid var(--c-0d0d0d);
+}
+
+.c-done h2,
+.c-alert h2 {
+  margin: 0 0 10px;
+  font-weight: 600;
+  font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .c-done h2 {
-  margin: 0 0 10px;
-  font-weight: 500;
-  font-size: clamp(1.2rem, 1rem + 0.8vw, 1.6rem);
-  letter-spacing: -0.02em;
   color: var(--c-94de57);
 }
 
-.c-done p {
+.c-done p,
+.c-alert p {
   margin: 0;
-  font-size: 0.86rem;
-  font-weight: 300;
+  font-size: 0.92rem;
+  font-weight: 400;
   line-height: 1.55;
 }
 
@@ -2375,8 +2373,18 @@ html {
   margin-top: 10px;
 }
 
+.c-alert a,
+.c-done a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.c-alert:focus,
 .c-done:focus {
-  outline-color: var(--c-0d0d0d);
+  outline: 3px solid var(--c-0d0d0d);
+  outline-offset: 3px;
 }
 
 .c-direct {

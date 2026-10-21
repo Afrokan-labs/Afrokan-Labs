@@ -5,13 +5,29 @@
  * aliases, because wrangler bundles this file into the function.
  */
 
-export const LIMITS = { name: 100, contact: 254, message: 2000 } as const;
+export const LIMITS = {
+  name: 100,
+  contact: 254,
+  message: 2000,
+  company: 100,
+  phone: 40,
+  /** A site path: the form's page, or the page the visitor came from. */
+  path: 200,
+} as const;
 
 /** Form field names, as posted. */
 export const FIELD = {
   name: "name",
   contact: "contact",
   message: "message",
+  /** Optional details, each shown on its own row of the notification email. */
+  company: "company",
+  phone: "phone",
+  /** One value per ticked "What do you need?" option. */
+  needs: "need",
+  /** The page the form was sent from, and the site page the visitor arrived from. */
+  page: "page",
+  from: "from",
   /** Honeypot: hidden from people, filled by bots. A filled one gets a fake success. */
   honeypot: "website",
   /** Added to the form by the Turnstile widget. */
