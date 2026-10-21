@@ -93,6 +93,8 @@ export default function ContactPage() {
             <ContactForm
               copy={form}
               email={links.email}
+              whatsapp={{ href: links.whatsapp, attrs: links.whatsappAttrs }}
+              replyWithin={getSite().replyWithin}
               turnstileSiteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
             />
             <div className="c-direct">

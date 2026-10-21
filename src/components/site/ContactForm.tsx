@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, type ReactNode, useEffect, useRef, useState } from "react";
 import type { ContactCopy } from "@/content/schema";
 import { track } from "@/lib/analytics";
 import {
@@ -9,6 +9,9 @@ import {
   FIELD,
   LIMITS,
   TURNSTILE_SCRIPT,
+  type ContactResponse,
+  type Field,
+  type SendError,
 } from "@/lib/contact-fields";
 
 declare global {
@@ -25,26 +28,61 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type Errors = { name?: string; email?: string; message?: string };
 
+/** The function's field names, as the form names them (it posts the email as "contact"). */
+const FORM_FIELD: Record<Field, keyof Errors> = {
+  name: "name",
+  contact: "email",
+  message: "message",
+};
+const ORDER = ["name", "email", "message"] as const;
+
 type Props = {
   copy: ContactCopy["form"];
   email: string;
+  /** The site's WhatsApp link and its tracking attributes, for the success and error messages. */
+  whatsapp: { href: string; attrs: Record<string, string> };
+  /** How soon we reply (site.replyWithin), for the success message. */
+  replyWithin: string;
   /** Unset in local builds: the widget is skipped and the server refuses the post. */
   turnstileSiteKey?: string;
 };
+
+/** Fills {placeholders} in a copy string with text or links. */
+function fill(template: string, parts: Record<string, ReactNode>): ReactNode[] {
+  return template
+    .split(/\{(\w+)\}/)
+    .map((piece, i) => (i % 2 ? <Fragment key={i}>{parts[piece]}</Fragment> : piece));
+}
 
 /**
  * reference contact.html form: inline errors, then a post to the contact
  * Pages Function (functions/api/contact.ts). The function takes name,
  * contact and message, so company, WhatsApp number and needs travel inside
  * the message. Turnstile loads when the visitor first focuses the form.
+ *
+ * Once sent, the form is replaced by a confirmation. A failed send keeps
+ * everything the visitor typed and offers WhatsApp and email instead. Both
+ * messages sit in live regions and take focus when they appear.
  */
-export function ContactForm({ copy, email, turnstileSiteKey }: Props) {
+export function ContactForm({ copy, email, whatsapp, replyWithin, turnstileSiteKey }: Props) {
   const [errors, setErrors] = useState<Errors>({});
-  const [status, setStatus] = useState("");
   const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState<{ name: string; email: string } | null>(null);
+  const [sendError, setSendError] = useState<SendError | null>(null);
   const [engaged, setEngaged] = useState(false);
   const widget = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | undefined>(undefined);
+  const busy = useRef(false);
+  const doneRef = useRef<HTMLDivElement>(null);
+  const alertRef = useRef<HTMLDivElement>(null);
+
+  // Move focus to whichever message just appeared.
+  useEffect(() => {
+    if (sent) doneRef.current?.focus();
+  }, [sent]);
+  useEffect(() => {
+    if (sendError) alertRef.current?.focus();
+  }, [sendError]);
 
   // An address typed into the home page's email box arrives here.
   useEffect(() => {
@@ -78,6 +116,7 @@ export function ContactForm({ copy, email, turnstileSiteKey }: Props) {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (busy.current) return;
     const form = e.currentTarget;
     const data = new FormData(form);
     const get = (k: string) => String(data.get(k) ?? "").trim();
@@ -87,9 +126,9 @@ export function ContactForm({ copy, email, turnstileSiteKey }: Props) {
       message: get("message").length > 4 ? undefined : copy.errors.message,
     };
     setErrors(next);
-    const firstBad = (["name", "email", "message"] as const).find((k) => next[k]);
+    setSendError(null);
+    const firstBad = ORDER.find((k) => next[k]);
     if (firstBad) {
-      setStatus("");
       form.querySelector<HTMLElement>(`[name="${firstBad}"]`)?.focus();
       return;
     }
@@ -106,36 +145,75 @@ export function ContactForm({ copy, email, turnstileSiteKey }: Props) {
       .join("\n")
       .slice(0, LIMITS.message);
 
+    const token = String(data.get(FIELD.turnstile) ?? "");
+    // No token: the widget was blocked or hasn't finished, and the server would refuse the post.
+    if (turnstileSiteKey && !token) {
+      track("contact_form_submit", { result: "error" });
+      setSendError("verification");
+      return;
+    }
+
     const body = new FormData();
     body.set(FIELD.name, get("name"));
     body.set(FIELD.contact, get("email"));
     body.set(FIELD.message, message);
     body.set(FIELD.honeypot, get(FIELD.honeypot));
-    body.set(FIELD.turnstile, String(data.get(FIELD.turnstile) ?? ""));
+    body.set(FIELD.turnstile, token);
 
+    busy.current = true;
     setSending(true);
-    setStatus(copy.sending);
-    let ok = false;
+    let reply: ContactResponse = { ok: false, error: "failed" };
     try {
       const res = await fetch(CONTACT_ENDPOINT, {
         method: "POST",
         body,
         headers: { Accept: "application/json" },
       });
-      ok = res.ok && ((await res.json()) as { ok?: boolean }).ok === true;
+      reply = (await res.json()) as ContactResponse;
     } catch {
-      ok = false;
+      // Offline, or a reply that isn't JSON: a server failure.
     }
+    busy.current = false;
     setSending(false);
-    track("contact_form_submit", { result: ok ? "success" : "error" });
-    if (ok) {
-      form.reset();
-      setStatus(copy.sent);
-    } else {
-      setStatus(copy.failed.replace("{email}", email));
-      if (widgetId.current) window.turnstile?.reset(widgetId.current);
+    track("contact_form_submit", { result: reply.ok ? "success" : "error" });
+
+    if (reply.ok) {
+      setSent({ name: get("name"), email: get("email") });
+      return;
     }
+    // Turnstile tokens are single-use, so a retry needs a fresh one.
+    if (widgetId.current) window.turnstile?.reset(widgetId.current);
+    if ("errors" in reply) {
+      const fields: Errors = {};
+      for (const field of Object.keys(reply.errors) as Field[])
+        fields[FORM_FIELD[field]] = copy.errors[FORM_FIELD[field]];
+      setErrors(fields);
+      const bad = ORDER.find((k) => fields[k]);
+      if (bad) {
+        form.querySelector<HTMLElement>(`[name="${bad}"]`)?.focus();
+        return;
+      }
+    }
+    setSendError("error" in reply && reply.error === "verification" ? "verification" : "failed");
   }
+
+  const waLink = (
+    <a href={whatsapp.href} {...whatsapp.attrs}>
+      {copy.whatsappLabel}
+    </a>
+  );
+  const links = { whatsapp: waLink, email: <a href={`mailto:${email}`}>{email}</a> };
+
+  if (sent)
+    return (
+      <div className="c-done-live" aria-live="polite">
+        <div className="c-done" ref={doneRef} tabIndex={-1}>
+          <h2>{copy.sent.title}</h2>
+          <p>{fill(copy.sent.body, { name: sent.name, email: sent.email, replyWithin })}</p>
+          <p>{fill(copy.sent.urgent, { whatsapp: waLink })}</p>
+        </div>
+      </div>
+    );
 
   const invalid = (k: keyof Errors) => (errors[k] ? true : undefined);
 
@@ -238,12 +316,19 @@ export function ContactForm({ copy, email, turnstileSiteKey }: Props) {
       <div className="c-actions">
         <small>{copy.privacyNote}</small>
         <button className="c-submit" type="submit" disabled={sending}>
-          {copy.submit}
+          {sending ? copy.sending : copy.submit}
         </button>
       </div>
       <p className="c-status" id="cstatus" role="status">
-        {status}
+        {sending ? copy.sending : ""}
       </p>
+      <div className="c-alert-live" role="alert">
+        {sendError && (
+          <div className="c-alert" ref={alertRef} tabIndex={-1}>
+            {fill(copy.sendErrors[sendError], links)}
+          </div>
+        )}
+      </div>
     </form>
   );
 }

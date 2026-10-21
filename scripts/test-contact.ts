@@ -4,7 +4,7 @@
  * every request the function makes is checked. Exits 1 on any failure.
  */
 import assert from "node:assert/strict";
-import { notificationText, onRequest } from "../functions/api/contact";
+import { autoReplyText, notificationText, onRequest } from "../functions/api/contact";
 
 const ORIGIN = "https://afrokanlabs.com";
 const ENV = {
@@ -22,7 +22,9 @@ const VALID = {
 type Sent = { url: string; body: unknown };
 let sent: Sent[] = [];
 let turnstileOk = true;
-let resendOk = true;
+/** Which Resend calls fail, by order within one post: 0 is the notification, 1 the auto-reply. */
+let resendFails: number[] = [];
+let resendCalls = 0;
 
 globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
   const url = String(input);
@@ -33,7 +35,7 @@ globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
   }
   if (url.includes("resend")) {
     sent.push({ url, body: JSON.parse(String(init?.body)) });
-    return new Response("{}", { status: resendOk ? 200 : 500 });
+    return new Response("{}", { status: resendFails.includes(resendCalls++) ? 500 : 200 });
   }
   throw new Error(`unexpected fetch ${url}`);
 }) as typeof fetch;
@@ -45,6 +47,7 @@ async function post(
   opts: { json?: boolean; origin?: string } = {},
 ) {
   sent = [];
+  resendCalls = 0;
   const request = new Request(`${ORIGIN}/api/contact`, {
     method: "POST",
     body: new URLSearchParams(fields),
@@ -65,7 +68,7 @@ const tests: [string, () => Promise<void>][] = [
     async () => {
       const r = await post(VALID);
       assert.deepEqual([r.status, r.body], [200, { ok: true }]);
-      assert.equal(sent.length, 2);
+      assert.equal(sent.length, 3);
       assert.deepEqual(sent[0].body, {
         secret: "test-secret",
         response: "token",
@@ -80,10 +83,40 @@ const tests: [string, () => Promise<void>][] = [
     },
   ],
   [
-    "a WhatsApp number sets no Reply-To",
+    "the visitor gets a fixed auto-reply from notify@, replying to hello@",
+    async () => {
+      await post({
+        ...VALID,
+        name: "Visit http://spam.example",
+        message: "Buy http://spam.example",
+      });
+      const reply = sent[2].body as Record<string, unknown>;
+      assert.deepEqual(reply.to, ["test@example.com"]);
+      assert.equal(reply.from, "Afrokan Labs website <notify@notify.afrokanlabs.com>");
+      assert.equal(reply.reply_to, "hello@afrokanlabs.com");
+      assert.equal(reply.subject, "We’ve received your message");
+      assert.equal(reply.text, autoReplyText());
+      // Nothing the visitor typed is echoed back.
+      assert.doesNotMatch(String(reply.text), /spam|Visit|Buy/);
+      assert.match(String(reply.text), /https:\/\/wa\.me\/\d+/);
+      assert.match(String(reply.text), /within 24 hours/);
+    },
+  ],
+  [
+    "a WhatsApp number sets no Reply-To and gets no auto-reply",
     async () => {
       await post({ ...VALID, contact: "+233 00 000 0000" });
       assert.equal((sent[1].body as Record<string, unknown>).reply_to, undefined);
+      assert.equal(sent.length, 2);
+    },
+  ],
+  [
+    "auto-reply fails: still a success, since the message reached us",
+    async () => {
+      resendFails = [1];
+      const r = await post(VALID);
+      resendFails = [];
+      assert.deepEqual([r.status, r.body, sent.length], [200, { ok: true }, 3]);
     },
   ],
   [
@@ -99,7 +132,7 @@ const tests: [string, () => Promise<void>][] = [
       turnstileOk = false;
       const r = await post(VALID);
       turnstileOk = true;
-      assert.deepEqual([r.status, r.body], [403, { ok: false, error: "failed" }]);
+      assert.deepEqual([r.status, r.body], [403, { ok: false, error: "verification" }]);
       assert.equal(sent.length, 1);
     },
   ],
@@ -107,7 +140,10 @@ const tests: [string, () => Promise<void>][] = [
     "missing token: 400, Turnstile not called",
     async () => {
       const r = await post({ ...VALID, "cf-turnstile-response": "" });
-      assert.deepEqual([r.status, sent.length], [400, 0]);
+      assert.deepEqual(
+        [r.status, r.body, sent.length],
+        [400, { ok: false, error: "verification" }, 0],
+      );
     },
   ],
   [
@@ -123,12 +159,12 @@ const tests: [string, () => Promise<void>][] = [
     },
   ],
   [
-    "Resend fails: 502",
+    'Resend fails: 502 "failed", and no auto-reply is sent',
     async () => {
-      resendOk = false;
+      resendFails = [0];
       const r = await post(VALID);
-      resendOk = true;
-      assert.equal(r.status, 502);
+      resendFails = [];
+      assert.deepEqual([r.status, r.body, sent.length], [502, { ok: false, error: "failed" }, 2]);
     },
   ],
   [

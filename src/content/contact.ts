@@ -50,8 +50,18 @@ export const contact = {
     privacyNote: "We only use your details to reply to you.",
     submit: "Submit",
     sending: "Sending…",
-    sent: "Thanks, we’ll be in touch within 24 hours.",
-    failed: "Something went wrong. Email {email} instead.",
+    sent: {
+      title: "Message sent",
+      body: "Thanks, {name}. Your message has reached us, and we’ll reply to {email} within {replyWithin}.",
+      urgent: "Anything urgent? Message us on {whatsapp}.",
+    },
+    sendErrors: {
+      verification:
+        "We couldn’t verify you’re human. Please try again, or message us on {whatsapp} or email {email}.",
+      failed:
+        "Something went wrong on our side, so your message wasn’t sent. Please try again, or message us on {whatsapp} or email {email}.",
+    },
+    whatsappLabel: "WhatsApp",
     messageLines: { company: "Company", phone: "WhatsApp", needs: "Needs" },
   },
   whatsappCta: "Chat with us on WhatsApp",
@@ -67,5 +77,23 @@ export const contact = {
   email: {
     subject: "New message from the website contact form",
     labels: { name: "Name", contact: "WhatsApp or email", message: "Message" },
+  },
+  /**
+   * The auto-reply to a visitor who gave an email address. Fixed text only:
+   * it never repeats their name or message, so the form can't be used to
+   * send someone else's words to a stranger.
+   */
+  autoReply: {
+    subject: "We’ve received your message",
+    lines: [
+      "Hello,",
+      "",
+      "Thanks for contacting Afrokan Labs. Your message has reached us, and we’ll reply within {replyWithin}.",
+      "",
+      "If it’s urgent, message us on WhatsApp: {whatsapp}",
+      "",
+      "Afrokan Labs",
+      "{location}",
+    ],
   },
 } satisfies z.input<typeof ContactCopy>;

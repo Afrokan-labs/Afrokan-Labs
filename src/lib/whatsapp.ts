@@ -9,6 +9,7 @@
  */
 import { trackingAttrs, type TrackingAttrs, type WhatsAppLocation } from "./analytics";
 import { getSite } from "./content";
+import { waMeUrl } from "./wa-me";
 
 export type WhatsAppLinkProps = TrackingAttrs & {
   href: string;
@@ -23,7 +24,7 @@ function waHref(message: string): string {
   // Until the number is confirmed the link is an inert in-page anchor;
   // launch:check blocks launch while the TODO_ remains.
   if (whatsappNumber.startsWith("TODO_")) return `#${whatsappNumber}`;
-  return `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
+  return waMeUrl(whatsappNumber, message);
 }
 
 /** A WhatsApp CTA with the default prefilled message, tracked as whatsapp_click. */

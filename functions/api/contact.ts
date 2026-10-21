@@ -5,24 +5,31 @@
  *   2. Verify the Turnstile token server-side
  *   3. Validate and length-limit with the schema the browser uses
  *   4. Send the notification email through Resend
- *   5. Reply: JSON for the enhanced form, a redirect for a plain form post
+ *   5. Send the visitor a fixed auto-reply, when they gave an email address
+ *   6. Reply: JSON for the enhanced form, a redirect for a plain form post
  *
- * Stores nothing and sends no auto-reply. Secrets come from context.env and
- * are validated on each request (architecture §12). User input never goes
- * into the From or Subject headers; the body is plain text.
+ * Stores nothing. Secrets come from context.env and are validated on each
+ * request (architecture §12). User input never goes into the From or Subject
+ * headers; the bodies are plain text, and the auto-reply carries none of it.
  *
  * Rate limiting is a Cloudflare dashboard rule, not code (docs/DEPLOY.md).
  */
 import * as z from "zod/mini";
 import { contact as copy } from "../../src/content/contact";
 import { site } from "../../src/content/site";
-import { FIELD, RESULT_PAGES, type ContactResponse } from "../../src/lib/contact-fields";
+import {
+  FIELD,
+  RESULT_PAGES,
+  type ContactResponse,
+  type SendError,
+} from "../../src/lib/contact-fields";
 import {
   readFields,
   replyToFor,
   validateContact,
   type ContactSubmission,
 } from "../../src/lib/contact-form";
+import { waMeUrl } from "../../src/lib/wa-me";
 
 /** The parts of Cloudflare's EventContext this function uses. */
 type Context = { request: Request; env: Record<string, unknown> };
@@ -53,7 +60,8 @@ export async function onRequest({ request, env }: Context): Promise<Response> {
           new URL(body.ok ? RESULT_PAGES.sent : RESULT_PAGES.failed, request.url).href,
           303,
         );
-  const failed = (status: number) => reply({ ok: false, error: "failed" }, status);
+  const failed = (status: number, error: SendError = "failed") =>
+    reply({ ok: false, error }, status);
 
   // Browsers send Origin on every POST; refuse posts from other sites.
   const origin = request.headers.get("Origin");
@@ -80,9 +88,9 @@ export async function onRequest({ request, env }: Context): Promise<Response> {
 
   // 2. Turnstile.
   const token = form.get(FIELD.turnstile);
-  if (typeof token !== "string" || !token) return failed(400);
+  if (typeof token !== "string" || !token) return failed(400, "verification");
   const ip = request.headers.get("CF-Connecting-IP") ?? undefined;
-  if (!(await verifyTurnstile(secrets.data, token, ip))) return failed(403);
+  if (!(await verifyTurnstile(secrets.data, token, ip))) return failed(403, "verification");
 
   // 3. Validation.
   const result = validateContact(readFields(form));
@@ -90,6 +98,10 @@ export async function onRequest({ request, env }: Context): Promise<Response> {
 
   // 4. Notification.
   if (!(await sendNotification(secrets.data, result.data))) return failed(502);
+
+  // 5. Auto-reply. The message already reached us, so a failure here still counts as sent.
+  const visitor = replyToFor(result.data.contact);
+  if (visitor) await sendAutoReply(secrets.data, visitor);
 
   return reply({ ok: true }, 200);
 }
@@ -122,8 +134,44 @@ export function notificationText(data: ContactSubmission): string {
   ].join("\n");
 }
 
+/** The auto-reply body: the fixed copy with site facts filled in, nothing from the visitor. */
+export function autoReplyText(): string {
+  const fill: Record<string, string> = {
+    replyWithin: site.replyWithin,
+    whatsapp: waMeUrl(site.whatsappNumber),
+    location: site.location,
+  };
+  return copy.autoReply.lines
+    .map((line) => line.replace(/\{(\w+)\}/g, (_, key: string) => fill[key] ?? ""))
+    .join("\n");
+}
+
 async function sendNotification(secrets: Secrets, data: ContactSubmission): Promise<boolean> {
   const replyTo = replyToFor(data.contact);
+  return sendEmail(secrets, "notification", {
+    to: [secrets.CONTACT_TO_EMAIL],
+    subject: copy.email.subject,
+    text: notificationText(data),
+    // Replying goes straight to the lead when they gave an email (§6).
+    ...(replyTo ? { reply_to: replyTo } : {}),
+  });
+}
+
+/** Sent only after Turnstile and validation pass, and only to the address the visitor gave. */
+function sendAutoReply(secrets: Secrets, to: string): Promise<boolean> {
+  return sendEmail(secrets, "auto-reply", {
+    to: [to],
+    subject: copy.autoReply.subject,
+    text: autoReplyText(),
+    reply_to: site.email,
+  });
+}
+
+async function sendEmail(
+  secrets: Secrets,
+  kind: string,
+  email: { to: string[]; subject: string; text: string; reply_to?: string },
+): Promise<boolean> {
   try {
     const res = await fetch(RESEND_SEND, {
       method: "POST",
@@ -131,19 +179,12 @@ async function sendNotification(secrets: Secrets, data: ContactSubmission): Prom
         Authorization: `Bearer ${secrets.RESEND_API_KEY}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        from: FROM,
-        to: [secrets.CONTACT_TO_EMAIL],
-        subject: copy.email.subject,
-        text: notificationText(data),
-        // Replying goes straight to the lead when they gave an email (§6).
-        ...(replyTo ? { reply_to: replyTo } : {}),
-      }),
+      body: JSON.stringify({ from: FROM, ...email }),
     });
-    if (!res.ok) console.error("contact: Resend replied", res.status, await res.text());
+    if (!res.ok) console.error(`contact: Resend replied (${kind})`, res.status, await res.text());
     return res.ok;
   } catch (error) {
-    console.error("contact: Resend request failed", error);
+    console.error(`contact: Resend request failed (${kind})`, error);
     return false;
   }
 }

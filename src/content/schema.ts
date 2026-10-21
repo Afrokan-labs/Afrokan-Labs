@@ -891,9 +891,18 @@ export const ContactCopy = z.object({
     privacyNote: text,
     submit: text,
     sending: text,
-    sent: text,
-    /** "{email}" is the site email. */
-    failed: z.string().includes("{email}"),
+    /** Replaces the form once sent. {name} and {email} are what the visitor typed. */
+    sent: z.object({
+      title: text,
+      body: z.string().includes("{name}").includes("{email}").includes("{replyWithin}"),
+      urgent: z.string().includes("{whatsapp}"),
+    }),
+    /** {whatsapp} and {email} render as links (the label is `whatsappLabel`, then the site email). */
+    sendErrors: z.object({
+      verification: z.string().includes("{whatsapp}").includes("{email}"),
+      failed: z.string().includes("{whatsapp}").includes("{email}"),
+    }),
+    whatsappLabel: text,
     /** How the optional fields travel inside the posted message. */
     messageLines: z.object({ company: text, phone: text, needs: text }),
   }),
@@ -910,6 +919,13 @@ export const ContactCopy = z.object({
   email: z.object({
     subject: text,
     labels: z.object({ name: z.string(), contact: z.string(), message: z.string() }),
+  }),
+  /** Plain-text auto-reply: fixed copy, never the visitor's input. */
+  autoReply: z.object({
+    subject: text,
+    lines: z
+      .array(z.string())
+      .refine((l) => l.some((line) => line.includes("{whatsapp}")), "needs a {whatsapp} line"),
   }),
 });
 export type ContactCopy = z.infer<typeof ContactCopy>;

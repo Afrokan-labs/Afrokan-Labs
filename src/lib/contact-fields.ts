@@ -22,9 +22,15 @@ export type ErrorKey = "required" | "tooLong" | "invalid";
 export type Field = "name" | "contact" | "message";
 export type FieldErrors = Partial<Record<Field, ErrorKey>>;
 
+/**
+ * Why a submission wasn't sent: Turnstile was missing or rejected
+ * ("verification"), or something on the server side failed ("failed").
+ */
+export type SendError = "verification" | "failed";
+
 /** The function's JSON reply to a fetch() submission. */
 export type ContactResponse =
-  { ok: true } | { ok: false; errors: FieldErrors } | { ok: false; error: "failed" };
+  { ok: true } | { ok: false; errors: FieldErrors } | { ok: false; error: SendError };
 
 /** Pages the function redirects to when the form was posted without JavaScript. */
 export const RESULT_PAGES = { sent: "/contact/sent", failed: "/contact/not-sent" } as const;

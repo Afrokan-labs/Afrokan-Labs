@@ -58,6 +58,10 @@ jobs:
       - name: Lighthouse CI
         run: pnpm lhci
 
+      # The built /contact form against a stubbed /api/contact and Turnstile.
+      - name: Contact form
+        run: pnpm test:contact-form
+
       # axe on every built page plus a keyboard pass (BUILD_PLAN 4.3).
       - name: Accessibility
         run: pnpm a11y
