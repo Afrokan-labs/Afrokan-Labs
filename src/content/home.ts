@@ -158,7 +158,11 @@ export const home = {
       website: "Website",
     },
   },
-  words: { label: "Innovate. Inspire. Create.", items: ["Innovate", "Inspire", "Create"] },
+  words: {
+    sectionLabel: "Listen, build, support",
+    label: "Listen. Build. Support.",
+    items: ["Listen", "Build", "Support"],
+  },
   process: {
     eyebrow: "Process",
     heading: { lead: "How we ", mark: "work" },

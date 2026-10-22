@@ -20,8 +20,8 @@ const lexend = Lexend({
   variable: "--nf-lexend",
   fallback: ["Segoe UI", "system-ui", "sans-serif"],
 });
-// "Innovate ✦ Inspire ✦ Create" and the 01–05 badges: only digits and those
-// letters, so a 10 KB subset (src/lib/fonts.ts) instead of the 51 KB latin file.
+// "Listen ✦ Build ✦ Support" and the 01–05 badges: only digits and those
+// letters, so an 11 KB subset (src/lib/fonts.ts) instead of the 51 KB latin file.
 // Licence: src/app/fonts/Unbounded-OFL.txt.
 const unbounded = localFont({
   src: "./fonts/unbounded-subset.woff2",

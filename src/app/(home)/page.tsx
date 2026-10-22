@@ -489,44 +489,44 @@ export default function HomePage() {
               </div>
             </section>
           )}
-          <section className="x-words" aria-label={words.label}>
+          <section className="x-words" aria-label={words.sectionLabel}>
             <svg className="x-wordline" viewBox="0 0 1000 104" role="img" aria-label={words.label}>
               <text
                 className="x-w"
                 x="0"
                 y="82"
                 fontSize="78"
-                textLength="300"
+                textLength="282"
                 lengthAdjust="spacingAndGlyphs"
               >
                 {words.items[0]}
               </text>
               <path
                 fill="var(--x-lime)"
-                transform="translate(315 34) scale(.3)"
+                transform="translate(297 34) scale(.3)"
                 d="M50 0C53 36 64 47 100 50 64 53 53 64 50 100 47 64 36 53 0 50 36 47 47 36 50 0Z"
               />
               <text
                 className="x-w"
-                x="360"
+                x="342"
                 y="82"
                 fontSize="78"
-                textLength="268"
+                textLength="246"
                 lengthAdjust="spacingAndGlyphs"
               >
                 {words.items[1]}
               </text>
               <path
                 fill="var(--x-lime)"
-                transform="translate(643 34) scale(.3)"
+                transform="translate(603 34) scale(.3)"
                 d="M50 0C53 36 64 47 100 50 64 53 53 64 50 100 47 64 36 53 0 50 36 47 47 36 50 0Z"
               />
               <text
                 className="x-w"
-                x="688"
+                x="648"
                 y="82"
                 fontSize="78"
-                textLength="312"
+                textLength="352"
                 lengthAdjust="spacingAndGlyphs"
               >
                 {words.items[2]}

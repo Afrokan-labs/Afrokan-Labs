@@ -5,4 +5,4 @@
  * --font-wide must use only these; content:validate checks the words line.
  * To change the words, regenerate the file with the new characters.
  */
-export const UNBOUNDED_GLYPHS = "0123456789InnovateInspireCreate";
+export const UNBOUNDED_GLYPHS = "0123456789InnovateInspireCreateListenBuildSupport";

@@ -368,7 +368,8 @@ export const Home = z.object({
     fields: z.object({ client: text, industry: text, status: text, built: text }),
     builtLabels: z.record(BuiltKind, text),
   }),
-  words: z.object({ label: text, items: z.array(text).length(3) }),
+  /** sectionLabel names the section; label is the word line's SVG alt text. */
+  words: z.object({ sectionLabel: text, label: text, items: z.array(text).length(3) }),
   process: z.object({
     eyebrow: text,
     heading: Heading,
