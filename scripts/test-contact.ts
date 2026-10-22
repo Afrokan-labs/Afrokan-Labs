@@ -5,7 +5,6 @@
  */
 import assert from "node:assert/strict";
 import { onRequest } from "../functions/api/contact";
-import { readFileSync } from "node:fs";
 import { autoReplyText, ghanaTime, notificationText } from "../src/lib/contact-email";
 import { signatureHtml } from "../src/lib/email-signature";
 
@@ -319,7 +318,7 @@ const tests: [string, () => Promise<void>][] = [
     },
   ],
   [
-    "signatures: compact team markup, PNGs only, and the files in docs/ are up to date",
+    "signatures: compact team markup, PNGs only",
     async () => {
       for (const named of [false, true]) {
         const html = signatureHtml({ named });
@@ -337,8 +336,6 @@ const tests: [string, () => Promise<void>][] = [
         assert.match(html, /href="https:\/\/afrokanlabs\.com"[^>]*>afrokanlabs\.com</);
         assert.equal(/\[First name\] &middot; Afrokan Labs/.test(html), named);
         assertSocialIcons(html);
-        const file = `docs/email-signatures/email-signature-${named ? "named" : "team"}.html`;
-        assert.equal(readFileSync(file, "utf8"), `${html}\n`, `${file}: run pnpm email:signatures`);
       }
     },
   ],

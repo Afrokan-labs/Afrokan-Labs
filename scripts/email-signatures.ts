@@ -1,6 +1,7 @@
 /**
  * pnpm email:signatures — writes the hello@ email signatures to
- * docs/email-signatures/, each file holding only the signature markup:
+ * docs/email-signatures/ (kept on disk, not in git), each file holding only
+ * the signature markup:
  *
  *   email-signature-team.html   The Afrokan Labs Team (default)
  *   email-signature-named.html  adds "[First name] · Afrokan Labs" on top

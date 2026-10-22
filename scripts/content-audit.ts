@@ -9,9 +9,10 @@
  * untraced. Paths, slugs and TODO_ placeholders are skipped (launch:check
  * covers placeholders).
  *
- * Informational: always exits 0. Read the lists before approving launch.
+ * Informational: exits 0 whatever it finds (1 only if the docs are missing).
+ * Read the lists before approving launch.
  */
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import matter from "gray-matter";
 import { about } from "../src/content/about";
@@ -39,6 +40,15 @@ const APPROVED = [
   "docs/content/contact.md",
 ];
 const DRAFTS = ["docs/content/seo.md"];
+
+// The docs are kept on disk but not in git, so a fresh clone doesn't have them.
+const missing = [...APPROVED, ...DRAFTS].filter((file) => !existsSync(file));
+if (missing.length) {
+  console.error(
+    `content:audit needs the content docs, which aren't in git. Missing:\n  ${missing.join("\n  ")}`,
+  );
+  process.exit(1);
+}
 
 const norm = (s: string) =>
   s

@@ -4,9 +4,15 @@ out
 next-env.d.ts
 *.tsbuildinfo
 
-# Only .env.example is committed.
+# Only .env.example is committed (it holds no real values).
 .env*
 !.env.example
+
+# Company docs (plans, copy, design handoff, CLAUDE.md, README) stay on disk
+# but never go to GitHub. Site content is .mdx in src/content/, so no page
+# needs a .md file.
+/docs/
+*.md
 # Local Pages Function secrets (wrangler pages dev).
 .dev.vars*
 .lighthouseci
