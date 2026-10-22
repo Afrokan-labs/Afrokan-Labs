@@ -75,7 +75,7 @@ export const articles = [
   },
   {
     category: "Case study",
-    title: "How we built a document checklist generator for a clearing firm",
+    title: "How we built a document checklist generator for ESE Logistic",
     summary: "The problem at ESE Logistic, what we built, and what we'd do differently.",
     status: "soon",
   },

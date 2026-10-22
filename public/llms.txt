@@ -26,7 +26,7 @@ Logistics, retail, schools, healthcare, real estate, hospitality and service bus
 
 ## Work
 
-- [ESE Logistic](https://afrokanlabs.com/work): a WhatsApp AI assistant, a checklist generator and a company website for a clearing and forwarding firm.
+- [ESE Logistic](https://afrokanlabs.com/work): a WhatsApp AI assistant, a checklist generator and a company website for ESE Logistic Solution Limited, a clearing and forwarding firm in Ghana.
 
 ## Pages
 

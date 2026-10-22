@@ -147,7 +147,7 @@ export const home = {
     tab: "CASE STUDY",
     heading: { lead: "Featured ", mark: "Work" },
     titles: {
-      "ese-logistic": "A WhatsApp assistant that answers a logistics firm's clients day and night",
+      "ese-logistic": "A WhatsApp assistant that answers ESE Logistic's clients day and night",
     },
     caseStudy: { label: "Read the full case study", href: "/work#cases" },
     whatsapp: "Chat with us on WhatsApp",
