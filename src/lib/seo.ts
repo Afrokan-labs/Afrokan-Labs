@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 import { confirmed } from "./confirmed";
 import { getHome, getMembers, getSite } from "./content";
 import { env } from "./env";
-import { getOgImage } from "./pages";
+import { getShareImage } from "./pages";
 
 const absolute = (path: string) => new URL(path, env.NEXT_PUBLIC_SITE_URL).href;
 
@@ -24,7 +24,8 @@ export function pageMetadata({ path, title, description, type = "website" }: Pag
   const site = getSite();
   const fullTitle = title.includes(site.name) ? title : `${title} | ${site.name}`;
   const desc = confirmed(description) ? description : undefined;
-  const image = getOgImage(path);
+  // The page's own public/og/<page>.png, else /og-image.png; omitted while neither exists.
+  const image = getShareImage(path);
 
   return {
     title: { absolute: fullTitle },
@@ -40,7 +41,7 @@ export function pageMetadata({ path, title, description, type = "website" }: Pag
       images: image ? [image] : undefined,
     },
     twitter: {
-      card: image ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title: fullTitle,
       description: desc,
       images: image ? [image.url] : undefined,
@@ -50,14 +51,20 @@ export function pageMetadata({ path, title, description, type = "website" }: Pag
 
 const ORGANIZATION_ID = "/#organization";
 
-/** Homepage: the company as an Organization and a ProfessionalService, at city level, with its founders. */
+/**
+ * Homepage: the company as an Organization and a ProfessionalService, at city
+ * level, with its founders. Only what the homepage shows: the logo mark, the
+ * footer's email, place and profiles, and the team's names and roles. The
+ * WhatsApp number isn't shown as text, so there's no telephone.
+ */
 export function organizationJsonLd() {
   const site = getSite();
   const sameAs = Object.values(site.social).filter(confirmed);
   const founders = getMembers().map((m) => ({
     "@type": "Person",
     name: m.name.join(" "),
-    jobTitle: m.title,
+    // The role as the homepage shows it ("CEO"); About spells it out.
+    jobTitle: m.abbr,
     ...(confirmed(m.linkedin) ? { sameAs: [m.linkedin] } : {}),
   }));
   return {
@@ -66,9 +73,14 @@ export function organizationJsonLd() {
     "@id": absolute(ORGANIZATION_ID),
     name: site.name,
     url: absolute("/"),
+    logo: {
+      "@type": "ImageObject",
+      url: absolute("/apple-touch-icon.png"),
+      width: 180,
+      height: 180,
+    },
     description: getHome().meta.description,
     email: site.email,
-    ...(confirmed(site.whatsappNumber) ? { telephone: site.whatsappNumber } : {}),
     address: {
       "@type": "PostalAddress",
       addressLocality: site.address.locality,

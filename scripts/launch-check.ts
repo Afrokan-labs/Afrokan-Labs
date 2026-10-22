@@ -9,7 +9,13 @@
  */
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
-import { getIndexablePaths, getOgImage, ogImagePath } from "../src/lib/pages";
+import {
+  FALLBACK_OG_IMAGE,
+  getIndexablePaths,
+  getFallbackOgImage,
+  getOgImage,
+  ogImagePath,
+} from "../src/lib/pages";
 
 const root = process.argv[2] ?? join(process.cwd(), "src", "content");
 // schema.ts defines the placeholder format; it isn't content.
@@ -46,6 +52,12 @@ const found = [
 const missingOg = getIndexablePaths()
   .filter((path) => !getOgImage(path))
   .map((path) => ({ where: `public${ogImagePath(path)}`, token: `OG image for ${path}` }));
+// The fallback covers any page added later without its own image.
+if (!getFallbackOgImage())
+  missingOg.push({
+    where: `public${FALLBACK_OG_IMAGE}`,
+    token: "fallback OG image for every page",
+  });
 
 const problems = [...found, ...missingOg];
 

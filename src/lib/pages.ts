@@ -71,12 +71,28 @@ export function ogImagePath(pagePath: string): string {
   return `/og/${name}.png`;
 }
 
+/** The site-wide share image, for any page whose own PNG isn't in public/og/ yet. */
+export const FALLBACK_OG_IMAGE = "/og-image.png";
+
 /**
  * The page's OG image, or undefined until its PNG is added to public/og/.
  * A file that isn't a 1200×630 PNG stops the build with a message naming it.
  */
 export function getOgImage(pagePath: string) {
-  const url = ogImagePath(pagePath);
+  return pngAt(ogImagePath(pagePath));
+}
+
+/** The site-wide fallback share image, or undefined until public/og-image.png exists. */
+export function getFallbackOgImage() {
+  return pngAt(FALLBACK_OG_IMAGE);
+}
+
+/** The page's own share image, else the site-wide fallback, else undefined (no broken og:image). */
+export function getShareImage(pagePath: string) {
+  return getOgImage(pagePath) ?? getFallbackOgImage();
+}
+
+function pngAt(url: string) {
   const file = join(process.cwd(), "public", url);
   if (!existsSync(file)) return undefined;
 
