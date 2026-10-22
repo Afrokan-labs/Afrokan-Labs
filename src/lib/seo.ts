@@ -5,7 +5,7 @@
  */
 import type { Metadata } from "next";
 import { confirmed } from "./confirmed";
-import { getHome, getSite } from "./content";
+import { getHome, getMembers, getSite } from "./content";
 import { env } from "./env";
 import { getOgImage } from "./pages";
 
@@ -50,10 +50,16 @@ export function pageMetadata({ path, title, description, type = "website" }: Pag
 
 const ORGANIZATION_ID = "/#organization";
 
-/** Homepage: the company as an Organization and a ProfessionalService, at city level. */
+/** Homepage: the company as an Organization and a ProfessionalService, at city level, with its founders. */
 export function organizationJsonLd() {
   const site = getSite();
   const sameAs = Object.values(site.social).filter(confirmed);
+  const founders = getMembers().map((m) => ({
+    "@type": "Person",
+    name: m.name.join(" "),
+    jobTitle: m.title,
+    ...(confirmed(m.linkedin) ? { sameAs: [m.linkedin] } : {}),
+  }));
   return {
     "@context": "https://schema.org",
     "@type": ["Organization", "ProfessionalService"],
@@ -69,5 +75,6 @@ export function organizationJsonLd() {
       addressCountry: site.address.country,
     },
     ...(sameAs.length ? { sameAs } : {}),
+    founder: founders,
   };
 }

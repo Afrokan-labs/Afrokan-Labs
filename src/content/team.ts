@@ -15,7 +15,7 @@ export const members = [
       alt: "Franklin Asare Wiafe, Chief Executive Officer",
     },
     photo: { src: "team-ceo-franklin.webp", alt: "Franklin Asare Wiafe, CEO of Afrokan Labs" },
-    linkedin: "TODO_FRANKLIN_LINKEDIN_URL",
+    linkedin: "https://www.linkedin.com/in/franklin-asare-wiafe",
     shape: "circles",
   },
   {
@@ -27,7 +27,7 @@ export const members = [
       alt: "Kwabena Mawuli, Chief Technology Officer",
     },
     photo: { src: "team-cto-kwabena.webp", alt: "Kwabena Mawuli, CTO of Afrokan Labs" },
-    linkedin: "TODO_KWABENA_LINKEDIN_URL",
+    linkedin: "https://www.linkedin.com/in/kwabena-nyamekye-mawuli-595309276",
     shape: "triangles",
   },
   {
@@ -36,7 +36,7 @@ export const members = [
     title: "Chief Information Officer",
     cutout: { src: "team-cio-samuel-cutout.webp", alt: "Samuel Antwi, Chief Information Officer" },
     photo: { src: "team-cio-samuel.webp", alt: "Samuel Antwi, CIO of Afrokan Labs" },
-    linkedin: "TODO_SAMUEL_LINKEDIN_URL",
+    linkedin: "https://www.linkedin.com/in/samuel-kojo-anafi-antwi",
     shape: "diamond",
   },
 ] satisfies z.input<typeof Members>;

@@ -1086,7 +1086,9 @@ export default function HomePage() {
                     <a
                       className="x-ln"
                       href={confirmed(m.linkedin) ? m.linkedin : "#"}
-                      aria-label={team.linkedinLabel.replace("{name}", name)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${team.linkedinLabel.replace("{name}", name)} ${links.opensNewTab}`}
                     >
                       <svg viewBox="0 0 16 16" aria-hidden="true">
                         <path
