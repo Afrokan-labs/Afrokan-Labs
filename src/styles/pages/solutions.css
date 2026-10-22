@@ -2525,3 +2525,36 @@ html {
     contain-intrinsic-size: auto 1322px;
   }
 }
+
+/*
+ * Contrast fixes (WCAG 2.1 AA, measured 2026-10-22): 4.5:1 for body text,
+ * 3:1 for large text. Each swaps in an existing palette colour; the ratio in
+ * each comment is against the background the text actually sits on.
+ */
+
+/* "#BuiltForGhana" on white, 4.24 -> 4.98. */
+.sol-tagline span {
+  color: var(--c-3f7e20);
+}
+
+/* Dark theme: closed industry numbers on #121212, 3.45 -> 5.40. */
+:root:not([data-site-theme="light"]) .bi-row:not(.open) .bi-n {
+  color: var(--c-8a8a84);
+}
+
+/* "The question you get every day" on the chat's #ece5dd, 3.99 -> 5.2. */
+.bi-chat .bi-lab,
+:root[data-site-theme="light"] .bi-chat .bi-lab {
+  color: var(--c-2a6b12);
+}
+
+/* Light theme: the label on the lime "What changes" panel kept its dark
+   green (the light theme's .bi-lab rule turned it #3f7e20, 3.05). */
+:root[data-site-theme="light"] .bi-change .bi-lab {
+  color: var(--c-1d3a0c);
+}
+
+/* Light theme: the open industry's number on #eef2e6, 4.38 -> 5.76. */
+:root[data-site-theme="light"] .bi-row.open .bi-n {
+  color: var(--c-2a6b12);
+}

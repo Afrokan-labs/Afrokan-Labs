@@ -2970,3 +2970,19 @@ html {
     display: none;
   }
 }
+
+/*
+ * Contrast fixes (WCAG 2.1 AA, measured 2026-10-22): 4.5:1 for body text,
+ * 3:1 for large text. Each swaps in an existing palette colour; the ratio in
+ * each comment is against the background the text actually sits on.
+ */
+
+/* Dark theme: unselected service numbers on #1c1c1c, 3.14 -> 4.91. */
+:root:not([data-site-theme="light"]) .sd-tab:not([aria-selected="true"]) .sd-n {
+  color: var(--c-8a8a84);
+}
+
+/* Light theme: "Now taking projects" on #f3f3ef, 4.48 -> 5.88. */
+:root[data-site-theme="light"] .s-badge b {
+  color: var(--c-2a6b12);
+}

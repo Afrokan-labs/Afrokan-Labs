@@ -2116,3 +2116,20 @@ html {
     position: static;
   }
 }
+
+/*
+ * Contrast fixes (WCAG 2.1 AA, measured 2026-10-22): 4.5:1 for body text,
+ * 3:1 for large text. Each swaps in an existing palette colour; the ratio in
+ * each comment is against the background the text actually sits on.
+ */
+
+/* "policy" / "use" in the white hero card, 2.30 -> 4.98 (large). */
+.lg-hero h1 span {
+  color: var(--c-3f7e20);
+}
+
+/* Light theme: section numbers and links on #f3f3ef and #e9f1e0, 4.05-4.48 -> 5.65+. */
+:root[data-site-theme="light"] .lg-doc h2 i,
+:root[data-site-theme="light"] .lg-doc a {
+  color: var(--c-2a6b12);
+}

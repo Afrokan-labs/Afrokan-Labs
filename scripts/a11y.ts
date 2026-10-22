@@ -64,7 +64,22 @@ const ANIMATIONS_DONE = `Promise.race([
   new Promise((r) => setTimeout(r, 3000)),
 ]).then(() => 0)`;
 
+/**
+ * Renders every block before axe runs. Below-the-fold sections use
+ * content-visibility: auto, and axe treats skipped (unrendered) content as
+ * hidden, so without this it would check only what is near the viewport.
+ */
+const RENDER_ALL = `(() => {
+  if (document.getElementById("a11y-render-all")) return 0;
+  const s = document.createElement("style");
+  s.id = "a11y-render-all";
+  s.textContent = "*{content-visibility:visible!important}";
+  document.head.append(s);
+  return 0;
+})()`;
+
 async function axe(cdp: Cdp): Promise<AxeViolation[]> {
+  await cdp.ev(RENDER_ALL);
   await cdp.ev(ANIMATIONS_DONE);
   if (!(await cdp.ev<boolean>("typeof window.axe === 'object'"))) await cdp.ev(AXE_SOURCE + ";0");
   return cdp.ev<AxeViolation[]>(

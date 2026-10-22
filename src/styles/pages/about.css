@@ -2546,3 +2546,14 @@ html {
     margin-top: 18px;
   }
 }
+
+/*
+ * Contrast fixes (WCAG 2.1 AA, measured 2026-10-22): 4.5:1 for body text,
+ * 3:1 for large text. Each swaps in an existing palette colour; the ratio in
+ * each comment is against the background the text actually sits on.
+ */
+
+/* The "3" beside "Members" on #e7e8e4, 4.05 -> 5.31 (small text). */
+.mb-title sup {
+  color: var(--c-2a6b12);
+}
