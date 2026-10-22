@@ -3,7 +3,11 @@ import type { Services } from "./schema";
 
 /** Services page copy. Source: the site handoff's reference/services.html (approved). */
 export const services = {
-  meta: { title: "Services" },
+  meta: {
+    title: "Services",
+    description:
+      "WhatsApp AI assistants, web platforms, workflow tools, backend systems and AI chatbots for Ghanaian businesses, with Starter, Growth and Complete packages.",
+  },
   hero: {
     badge: { bold: "Now taking projects", rest: " — Accra, Ghana" },
     heading: { first: "Tools that work", script: "the", rest: " way you work" },

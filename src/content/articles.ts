@@ -3,7 +3,11 @@ import type { Articles, Insights } from "./schema";
 
 /** Insights page copy. Source: the site handoff's reference/insights.html (approved). */
 export const insights = {
-  meta: { title: "Insights" },
+  meta: {
+    title: "Insights",
+    description:
+      "Practical articles on automation, WhatsApp AI and software for Ghanaian businesses, from website costs to data protection. New articles go live one by one.",
+  },
   heading:
     "Afrokan Labs Insights: articles on automation, WhatsApp AI, building and growing businesses in Ghana",
   board: {

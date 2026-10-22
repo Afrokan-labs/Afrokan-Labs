@@ -8,7 +8,11 @@ import type { ContactCopy } from "./schema";
  */
 export const contact = {
   page: {
-    meta: { title: "Contact" },
+    meta: {
+      title: "Contact",
+      description:
+        "Tell Afrokan Labs what's slowing your business down. The first conversation is free, and you get a written plan, timeline and price before work begins.",
+    },
     leftLabel: "Why talk to us",
     homeLabel: "Afrokan Labs home",
     big: ["Let's", "Build"],

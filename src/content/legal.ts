@@ -183,7 +183,7 @@ export const legal = {
     meta: {
       title: "Terms of Service",
       description:
-        "The rules for using the Afrokan Labs website, what its content does and doesn’t promise, and how our written project agreements fit in.",
+        "The rules for using the Afrokan Labs website, what its content does and doesn’t promise, and how our written proposals and project agreements fit in.",
     },
     kicker: "Legal · Terms",
     heading: { lead: "Terms of ", mark: "use" },

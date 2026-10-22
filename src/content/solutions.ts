@@ -3,7 +3,11 @@ import type { Solutions } from "./schema";
 
 /** Solutions page copy. Source: the site handoff's reference/solutions.html (approved). */
 export const solutions = {
-  meta: { title: "Solutions" },
+  meta: {
+    title: "Solutions",
+    description:
+      "See a business day that runs itself: enquiries answered, checklists sent, orders tracked. Tools for clearing firms, shops, schools, clinics and restaurants.",
+  },
   poster: {
     label:
       "Four moments in a business day: enquiry answered at 6:42 am, checklist sent at 9:15 am, order tracked at 1:30 pm, daily report ready at 6:00 pm",

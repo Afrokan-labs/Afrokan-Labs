@@ -7,7 +7,11 @@ import type { Work } from "./schema";
  * replacing the drawn mocks; ESE approved naming and screenshots in writing).
  */
 export const work = {
-  meta: { title: "Work" },
+  meta: {
+    title: "Work",
+    description:
+      "Software we've shipped for Ghanaian businesses: a WhatsApp AI assistant, a checklist generator and a website for ESE Logistic, a clearing and forwarding firm.",
+  },
   hero: {
     heading: { lead: "Software we've shipped ", for: "for", rest: "Ghanaian businesses" },
     big: "work.",

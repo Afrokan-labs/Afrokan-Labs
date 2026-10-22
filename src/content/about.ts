@@ -6,7 +6,11 @@ import type { About } from "./schema";
  * update 1 (approved). The team itself is in team.ts.
  */
 export const about = {
-  meta: { title: "About" },
+  meta: {
+    title: "About",
+    description:
+      "Afrokan Labs is a small AI and software studio in Accra. Meet the founders and see how we work: a clear price before work starts, and we stay after launch.",
+  },
   hero: {
     eyebrow: "About us",
     heading: { first: "we're a", second: "small AI", third: { lead: "studio in ", mark: "Accra" } },

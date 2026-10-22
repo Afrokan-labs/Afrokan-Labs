@@ -265,6 +265,8 @@ export type Members = z.infer<typeof Members>;
 export type BuiltKind = z.infer<typeof BuiltKind>;
 
 const text = z.string().min(1);
+/** An indexable page's meta description: unique, from the page's own copy, 140–160 characters. */
+const MetaDescription = z.string().min(140).max(160);
 /** A heading drawn over several lines (the reference breaks with <br>). */
 const Lines = z.array(text).min(1);
 /** A site-relative link or an in-page anchor, e.g. "/services" or "#contact". */
@@ -279,7 +281,7 @@ const Stat = z.object({ value: text, unit: z.string().optional(), label: text })
 
 /** The home page (site handoff reference/index.html plus site update 1). */
 export const Home = z.object({
-  meta: z.object({ title: text, description: z.string().max(155) }),
+  meta: z.object({ title: text, description: MetaDescription }),
   hero: z.object({
     headline: text,
     /** Update 2 §2: the giant outlined word behind the hero card (decorative). */
@@ -422,7 +424,7 @@ export type Home = z.infer<typeof Home>;
 
 /** The about page (site handoff reference/about.html plus site update 1). */
 export const About = z.object({
-  meta: z.object({ title: text, description: z.string().max(155).optional() }),
+  meta: z.object({ title: text, description: MetaDescription }),
   hero: z.object({
     eyebrow: text,
     /** Three lines; the drawn shapes sit between them. The last ends on the marked word. */
@@ -496,7 +498,7 @@ export type About = z.infer<typeof About>;
 
 /** The services page (site handoff reference/services.html). */
 export const Services = z.object({
-  meta: z.object({ title: text, description: z.string().max(155).optional() }),
+  meta: z.object({ title: text, description: MetaDescription }),
   hero: z.object({
     badge: z.object({ bold: text, rest: text }),
     /** "Tools that work" / "the" (script) "way you work". */
@@ -574,7 +576,7 @@ export type Packages = z.infer<typeof Packages>;
 
 /** The solutions page (site handoff reference/solutions.html). */
 export const Solutions = z.object({
-  meta: z.object({ title: text, description: z.string().max(155).optional() }),
+  meta: z.object({ title: text, description: MetaDescription }),
   poster: z.object({
     label: z.string().min(10),
     /** Each moment's pill: "@ {time}" under its title. */
@@ -645,7 +647,7 @@ export type Industries = z.infer<typeof Industries>;
 
 /** The work page (site handoff reference/work.html). */
 export const Work = z.object({
-  meta: z.object({ title: text, description: z.string().max(155).optional() }),
+  meta: z.object({ title: text, description: MetaDescription }),
   hero: z.object({
     /** "Software we've shipped" "for" / "Ghanaian businesses". */
     heading: z.object({ lead: text, for: text, rest: text }),
@@ -701,7 +703,7 @@ export const ArticleCategory = z.enum(["Guides", "AI", "Workflows", "Case study"
 
 /** The insights page (site handoff reference/insights.html). The articles are in articles.ts. */
 export const Insights = z.object({
-  meta: z.object({ title: text, description: z.string().max(155).optional() }),
+  meta: z.object({ title: text, description: MetaDescription }),
   heading: text,
   /** The word board (decorative, aria-hidden). Split words wrap a drawn glyph. */
   board: z.object({
@@ -748,7 +750,7 @@ export type Articles = z.infer<typeof Articles>;
 
 /** A legal page. Paragraphs and list items take **bold** and [label](/path); {email} and {domain} are filled in. */
 const LegalDoc = z.object({
-  meta: z.object({ title: text, description: z.string().max(155).optional() }),
+  meta: z.object({ title: text, description: MetaDescription }),
   kicker: text,
   heading: Heading,
   intro: text,
@@ -791,7 +793,7 @@ const ResultPage = z.object({ title: z.string().min(1), body: z.string().min(1) 
 export const ContactCopy = z.object({
   /** /contact (site handoff reference/contact.html). */
   page: z.object({
-    meta: z.object({ title: text, description: z.string().max(155).optional() }),
+    meta: z.object({ title: text, description: MetaDescription }),
     leftLabel: text,
     homeLabel: text,
     big: z.tuple([text, text]),
