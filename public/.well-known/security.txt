@@ -1,0 +1,4 @@
+Contact: mailto:hello@afrokanlabs.com
+Expires: 2027-09-22T00:00:00Z
+Preferred-Languages: en
+Canonical: https://afrokanlabs.com/.well-known/security.txt

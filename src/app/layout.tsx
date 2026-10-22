@@ -64,6 +64,14 @@ const fontVars = [lexend, unbounded, archivo, serif].map((f) => f.variable).join
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
   title: { default: site.name, template: `%s | ${site.name}` },
+  // favicon.ico is linked by Next's file convention (src/app/). Setting icons
+  // here drops the convention's icon.svg link, so the SVG is listed again. The
+  // touch icon lives in public/ so iOS also finds it at its default path.
+  // Raster icons: pnpm icons (scripts/icons.ts).
+  icons: {
+    icon: { url: "/icon.svg", type: "image/svg+xml" },
+    apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

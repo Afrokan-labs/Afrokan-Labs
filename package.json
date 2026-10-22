@@ -12,6 +12,7 @@
     "format:check": "prettier --check .",
     "content:validate": "tsx scripts/validate-content.ts",
     "images": "tsx scripts/optimize-images.ts",
+    "icons": "tsx scripts/icons.ts",
     "lhci": "lhci collect && lhci upload && tsx scripts/lhci-summary.ts && lhci assert",
     "a11y": "tsx scripts/a11y.ts",
     "launch:check": "tsx scripts/launch-check.ts",
