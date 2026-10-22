@@ -58,23 +58,25 @@ jobs:
       # Lighthouse CI in three steps (pnpm lhci runs the same locally): the
       # reports are saved and summarised before the assertions run, so a
       # failing budget still leaves every page's numbers in the log and the
-      # lighthouse-reports artifact.
+      # lighthouse-reports artifact. The assertions run last, so a failing
+      # budget doesn't skip the contact form and accessibility checks.
       - name: Lighthouse collect
         run: pnpm exec lhci collect
 
       - name: Lighthouse reports
         run: pnpm exec lhci upload && pnpm exec tsx scripts/lhci-summary.ts
 
-      - name: Lighthouse assertions
-        run: pnpm exec lhci assert
-
       # The built /contact form against a stubbed /api/contact and Turnstile.
       - name: Contact form
         run: pnpm test:contact-form
 
-      # axe on every built page plus a keyboard pass (BUILD_PLAN 4.3).
+      # axe on every built page, a keyboard pass (BUILD_PLAN 4.3), and no hero
+      # starting at opacity 0 in the first frame.
       - name: Accessibility
         run: pnpm a11y
+
+      - name: Lighthouse assertions
+        run: pnpm exec lhci assert
 
       - name: Upload Lighthouse reports
         if: always()

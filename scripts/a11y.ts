@@ -6,7 +6,11 @@
  *   with the mobile menu open;
  * - a keyboard pass: the first Tab reaches the skip link, every Tab stop shows a
  *   visible focus indicator, every visible control is reachable, and the menu
- *   opens with Enter and closes with Escape, returning focus to its toggle.
+ *   opens with Enter and closes with Escape, returning focus to its toggle;
+ * - a first-frame pass with the page's scripts blocked: no text or image above
+ *   the fold (the h1 and the LCP element included) may start at opacity 0, by
+ *   a static opacity or an animation's first keyframe. A hero that fades in
+ *   hides its first paint and delays LCP (CLAUDE.md component rule 5).
  *
  * Drives headless Chrome over the DevTools protocol (scripts/browser.ts).
  * Exits 1 on any failure.
@@ -116,6 +120,48 @@ const REACHABLE = `[...document.querySelectorAll('a[href], button:not([disabled]
   .filter((el) => el.tabIndex >= 0 && el.getClientRects().length && !el.closest("[inert], dialog:not([open])") && getComputedStyle(el).visibility !== "hidden")
   .map((el) => { if (!el.dataset.a11yId) el.dataset.a11yId = String(Math.random()); return el.dataset.a11yId; })`;
 
+/**
+ * Lists every text or image above the fold that starts invisible: it, or an
+ * ancestor, has opacity 0 or an animation whose first keyframe has opacity 0.
+ * Animations keep their keyframes after they finish, so timing doesn't matter.
+ */
+const HIDDEN_AT_START = `(() => {
+  const label = (el) => el.tagName.toLowerCase() + (el.id ? "#" + el.id : "") +
+    [...el.classList].map((c) => "." + c).join("");
+  const hides = (el) => {
+    const fading = el.getAnimations().find((a) => a.effect?.getKeyframes()
+      .some((k) => k.offset === 0 && "opacity" in k && Number(k.opacity) === 0));
+    if (fading) return "animation " + (fading.animationName ?? "") + " starts at opacity 0";
+    return getComputedStyle(el).opacity === "0" ? "opacity: 0" : "";
+  };
+  const found = new Map();
+  for (const el of document.body.querySelectorAll("*")) {
+    const r = el.getBoundingClientRect();
+    if (r.width < 1 || r.height < 1 || r.top >= innerHeight || r.bottom <= 0) continue;
+    const content = /^(img|svg|video|canvas)$/i.test(el.tagName) ||
+      [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
+    if (!content) continue;
+    for (let a = el; a && a !== document.documentElement; a = a.parentElement) {
+      const why = hides(a);
+      if (why) {
+        const key = label(a) + " (" + why + ")";
+        if (!found.has(key)) found.set(key, label(el));
+        break;
+      }
+    }
+  }
+  return [...found].map(([el, child]) => el + " hides " + child);
+})()`;
+
+async function firstFrame(cdp: Cdp, url: string): Promise<string[]> {
+  await cdp.send("Page.navigate", { url: url + "?nojs" });
+  await cdp.ev(
+    `new Promise((r) => document.readyState === "complete" ? r(0) : addEventListener("load", () => r(0)))`,
+  );
+  await cdp.ev("document.fonts.ready.then(() => 0)");
+  return cdp.ev<string[]>(HIDDEN_AT_START);
+}
+
 async function keyboard(cdp: Cdp, width: number): Promise<string[]> {
   const problems: string[] = [];
   const expected = await cdp.ev<string[]>(REACHABLE);
@@ -213,6 +259,9 @@ async function main() {
 
         await load();
         for (const p of await keyboard(cdp, width)) failures.push(`${where}: keyboard: ${p}`);
+
+        for (const p of await firstFrame(cdp, server.origin + path))
+          failures.push(`${where}: above the fold, ${p}`);
       }
     }
   } finally {
@@ -227,7 +276,7 @@ async function main() {
     process.exit(1);
   }
   console.log(
-    `a11y passed: ${paths.length} pages × ${WIDTHS.length} widths, axe clean, keyboard pass clean.`,
+    `a11y passed: ${paths.length} pages × ${WIDTHS.length} widths, axe clean, keyboard pass clean, nothing above the fold starts at opacity 0.`,
   );
 }
 

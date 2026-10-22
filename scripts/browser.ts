@@ -14,6 +14,8 @@ export const OUT = join(process.cwd(), "out");
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 // ----- Static server for out/ (same lookup as Cloudflare Pages: /work -> work.html) -----
+// A page requested with ?nojs is sent with a CSP that blocks its scripts, so a
+// check sees the server-rendered first frame. DevTools evaluation still works.
 
 const TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
@@ -34,12 +36,19 @@ export type ApiHandler = (req: IncomingMessage, res: ServerResponse) => boolean;
 export function serve(api?: ApiHandler): Promise<{ origin: string; close: () => void }> {
   const server = createServer((req, res) => {
     if (api?.(req, res)) return;
-    let path = decodeURIComponent(new URL(req.url ?? "/", "http://x").pathname);
+    const url = new URL(req.url ?? "/", "http://x");
+    const headers = url.searchParams.has("nojs")
+      ? { "content-security-policy": "script-src 'none'" }
+      : {};
+    let path = decodeURIComponent(url.pathname);
     if (path.endsWith("/")) path += "index.html";
     for (const candidate of [path, `${path}.html`]) {
       const file = join(OUT, candidate);
       if (file.startsWith(OUT) && existsSync(file) && extname(file)) {
-        res.writeHead(200, { "content-type": TYPES[extname(file)] ?? "application/octet-stream" });
+        res.writeHead(200, {
+          ...headers,
+          "content-type": TYPES[extname(file)] ?? "application/octet-stream",
+        });
         return res.end(readFileSync(file));
       }
     }
