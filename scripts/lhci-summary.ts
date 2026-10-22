@@ -3,11 +3,13 @@
  * median-run performance score and LCP (the values `lhci assert` checks), the
  * LCP range across runs, the LCP element and its phases, so a passing page's
  * numbers show in the CI log too. In CI it also writes the table to the job
- * summary. Thresholds come from lighthouserc.json.
+ * summary. Thresholds come from lighthouserc.cjs. LCP over budget shows as
+ * "warn" when the config only warns on it, as `lhci assert` does.
  *
  * Usage: tsx scripts/lhci-summary.ts   (after lhci collect and lhci upload)
  */
 import { appendFileSync, existsSync, readdirSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { join } from "node:path";
 
 type Entry = { url: string; isRepresentativeRun: boolean; jsonPath: string };
@@ -26,9 +28,10 @@ if (!existsSync(manifestPath)) {
   process.exit(1);
 }
 
-const rc = JSON.parse(readFileSync("lighthouserc.json", "utf8"));
+const rc = createRequire(join(process.cwd(), "package.json"))("./lighthouserc.cjs");
 const minScore: number = rc.ci.assert.assertions["categories:performance"][1].minScore;
-const maxLcp: number = rc.ci.assert.assertions["largest-contentful-paint"][1].maxNumericValue;
+const [lcpLevel, { maxNumericValue: maxLcp }]: [string, { maxNumericValue: number }] =
+  rc.ci.assert.assertions["largest-contentful-paint"];
 
 const manifest: Entry[] = JSON.parse(readFileSync(manifestPath, "utf8"));
 const read = (path: string): Lhr => JSON.parse(readFileSync(path, "utf8"));
@@ -72,7 +75,12 @@ const rows = manifest
       observedLcp: metrics.observedLargestContentfulPaint as number,
       phases,
       selector,
-      pass: score >= minScore && lcp <= maxLcp,
+      result:
+        score < minScore || (lcp > maxLcp && lcpLevel === "error")
+          ? "FAIL"
+          : lcp > maxLcp
+            ? "warn"
+            : "pass",
     };
   })
   .sort((a, b) => a.page.localeCompare(b.page));
@@ -103,12 +111,14 @@ const table = [
     ms(row.phases["Load Time"] ?? NaN),
     ms(row.phases["Render Delay"] ?? NaN),
     row.selector,
-    row.pass ? "pass" : "FAIL",
+    row.result,
   ]),
 ];
 
 const widths = header.map((_, i) => Math.max(...table.map((cells) => cells[i].length)));
-console.log(`\nLighthouse median runs (performance >= ${minScore * 100}, LCP <= ${maxLcp} ms):\n`);
+console.log(
+  `\nLighthouse median runs (performance >= ${minScore * 100}, LCP <= ${maxLcp} ms, ${lcpLevel}):\n`,
+);
 for (const cells of table) console.log(cells.map((cell, i) => cell.padEnd(widths[i])).join("  "));
 
 if (process.env.GITHUB_STEP_SUMMARY) {
