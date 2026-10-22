@@ -90,7 +90,7 @@ export default function ContactPage() {
               </svg>
             </a>
             <h1 id="c-title">{page.heading}</h1>
-            <p className="c-intro">{page.intro}</p>
+            <p className="c-intro">{page.intro.replace("{replyWithin}", getSite().replyWithin)}</p>
             <ContactForm
               copy={form}
               email={links.email}

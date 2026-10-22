@@ -74,7 +74,7 @@ export const home = {
         value: "24/7",
         unit: ".",
         label: "WhatsApp answers, day or night",
-        note: "↑ No extra staff",
+        note: "↑ Answers after hours",
       },
     ],
     stripLabel: "Industries we build for",
@@ -222,7 +222,7 @@ export const home = {
   },
   contact: {
     heading: "Get in Touch Today!",
-    body: "Have a problem in your business we could solve? Whether it's a WhatsApp assistant, a simple internal tool or a full web platform, leave your email and we'll reach out within 24 hours.",
+    body: "Have a problem in your business we could solve? Whether it's a WhatsApp assistant, a simple internal tool or a full web platform, leave your email and we'll reach out within {replyWithin}.",
     emailLabel: "Your email",
     emailPlaceholder: "Enter your email",
     submit: "Contact Us",

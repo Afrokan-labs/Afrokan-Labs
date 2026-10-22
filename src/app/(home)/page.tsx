@@ -1202,7 +1202,7 @@ export default function HomePage() {
               <h2 className="x-h2" id="contact-new-title">
                 {contact.heading}
               </h2>
-              <p>{contact.body}</p>
+              <p>{contact.body.replace("{replyWithin}", site.replyWithin)}</p>
               <form className="x-form" id="xform" noValidate>
                 <label htmlFor="x-email">{contact.emailLabel}</label>
                 <input

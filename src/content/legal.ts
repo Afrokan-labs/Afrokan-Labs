@@ -32,7 +32,7 @@ export const legal = {
             p: "Afrokan Labs (“we”, “us”) is an AI and software studio based in Accra, Ghana. We build WhatsApp AI assistants, websites, workflow tools and backend systems for businesses. This policy explains how we handle personal information collected through **{domain}** and when you contact us.",
           },
           {
-            p: "Legal entity: [TO FILL: registered business name, registration number and registered address, once Afrokan Labs is formally registered]. Data Protection Commission registration: [TO FILL: data controller registration number].",
+            p: "Afrokan Labs is run by its founders, Franklin Asare Wiafe, Kwabena Mawuli and Samuel Antwi, in Accra, Ghana. Contact: **{email}**.",
           },
           { p: "For any privacy question, email **{email}**." },
         ],
@@ -112,14 +112,13 @@ export const legal = {
             ul: [
               "**Cloudflare**, which hosts this website (Cloudflare Pages), runs the contact form, and provides Turnstile and Web Analytics.",
               "**Resend**, which delivers contact form messages to our inbox and sends you an automatic confirmation email when you give us an email address.",
-              "Our email provider, [TO FILL: provider that hosts the {email} inbox], which stores the messages we receive.",
+              "**Namecheap Private Email** (Namecheap, Inc.), which hosts our {email} inbox and stores the messages we receive.",
               "WhatsApp (Meta), when you choose to contact us on WhatsApp.",
               "Form or newsletter services, if and when we connect them.",
             ],
           },
           {
-            // TODO_CONFIRM_DATA_OUTSIDE_GHANA (TODO.md "Privacy").
-            p: "These providers may store data outside Ghana. Where that happens we choose reputable providers with appropriate safeguards. We may also disclose information if required by law.",
+            p: "Some of these providers, including Cloudflare, Resend, Namecheap Private Email (Namecheap, Inc.) and WhatsApp (Meta), may process or store data outside Ghana. Where that happens we choose reputable providers with appropriate safeguards. We may also disclose information if required by law.",
           },
         ],
       },
@@ -198,7 +197,7 @@ export const legal = {
         title: "About these terms",
         blocks: [
           {
-            p: "These terms apply to your use of **{domain}**, run by Afrokan Labs, an AI and software studio based in Accra, Ghana ([TO FILL: registered business name, registration number and registered address, once Afrokan Labs is formally registered]). By using the site, you agree to them. If you hire us for a project, the written proposal or contract for that project also applies, and it takes priority if anything conflicts.",
+            p: "These terms apply to your use of **{domain}**, run by Afrokan Labs, an AI and software studio based in Accra, Ghana. Afrokan Labs is run by its founders, Franklin Asare Wiafe, Kwabena Mawuli and Samuel Antwi, in Accra, Ghana. Contact: **{email}**. By using the site, you agree to them. If you hire us for a project, the written proposal or contract for that project also applies, and it takes priority if anything conflicts.",
           },
         ],
       },

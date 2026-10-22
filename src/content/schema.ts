@@ -406,7 +406,8 @@ export const Home = z.object({
   }),
   contact: z.object({
     heading: text,
-    body: text,
+    /** {replyWithin} is filled from site.replyWithin. */
+    body: z.string().includes("{replyWithin}"),
     emailLabel: text,
     emailPlaceholder: text,
     submit: text,
@@ -798,7 +799,8 @@ export const ContactCopy = z.object({
     whatsapp: text,
     closeLabel: text,
     heading: text,
-    intro: text,
+    /** {replyWithin} is filled from site.replyWithin. */
+    intro: z.string().includes("{replyWithin}"),
     direct: z.object({ email: text, based: text, follow: text }),
   }),
   /** The handoff form. Its post goes to functions/api/contact.ts. */
