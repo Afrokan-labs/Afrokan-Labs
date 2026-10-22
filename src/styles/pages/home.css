@@ -2900,6 +2900,90 @@ body {
   background: var(--x-lime);
 }
 
+/* "What clients say": one quote on the team card's black panel (both themes). */
+.x-quote {
+  margin-top: clamp(24px, 3vw, 36px);
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 2fr);
+  gap: 24px clamp(24px, 4vw, 56px);
+  background: var(--c-000000);
+  border: 1px solid var(--c-222222);
+  border-radius: 26px;
+  padding: clamp(28px, 4vw, 52px);
+}
+
+.x-quote-k {
+  margin: 0;
+  font-family: var(--x-font);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--x-lime);
+}
+
+.x-quote-mark {
+  display: block;
+  width: clamp(44px, 5vw, 64px);
+  height: auto;
+  margin-top: clamp(18px, 2.4vw, 28px);
+  fill: var(--x-lime);
+}
+
+.x-quote-fig {
+  margin: 0;
+}
+
+.x-quote-fig blockquote {
+  margin: 0;
+}
+
+.x-quote-fig p {
+  margin: 0;
+  max-width: 40ch;
+  font-family: var(--x-font);
+  font-size: clamp(1.2rem, 0.9rem + 1.25vw, 1.9rem);
+  font-weight: 300;
+  line-height: 1.38;
+  letter-spacing: -0.01em;
+  color: var(--x-white);
+}
+
+.x-quote-fig figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: clamp(20px, 2.6vw, 32px);
+  padding-left: 16px;
+  border-left: 3px solid var(--x-lime);
+  font-family: var(--x-font);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--c-cfcfcf);
+}
+
+.x-quote-fig figcaption b {
+  font-weight: 500;
+  color: var(--x-white);
+}
+
+@media (max-width: 760px) {
+  .x-quote {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .x-quote-side {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .x-quote-mark {
+    width: 40px;
+    margin-top: 0;
+  }
+}
+
 .x-arches {
   list-style: none;
   margin: clamp(32px, 4vw, 48px) 0 0;

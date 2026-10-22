@@ -1,5 +1,6 @@
 import "@/styles/pages/home.css";
 import { Fragment } from "react";
+import { ClientQuote } from "@/components/site/ClientQuote";
 import { Img } from "@/components/site/Img";
 import { LogoMark, WaIcon } from "@/components/site/LogoMark";
 import { Eyebrow } from "@/components/site/Eyebrow";
@@ -16,6 +17,7 @@ import {
   getProjects,
   getSite,
   getStatusLabels,
+  getTestimonials,
 } from "@/lib/content";
 import { confirmed } from "@/lib/confirmed";
 import { getLinks } from "@/lib/links";
@@ -105,6 +107,7 @@ export default function HomePage() {
   // Featured work (architecture §4): omitted without a featured project, and the
   // client's real name only when approved.
   const project = getProjects().find((p) => p.featured);
+  const testimonials = getTestimonials();
   return (
     <>
       <JsonLd data={organizationJsonLd()} />
@@ -1093,12 +1096,10 @@ export default function HomePage() {
               })}
             </ul>
           </section>
-          {/*
-            Testimonials go here, once a client has given a real quote with
-            written permission. Add it to `testimonials` in
-            src/content/testimonials.ts (the schema requires writtenPermission:
-            true). No invented, placeholder or "your review here" quotes.
-          */}
+          {/* Real, approved quotes only (testimonials.ts); omitted while there are none. */}
+          {testimonials.items[0] && (
+            <ClientQuote label={testimonials.label} quote={testimonials.items[0]} />
+          )}
           <section
             className="xb"
             aria-label={`${ticker.label}: ${ticker.items.map((i) => i.label).join(", ")}`}

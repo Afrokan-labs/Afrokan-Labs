@@ -246,14 +246,17 @@ export const Testimonials = z.object({
   label: z.string().min(1),
   labels: z.object({ previous: z.string().min(1), next: z.string().min(1) }),
   items: z.array(
-    z.object({
-      quote: z.string().min(1).max(400),
-      name: z.string().min(1),
-      role: z.string().min(1),
-      company: z.string().min(1),
-      photo: Picture.optional(),
-      writtenPermission: z.literal(true),
-    }),
+    z
+      .object({
+        quote: z.string().min(1).max(400),
+        /** The person quoted. Optional, but name and role go together; without them the company is credited. */
+        name: z.string().min(1).optional(),
+        role: z.string().min(1).optional(),
+        company: z.string().min(1),
+        photo: Picture.optional(),
+        writtenPermission: z.literal(true),
+      })
+      .refine((q) => !q.name === !q.role, "Give both name and role, or neither."),
   ),
 });
 
