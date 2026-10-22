@@ -2324,3 +2324,18 @@ html {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/*
+ * Contrast fix (WCAG 2.1 AA, 2026-10-22): a deeper scrim over the hero art so
+ * "Let's Build", the lime subtitle and the body text clear 3:1 / 4.5:1. Same
+ * overlay as above, darker where the text sits; the brand colours are unchanged.
+ */
+.c-left::after {
+  background: linear-gradient(
+    180deg,
+    rgb(0 0 0 / 0.3) 0%,
+    rgb(0 0 0 / 0.42) 22%,
+    rgb(0 0 0 / 0.66) 48%,
+    rgb(0 0 0 / 0.74) 100%
+  );
+}

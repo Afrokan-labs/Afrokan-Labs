@@ -2557,3 +2557,9 @@ html {
 .mb-title sup {
   color: var(--c-2a6b12);
 }
+
+/* Each photo fades out before the name that overlaps it, so the name sits on
+   the card's light background (Franklin's measured 2.34 over his photo). */
+.mb-vis img {
+  mask-image: linear-gradient(var(--c-000000) 52%, transparent 80%);
+}
