@@ -3,6 +3,7 @@
  * (architecture §8). One list feeds the sitemap, content:validate and
  * launch:check. Server-side, build time only.
  */
+import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -22,6 +23,46 @@ export function getIndexablePaths(): string[] {
     "/privacy",
     "/terms",
   ];
+}
+
+/**
+ * The files each indexable page's content comes from: its route and the
+ * content it renders. Shared chrome (layout, nav, footer, site.ts, styles) is
+ * left out, so a footer tweak doesn't re-date every page in the sitemap.
+ */
+const PAGE_SOURCES: Record<string, string[]> = {
+  "/": ["src/app/(home)", "src/content/home.ts", "src/content/team.ts", "src/content/projects"],
+  "/about": ["src/app/(site)/about", "src/content/about.ts", "src/content/team.ts"],
+  "/services": ["src/app/(site)/services", "src/content/services.ts", "src/content/packages.ts"],
+  "/solutions": [
+    "src/app/(site)/solutions",
+    "src/content/solutions.ts",
+    "src/content/industries.ts",
+  ],
+  "/work": ["src/app/(site)/work", "src/content/work.ts"],
+  "/insights": ["src/app/(site)/insights", "src/content/articles.ts"],
+  "/contact": ["src/app/(site)/contact", "src/content/contact.ts"],
+  "/privacy": ["src/app/(site)/privacy", "src/content/legal.ts"],
+  "/terms": ["src/app/(site)/terms", "src/content/legal.ts"],
+};
+
+/**
+ * When the page's content last changed: the newest commit touching its
+ * sources, as an ISO date. Undefined in a shallow clone (every page would get
+ * the latest commit's date) or without git, so the sitemap omits it rather
+ * than state a wrong date.
+ */
+export function getLastModified(pagePath: string): string | undefined {
+  const sources = PAGE_SOURCES[pagePath];
+  if (!sources) throw new Error(`No PAGE_SOURCES entry for ${pagePath} (src/lib/pages.ts).`);
+  try {
+    const git = (...args: string[]) =>
+      execFileSync("git", args, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+    if (git("rev-parse", "--is-shallow-repository") !== "false") return undefined;
+    return git("log", "-1", "--format=%cI", "--", ...sources) || undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 /** "/" -> "/og/home.png", "/privacy" -> "/og/privacy.png". */
