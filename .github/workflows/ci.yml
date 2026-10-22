@@ -84,6 +84,8 @@ jobs:
         with:
           name: lighthouse-reports
           path: .lighthouseci
+          # upload-artifact skips dot-folders unless told otherwise.
+          include-hidden-files: true
           if-no-files-found: ignore
 
       # Enable after launch (BUILD_PLAN 5.1): from then on no PR may add a TODO_.
