@@ -20,7 +20,7 @@ export const legal = {
     heading: { lead: "Privacy ", mark: "policy" },
     intro:
       "How Afrokan Labs collects, uses and protects your personal information when you visit our website or work with us.",
-    updated: "Last updated: 21 October 2026",
+    updated: "Last updated: 22 October 2026",
     place: "Afrokan Labs · Accra, Ghana",
     draft: "Draft: pending legal review",
     tocLabel: "On this page",
@@ -31,6 +31,9 @@ export const legal = {
           {
             p: "Afrokan Labs (“we”, “us”) is an AI and software studio based in Accra, Ghana. We build WhatsApp AI assistants, websites, workflow tools and backend systems for businesses. This policy explains how we handle personal information collected through **{domain}** and when you contact us.",
           },
+          {
+            p: "Legal entity: [TO FILL: registered business name, registration number and registered address, once Afrokan Labs is formally registered]. Data Protection Commission registration: [TO FILL: data controller registration number].",
+          },
           { p: "For any privacy question, email **{email}**." },
         ],
       },
@@ -39,7 +42,8 @@ export const legal = {
         blocks: [
           {
             ul: [
-              "**Details you give us**: your name, company, email address, WhatsApp number and the message you send through our contact form, by email or on WhatsApp.",
+              "**Contact form**: your name, an email address or WhatsApp number for our reply, and your message. If you choose to, also your company, phone number and what you need help with. The form also records which page you sent it from and which page of our site you arrived from.",
+              "**Messages you send us directly**: whatever you include when you email us or message us on WhatsApp.",
               "**Project information**: documents, requirements and other material you share with us so we can scope or build a project.",
               "**Basic technical data**: information your browser sends automatically, such as device type, pages visited and approximate location. We count visits with Cloudflare Web Analytics (see Analytics below).",
               "**Your theme choice**: if you switch between light and dark mode, your browser remembers the choice locally. It is not sent to us.",
@@ -65,6 +69,14 @@ export const legal = {
           },
           {
             p: "This data is aggregated and does not identify you. Cloudflare decides how long it is kept, under its [privacy policy](https://www.cloudflare.com/privacypolicy/).",
+          },
+        ],
+      },
+      {
+        title: "Spam protection",
+        blocks: [
+          {
+            p: "Our contact page uses **Cloudflare Turnstile** to check that a form is sent by a person, not a bot. To do that, Turnstile reads signals from your browser and device, such as how the page was loaded and interacted with, and Cloudflare processes them under its [privacy policy](https://www.cloudflare.com/privacypolicy/). It runs only on the contact page, and we receive only a pass or fail result.",
           },
         ],
       },
@@ -98,7 +110,9 @@ export const legal = {
           },
           {
             ul: [
-              "Hosting and email providers that store and deliver our website and messages.",
+              "**Cloudflare**, which hosts this website (Cloudflare Pages), runs the contact form, and provides Turnstile and Web Analytics.",
+              "**Resend**, which delivers contact form messages to our inbox and sends you an automatic confirmation email when you give us an email address.",
+              "Our email provider, [TO FILL: provider that hosts the {email} inbox], which stores the messages we receive.",
               "WhatsApp (Meta), when you choose to contact us on WhatsApp.",
               "Form or newsletter services, if and when we connect them.",
             ],
@@ -139,7 +153,10 @@ export const legal = {
             ],
           },
           {
-            p: "Email **{email}** and we will respond within a reasonable time. If you are not satisfied, you can contact Ghana’s **Data Protection Commission**.",
+            p: "**To ask us to delete your information**, email **{email}** from the email address or WhatsApp number you contacted us with, and say what you would like deleted. We will confirm once it is done, or explain why we need to keep any of it.",
+          },
+          {
+            p: "For any other request, email **{email}** and we will respond within a reasonable time. If you are not satisfied, you can contact Ghana’s **Data Protection Commission**.",
           },
         ],
       },
@@ -172,7 +189,7 @@ export const legal = {
     kicker: "Legal · Terms",
     heading: { lead: "Terms of ", mark: "use" },
     intro: "The rules for using the Afrokan Labs website, and how our project agreements fit in.",
-    updated: "Last updated: 3 October 2026",
+    updated: "Last updated: 22 October 2026",
     place: "Afrokan Labs · Accra, Ghana",
     draft: "Draft: pending legal review",
     tocLabel: "On this page",
@@ -181,7 +198,7 @@ export const legal = {
         title: "About these terms",
         blocks: [
           {
-            p: "These terms apply to your use of **{domain}**, run by Afrokan Labs, an AI and software studio based in Accra, Ghana. By using the site, you agree to them. If you hire us for a project, the written proposal or contract for that project also applies, and it takes priority if anything conflicts.",
+            p: "These terms apply to your use of **{domain}**, run by Afrokan Labs, an AI and software studio based in Accra, Ghana ([TO FILL: registered business name, registration number and registered address, once Afrokan Labs is formally registered]). By using the site, you agree to them. If you hire us for a project, the written proposal or contract for that project also applies, and it takes priority if anything conflicts.",
           },
         ],
       },
