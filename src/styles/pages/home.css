@@ -6141,3 +6141,127 @@ img.cu-photo {
     left: 12px;
   }
 }
+
+/*
+ * Below-the-fold sections render on approach (see site.css). Each height is the
+ * section's content box (its rendered height less padding) at 1350px and 412px,
+ * the widths Lighthouse tests.
+ */
+.ae-intro,
+.x-ideas,
+.o-sec,
+.sv,
+.x-work,
+.x-words,
+.x-process,
+.x-crew,
+.rv,
+.xb,
+.bb2,
+.x-contact {
+  content-visibility: auto;
+}
+
+/* The ideas badge and star, and the process ribbon, sit past their section's edge. */
+.x-ideas,
+.x-process {
+  overflow-clip-margin: 200px;
+}
+
+.ae-intro {
+  contain-intrinsic-size: auto 255px;
+}
+
+.x-ideas {
+  contain-intrinsic-size: auto 848px;
+}
+
+.o-sec {
+  contain-intrinsic-size: auto 560px;
+}
+
+.sv {
+  contain-intrinsic-size: auto 1486px;
+}
+
+.x-work {
+  contain-intrinsic-size: auto 316px;
+}
+
+.x-words {
+  contain-intrinsic-size: auto 172px;
+}
+
+.x-process {
+  contain-intrinsic-size: auto 2219px;
+}
+
+.x-crew {
+  contain-intrinsic-size: auto 689px;
+}
+
+.rv {
+  contain-intrinsic-size: auto 759px;
+}
+
+.xb {
+  contain-intrinsic-size: auto 243px;
+}
+
+.bb2 {
+  contain-intrinsic-size: auto 512px;
+}
+
+.x-contact {
+  contain-intrinsic-size: auto 542px;
+}
+
+@media (max-width: 760px) {
+  .ae-intro {
+    contain-intrinsic-size: auto 240px;
+  }
+
+  .x-ideas {
+    contain-intrinsic-size: auto 1006px;
+  }
+
+  .o-sec {
+    contain-intrinsic-size: auto 624px;
+  }
+
+  .sv {
+    contain-intrinsic-size: auto 1229px;
+  }
+
+  .x-work {
+    contain-intrinsic-size: auto 725px;
+  }
+
+  .x-words {
+    contain-intrinsic-size: auto 71px;
+  }
+
+  .x-process {
+    contain-intrinsic-size: auto 2748px;
+  }
+
+  .x-crew {
+    contain-intrinsic-size: auto 671px;
+  }
+
+  .rv {
+    contain-intrinsic-size: auto 808px;
+  }
+
+  .xb {
+    contain-intrinsic-size: auto 170px;
+  }
+
+  .bb2 {
+    contain-intrinsic-size: auto 783px;
+  }
+
+  .x-contact {
+    contain-intrinsic-size: auto 749px;
+  }
+}

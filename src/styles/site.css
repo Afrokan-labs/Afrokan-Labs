@@ -345,3 +345,33 @@ svg text {
     }
   }
 }
+
+/*
+ * Below-the-fold rendering. content-visibility: auto skips style, layout and
+ * paint for a block until it nears the viewport, so the fonts and lazy images
+ * only it uses (the footer's Archivo 800, for one) aren't fetched before LCP.
+ * contain-intrinsic-size holds its measured content-box height (the rendered
+ * height less padding, at 1350px and 412px) until the block first renders;
+ * "auto" then keeps its real height, so the scrollbar doesn't jump. Each
+ * page's own sections are listed at the end of its stylesheet in
+ * src/styles/pages/.
+ */
+.x-footwrap {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 592px;
+}
+
+.x-cta {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 168px;
+}
+
+@media (max-width: 760px) {
+  .x-footwrap {
+    contain-intrinsic-size: auto 609px;
+  }
+
+  .x-cta {
+    contain-intrinsic-size: auto 260px;
+  }
+}

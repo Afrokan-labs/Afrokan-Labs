@@ -2502,3 +2502,26 @@ html {
     height: 36px;
   }
 }
+
+/* Below-the-fold sections render on approach (see site.css): the day section
+   is below the fold on desktop only, the industries on both. Headline
+   highlights and the cards' plus badges sit a few px past the section's edge. */
+.x-sec {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 441px;
+  overflow-clip-margin: 8px;
+}
+
+.x-sec.bi {
+  contain-intrinsic-size: auto 896px;
+}
+
+@media (max-width: 760px) {
+  .x-sec {
+    contain-intrinsic-size: auto 1357px;
+  }
+
+  .x-sec.bi {
+    contain-intrinsic-size: auto 1322px;
+  }
+}

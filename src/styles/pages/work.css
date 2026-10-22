@@ -2287,3 +2287,15 @@ html {
     font-size: 0.76rem;
   }
 }
+
+/* Below-the-fold sections render on approach (see site.css). */
+.w-cases {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1020px;
+}
+
+@media (max-width: 760px) {
+  .w-cases {
+    contain-intrinsic-size: auto 1385px;
+  }
+}
