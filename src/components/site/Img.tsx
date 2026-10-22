@@ -8,8 +8,6 @@ type Props = {
   sizes?: string;
   /** Above-the-fold images load eagerly with high priority; the rest are lazy. */
   priority?: boolean;
-  /** Above the fold but not the LCP element: eager, at normal priority. */
-  eager?: boolean;
 };
 
 /**
@@ -17,7 +15,7 @@ type Props = {
  * The <picture> is display: contents, so the reference's selectors and
  * absolute positioning apply to the <img> exactly as in the handoff files.
  */
-export function Img({ src, alt, className, sizes = "100vw", priority, eager }: Props) {
+export function Img({ src, alt, className, sizes = "100vw", priority }: Props) {
   const img = getImage(`assets/images/${src}`);
   return (
     <picture style={{ display: "contents" }}>
@@ -31,7 +29,7 @@ export function Img({ src, alt, className, sizes = "100vw", priority, eager }: P
         width={img.width}
         height={img.height}
         sizes={sizes}
-        loading={priority || eager ? "eager" : "lazy"}
+        loading={priority ? "eager" : "lazy"}
         fetchPriority={priority ? "high" : undefined}
         decoding="async"
       />
