@@ -77,8 +77,7 @@ export function WelcomeBlock({ copy, industries }: Props) {
         <div className="ae-dark">
           <Eyebrow>{team.eyebrow}</Eyebrow>
           <h3>
-            {team.heading[0]}
-            <br />
+            {team.heading[0]} <br />
             <span>{team.heading[1]}</span>
           </h3>
           <p>{team.body}</p>

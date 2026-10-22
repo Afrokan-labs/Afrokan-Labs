@@ -25,7 +25,7 @@ export default function ServicesPage() {
               {hero.badge.rest}
             </span>
             <h1 className="s-h1" id="s-title">
-              <span>{hero.heading.first}</span>
+              <span>{hero.heading.first}</span>{" "}
               <span className="s-grad">
                 <span className="s-script">{hero.heading.script}</span>
                 {hero.heading.rest}

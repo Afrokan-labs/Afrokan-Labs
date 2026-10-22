@@ -30,8 +30,7 @@ export function Philosophy({ copy }: { copy: About["philosophy"] }) {
     <section className="x-sec ph" aria-labelledby="ph-title">
       <Eyebrow>{copy.eyebrow}</Eyebrow>
       <h2 id="ph-title">
-        {copy.heading[0]}
-        <span>{copy.heading[1]}</span>
+        {copy.heading[0]} <span>{copy.heading[1]}</span>
       </h2>
       <p>{copy.body}</p>
       <ul className="ph-cards">

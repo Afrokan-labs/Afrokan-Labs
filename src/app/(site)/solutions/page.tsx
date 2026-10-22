@@ -222,8 +222,8 @@ export default function SolutionsPage() {
                         aria-controls={`bi-${i}`}
                         id={`bib-${i}`}
                       >
-                        <span className="bi-n">{String(i + 1).padStart(2, "0")}</span>
-                        <span className="bi-name">{item.name}</span>
+                        <span className="bi-n">{String(i + 1).padStart(2, "0")}</span>{" "}
+                        <span className="bi-name">{item.name}</span>{" "}
                         <span className={delivered ? "bi-st real" : "bi-st"}>
                           {index.status[item.status]}
                         </span>

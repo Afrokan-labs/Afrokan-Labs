@@ -1047,13 +1047,13 @@ export default function HomePage() {
           <section className="x-crew" id="about" aria-labelledby="team-title">
             <div className="x-crew-head">
               <h2 className="x-crew-h" id="team-title">
-                <b>{team.heading.first}</b>
+                <b>{team.heading.first}</b>{" "}
                 <span>
                   {team.heading.middle}{" "}
                   <span className="x-lime" style={{ display: "inline" }}>
                     {team.heading.brand}
                   </span>
-                </span>
+                </span>{" "}
                 <span>{team.heading.last}</span>
               </h2>
               <div className="x-crew-side">

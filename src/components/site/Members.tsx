@@ -30,6 +30,8 @@ export function Members({ title, members }: { title: string; members: MemberList
     <section className="mb" aria-labelledby="mb-title">
       <h2 className="mb-title" id="mb-title">
         {title}
+        {/* A hidden space keeps "Members 3" two words in the text without moving the 3. */}
+        <span className="sr-only"> </span>
         <sup>{members.length}</sup>
       </h2>
       <ul className="mb-grid">
@@ -42,8 +44,7 @@ export function Members({ title, members }: { title: string; members: MemberList
               <Img src={m.cutout.src} alt={m.cutout.alt} sizes="(max-width: 760px) 340px, 30vw" />
             </div>
             <h3 className="mb-name">
-              <span>{m.name[0]}</span>
-              <span>{m.name[1]}</span>
+              <span>{m.name[0]}</span> <span>{m.name[1]}</span>
             </h3>
             <p className="mb-role">
               <b>{m.abbr}</b> / {m.title}

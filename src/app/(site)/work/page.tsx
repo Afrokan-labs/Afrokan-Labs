@@ -215,8 +215,7 @@ export default function WorkPage() {
             </svg>
             <h1 className="w-kick" id="w-title">
               {hero.heading.lead}
-              <span>{hero.heading.for}</span>
-              <br />
+              <span>{hero.heading.for}</span> <br />
               <span>{hero.heading.rest}</span>
             </h1>
             <p className="w-big" aria-hidden="true">

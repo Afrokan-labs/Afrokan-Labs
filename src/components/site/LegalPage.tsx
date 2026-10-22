@@ -54,8 +54,7 @@ export function LegalPage({ doc, email, domain }: Props) {
             {doc.sections.map((s, i) => (
               <section key={s.title} id={`s${i + 1}`} aria-labelledby={`h${i + 1}`}>
                 <h2 id={`h${i + 1}`}>
-                  <i>{String(i + 1).padStart(2, "0")}</i>
-                  {s.title}
+                  <i>{String(i + 1).padStart(2, "0")}</i> {s.title}
                 </h2>
                 {s.blocks.map((b, j) =>
                   "p" in b ? (

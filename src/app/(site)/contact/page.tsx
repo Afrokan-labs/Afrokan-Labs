@@ -66,8 +66,7 @@ export default function ContactPage() {
               {getSite().name}
             </a>
             <h2 className="c-big">
-              <span>{page.big[0]}</span>
-              <span>{page.big[1]}</span>
+              <span>{page.big[0]}</span> <span>{page.big[1]}</span>
             </h2>
             <p className="c-sub">{page.sub}</p>
             <p className="c-txt">{page.body}</p>
