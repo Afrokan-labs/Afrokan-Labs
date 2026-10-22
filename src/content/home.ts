@@ -145,9 +145,8 @@ export const home = {
     notch: "Three tools, one delivery",
     tab: "CASE STUDY",
     heading: { lead: "Featured ", mark: "Work" },
-    // TODO_VERIFY_FASTER: "faster" is a result claim marked [verify]; confirm with ESE or reword.
     titles: {
-      "ese-logistic": "Helping a clearing and forwarding firm answer customers faster",
+      "ese-logistic": "A WhatsApp assistant that answers a logistics firm's clients day and night",
     },
     caseStudy: { label: "Read the full case study", href: "/work#cases" },
     whatsapp: "Chat with us on WhatsApp",
