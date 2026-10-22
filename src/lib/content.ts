@@ -23,7 +23,7 @@ import { services } from "../content/services";
 import { site } from "../content/site";
 import { solutions } from "../content/solutions";
 import { members } from "../content/team";
-import { reviews, testimonials } from "../content/testimonials";
+import { testimonials } from "../content/testimonials";
 import { work } from "../content/work";
 
 const PROJECTS_DIR = join(process.cwd(), "src", "content", "projects");
@@ -60,8 +60,6 @@ export const getSolutions = () => parse("src/content/solutions.ts", schema.Solut
 export const getIndustries = () =>
   parse("src/content/industries.ts", schema.Industries, industries);
 export const getMembers = () => parse("src/content/team.ts (members)", schema.Members, members);
-export const getReviews = () =>
-  parse("src/content/testimonials.ts (reviews)", schema.Reviews, reviews);
 export const getTestimonials = () =>
   parse("src/content/testimonials.ts", schema.Testimonials, testimonials);
 

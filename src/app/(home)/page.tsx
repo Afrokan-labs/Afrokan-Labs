@@ -5,7 +5,6 @@ import { LogoMark, WaIcon } from "@/components/site/LogoMark";
 import { Eyebrow } from "@/components/site/Eyebrow";
 import { HomeScripts } from "@/components/site/HomeScripts";
 import { Nav } from "@/components/site/Nav";
-import { Reviews } from "@/components/site/Reviews";
 import { RotatingBadge } from "@/components/site/RotatingBadge";
 import { WelcomeBlock } from "@/components/site/WelcomeBlock";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -15,12 +14,10 @@ import {
   getHome,
   getMembers,
   getProjects,
-  getReviews,
   getSite,
   getStatusLabels,
 } from "@/lib/content";
 import { confirmed } from "@/lib/confirmed";
-import { getImage, imageUrl } from "@/lib/images";
 import { getLinks } from "@/lib/links";
 import { whatsappTextLink } from "@/lib/whatsapp";
 import { organizationJsonLd, pageMetadata } from "@/lib/seo";
@@ -70,15 +67,6 @@ function lines(items: readonly string[]) {
       {line}
     </Fragment>
   ));
-}
-
-/** Reviews with their pipeline image URLs (the client component can't read the manifest). */
-function reviewItems() {
-  return getReviews().map((r) => {
-    const src = `assets/images/${r.image}`;
-    const { width, height } = getImage(src);
-    return { ...r, big: imageUrl(src, 1000), thumb: imageUrl(src, 400), width, height };
-  });
 }
 
 export default function HomePage() {
@@ -1105,7 +1093,12 @@ export default function HomePage() {
               })}
             </ul>
           </section>
-          <Reviews copy={home.reviews} items={reviewItems()} />
+          {/*
+            Testimonials go here, once a client has given a real quote with
+            written permission. Add it to `testimonials` in
+            src/content/testimonials.ts (the schema requires writtenPermission:
+            true). No invented, placeholder or "your review here" quotes.
+          */}
           <section
             className="xb"
             aria-label={`${ticker.label}: ${ticker.items.map((i) => i.label).join(", ")}`}

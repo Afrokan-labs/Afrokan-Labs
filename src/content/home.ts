@@ -36,7 +36,8 @@ export const home = {
   stats: {
     label: "Quick facts",
     items: [
-      { value: "3", unit: "+", label: "Systems delivered" },
+      // Exactly three: ESE Logistic's assistant, checklist tool and website.
+      { value: "3", label: "Systems delivered" },
       { value: "24/7", label: "WhatsApp replies" },
       { value: "100", unit: "%", label: "Mobile-first builds" },
       { value: "4", unit: "-step", label: "Clear delivery process" },
@@ -208,14 +209,6 @@ export const home = {
     body: "We're a small team in Accra. The people who scope your project are the people who build it, so you always know who you're talking to.",
     join: { label: "Join our team", href: "#contact" },
     linkedinLabel: "{name} on LinkedIn",
-  },
-  reviews: {
-    eyebrow: "Clients",
-    heading: { first: "What our clients", lead: "really ", mark: "say" },
-    delivered: "Delivered",
-    openSlot: "Open slot",
-    choose: "Choose a client",
-    show: "Show {name}",
   },
   project: {
     heading: { lead: "Start your project", mark: "journey" },

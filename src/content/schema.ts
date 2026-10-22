@@ -242,35 +242,6 @@ export const Members = z
   )
   .min(1);
 
-/**
- * Home "What our clients really say" (site update 1). Open slots are
- * invitations, not reviews. A quote shows only when the client is real and
- * the quote is approved (`quote`); until then `placeholder` fills the slot.
- * Never add star ratings, and never pair a person's photo with words they
- * didn't give.
- */
-export const Reviews = z
-  .array(
-    z
-      .object({
-        id: z.string().min(1),
-        real: z.boolean(),
-        /** The client's approved words. Only allowed when `real` is true. */
-        quote: z.string().min(1).max(400).optional(),
-        placeholder: z.string().min(1),
-        fact: z.string().min(1),
-        name: z.string().min(1),
-        /** "Sector · Delivered" or "Sector · Open slot". */
-        role: z.string().min(1),
-        /** The thumbnail's caption. */
-        sector: z.string().min(1),
-        image: z.string().endsWith(".webp"),
-        cta: z.object({ label: z.string().min(1), href: z.string().startsWith("/") }),
-      })
-      .refine((r) => r.real || !r.quote, "Only a real client can have a quote"),
-  )
-  .min(1);
-
 /** Real, approved quotes only. An empty list hides the section (design-system §7). */
 export const Testimonials = z.object({
   label: z.string().min(1),
@@ -291,7 +262,6 @@ export type Project = z.infer<typeof Project>;
 export type Site = z.infer<typeof Site>;
 export type Testimonials = z.infer<typeof Testimonials>;
 export type Members = z.infer<typeof Members>;
-export type Reviews = z.infer<typeof Reviews>;
 export type BuiltKind = z.infer<typeof BuiltKind>;
 
 const text = z.string().min(1);
@@ -418,14 +388,6 @@ export const Home = z.object({
     body: text,
     join: Link,
     linkedinLabel: text,
-  }),
-  reviews: z.object({
-    eyebrow: text,
-    heading: z.object({ first: text, lead: text, mark: text }),
-    delivered: text,
-    openSlot: text,
-    choose: text,
-    show: text,
   }),
   /** Update 2 §5: "Start your project journey", just before Get in Touch. */
   project: z.object({
