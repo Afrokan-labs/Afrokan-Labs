@@ -55,8 +55,18 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Lighthouse CI
-        run: pnpm lhci
+      # Lighthouse CI in three steps (pnpm lhci runs the same locally): the
+      # reports are saved and summarised before the assertions run, so a
+      # failing budget still leaves every page's numbers in the log and the
+      # lighthouse-reports artifact.
+      - name: Lighthouse collect
+        run: pnpm exec lhci collect
+
+      - name: Lighthouse reports
+        run: pnpm exec lhci upload && pnpm exec tsx scripts/lhci-summary.ts
+
+      - name: Lighthouse assertions
+        run: pnpm exec lhci assert
 
       # The built /contact form against a stubbed /api/contact and Turnstile.
       - name: Contact form
