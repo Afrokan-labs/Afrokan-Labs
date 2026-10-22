@@ -40,8 +40,7 @@ export const about = {
   story: {
     label: "Our story",
     from: "Started at the University of Ghana, Legon",
-    // TODO_CONFIRM_ORIGIN_STORY: "started as a group of students at the University of Ghana" (TODO.md).
-    lead: "Afrokan Labs started as a group of students at the University of Ghana who kept seeing the same thing.",
+    lead: "We started Afrokan Labs as students at the University of Ghana, after seeing how much time local businesses spend on work a simple system could handle: answering the same questions, sorting documents, following up on leads. So we started building those systems, designed for how Ghanaian businesses actually work: WhatsApp first, mobile first, and easy for staff to use. We're three founders, and every project starts with one question: what's slowing your team down?",
     old: {
       label: "How businesses were running",
       items: [

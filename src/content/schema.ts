@@ -53,7 +53,8 @@ export const Project = z.object({
   }),
   industry: z.string(),
   status: z.enum(["live", "delivered"]),
-  liveSince: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/).optional(), // "2026-05"
+  // "2026-05" shows "Live since May 2026"; without it a live project shows "Live".
+  liveSince: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/).optional(),
   formerBrand: z.string().optional(),   // "Deuel's Designs"; rendered at named tier only
 
   built: z.array(z.enum(["whatsapp-assistant", "workflow-tool", "website"])),
@@ -77,8 +78,6 @@ export const Project = z.object({
 
   if (p.published && !p.client.descriptionApproved)
     fail("Cannot publish without the client's OK to describe the work (anonymised tier).");
-  if (p.status === "live" && !p.liveSince)
-    fail('status "live" requires liveSince.');
   if (!p.client.nameApproved) {
     if (p.result || p.testimonial)
       fail("Result and testimonial require the named tier (nameApproved).");
@@ -778,11 +777,6 @@ export type LegalDoc = z.infer<typeof LegalDoc>;
 export const CaseStudyCopy = z.object({
   attribution: z.string().includes("{formerBrand}"),
   headings: z.object({ howItWorks: z.string().min(1), result: z.string().min(1) }),
-  workIndex: z.object({
-    title: z.string().min(1),
-    /** Meta description. Omitted from the page while TODO_. */
-    description: orTodo(z.string().min(1).max(155), "a meta description of up to 155 characters"),
-  }),
   cta: z.object({ title: z.string().min(1), button: z.string().min(1) }),
 });
 export type CaseStudyCopy = z.infer<typeof CaseStudyCopy>;

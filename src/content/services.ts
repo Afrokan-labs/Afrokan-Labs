@@ -28,7 +28,7 @@ export const services = {
       ask: { label: "Ask about this", href: "/contact" },
     },
   },
-  // TODO_CONFIRM_SEPARATE_SERVICES: "Backend Systems" and "AI Chatbots" as separate services (TODO.md).
+  // "Backend Systems" and "AI Chatbots" stay separate services (confirmed 2026-10-22).
   items: [
     {
       name: "WhatsApp AI Assistants",
