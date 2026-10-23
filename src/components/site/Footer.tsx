@@ -1,5 +1,6 @@
 import { getLinks, NAV } from "@/lib/links";
 import { LogoMark, SocialIcon } from "./LogoMark";
+import { PhoneLinks } from "./PhoneLinks";
 
 /** reference footer (every page): GET IN TOUCH, three columns, © line, Accra clock, back to top. */
 export function Footer() {
@@ -59,6 +60,11 @@ export function Footer() {
               <li>
                 <a href={links.mailto}>{links.email}</a>
               </li>
+              {links.phone && (
+                <li>
+                  <PhoneLinks phone={links.phone} whatsapp={links.whatsapp} />
+                </li>
+              )}
               <li>{links.location}</li>
               <li>
                 <a href="/privacy">Privacy</a>

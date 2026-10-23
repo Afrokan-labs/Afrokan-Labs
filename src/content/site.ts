@@ -62,6 +62,14 @@ export const site = {
     opensNewTab: "(opens in a new tab)",
     // Each social link's accessible name, e.g. "Afrokan Labs on Instagram".
     socialLabel: "{name} on {platform}",
+    // The number as text on Contact and in the footer, with a Call and a WhatsApp link.
+    phone: {
+      label: "Phone",
+      call: "Call",
+      callLabel: "Call {name} on {number}",
+      whatsapp: "WhatsApp",
+      whatsappLabel: "Message {name} on WhatsApp",
+    },
     // Copy §2: "Live since [Month Year]"; {date} is filled from the project's liveSince.
     status: { live: "Live", liveSince: "Live since {date}", delivered: "Delivered" },
     nav: {

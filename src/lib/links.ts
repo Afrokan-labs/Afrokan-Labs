@@ -2,6 +2,7 @@
  * Contact facts and links the site handoff pages share (nav, footer, CTAs).
  * Server-side: reads src/content/site.ts through src/lib/content.ts.
  */
+import { confirmed } from "./confirmed";
 import { getSite } from "./content";
 import { socialLinks } from "./social";
 import { whatsappTextLink } from "./whatsapp";
@@ -43,5 +44,23 @@ export function getLinks() {
     social: socialLinks(site.social, site.name, site.ui.socialLabel),
     /** Screen-reader note for links that open in a new tab. */
     opensNewTab: site.ui.opensNewTab,
+    /** The WhatsApp number as text, with Call and WhatsApp links; undefined until the number is confirmed. */
+    phone: confirmed(site.whatsappNumber)
+      ? {
+          ...site.ui.phone,
+          display: displayNumber(site.whatsappNumber),
+          tel: `tel:${site.whatsappNumber}`,
+          callLabel: site.ui.phone.callLabel
+            .replace("{name}", site.name)
+            .replace("{number}", displayNumber(site.whatsappNumber)),
+          whatsappLabel: site.ui.phone.whatsappLabel.replace("{name}", site.name),
+        }
+      : undefined,
   };
+}
+
+/** "+233596069011" -> "+233 59 606 9011" (Ghana: 2-3-4 after the country code); other numbers as given. */
+function displayNumber(e164: string): string {
+  const m = e164.match(/^\+233(\d{2})(\d{3})(\d{4})$/);
+  return m ? `+233 ${m[1]} ${m[2]} ${m[3]}` : e164;
 }

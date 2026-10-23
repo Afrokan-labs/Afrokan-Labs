@@ -1,6 +1,7 @@
 import "@/styles/pages/contact.css";
 import { ContactForm } from "@/components/site/ContactForm";
 import { SocialIcon } from "@/components/site/LogoMark";
+import { PhoneLinks } from "@/components/site/PhoneLinks";
 import { env } from "@/lib/env";
 import { getContactCopy, getSite } from "@/lib/content";
 import { getLinks } from "@/lib/links";
@@ -102,6 +103,12 @@ export default function ContactPage() {
                 <b>{page.direct.email}</b>
                 <a href={links.mailto}>{links.email}</a>
               </span>
+              {links.phone && (
+                <span>
+                  <b>{links.phone.label}</b>
+                  <PhoneLinks phone={links.phone} whatsapp={links.whatsapp} />
+                </span>
+              )}
               <span>
                 <b>{page.direct.based}</b>
                 {links.location}

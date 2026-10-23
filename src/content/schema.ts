@@ -162,6 +162,13 @@ export const Site = z.object({
     opensWhatsApp: z.string().min(1),
     opensNewTab: z.string().min(1),
     socialLabel: z.string().includes("{name}").includes("{platform}"),
+    phone: z.object({
+      label: z.string().min(1),
+      call: z.string().min(1),
+      callLabel: z.string().includes("{name}").includes("{number}"),
+      whatsapp: z.string().min(1),
+      whatsappLabel: z.string().includes("{name}"),
+    }),
     status: z.object({
       live: z.string().min(1),
       liveSince: z.string().includes("{date}"),

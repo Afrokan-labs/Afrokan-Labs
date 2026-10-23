@@ -54,8 +54,7 @@ const ORGANIZATION_ID = "/#organization";
 /**
  * Homepage: the company as an Organization and a ProfessionalService, at city
  * level, with its founders. Only what the homepage shows: the logo mark, the
- * footer's email, place and profiles, and the team's names and roles. The
- * WhatsApp number isn't shown as text, so there's no telephone.
+ * footer's email, phone, place and profiles, and the team's names and roles.
  */
 export function organizationJsonLd() {
   const site = getSite();
@@ -81,6 +80,8 @@ export function organizationJsonLd() {
     },
     description: getHome().meta.description,
     email: site.email,
+    // Shown as text on Contact and in the footer.
+    ...(confirmed(site.whatsappNumber) ? { telephone: site.whatsappNumber } : {}),
     address: {
       "@type": "PostalAddress",
       addressLocality: site.address.locality,

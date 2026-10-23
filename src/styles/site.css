@@ -47,6 +47,41 @@ svg text {
   text-decoration: none;
 }
 
+/* Phone number with Call and WhatsApp links (Contact page and footer). Each
+   link is a 44px pill in the surrounding text colour, so it suits both. */
+.phone {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+}
+
+.phone-links {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.phone-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid currentcolor;
+  border-radius: 999px;
+  font-weight: 500;
+  color: inherit;
+  text-decoration: none;
+}
+
+.phone-link:hover {
+  background: rgb(127 127 127 / 0.14);
+}
+
+.phone-link:focus-visible {
+  outline: 2px solid currentcolor;
+  outline-offset: 2px;
+}
+
 /* Menu button and sheet (≤900px, next to the Contact pill). */
 .x-menu-row {
   display: none;
