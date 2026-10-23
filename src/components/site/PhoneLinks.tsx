@@ -5,22 +5,23 @@ type Phone = NonNullable<ReturnType<typeof getLinks>["phone"]>;
 /**
  * The phone number as text, then a Call (tel:) and a WhatsApp link, each with
  * its own accessible name and a 44px target, and the business hours below
- * (Contact page and footer).
+ * (Contact page and footer). The spaces between the parts are dropped by the
+ * flex layout but keep them apart in copied and read-out text.
  */
 export function PhoneLinks({ phone, whatsapp }: { phone: Phone; whatsapp: string }) {
   return (
     <span className="phone">
       <span className="phone-row">
-        <span className="phone-num">{phone.display}</span>
+        <span className="phone-num">{phone.display}</span>{" "}
         <span className="phone-links">
           <a className="phone-link" href={phone.tel} aria-label={phone.callLabel}>
             {phone.call}
-          </a>
+          </a>{" "}
           <a className="phone-link" href={whatsapp} aria-label={phone.whatsappLabel}>
             {phone.whatsapp}
           </a>
         </span>
-      </span>
+      </span>{" "}
       <small className="phone-hours">{phone.hours}</small>
     </span>
   );

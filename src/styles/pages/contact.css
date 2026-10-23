@@ -2300,7 +2300,9 @@ html {
 
 .c-direct b {
   font-weight: 500;
-  margin-right: 6px;
+
+  /* With the space after the label, about the reference's 6px gap. */
+  margin-right: 3px;
 }
 
 .c-hp {

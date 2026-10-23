@@ -141,7 +141,7 @@ export default function ServicesPage() {
                       tabIndex={i === 0 ? 0 : -1}
                       className="sd-tab"
                     >
-                      <span className="sd-n">{pad(i + 1)}</span>
+                      <span className="sd-n">{pad(i + 1)}</span>{" "}
                       <span className="sd-t">{item.name}</span>
                       <span className="sd-arr" aria-hidden="true">
                         {ARROW}

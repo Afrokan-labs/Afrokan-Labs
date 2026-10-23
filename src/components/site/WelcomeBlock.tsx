@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { Home, Site } from "@/content/schema";
 import { CurveArrow, Eyebrow } from "./Eyebrow";
 import { Img } from "./Img";
@@ -84,7 +85,7 @@ export function WelcomeBlock({ copy, industries }: Props) {
           <div className="ae-btns">
             <a className="ae-btn g" href={team.buttons[0].href}>
               {team.buttons[0].label} <CurveArrow />
-            </a>
+            </a>{" "}
             <a className="ae-btn w" href={team.buttons[1].href}>
               {team.buttons[1].label} <CurveArrow />
             </a>
@@ -118,7 +119,10 @@ export function WelcomeBlock({ copy, industries }: Props) {
       <div className="ae-strip" aria-label={copy.stripLabel}>
         <div className="ae-strip-in">
           {industries.map((item) => (
-            <Industry key={item.label} item={item} />
+            <Fragment key={item.label}>
+              {" "}
+              <Industry item={item} />
+            </Fragment>
           ))}
           {/* The copy that makes the loop seamless; screen readers hear the list once. */}
           <span aria-hidden="true" style={{ display: "contents" }}>

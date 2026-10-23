@@ -11,7 +11,7 @@ export function ThemeToggle() {
           <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="currentColor" />
         </svg>
         Dark
-      </button>
+      </button>{" "}
       <button type="button" data-t="light" aria-pressed="false">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="12" cy="12" r="4.2" fill="currentColor" />

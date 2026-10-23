@@ -484,7 +484,10 @@ export default function HomePage() {
                     <dt>{work.fields.built}</dt>
                     <dd className="x-tags">
                       {project.built.map((kind) => (
-                        <span key={kind}>{work.builtLabels[kind]}</span>
+                        <Fragment key={kind}>
+                          {" "}
+                          <span>{work.builtLabels[kind]}</span>
+                        </Fragment>
                       ))}
                     </dd>
                   </div>
@@ -1166,7 +1169,7 @@ export default function HomePage() {
                       />
                     </svg>
                   </span>
-                </a>
+                </a>{" "}
                 <a className="bb2-btn o" href={bannerWaHref}>
                   <WaIcon />
                   {banner.whatsapp}

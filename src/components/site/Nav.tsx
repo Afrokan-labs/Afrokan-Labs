@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { NAV, type NavKey } from "@/lib/links";
 import { LogoMark } from "./LogoMark";
 import { MenuSheet } from "./MenuSheet";
@@ -19,10 +20,14 @@ type Props = {
  * Every page nav also gets a sticky copy that appears once it scrolls away.
  */
 export function Nav({ current, dark, logoHref = "/", sticky }: Props) {
+  // The spaces are dropped by the flex rows but keep the links apart when copied.
   const link = (l: { key: string; label: string; href: string }) => (
-    <a key={l.key} href={l.href} aria-current={l.key === current ? "page" : undefined}>
-      {l.label}
-    </a>
+    <Fragment key={l.key}>
+      {" "}
+      <a href={l.href} aria-current={l.key === current ? "page" : undefined}>
+        {l.label}
+      </a>
+    </Fragment>
   );
   return (
     <>
@@ -36,7 +41,7 @@ export function Nav({ current, dark, logoHref = "/", sticky }: Props) {
           Afrokan Labs
         </a>
         <div className="x-nav-side">
-          {NAV.right.map(link)}
+          {NAV.right.map(link)}{" "}
           <a
             className="x-nav-cta"
             href={NAV.contact.href}
@@ -48,7 +53,7 @@ export function Nav({ current, dark, logoHref = "/", sticky }: Props) {
         <div className="x-menu-row">
           <a className="x-menu" href={NAV.contact.href}>
             {NAV.contact.label}
-          </a>
+          </a>{" "}
           <MenuSheet links={NAV.all} current={current} />
         </div>
       </nav>

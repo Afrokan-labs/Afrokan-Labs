@@ -100,22 +100,20 @@ export default function ContactPage() {
             />
             <div className="c-direct">
               <span>
-                <b>{page.direct.email}</b>
-                <a href={links.mailto}>{links.email}</a>
-              </span>
+                <b>{page.direct.email}</b> <a href={links.mailto}>{links.email}</a>
+              </span>{" "}
               {links.phone && (
                 <span>
-                  <b>{links.phone.label}</b>
+                  <b>{links.phone.label}</b>{" "}
                   <PhoneLinks phone={links.phone} whatsapp={links.whatsapp} />
                 </span>
-              )}
+              )}{" "}
               <span>
-                <b>{page.direct.based}</b>
-                {links.location}
-              </span>
+                <b>{page.direct.based}</b> {links.location}
+              </span>{" "}
               {links.social.length > 0 && (
                 <span className="c-social">
-                  <b>{page.direct.follow}</b>
+                  <b>{page.direct.follow}</b>{" "}
                   {links.social.map((p) => (
                     <a
                       key={p.key}

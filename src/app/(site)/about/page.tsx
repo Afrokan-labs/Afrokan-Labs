@@ -131,7 +131,10 @@ export default function AboutPage() {
                   />
                 </svg>{" "}
                 {pile.items.map((item) => (
-                  <span key={item}>{item}</span>
+                  <Fragment key={item}>
+                    {" "}
+                    <span>{item}</span>
+                  </Fragment>
                 ))}
               </div>
               <div className="x-proof">
@@ -178,7 +181,7 @@ export default function AboutPage() {
             <div className="st-top">
               <span className="x-label" id="story-title">
                 {story.label}
-              </span>
+              </span>{" "}
               <span className="st-from">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <g {...LINE}>
