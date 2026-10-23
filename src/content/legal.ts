@@ -3,12 +3,14 @@ import type { Legal } from "./schema";
 
 /**
  * Privacy Policy and Terms of Use. Source: the site handoff's
- * reference/privacy.html and terms.html: plain-language drafts, pending review
- * by a Ghanaian lawyer (TODO.md). Remove `draft` once reviewed. The only
+ * reference/privacy.html and terms.html: plain-language drafts. The only
  * source for /privacy; analytics wording (Cloudflare Web Analytics) added
  * 2026-10-21.
  * In text: **bold**, [label](/path), and {email} / {domain} from site.ts.
  */
+// TODO_LEGAL_REVIEW: neither policy has been reviewed by a lawyer in Ghana yet
+// (TODO.md). The visible "Draft" badge was removed on 2026-10-23; launch:check
+// warns until this line goes, once the review is done.
 export const legal = {
   privacy: {
     meta: {
@@ -22,7 +24,6 @@ export const legal = {
       "How Afrokan Labs collects, uses and protects your personal information when you visit our website or work with us.",
     updated: "Last updated: 22 October 2026",
     place: "Afrokan Labs · Accra, Ghana",
-    draft: "Draft: pending legal review",
     tocLabel: "On this page",
     sections: [
       {
@@ -200,7 +201,6 @@ export const legal = {
     intro: "The rules for using the Afrokan Labs website, and how our project agreements fit in.",
     updated: "Last updated: 22 October 2026",
     place: "Afrokan Labs · Accra, Ghana",
-    draft: "Draft: pending legal review",
     tocLabel: "On this page",
     sections: [
       {

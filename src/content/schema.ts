@@ -775,7 +775,6 @@ const LegalDoc = z.object({
   updated: text,
   place: text,
   /** The "Draft" tag; remove it once a Ghanaian lawyer has reviewed the page (TODO.md). */
-  draft: z.string().optional(),
   tocLabel: text,
   sections: z
     .array(

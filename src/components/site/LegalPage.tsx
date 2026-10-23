@@ -35,10 +35,11 @@ export function LegalPage({ doc, email, domain }: Props) {
             <span>{doc.heading.mark}</span>
           </h1>
           <p>{doc.intro}</p>
+          {/* Inline pills with a zero-size " · " between them, so the row copies and
+              reads as "Last updated: … · Afrokan Labs · Accra, Ghana" (a flex row
+              copies each pill on its own line). */}
           <div className="lg-meta">
-            <span>{doc.updated}</span>
-            <span>{doc.place}</span>
-            {doc.draft && <span className="draft">{doc.draft}</span>}
+            <span>{doc.updated}</span> <span className="lg-sep">·</span> <span>{doc.place}</span>
           </div>
         </header>
         <div className="lg-body">

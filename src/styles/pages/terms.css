@@ -1936,23 +1936,25 @@ html {
   color: var(--c-444444);
 }
 
+/* Inline pills, not flex, so the row copies on one line; the spaces either side
+   of the zero-size separator make the gap, and the margins the wrapped rows. */
 .lg-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 6px;
+  margin-top: 2px;
+  font-size: 0.72rem;
 }
 
-.lg-meta span {
+/* Copied text keeps it; screen readers get the date and place as separate phrases. */
+.lg-meta .lg-sep {
+  font-size: 0;
+}
+
+.lg-meta span:not(.lg-sep) {
+  display: inline-block;
+  margin: 4px 0;
   font-size: 0.72rem;
   padding: 6px 12px;
   border-radius: 99px;
   background: var(--c-f1f1ec);
-}
-
-.lg-meta span.draft {
-  background: var(--c-94de57);
-  font-weight: 500;
 }
 
 .lg-body {

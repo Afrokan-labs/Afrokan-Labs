@@ -23,7 +23,7 @@ const root = process.argv[2] ?? join(process.cwd(), "src", "content");
 const SKIP = new Set(["schema.ts"]);
 const PLACEHOLDER = /TODO_[A-Z0-9_]+|PLACEHOLDER-[\w.-]+/g;
 /** Known gaps that shouldn't block launch: reported, but the check still passes. */
-const WARN_ONLY = new Set(["TODO_REPLACE_TEAM_PHOTO"]);
+const WARN_ONLY = new Set(["TODO_REPLACE_TEAM_PHOTO", "TODO_LEGAL_REVIEW"]);
 /** Text left for a person to fill in, e.g. "[TO FILL: retention period]", anywhere in src/. */
 const TO_FILL = /\[TO FILL[^\]]*\]?/g;
 
