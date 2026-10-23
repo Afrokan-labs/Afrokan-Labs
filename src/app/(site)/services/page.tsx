@@ -350,13 +350,14 @@ const PACKAGE_ART = {
       </g>
       <rect x="74" y="32" width="54" height="34" rx="6" fill="#E5DED3" />
       <rect x="134" y="32" width="54" height="34" rx="6" fill="#D9E8C8" />
-      <g textAnchor="middle" fontSize="13" fontWeight="600" fill="#0D0D0D">
-        <text x="101" y="55">
-          24
-        </text>
-        <text x="161" y="55">
-          98%
-        </text>
+      {/* Stat tiles drawn as bars, not figures: no made-up numbers. */}
+      <g fill="#0D0D0D">
+        <rect x="87" y="42" width="28" height="7" rx="3.5" />
+        <rect x="147" y="42" width="28" height="7" rx="3.5" />
+      </g>
+      <g fill="#0D0D0D" opacity=".35">
+        <rect x="91" y="54" width="20" height="4" rx="2" />
+        <rect x="151" y="54" width="20" height="4" rx="2" />
       </g>
       <g fill="#94DE57">
         <rect x="80" y="100" width="12" height="12" rx="2" />
