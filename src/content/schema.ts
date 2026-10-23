@@ -112,6 +112,14 @@ export const Site = z.object({
   /** schema.org PostalAddress for JSON-LD: city level only (architecture §8). */
   address: z.object({ locality: z.string().min(1), country: z.string().regex(/^[A-Z]{2}$/) }),
   /** E.164, e.g. +233201234567. The only place the number exists. */
+  /** Opening days (consecutive, in week order) and 24-hour times. */
+  hours: z.object({
+    days: z
+      .array(z.enum(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]))
+      .min(1),
+    opens: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
+    closes: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
+  }),
   whatsappNumber: orTodo(
     z.string().regex(/^\+[1-9]\d{7,14}$/),
     "an E.164 number such as +233201234567",
@@ -168,6 +176,7 @@ export const Site = z.object({
       callLabel: z.string().includes("{name}").includes("{number}"),
       whatsapp: z.string().min(1),
       whatsappLabel: z.string().includes("{name}"),
+      hours: z.string().includes("{hours}"),
     }),
     status: z.object({
       live: z.string().min(1),

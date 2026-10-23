@@ -82,6 +82,12 @@ export function organizationJsonLd() {
     email: site.email,
     // Shown as text on Contact and in the footer.
     ...(confirmed(site.whatsappNumber) ? { telephone: site.whatsappNumber } : {}),
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: site.hours.days,
+      opens: site.hours.opens,
+      closes: site.hours.closes,
+    },
     address: {
       "@type": "PostalAddress",
       addressLocality: site.address.locality,

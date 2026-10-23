@@ -54,9 +54,23 @@ export function getLinks() {
             .replace("{name}", site.name)
             .replace("{number}", displayNumber(site.whatsappNumber)),
           whatsappLabel: site.ui.phone.whatsappLabel.replace("{name}", site.name),
+          hours: site.ui.phone.hours.replace("{hours}", displayHours(site.hours)),
         }
       : undefined,
   };
+}
+
+/** { days: Monday…Saturday, opens: "08:00", closes: "17:00" } -> "Mon–Sat, 8am–5pm". */
+function displayHours({ days, opens, closes }: { days: string[]; opens: string; closes: string }) {
+  const day = (d: string) => d.slice(0, 3);
+  const range = days.length > 1 ? `${day(days[0])}–${day(days.at(-1)!)}` : day(days[0]);
+  return `${range}, ${time(opens)}–${time(closes)}`;
+}
+
+/** "08:00" -> "8am", "17:30" -> "5:30pm". */
+function time(hhmm: string) {
+  const [h, m] = hhmm.split(":").map(Number);
+  return `${h % 12 || 12}${m ? `:${String(m).padStart(2, "0")}` : ""}${h < 12 ? "am" : "pm"}`;
 }
 
 /** "+233596069011" -> "+233 59 606 9011" (Ghana: 2-3-4 after the country code); other numbers as given. */

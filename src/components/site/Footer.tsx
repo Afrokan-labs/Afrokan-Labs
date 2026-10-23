@@ -49,9 +49,6 @@ export function Footer() {
                   </a>
                 </li>
               ))}
-              <li>
-                <a href={links.whatsapp}>WhatsApp</a>
-              </li>
             </ul>
           </div>
           <div className="f-col">

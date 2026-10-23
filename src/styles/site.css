@@ -51,9 +51,20 @@ svg text {
    link is a 44px pill in the surrounding text colour, so it suits both. */
 .phone {
   display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.phone-row {
+  display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px 12px;
+}
+
+.phone-hours {
+  /* 12px: the footer's and Contact's own text is 12–13px. */
+  font-size: 0.75rem;
 }
 
 .phone-links {
@@ -71,6 +82,11 @@ svg text {
   font-weight: 500;
   color: inherit;
   text-decoration: none;
+}
+
+/* The footer's links are light (300); its pills match the Contact page's. */
+.f-col .phone-link {
+  font-weight: 500;
 }
 
 .phone-link:hover {
