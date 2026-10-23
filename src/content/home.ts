@@ -38,7 +38,7 @@ export const home = {
     items: [
       // Exactly three: ESE Logistic's assistant, checklist tool and website.
       { value: "3", label: "Systems delivered" },
-      { value: "24/7", label: "WhatsApp replies" },
+      { value: "24/7", label: "AI assistant replies" },
       { value: "100", unit: "%", label: "Mobile-first builds" },
       { value: "4", unit: "-step", label: "Clear delivery process" },
     ],
