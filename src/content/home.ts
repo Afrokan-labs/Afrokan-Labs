@@ -85,9 +85,11 @@ export const home = {
     heading: ["Turning ideas into", "working software"],
     body: "We may be a small team, but we scope, build and support every project ourselves. Working hand-in-hand with you, we turn the problems that slow your business down into tools your staff and customers actually use.",
     banner: ["An AI & software", "studio in Accra"],
+    // TODO_REPLACE_TEAM_PHOTO: not the founders. Swap in a real photo of Franklin,
+    // Kwabena and Samuel, then name them in the alt text (launch:check warns until then).
     wide: {
       src: "home-ideas-team.webp",
-      alt: "Franklin, Kwabena and Samuel of Afrokan Labs working together at laptops",
+      alt: "Three people working together at laptops around a table in a bright office",
     },
     tall: { src: "home-ideas-thinker.webp", alt: "" },
   },

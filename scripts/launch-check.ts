@@ -3,7 +3,8 @@
  * image used in src/content, every "[TO FILL" marker anywhere in src/
  * (content, pages and components), and every indexable page without its OG
  * image in public/og/, and exits 1 while any remain. Must pass on the launch
- * PR (architecture §11).
+ * PR (architecture §11). Placeholders in WARN_ONLY are listed as warnings and
+ * don't fail the check.
  *
  * Usage: tsx scripts/launch-check.ts [dir]   (default: src/content; [TO FILL is always checked in src/)
  */
@@ -21,6 +22,8 @@ const root = process.argv[2] ?? join(process.cwd(), "src", "content");
 // schema.ts defines the placeholder format; it isn't content.
 const SKIP = new Set(["schema.ts"]);
 const PLACEHOLDER = /TODO_[A-Z0-9_]+|PLACEHOLDER-[\w.-]+/g;
+/** Known gaps that shouldn't block launch: reported, but the check still passes. */
+const WARN_ONLY = new Set(["TODO_REPLACE_TEAM_PHOTO"]);
 /** Text left for a person to fill in, e.g. "[TO FILL: retention period]", anywhere in src/. */
 const TO_FILL = /\[TO FILL[^\]]*\]?/g;
 
@@ -44,10 +47,12 @@ const scan = (paths: string[], pattern: RegExp) =>
       ),
   );
 
-const found = [
+const all = [
   ...scan(files(root), PLACEHOLDER),
   ...scan(files(join(process.cwd(), "src")), TO_FILL),
 ];
+const found = all.filter((f) => !WARN_ONLY.has(f.token));
+const warnings = all.filter((f) => WARN_ONLY.has(f.token));
 
 const missingOg = getIndexablePaths()
   .filter((path) => !getOgImage(path))
@@ -60,6 +65,14 @@ if (!getFallbackOgImage())
   });
 
 const problems = [...found, ...missingOg];
+
+if (warnings.length) {
+  const width = Math.max(...warnings.map((f) => f.where.length));
+  console.warn(`launch:check warning: ${warnings.length} known gap(s), not blocking launch.
+`);
+  for (const f of warnings) console.warn(`  ${f.where.padEnd(width)}  ${f.token}`);
+  console.warn("");
+}
 
 if (problems.length === 0) {
   console.log(

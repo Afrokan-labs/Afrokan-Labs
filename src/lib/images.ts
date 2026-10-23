@@ -24,7 +24,7 @@ function manifest(): Record<string, ManifestEntry> {
   return cache;
 }
 
-/** Props for <ResponsiveImage>, e.g. getImage("assets/images/franklin-wiafe.jpg"). */
+/** Props for <ResponsiveImage>, e.g. getImage("assets/images/team-ceo-franklin.webp"). */
 export function getImage(src: string) {
   const entry = manifest()[src];
   if (!entry) {
