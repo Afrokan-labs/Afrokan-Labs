@@ -50,7 +50,10 @@ export const legal = {
             ],
           },
           {
-            p: "We do not knowingly collect information from children, and we do not ask for sensitive information such as health or financial details through this website.",
+            p: "This website and our services are for businesses and adults. They are not aimed at anyone under 18, and we do not knowingly collect personal information from anyone under 18. If you believe someone under 18 has sent us their information, email **{email}** and we will delete it.",
+          },
+          {
+            p: "We do not ask for sensitive information such as health or financial details through this website.",
           },
         ],
       },
@@ -137,6 +140,9 @@ export const legal = {
             // Retention follows Act 843 instead of a fixed period (decided 2026-10-18).
             p: "As the Data Protection Act, 2012 (Act 843) requires, we keep personal information only for as long as we need it for the purpose we collected it for, unless the law or a contract requires us to keep it longer, or you agree that we can. Project records, for example, are kept for as long as needed to support the work and meet legal and tax obligations. After that we delete or anonymise them.",
           },
+          {
+            p: "**Enquiries.** If you contact us through the form, by email or on WhatsApp and it doesn't lead to a project, we delete your message and contact details within 12 months of our last exchange. If it does lead to a project, it becomes part of the project records described above.",
+          },
         ],
       },
       {
@@ -148,8 +154,12 @@ export const legal = {
               "Tell you what personal information we hold about you and give you a copy.",
               "Correct information that is wrong or out of date.",
               "Delete your information or stop using it, where there is no reason for us to keep it.",
-              "Stop sending you marketing messages.",
+              "Object to us using your information for direct marketing. If you do, we will stop, at no cost to you. Every marketing email also includes a way to unsubscribe.",
+              "Object to decisions about you made solely by automated processing. We don't make decisions about you that are based solely on automated processing and have legal or similarly significant effects. If that ever changes, we will tell you, and you can ask for a person to review the decision.",
             ],
+          },
+          {
+            p: "These rights come from the Data Protection Act, 2012 (Act 843), including sections 40 and 41.",
           },
           {
             p: "**To ask us to delete your information**, email **{email}** from the email address or WhatsApp number you contacted us with, and say what you would like deleted. We will confirm once it is done, or explain why we need to keep any of it.",
