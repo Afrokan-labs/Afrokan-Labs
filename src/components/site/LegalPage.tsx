@@ -70,7 +70,7 @@ export function LegalPage({ doc, email, domain }: Props) {
                 )}
               </section>
             ))}
-            <p className="lg-note">{doc.note}</p>
+            <p className="lg-note">{inline(doc.note)}</p>
             <a className="lg-other" href={doc.other.href}>
               {doc.other.label}
             </a>

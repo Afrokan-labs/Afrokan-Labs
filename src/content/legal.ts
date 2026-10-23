@@ -187,7 +187,7 @@ export const legal = {
         ],
       },
     ],
-    note: "This document is a plain-language draft prepared for Afrokan Labs. It is not legal advice and should be reviewed by a qualified lawyer in Ghana before the site goes live.",
+    note: "We may update this policy from time to time. The date at the top shows when it last changed. If you have questions about how we handle your information, email {email}.",
     other: { label: "Read our Terms of Use →", href: "/terms" },
   },
   terms: {
@@ -288,7 +288,7 @@ export const legal = {
         ],
       },
     ],
-    note: "This document is a plain-language draft prepared for Afrokan Labs. It is not legal advice and should be reviewed by a qualified lawyer in Ghana before the site goes live.",
+    note: "We may update these terms from time to time. The date at the top shows when they last changed. If you have questions, email {email}.",
     other: { label: "Read our Privacy Policy →", href: "/privacy" },
   },
 } satisfies z.input<typeof Legal>;
