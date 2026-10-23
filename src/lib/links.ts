@@ -61,7 +61,15 @@ export function getLinks() {
 }
 
 /** { days: Monday…Saturday, opens: "08:00", closes: "17:00" } -> "Mon–Sat, 8am–5pm". */
-export function displayHours({ days, opens, closes }: { days: string[]; opens: string; closes: string }) {
+export function displayHours({
+  days,
+  opens,
+  closes,
+}: {
+  days: string[];
+  opens: string;
+  closes: string;
+}) {
   const day = (d: string) => d.slice(0, 3);
   const range = days.length > 1 ? `${day(days[0])}–${day(days.at(-1)!)}` : day(days[0]);
   return `${range}, ${time(opens)}–${time(closes)}`;
