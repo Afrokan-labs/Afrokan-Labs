@@ -22,7 +22,8 @@
     "test:contact-form": "tsx scripts/test-contact-form.ts",
     "email:test": "tsx scripts/email-test.ts",
     "email:assets": "tsx scripts/email-assets.ts",
-    "email:signatures": "tsx scripts/email-signatures.ts"
+    "email:signatures": "tsx scripts/email-signatures.ts",
+    "prepare": "simple-git-hooks"
   },
   "dependencies": {
     "@mdx-js/mdx": "^3.1.1",
@@ -43,10 +44,14 @@
     "eslint-config-next": "15.5.27",
     "prettier": "^3.9.9",
     "sharp": "^0.34.5",
+    "simple-git-hooks": "2.14.0",
     "stylelint": "^17.16.0",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-declaration-strict-value": "^1.12.1",
     "tsx": "^4.23.15",
     "typescript": "^5"
+  },
+  "simple-git-hooks": {
+    "pre-push": "pnpm format:check && pnpm lint && pnpm typecheck"
   }
 }
