@@ -164,7 +164,7 @@ async function main() {
         assert.equal(await ev(`!!document.getElementById("cform")`), false);
         const text = await ev<string>(`document.querySelector(".c-done").textContent`);
         assert.match(text, /Thanks, Ama Test\./);
-        assert.match(text, /ama@example\.com within 24 hours/);
+        assert.match(text, /ama@example\.com within 1 business day/);
         assert.equal(
           await ev(`!!document.querySelector('.c-done a[href^="https://wa.me/"]')`),
           true,

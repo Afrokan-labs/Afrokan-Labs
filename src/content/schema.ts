@@ -888,3 +888,9 @@ export const ContactCopy = z.object({
   }),
 });
 export type ContactCopy = z.infer<typeof ContactCopy>;
+
+/** /llms.txt (src/content/llms.ts): its contact facts come from site.ts. */
+export const Llms = ["{whatsappUrl}", "{phone}", "{hours}", "{email}", "{location}"].reduce(
+  (text, token) => text.includes(token),
+  z.string().min(1),
+);

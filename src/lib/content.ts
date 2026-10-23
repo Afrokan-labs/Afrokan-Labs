@@ -17,6 +17,7 @@ import { contact } from "../content/contact";
 import { home } from "../content/home";
 import { industries } from "../content/industries";
 import { legal } from "../content/legal";
+import { llms } from "../content/llms";
 import { packages } from "../content/packages";
 import * as schema from "../content/schema";
 import { services } from "../content/services";
@@ -60,6 +61,7 @@ export const getSolutions = () => parse("src/content/solutions.ts", schema.Solut
 export const getIndustries = () =>
   parse("src/content/industries.ts", schema.Industries, industries);
 export const getMembers = () => parse("src/content/team.ts (members)", schema.Members, members);
+export const getLlms = () => parse("src/content/llms.ts", schema.Llms, llms);
 export const getTestimonials = () =>
   parse("src/content/testimonials.ts", schema.Testimonials, testimonials);
 
@@ -194,6 +196,7 @@ export async function validateAllContent() {
   getLegal();
   getCaseStudyCopy();
   getContactCopy();
+  getLlms();
   const quotes = getTestimonials();
   const services = getServices();
   getPackages();

@@ -39,7 +39,8 @@
   Cache-Control: public, max-age=86400
 
 # Plain-text files for machines: security.txt (RFC 9116 asks for UTF-8 plain
-# text) and llms.txt. Served from public/ as-is; nothing rewrites these paths.
+# text, served from public/ as-is) and llms.txt (written at build time by
+# src/app/llms.txt/route.ts).
 /.well-known/security.txt
   ! Content-Type
   Content-Type: text/plain; charset=utf-8

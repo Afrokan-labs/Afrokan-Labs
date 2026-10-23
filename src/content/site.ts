@@ -23,8 +23,10 @@ export const site = {
     opens: "08:00",
     closes: "17:00",
   },
-  // Contact form success line: "we'll reply within [X hours]".
-  replyWithin: "24 hours",
+  // "We'll reply within …" on Contact, the form success message, the auto-reply
+  // email and the home contact box. Changed from "24 hours" on 2026-10-23 to fit
+  // the Mon–Sat hours.
+  replyWithin: "1 business day",
   // The home project banner's status pill (update 2 §5). Set to "" to hide it.
   availability: "Taking new projects this month",
 

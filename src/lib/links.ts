@@ -61,7 +61,7 @@ export function getLinks() {
 }
 
 /** { days: Monday…Saturday, opens: "08:00", closes: "17:00" } -> "Mon–Sat, 8am–5pm". */
-function displayHours({ days, opens, closes }: { days: string[]; opens: string; closes: string }) {
+export function displayHours({ days, opens, closes }: { days: string[]; opens: string; closes: string }) {
   const day = (d: string) => d.slice(0, 3);
   const range = days.length > 1 ? `${day(days[0])}–${day(days.at(-1)!)}` : day(days[0]);
   return `${range}, ${time(opens)}–${time(closes)}`;
@@ -74,7 +74,7 @@ function time(hhmm: string) {
 }
 
 /** "+233596069011" -> "+233 59 606 9011" (Ghana: 2-3-4 after the country code); other numbers as given. */
-function displayNumber(e164: string): string {
+export function displayNumber(e164: string): string {
   const m = e164.match(/^\+233(\d{2})(\d{3})(\d{4})$/);
   return m ? `+233 ${m[1]} ${m[2]} ${m[3]}` : e164;
 }

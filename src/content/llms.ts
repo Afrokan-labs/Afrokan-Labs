@@ -1,4 +1,9 @@
-# Afrokan Labs
+/**
+ * /llms.txt: a plain-text summary of the site for AI tools (llmstxt.org),
+ * served by src/app/llms.txt/route.ts. The contact facts are filled in from
+ * site.ts: {whatsappUrl}, {phone}, {hours}, {email}, {location}.
+ */
+export const llms = `# Afrokan Labs
 
 > AI and software studio in Accra, Ghana. WhatsApp AI assistants, workflow tools and web platforms for growing businesses. Tell us what slows your team down and we'll build around it.
 
@@ -40,6 +45,9 @@ Logistics, retail, schools, healthcare, real estate, hospitality and service bus
 
 ## Contact
 
-- WhatsApp: https://wa.me/233596069011
-- Email: hello@afrokanlabs.com
-- Location: Accra, Ghana
+- WhatsApp: {whatsappUrl}
+- Phone: {phone}
+- Hours: {hours}, Accra time (GMT). WhatsApp anytime.
+- Email: {email}
+- Location: {location}
+`;

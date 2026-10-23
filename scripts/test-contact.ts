@@ -120,7 +120,7 @@ const tests: [string, () => Promise<void>][] = [
       // Nothing the visitor typed is echoed back.
       assert.doesNotMatch(String(reply.text), /spam|Visit|Buy/);
       assert.match(String(reply.text), /https:\/\/wa\.me\/\d+/);
-      assert.match(String(reply.text), /within 24 hours/);
+      assert.match(String(reply.text), /within 1 business day/);
     },
   ],
   [
