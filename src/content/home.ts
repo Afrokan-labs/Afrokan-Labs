@@ -174,27 +174,50 @@ export const home = {
         chip: "Free first conversation",
         title: "Understand the problem",
         body: "We start with a conversation about what's slowing your business down, not about technology. We listen to how your team and customers actually work today, on WhatsApp, on the phone and on paper.",
+        get: [
+          "A free call or visit",
+          "The problem written back to you in plain words",
+          "An honest view on whether software is the answer",
+        ],
         link: { label: "Start the conversation", href: "#contact" },
       },
       {
         chip: "Clear plan before work starts",
         title: "Scope and quote",
         body: "You get a written plan with what we'll build, how long it takes and exactly what it costs. Nothing starts until you're happy with it, so there are no surprises halfway through.",
+        get: [
+          "A written plan you can share",
+          "A fixed price, agreed up front",
+          "A timeline you sign off on",
+        ],
         link: { label: "See our services", href: "/services" },
       },
       {
         chip: "Check-ins every week",
         title: "Build, with you watching",
         body: "We build in short steps and show you progress along the way, not just at the end. You test early versions with your own team and tell us what to change while it's still easy to change.",
+        get: [
+          "Weekly progress check-ins",
+          "Early versions your team can try",
+          "Changes made while they're cheap",
+        ],
         link: { label: "See a project we built", href: "#work" },
       },
       {
         chip: "We stay after launch",
         title: "Hand over and support",
         body: "We train your team on what we built, hand over everything you need, and stay available to fix, adjust and improve it as your business grows.",
+        get: ["Training for your team", "Everything handed over to you", "Support after launch"],
         link: { label: "Meet the team", href: "/about" },
       },
     ],
+    stepPrefix: "Step {n}: ",
+    getLabel: "What you get",
+    end: {
+      lead: "Not sure where to start?",
+      rest: " The first conversation is free, and there's no obligation after it.",
+      cta: { label: "Book a free call", href: "#contact" },
+    },
     visuals: {
       gauge: { value: "GH₵0", label: "First call", note: "Free" },
       quote: { total: "Total price", fixed: "Fixed" },
@@ -212,6 +235,10 @@ export const home = {
   },
   team: {
     heading: { first: "The people", middle: "building", brand: "Afrokan", last: "Labs" },
+    leads: {
+      label: "Team leads",
+      more: { label: "Meet everyone on the About page", href: "/about" },
+    },
     body: "We're a small team in Accra. The people who scope your project are the people who build it, so you always know who you're talking to.",
     join: { label: "Join our team", href: "#contact" },
     linkedinLabel: "{name} on LinkedIn",

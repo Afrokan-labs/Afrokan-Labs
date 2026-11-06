@@ -53,6 +53,22 @@ export const solutions = {
       },
     ],
   },
+  explore: {
+    heading: ["Explore", "what we build"],
+    // The pack says "6+". There are exactly six here, so no "+" (as with the home stat).
+    note: "6 industries",
+    badge: "WHATSAPP · WEB · WORKFLOW · DATA ·",
+    tiles: [
+      { label: "Customer service", src: "solutions-morning.webp", tone: "green" },
+      { label: "Professional services", src: "solutions-office.webp", tone: "black" },
+      { label: "Strategy", src: "home-ideas-thinker.webp", tone: "sand" },
+      { label: "Logistics", src: "solutions-yard.webp", tone: "sage" },
+      { label: "Retail", src: "solutions-evening.webp", tone: "deep" },
+      // TODO_REPLACE_TEAM_PHOTO: the pack uses home-ideas-team here, but those aren't
+      // the founders. Samuel is real and in the team hoodie; swap in the group photo later.
+      { label: "Our team", src: "work-hero-samuel.webp", tone: "green" },
+    ],
+  },
   industries: {
     heading: { lead: "Built for businesses ", mark: "like yours" },
     body: "We've delivered for clearing and forwarding. The same tools fit any business that answers the same questions every day. Open an industry to see how.",

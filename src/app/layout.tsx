@@ -5,6 +5,7 @@ import "@/styles/tokens.css";
 import "@/styles/site.css";
 import { Footer } from "@/components/site/Footer";
 import { WaSprite } from "@/components/site/LogoMark";
+import { LOADER_HEAD, PageLoader } from "@/components/site/PageLoader";
 import { SiteScripts } from "@/components/site/SiteScripts";
 import { THEME_INIT, ThemeToggle } from "@/components/site/ThemeToggle";
 import { getSite } from "@/lib/content";
@@ -80,8 +81,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={fontVars} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+        <script dangerouslySetInnerHTML={{ __html: LOADER_HEAD }} />
       </head>
       <body>
+        <PageLoader />
         <a className="skip-link" href="#main">
           Skip to content
         </a>

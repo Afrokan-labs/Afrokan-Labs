@@ -151,6 +151,8 @@ const HIDDEN_AT_START = `(() => {
   };
   const found = new Map();
   for (const el of document.body.querySelectorAll("*")) {
+    // The page loader's logo starts hidden on purpose: it's decorative, not page content.
+    if (el.closest("#afk-loader")) continue;
     const r = el.getBoundingClientRect();
     if (r.width < 1 || r.height < 1 || r.top >= innerHeight || r.bottom <= 0) continue;
     const content = /^(img|svg|video|canvas)$/i.test(el.tagName) ||

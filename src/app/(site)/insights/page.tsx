@@ -2,7 +2,8 @@ import "@/styles/pages/insights.css";
 import { Fragment } from "react";
 import { Nav } from "@/components/site/Nav";
 import { InsightsScripts } from "@/components/site/InsightsScripts";
-import { getArticles, getInsights } from "@/lib/content";
+import { PosterCard } from "@/components/site/PosterCard";
+import { getArticles, getInsights, getSite } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({ path: "/insights", ...getInsights().meta });
@@ -10,8 +11,7 @@ export const metadata = pageMetadata({ path: "/insights", ...getInsights().meta 
 export default function InsightsPage() {
   const { heading, board, search, recommended, comingSoon, all, empty, newsletter } = getInsights();
   const articles = getArticles();
-  const rec = articles.slice(0, 4);
-  const cat = (i: number) => `${rec[i].category} · ${recommended.soon}`;
+  const site = getSite();
   return (
     <>
       <InsightsScripts preview={newsletter.preview} invalid={newsletter.invalid} />
@@ -153,155 +153,22 @@ export default function InsightsPage() {
               <h2>{recommended.heading}</h2>
               <a href={recommended.seeAll.href}>{recommended.seeAll.label}</a>
             </div>
-            <ul className="i-rec">
-              <li className="i-card i-c1">
-                <span className="i-cat">{cat(0)}</span>{" "}
-                <svg
-                  className="i-art"
-                  viewBox="0 0 200 200"
-                  preserveAspectRatio="xMidYMid slice"
-                  aria-hidden="true"
-                >
-                  <defs>
-                    <radialGradient id="d1" cx=".4" cy=".35" r=".7">
-                      <stop offset="0" stopColor="#CDF2A8" />
-                      <stop offset=".6" stopColor="#94DE57" />
-                      <stop offset="1" stopColor="#66AE34" />
-                    </radialGradient>
-                  </defs>
-                  <circle cx="118" cy="40" r="78" fill="url(#d1)" />
-                  <circle cx="100" cy="30" r="40" fill="#fff" />
-                </svg>
-                <h3>{rec[0].title}</h3>
-                <span className="i-go">
-                  <svg viewBox="0 0 16 16">
-                    <path
-                      d="M4 12 12 4M5.5 4H12v6.5"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-                <span className="i-soon">{comingSoon}</span>
-              </li>
-              <li className="i-card i-c2">
-                <h3>{rec[1].title}</h3>
-                <span className="i-cat">{cat(1)}</span>{" "}
-                <svg
-                  className="i-art"
-                  viewBox="0 0 200 200"
-                  preserveAspectRatio="xMidYMid slice"
-                  aria-hidden="true"
-                >
-                  <defs>
-                    <radialGradient id="d2" cx=".35" cy=".3" r=".8">
-                      <stop offset="0" stopColor="#94DE57" />
-                      <stop offset="1" stopColor="#367520" />
-                    </radialGradient>
-                  </defs>
-                  <circle cx="120" cy="150" r="46" fill="url(#d2)" />
-                  <circle cx="160" cy="118" r="24" fill="url(#d2)" />
-                  <circle cx="84" cy="176" r="22" fill="url(#d2)" />
-                  <circle cx="150" cy="176" r="14" fill="url(#d2)" />
-                  <circle cx="66" cy="140" r="6" fill="#367520" />
-                </svg>{" "}
-                <span className="i-go">
-                  <svg viewBox="0 0 16 16">
-                    <path
-                      d="M4 12 12 4M5.5 4H12v6.5"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-                <span className="i-soon">{comingSoon}</span>
-              </li>
-              <li className="i-card i-c3">
-                <span className="i-cat">{cat(2)}</span>{" "}
-                <svg
-                  className="i-art"
-                  viewBox="0 0 200 200"
-                  preserveAspectRatio="xMidYMid slice"
-                  aria-hidden="true"
-                >
-                  <defs>
-                    <linearGradient id="d3" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0" stopColor="#4a4d52" />
-                      <stop offset="1" stopColor="#26282B" stopOpacity="0" />
-                    </linearGradient>
-                  </defs>
-                  <rect
-                    x="40"
-                    y="-30"
-                    width="36"
-                    height="150"
-                    rx="18"
-                    transform="rotate(30 58 45)"
-                    fill="url(#d3)"
-                  />
-                  <rect
-                    x="110"
-                    y="-20"
-                    width="44"
-                    height="130"
-                    rx="22"
-                    transform="rotate(30 132 45)"
-                    fill="url(#d3)"
-                  />
-                </svg>
-                <h3>{rec[2].title}</h3>
-                <span className="i-go">
-                  <svg viewBox="0 0 16 16">
-                    <path
-                      d="M4 12 12 4M5.5 4H12v6.5"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-                <span className="i-soon">{comingSoon}</span>
-              </li>
-              <li className="i-card i-c4">
-                <h3>{rec[3].title}</h3>
-                <span className="i-cat">{cat(3)}</span>{" "}
-                <svg
-                  className="i-art"
-                  viewBox="0 0 200 200"
-                  preserveAspectRatio="xMidYMid slice"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M20 210V160a16 16 0 0 1 32 0v20a16 16 0 0 0 32 0v-20a16 16 0 0 1 32 0v20a16 16 0 0 0 32 0v-20a16 16 0 0 1 32 0v50"
-                    fill="none"
-                    stroke="#fff"
-                    strokeOpacity=".55"
-                    strokeWidth="18"
-                    strokeLinecap="round"
-                  />
-                </svg>{" "}
-                <span className="i-go">
-                  <svg viewBox="0 0 16 16">
-                    <path
-                      d="M4 12 12 4M5.5 4H12v6.5"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-                <span className="i-soon">{comingSoon}</span>
-              </li>
+            <ul className="pc-grid pc-arts">
+              {articles.flatMap((a) =>
+                a.poster
+                  ? [
+                      <PosterCard
+                        key={a.title}
+                        poster={a.poster}
+                        layout="articles"
+                        href={a.poster.href ?? recommended.seeAll.href}
+                        name={site.name}
+                        role={all.categories[a.category]}
+                        pill={a.poster.href ? recommended.read : comingSoon}
+                      />,
+                    ]
+                  : [],
+              )}
             </ul>
           </section>
         </div>

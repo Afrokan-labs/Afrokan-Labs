@@ -3,12 +3,11 @@
 import { useEffect } from "react";
 
 const REVEAL =
-  ".x-ideas-head, .x-shot, .o-text, .o-stage, .sv-top, .sv-row, .x-work-grid, .x-words, .hw-row, .x-crew-head, .x-arch, .x-tband, .x-contact-text, .x-mapwrap, .f-big, .f-cols, .f-bottom, .x-head, .s-row, .sol-moment, .sol-i, .i-card, .i-item, .i-news, .x-value, .rd-panel, .x-stop, .x-story, .st-lead, .st-flow, .st-facts, .x-cta, .x-lower > *, .c-direct";
+  ".x-ideas-head, .x-shot, .o-text, .o-stage, .sv-top, .sv-row, .x-work-grid, .x-words, .hw2-card, .hw2-stage, .x-crew-head, .x-arch, .x-tband, .x-contact-text, .x-mapwrap, .f-big, .f-cols, .f-bottom, .x-head, .s-row, .sol-moment, .i-item, .i-news, .rd-panel, .x-stop, .x-story, .st-lead, .st-flow, .st-facts, .x-cta, .x-lower > *, .c-direct";
 
 /**
  * The reference's shared page script, run once per page load: theme toggle,
- * the footer's Accra clock and back-to-top, page fade transitions and the
- * staggered scroll reveals. Internal links are plain <a>, so each page is a
+ * the footer's Accra clock and back-to-top, and the staggered scroll reveals. Internal links are plain <a>, so each page is a
  * fresh document and this runs on every page.
  */
 export function SiteScripts() {
@@ -59,29 +58,6 @@ export function SiteScripts() {
     }
 
     if (reduce) return done;
-
-    // Page transitions: fade out, then go to the other page of the site.
-    const onClick = (e: MouseEvent) => {
-      const a = (e.target as Element).closest?.("a[href]");
-      if (!(a instanceof HTMLAnchorElement)) return;
-      const h = a.getAttribute("href") ?? "";
-      if (!h.startsWith("/") || h.startsWith("//") || a.target === "_blank") return;
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-      const url = new URL(a.href);
-      // Another anchor on this page: let the browser scroll.
-      if (url.pathname === location.pathname && url.hash) return;
-      e.preventDefault();
-      root.classList.add("fx-leave");
-      setTimeout(() => (location.href = url.href), 260);
-      setTimeout(() => root.classList.remove("fx-leave"), 1500);
-    };
-    const onShow = () => root.classList.remove("fx-leave");
-    document.addEventListener("click", onClick);
-    window.addEventListener("pageshow", onShow);
-    cleanups.push(() => {
-      document.removeEventListener("click", onClick);
-      window.removeEventListener("pageshow", onShow);
-    });
 
     // Staggered scroll reveals, only for things below the first screen at load.
     if (!("IntersectionObserver" in window)) return done;

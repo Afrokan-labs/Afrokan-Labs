@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import { CtaBox } from "@/components/site/CtaBox";
 import { Nav } from "@/components/site/Nav";
 import { Img } from "@/components/site/Img";
+import { RotatingBadge } from "@/components/site/RotatingBadge";
 import { SolutionsScripts } from "@/components/site/SolutionsScripts";
 import type { Industries } from "@/content/schema";
 import { getIndustries, getSite, getSolutions } from "@/lib/content";
@@ -22,7 +23,7 @@ const PHOTOS = [
 ];
 
 export default function SolutionsPage() {
-  const { poster, day, industries } = getSolutions();
+  const { poster, day, explore, industries } = getSolutions();
   const index = getIndustries();
   const moments = day.moments;
   const pillTime = (time: string) => poster.pillTime.replace("{time}", time);
@@ -200,6 +201,25 @@ export default function SolutionsPage() {
                 </li>
               ))}
             </ol>
+          </section>
+          <section className="x-sec mz" aria-labelledby="mz-title">
+            <div className="mz-head">
+              <h2 id="mz-title">
+                {explore.heading[0]}
+                <br />
+                <span>{explore.heading[1]}</span>
+              </h2>
+              <p>{explore.note}</p>
+              <RotatingBadge className="mz-badge" text={explore.badge} radius={72} fontSize={16} />
+            </div>
+            <ul className="mz-grid">
+              {explore.tiles.map((tile, i) => (
+                <li className={`mz-t ${"abcdef"[i]} ${tile.tone}`} key={tile.label}>
+                  <Img src={tile.src} alt="" sizes="(max-width: 760px) 100vw, 42vw" />
+                  <span>{tile.label}</span>
+                </li>
+              ))}
+            </ul>
           </section>
           <section className="x-sec bi" aria-labelledby="ind-title">
             <div className="x-head">

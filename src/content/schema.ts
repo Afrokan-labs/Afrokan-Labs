@@ -240,6 +240,19 @@ export const Site = z.object({
   emailSignature: z.object({ team: z.string().includes("{name}"), whatsapp: z.string().min(1) }),
 });
 
+/** Update 2 §9: a square poster card (About "What we believe", Insights "Recommended"). */
+export const Poster = z.object({
+  theme: z.enum(["green", "black", "deep", "sand"]),
+  shape: z.enum(["s1", "s2", "s3", "s4"]),
+  tag: z.string().startsWith("#"),
+  headline: z.string().min(1),
+  /** The line under the headline (s1, s2) or the black note box (s4). */
+  sub: z.string().min(1).optional(),
+  /** The photo in the frame (s3, s4). tone: "mono" is fully grayscale. */
+  photo: z.object({ src: z.string().endsWith(".webp"), tone: z.enum(["soft", "mono"]) }).optional(),
+});
+export type Poster = z.infer<typeof Poster>;
+
 /** About "Members" (site update 1): real people only, each with a transparent cut-out. */
 export const Members = z
   .array(
@@ -253,6 +266,23 @@ export const Members = z
       photo: z.object({ src: z.string().endsWith(".webp"), alt: z.string().min(10) }),
       linkedin: orTodo(z.url(), "their LinkedIn URL"),
       shape: z.enum(["circles", "triangles", "diamond"]),
+      /** The pill on the photo (update 2 §7), e.g. "Builds" / "WhatsApp AI". */
+      highlight: z.object({ label: z.string().min(1), value: z.string().min(1) }),
+    }),
+  )
+  .min(1);
+
+/** Update 5 §3: the team leads, on About "Members" and the home strip. Real people only. */
+export const Leads = z
+  .array(
+    z.object({
+      name: z.tuple([z.string().min(1), z.string().min(1)]),
+      role: z.string().min(1),
+      cutout: z.object({ src: z.string().endsWith(".webp"), alt: z.string().min(10) }),
+      shape: z.enum(["ring", "plus"]),
+      /** The pill's colours: p1 is black, p2 is green. */
+      pill: z.enum(["p1", "p2"]),
+      highlight: z.object({ label: z.string().min(1), value: z.string().min(1) }),
     }),
   )
   .min(1);
@@ -280,6 +310,7 @@ export type Project = z.infer<typeof Project>;
 export type Site = z.infer<typeof Site>;
 export type Testimonials = z.infer<typeof Testimonials>;
 export type Members = z.infer<typeof Members>;
+export type Leads = z.infer<typeof Leads>;
 export type BuiltKind = z.infer<typeof BuiltKind>;
 
 const text = z.string().min(1);
@@ -394,7 +425,22 @@ export const Home = z.object({
     eyebrow: text,
     heading: Heading,
     body: text,
-    steps: z.array(z.object({ chip: text, title: text, body: text, link: Link })).length(4),
+    steps: z
+      .array(
+        z.object({
+          chip: text,
+          title: text,
+          body: text,
+          get: z.tuple([text, text, text]),
+          link: Link,
+        }),
+      )
+      .length(4),
+    /** Read before each step's title by screen readers: "Step {n}: ". */
+    stepPrefix: z.string().includes("{n}"),
+    getLabel: text,
+    /** The closing strip under the steps (.hw2-end). */
+    end: z.object({ lead: text, rest: text, cta: Link }),
     /** Text inside the drawn step visuals (decorative, aria-hidden). */
     visuals: z.object({
       gauge: z.object({ value: text, label: text, note: text }),
@@ -409,6 +455,8 @@ export const Home = z.object({
     body: text,
     join: Link,
     linkedinLabel: text,
+    /** The strip under the arches; the people are in src/content/team.ts. */
+    leads: z.object({ label: text, more: Link }),
   }),
   /** Update 2 §5: "Start your project journey", just before Get in Touch. */
   project: z.object({
@@ -479,7 +527,7 @@ export const About = z.object({
       )
       .min(1),
   }),
-  members: z.object({ title: text }),
+  members: z.object({ title: text, leadsLabel: text }),
   philosophy: z.object({
     eyebrow: text,
     heading: z.tuple([text, text]),
@@ -488,18 +536,31 @@ export const About = z.object({
       .array(z.object({ title: text, icon: z.enum(["audit", "systems", "results"]), body: text }))
       .length(3),
   }),
+  /** Update 2 §8: the drag strip after "Our philosophy". */
+  highlight: z.object({
+    heading: Lines,
+    hint: text,
+    drag: text,
+    label: text,
+    tiles: z
+      .array(
+        z.object({
+          label: text,
+          src: z.string().endsWith(".webp"),
+          /** cut: a transparent cut-out. photo: a grayscale photo. */
+          kind: z.enum(["cut", "photo"]),
+          tone: z.enum(["green", "black", "sand", "sage", "deep"]),
+        }),
+      )
+      .length(6),
+  }),
+  /** "What we believe": update 2 §9's poster cards. Each is signed by a team member. */
   values: z.object({
     heading: Heading,
     body: text,
-    items: z
-      .array(
-        z.object({
-          icon: z.enum(["whatsapp", "people", "document", "shield"]),
-          title: text,
-          body: text,
-        }),
-      )
-      .min(1),
+    speak: text,
+    href: text,
+    items: z.array(Poster.extend({ by: z.string().min(2) })).length(4),
   }),
   /** Update 4 §3: the reach timeline. The first stop is "now"; each stop adds a ring. */
   road: z.object({
@@ -613,6 +674,21 @@ export const Solutions = z.object({
   }),
   /** "Built for businesses like yours": the rows are in src/content/industries.ts. */
   industries: z.object({ heading: Heading, body: text }),
+  /** Update 2 §10: the photo mosaic before the industry index. */
+  explore: z.object({
+    heading: z.tuple([text, text]),
+    note: text,
+    badge: text,
+    tiles: z
+      .array(
+        z.object({
+          label: text,
+          src: z.string().endsWith(".webp"),
+          tone: z.enum(["green", "black", "sand", "sage", "deep"]),
+        }),
+      )
+      .length(6),
+  }),
 });
 export type Solutions = z.infer<typeof Solutions>;
 
@@ -734,7 +810,7 @@ export const Insights = z.object({
     small: z.tuple([text, text, text, text, text]),
   }),
   search: z.object({ label: text, placeholder: text, submit: text }),
-  recommended: z.object({ heading: text, seeAll: Link, soon: text }),
+  recommended: z.object({ heading: text, seeAll: Link, read: text }),
   comingSoon: text,
   all: z.object({
     heading: Heading,
@@ -761,7 +837,17 @@ export type Insights = z.infer<typeof Insights>;
 /** Insights articles. None is written yet, so each is "soon"; a published one gets a body later. */
 export const Articles = z
   .array(
-    z.object({ category: ArticleCategory, title: text, summary: text, status: z.literal("soon") }),
+    z.object({
+      category: ArticleCategory,
+      title: text,
+      summary: text,
+      status: z.literal("soon"),
+      /** Set on the four "Recommended articles" (update 2 §9). */
+      poster: Poster.extend({
+        /** The published post. Its pill then reads "Read" and links there. */
+        href: z.string().min(1).optional(),
+      }).optional(),
+    }),
   )
   .min(1);
 export type Articles = z.infer<typeof Articles>;

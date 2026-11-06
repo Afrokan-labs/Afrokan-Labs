@@ -79,7 +79,70 @@ type Props = {
   invalidEmail: string;
 };
 
-/** The home page's scripts from reference/index.html: hero chat loop, orbit, email box. */
+/** "How we work": the active step follows the middle of the viewport (update 5 §2). */
+function trackSteps() {
+  const sec = document.querySelector<HTMLElement>(".hw2");
+  const list = sec?.querySelector<HTMLElement>(".hw2-list");
+  if (!sec || !list) return () => {};
+  const steps = [...sec.querySelectorAll(".hw2-step")];
+  const arts = [...sec.querySelectorAll(".hw2-frame .hw-vis")];
+  const pips = [...sec.querySelectorAll(".hw2-pips i")];
+  const count = sec.querySelector(".hw2-count b");
+  let current = 0;
+  const show = (n: number) => {
+    if (n === current) return;
+    current = n;
+    steps.forEach((s, i) => {
+      s.classList.toggle("is-on", i === n);
+      s.classList.toggle("is-done", i < n);
+    });
+    arts.forEach((a, i) => a.classList.toggle("is-on", i === n));
+    pips.forEach((p, i) => p.classList.toggle("on", i === n));
+    if (count) count.textContent = String(n + 1).padStart(2, "0");
+  };
+  const tick = () => {
+    const mid = innerHeight / 2;
+    let n = 0;
+    steps.forEach((s, i) => {
+      if (s.getBoundingClientRect().top < mid) n = i;
+    });
+    show(n);
+    const r = list.getBoundingClientRect();
+    const p = Math.max(0, Math.min(1, (mid - r.top) / r.height));
+    list.style.setProperty("--hw-p", p.toFixed(3));
+  };
+  let raf = 0;
+  const onScroll = () => {
+    raf ||= requestAnimationFrame(() => {
+      raf = 0;
+      tick();
+    });
+  };
+  // Measured only while the section is near the screen: reading its layout from
+  // the top of the page would render it early, defeating content-visibility.
+  const near = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        addEventListener("scroll", onScroll, { passive: true });
+        addEventListener("resize", onScroll);
+        tick();
+      } else {
+        removeEventListener("scroll", onScroll);
+        removeEventListener("resize", onScroll);
+      }
+    },
+    { rootMargin: "50% 0px" },
+  );
+  near.observe(sec);
+  return () => {
+    near.disconnect();
+    cancelAnimationFrame(raf);
+    removeEventListener("scroll", onScroll);
+    removeEventListener("resize", onScroll);
+  };
+}
+
+/** The home page's scripts from reference/index.html: hero chat loop, orbit, steps, email box. */
 export function HomeScripts({
   chat: CHAT_SCRIPT,
   online,
@@ -99,6 +162,7 @@ export function HomeScripts({
     };
     let raf = 0;
     let stopOrbit = () => {};
+    const stopSteps = trackSteps();
 
     // Hero phone: customer asks, AI types and replies, booking confirmed, loop.
     const chat = document.getElementById("wachat");
@@ -280,6 +344,7 @@ export function HomeScripts({
       timers.forEach(clearTimeout);
       cancelAnimationFrame(raf);
       stopOrbit();
+      stopSteps();
       form?.removeEventListener("submit", onSubmit);
     };
   }, [CHAT_SCRIPT, online, typing, tileCopy, invalidEmail]);

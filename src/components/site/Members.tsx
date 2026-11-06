@@ -1,7 +1,7 @@
-import type { Members as MemberList } from "@/content/schema";
+import type { Leads, Members as MemberList } from "@/content/schema";
 import { Img } from "./Img";
 
-const SHAPES: Record<MemberList[number]["shape"], React.ReactNode> = {
+const SHAPES: Record<MemberList[number]["shape"] | Leads[number]["shape"], React.ReactNode> = {
   circles: (
     <>
       <circle cx="62" cy="70" r="46" />
@@ -22,34 +22,72 @@ const SHAPES: Record<MemberList[number]["shape"], React.ReactNode> = {
       <path d="M170 10 L196 36 L170 62 L144 36Z" />
     </>
   ),
+  ring: (
+    <>
+      <path d="M105 14a86 86 0 1 1 0 172a86 86 0 1 1 0-172zm0 44a42 42 0 1 0 0 84a42 42 0 1 0 0-84z" />
+      <circle cx="186" cy="30" r="18" />
+    </>
+  ),
+  plus: <path d="M80 20h50v58h58v50h-58v58H80v-58H22V78h58z" />,
 };
 
-/** About "Members" (site update 1, reference .mb): cut-outs on green shapes. */
-export function Members({ title, members }: { title: string; members: MemberList }) {
+type CardProps = {
+  name: readonly [string, string];
+  shape: keyof typeof SHAPES;
+  cutout: { src: string; alt: string };
+  highlight: { label: string; value: string };
+  pill: string;
+  children: React.ReactNode;
+};
+
+function Card({ name, shape, cutout, highlight, pill, children }: CardProps) {
+  return (
+    <li className="mb-card">
+      <div className="mb-vis">
+        <svg className="mb-shape" viewBox="0 0 210 200" aria-hidden="true">
+          <g fill="currentColor">{SHAPES[shape]}</g>
+        </svg>
+        <Img src={cutout.src} alt={cutout.alt} sizes="(max-width: 760px) 340px, 30vw" />
+        <span className={`mb-pill ${pill}`}>
+          <small>{highlight.label}</small> <b>{highlight.value}</b>
+        </span>
+      </div>
+      <h3 className="mb-name">
+        <span>{name[0]}</span> <span>{name[1]}</span>
+      </h3>
+      <p className="mb-role">{children}</p>
+    </li>
+  );
+}
+
+type Props = { title: string; leadsLabel: string; members: MemberList; leads: Leads };
+
+/** About "Members" (updates 1, 2 §7 and 5 §3, reference .mb): cut-outs on green shapes. */
+export function Members({ title, leadsLabel, members, leads }: Props) {
   return (
     <section className="mb" aria-labelledby="mb-title">
       <h2 className="mb-title" id="mb-title">
         {title}
-        {/* A hidden space keeps "Members 3" two words in the text without moving the 3. */}
+        {/* A hidden space keeps "Members 5" two words in the text without moving the 5. */}
         <span className="sr-only"> </span>
-        <sup>{members.length}</sup>
+        <sup>{members.length + leads.length}</sup>
       </h2>
       <ul className="mb-grid">
-        {members.map((m) => (
-          <li key={m.abbr} className="mb-card">
-            <div className="mb-vis">
-              <svg className="mb-shape" viewBox="0 0 210 200" aria-hidden="true">
-                <g fill="currentColor">{SHAPES[m.shape]}</g>
-              </svg>
-              <Img src={m.cutout.src} alt={m.cutout.alt} sizes="(max-width: 760px) 340px, 30vw" />
-            </div>
-            <h3 className="mb-name">
-              <span>{m.name[0]}</span> <span>{m.name[1]}</span>
-            </h3>
-            <p className="mb-role">
-              <b>{m.abbr}</b> / {m.title}
-            </p>
-          </li>
+        {members.map((m, i) => (
+          <Card key={m.abbr} {...m} pill={`p${i}`}>
+            <b>{m.abbr}</b> / {m.title}
+          </Card>
+        ))}
+      </ul>
+      <div className="mb-sub">
+        <span>{leadsLabel}</span>
+        <i aria-hidden="true" />
+      </div>
+      <ul className="mb-grid mb-grid2">
+        {leads.map((lead) => (
+          <Card key={lead.role} {...lead}>
+            <b>{lead.role}</b>
+          </Card>
         ))}
       </ul>
     </section>

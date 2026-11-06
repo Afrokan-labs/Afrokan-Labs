@@ -1,13 +1,14 @@
 import "@/styles/pages/about.css";
 import { Fragment } from "react";
+import { AboutScripts } from "@/components/site/AboutScripts";
 import { CtaBox } from "@/components/site/CtaBox";
 import { Img } from "@/components/site/Img";
 import { LogoMark } from "@/components/site/LogoMark";
 import { Members } from "@/components/site/Members";
 import { Nav } from "@/components/site/Nav";
 import { Philosophy } from "@/components/site/Philosophy";
-import type { About } from "@/content/schema";
-import { getAbout, getMembers, getSite } from "@/lib/content";
+import { PosterCard } from "@/components/site/PosterCard";
+import { getAbout, getLeads, getMembers, getSite } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({ path: "/about", ...getAbout().meta });
@@ -19,46 +20,10 @@ const COLLAGE = [
   { pic: "x-pic-blob", name: "x-n-sand up", roleFirst: true },
 ];
 
-const VALUE_ICONS: Record<About["values"]["items"][number]["icon"], React.ReactNode> = {
-  whatsapp: <use href="#wa" />,
-  people: (
-    <>
-      <circle cx="9" cy="8" r="3.2" fill="none" stroke="currentColor" strokeWidth="1.8" />
-      <circle cx="17" cy="9.5" r="2.4" fill="none" stroke="currentColor" strokeWidth="1.8" />
-      <path
-        d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5M15 14.2c3 0 5.5 1.6 5.5 4.3"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-    </>
-  ),
-  document: (
-    <path
-      d="M5 4h10l4 4v12H5z M15 4v4h4 M8 12h8M8 16h5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinejoin="round"
-      strokeLinecap="round"
-    />
-  ),
-  shield: (
-    <path
-      d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z M8.5 12l2.5 2.5 4.5-5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinejoin="round"
-      strokeLinecap="round"
-    />
-  ),
-};
-
 export default function AboutPage() {
-  const { hero, pile, proof, story, members, philosophy, values, road } = getAbout();
+  const { hero, pile, proof, story, members, philosophy, highlight, values, road } = getAbout();
   const team = getMembers();
+  const site = getSite();
   return (
     <>
       <div className="x x-glow">
@@ -260,8 +225,41 @@ export default function AboutPage() {
               ))}
             </ul>
           </section>
-          <Members title={members.title} members={team} />
+          <Members
+            title={members.title}
+            leadsLabel={members.leadsLabel}
+            members={team}
+            leads={getLeads()}
+          />
           <Philosophy copy={philosophy} />
+          <section className="x-sec ds" aria-labelledby="ds-title">
+            <div className="ds-head">
+              <h2 id="ds-title">
+                {highlight.heading.map((line, i) => (
+                  <Fragment key={line}>
+                    {i > 0 && <br />}
+                    {line}
+                  </Fragment>
+                ))}
+              </h2>
+              <span className="ds-hint">{highlight.hint}</span>
+            </div>
+            <div className="ds-wrap">
+              {/* Focusable, so the arrow keys scroll it. */}
+              <ul className="ds-track" id="dstrack" tabIndex={0} aria-label={highlight.label}>
+                {highlight.tiles.map((tile) => (
+                  <li className={`ds-t ${tile.kind} ${tile.tone}`} key={tile.label}>
+                    <Img src={tile.src} alt="" sizes="280px" />
+                    <span>{tile.label}</span>
+                  </li>
+                ))}
+              </ul>
+              <span className="ds-drag" aria-hidden="true">
+                {highlight.drag}
+              </span>
+            </div>
+            <AboutScripts />
+          </section>
           <section className="x-sec" aria-labelledby="values-title">
             <div className="x-head">
               <h2 className="x-h2" id="values-title">
@@ -270,18 +268,25 @@ export default function AboutPage() {
               </h2>
               <p>{values.body}</p>
             </div>
-            <ul className="x-values">
-              {values.items.map((item) => (
-                <li className="x-value" key={item.title}>
-                  <span className="x-vi">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      {VALUE_ICONS[item.icon]}
-                    </svg>
-                  </span>
-                  <h3>{item.title}</h3>
-                  <p>{item.body}</p>
-                </li>
-              ))}
+            <ul className="pc-grid pc-vals">
+              {values.items.map((poster) => {
+                const by = team.find((m) => m.abbr === poster.by);
+                return (
+                  by && (
+                    <PosterCard
+                      key={poster.tag}
+                      poster={poster}
+                      layout="values"
+                      href={values.href}
+                      avatar={by.photo.src}
+                      name={by.name.join(" ")}
+                      role={`${by.abbr}, ${site.name}`}
+                      pill={values.speak}
+                      speech
+                    />
+                  )
+                );
+              })}
             </ul>
           </section>
           <section className="x-sec rd" aria-labelledby="road-title">
@@ -332,7 +337,7 @@ export default function AboutPage() {
               </ol>
             </div>
           </section>
-          <CtaBox copy={getSite().ctaBox} />
+          <CtaBox copy={site.ctaBox} />
         </div>
       </div>
     </>

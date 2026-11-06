@@ -23,7 +23,7 @@ export const insights = {
   recommended: {
     heading: "Recommended articles",
     seeAll: { label: "See all", href: "#all" },
-    soon: "Soon",
+    read: "Read",
   },
   comingSoon: "Coming soon",
   all: {
@@ -66,24 +66,53 @@ export const articles = [
     title: "Why your customers would rather WhatsApp you than visit your website",
     summary: "What that means for how you answer enquiries, and where a website still matters.",
     status: "soon",
+    poster: {
+      theme: "green",
+      shape: "s1",
+      tag: "#whatsapp",
+      headline: "Why your customers would rather WhatsApp you.",
+      sub: "And where a website still matters.",
+    },
   },
   {
     category: "AI",
     title: "What a WhatsApp AI assistant can and can't do for your business",
     summary: "A plain-language look at what to expect before you invest in one.",
     status: "soon",
+    poster: {
+      theme: "black",
+      shape: "s3",
+      tag: "#whatsappai",
+      headline: "What a WhatsApp AI assistant can and can't do.",
+      photo: { src: "solutions-morning.webp", tone: "soft" },
+    },
   },
   {
     category: "Case study",
     title: "How we built a document checklist generator for ESE Logistic",
     summary: "The problem at ESE Logistic, what we built, and what we'd do differently.",
     status: "soon",
+    poster: {
+      theme: "deep",
+      shape: "s4",
+      tag: "#casestudy",
+      headline: "How we built a checklist tool for a clearing firm.",
+      sub: "The problem, what we built, and what we'd change.",
+      photo: { src: "work-bg-port.webp", tone: "soft" },
+    },
   },
   {
     category: "Workflows",
     title: "From paper files to a simple tracker: a starter guide",
     summary: "How to move one process off paper without disrupting your team.",
     status: "soon",
+    poster: {
+      theme: "sand",
+      shape: "s2",
+      tag: "#workflows",
+      headline: "From paper files to a simple tracker.",
+      sub: "A starter guide for busy teams.",
+    },
   },
   {
     category: "Guides",

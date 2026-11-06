@@ -1,0 +1,348 @@
+/*
+ * Poster cards (update 2 §9, reference "POSTER CARDS"), shared by About and
+ * Insights. Imported by PosterCard, so a page only gets it if it uses one.
+ */
+
+/* ---------- POSTER CARDS (social-post style) ---------- */
+.pc-grid {
+  list-style: none;
+  margin: clamp(24px, 3vw, 36px) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.pc {
+  position: relative;
+  aspect-ratio: 1;
+  container-type: inline-size;
+  min-width: 0;
+}
+
+.pc > a,
+.pc > div.pc-in {
+  position: absolute;
+  inset: 0;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.pc-frame {
+  position: absolute;
+  inset: 4cqi;
+  border: 1px solid currentcolor;
+  opacity: 0.28;
+  border-radius: 6cqi;
+  pointer-events: none;
+}
+
+.pc .pc-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.pc .pc-photo.s3 {
+  clip-path: polygon(10% 15%, 90% 15%, 90% 64%, 62% 64%, 55% 71%, 10% 71%);
+}
+
+.pc .pc-photo.s4 {
+  clip-path: polygon(9% 24%, 56% 24%, 56% 36%, 64% 43%, 64% 86%, 9% 86%);
+}
+
+.pc .pc-photo.mono {
+  filter: grayscale(1);
+}
+
+.pc .pc-photo.soft {
+  filter: grayscale(0.15);
+}
+
+.pc:hover .pc-photo {
+  transform: scale(1.015);
+}
+
+.pc > a:focus-visible {
+  outline: 2px solid currentcolor;
+  outline-offset: -6px;
+  border-radius: 6cqi;
+}
+
+.pc svg.pc-shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.pc:hover svg.pc-shape {
+  transform: scale(1.015);
+}
+
+.pc-tag {
+  position: absolute;
+  left: 9cqi;
+  top: 8cqi;
+  font-size: 2.6cqi;
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+.pc-logo {
+  position: absolute;
+  right: 9cqi;
+  top: 7cqi;
+  width: 7cqi;
+  height: 7cqi;
+}
+
+.pc-logo svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.pc-logo::after {
+  content: "";
+  position: absolute;
+  right: -1.6cqi;
+  top: -1.4cqi;
+  width: 1.8cqi;
+  height: 1.8cqi;
+  border-radius: 50%;
+  background: currentcolor;
+}
+
+.pc-h {
+  position: absolute;
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+  font-size: 7.4cqi;
+}
+
+.pc-sub {
+  position: absolute;
+  margin: 0;
+  font-size: 2.9cqi;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.pc-ill {
+  position: absolute;
+}
+
+.pc-ill svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.pc-foot {
+  position: absolute;
+  left: 9cqi;
+  right: 9cqi;
+  bottom: 6.4cqi;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3cqi;
+}
+
+.pc-who {
+  display: flex;
+  align-items: center;
+  gap: 2.4cqi;
+  min-width: 0;
+}
+
+.pc-av {
+  width: 7.4cqi;
+  height: 7.4cqi;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--c-94de57);
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--c-0d0d0d);
+  border: 0.4cqi solid rgb(255 255 255 / 0.7);
+}
+
+.pc-av img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 15%;
+  filter: grayscale(1);
+}
+
+.pc-av svg {
+  width: 55%;
+  height: 55%;
+}
+
+.pc-who span {
+  display: grid;
+  line-height: 1.15;
+  border-left: 0.3cqi solid currentcolor;
+  padding-left: 2cqi;
+}
+
+.pc-who b {
+  font-size: 2.6cqi;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pc-who small {
+  font-size: 2cqi;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.pc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.4cqi;
+  padding: 1.4cqi 3.4cqi;
+  border-radius: 99px;
+  background: var(--c-1f5a2e);
+  color: var(--c-ffffff);
+  font-size: 2.4cqi;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.pc-pill svg {
+  width: 3cqi;
+  height: 3cqi;
+  color: var(--c-94de57);
+}
+
+.pc:hover .pc-pill {
+  background: var(--c-0d0d0d);
+}
+
+/* themes */
+.pc.t-green {
+  background: var(--c-94de57);
+  color: var(--c-0d0d0d);
+}
+
+.pc.t-green .pc-shape {
+  color: var(--c-c3ee9c);
+}
+
+.pc.t-black {
+  background: var(--c-0d0d0d);
+  color: var(--c-ffffff);
+}
+
+.pc.t-black .pc-pill {
+  background: var(--c-94de57);
+  color: var(--c-0d0d0d);
+}
+
+.pc.t-black .pc-pill svg {
+  color: var(--c-0d0d0d);
+}
+
+.pc.t-black:hover .pc-pill {
+  background: var(--c-ffffff);
+}
+
+.pc.t-sand {
+  background: var(--c-e5ded3);
+  color: var(--c-0d0d0d);
+}
+
+.pc.t-sand .pc-shape {
+  color: var(--c-f4efe7);
+}
+
+.pc.t-deep {
+  background: var(--c-1f4d2a);
+  color: var(--c-ffffff);
+}
+
+.pc.t-deep .pc-shape {
+  color: var(--c-3f7e20);
+}
+
+.pc.t-deep .pc-pill {
+  background: var(--c-94de57);
+  color: var(--c-0d0d0d);
+}
+
+.pc.t-deep .pc-pill svg {
+  color: var(--c-0d0d0d);
+}
+
+.pc-box {
+  position: absolute;
+  background: var(--c-0d0d0d);
+  color: var(--c-ffffff);
+  padding: 3cqi 3.6cqi;
+  border-radius: 3cqi;
+  font-size: 2.9cqi;
+  line-height: 1.4;
+  font-weight: 300;
+}
+
+.pc-hl {
+  background: var(--c-0d0d0d);
+  color: var(--c-ffffff);
+  padding: 0.3cqi 1.4cqi;
+}
+
+.pc-vals {
+  max-width: 1000px;
+  margin-inline: auto;
+}
+
+@media (max-width: 640px) {
+  .pc-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.pc-arts {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 1000px) {
+  .pc-arts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .pc-arts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc .pc-photo,
+  .pc svg.pc-shape,
+  .pc-pill {
+    transition: none;
+  }
+
+  .pc:hover .pc-photo,
+  .pc:hover svg.pc-shape {
+    transform: none;
+  }
+}

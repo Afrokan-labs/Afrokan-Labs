@@ -23,7 +23,7 @@ import * as schema from "../content/schema";
 import { services } from "../content/services";
 import { site } from "../content/site";
 import { solutions } from "../content/solutions";
-import { members } from "../content/team";
+import { leads, members } from "../content/team";
 import { testimonials } from "../content/testimonials";
 import { work } from "../content/work";
 
@@ -61,6 +61,7 @@ export const getSolutions = () => parse("src/content/solutions.ts", schema.Solut
 export const getIndustries = () =>
   parse("src/content/industries.ts", schema.Industries, industries);
 export const getMembers = () => parse("src/content/team.ts (members)", schema.Members, members);
+export const getLeads = () => parse("src/content/team.ts (leads)", schema.Leads, leads);
 export const getLlms = () => parse("src/content/llms.ts", schema.Llms, llms);
 export const getTestimonials = () =>
   parse("src/content/testimonials.ts", schema.Testimonials, testimonials);
@@ -203,6 +204,7 @@ export async function validateAllContent() {
   getSolutions();
   getIndustries();
   const team = getMembers();
+  getLeads();
   const projects = readProjectFiles();
   for (const file of projects) await compileBody(file);
 
