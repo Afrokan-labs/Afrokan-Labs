@@ -2325,11 +2325,6 @@ textarea.c-in {
   text-align: center;
 }
 
-.c-hp {
-  position: absolute;
-  left: -9999px;
-}
-
 .c-spin {
   animation: c-spin 0.8s linear infinite;
 }

@@ -149,6 +149,14 @@ async function main() {
           ),
           "off",
         );
+        // ...and it isn't rendered at all (inside a `hidden` element), so nothing autofills it.
+        assert.equal(
+          await ev(`(() => {
+            const hp = document.querySelector("#cform [name=afk_hp_check]");
+            return !!hp.closest("[hidden]") && hp.offsetParent === null && hp.getClientRects().length === 0;
+          })()`),
+          true,
+        );
         // The <head> script's "js" class survives hydration, so Continue really shows.
         assert.equal(await ev(`document.documentElement.classList.contains("js")`), true);
         assert.equal(await ev(`!!${visible}.querySelector(".c-next").offsetParent`), true);
@@ -200,6 +208,8 @@ async function main() {
         assert.deepEqual(field("goal"), [GOAL]);
         assert.deepEqual(field("company"), ["Test Shop Ltd"]);
         assert.deepEqual(field("page"), ["/contact"]);
+        // The unrendered honeypot is still posted, empty.
+        assert.deepEqual(field("afk_hp_check"), [""]);
         // The WhatsApp button carries the summary.
         const href = await ev<string>(`document.querySelector(".c-thanks a.c-cta").href`);
         const text = decodeURIComponent(new URL(href).searchParams.get("text") ?? "");
