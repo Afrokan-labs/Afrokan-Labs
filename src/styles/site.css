@@ -99,102 +99,6 @@ svg text {
 }
 
 /* Menu button and sheet (≤900px, next to the Contact pill). */
-.x-menu-row {
-  display: none;
-}
-
-.x-burger {
-  display: inline-grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: 1px solid var(--c-5a5a5a);
-  border-radius: 50%;
-  background: transparent;
-  color: var(--c-ffffff);
-  cursor: pointer;
-}
-
-.x-burger svg {
-  width: 18px;
-  height: 18px;
-}
-
-@media (max-width: 900px) {
-  .x-menu-row {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    justify-self: end;
-  }
-}
-
-.x-sheet {
-  width: min(100% - 32px, 420px);
-  max-height: calc(100dvh - 32px);
-  margin: 16px 16px auto auto;
-  padding: 0;
-  border: 1px solid var(--c-2c2c2c);
-  border-radius: 26px;
-  background: var(--c-1a1a1a);
-  color: var(--c-ffffff);
-  font-family: var(--nf-lexend);
-}
-
-.x-sheet::backdrop {
-  background: rgb(0 0 0 / 0.6);
-}
-
-.x-sheet-panel {
-  display: grid;
-  gap: 8px;
-  padding: 18px;
-}
-
-.x-sheet-close {
-  justify-self: end;
-  min-height: 40px;
-  padding: 0 18px;
-  border: 0;
-  border-radius: 99px;
-  background: var(--c-94de57);
-  color: var(--c-0d0d0d);
-  font: 500 0.85rem/1 var(--nf-lexend);
-  cursor: pointer;
-}
-
-.x-sheet ul {
-  display: grid;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.x-sheet a {
-  display: flex;
-  align-items: center;
-  min-height: 52px;
-  padding: 0 14px;
-  border-radius: 14px;
-  color: inherit;
-  font-size: 1.4rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  text-decoration: none;
-}
-
-.x-sheet a:hover,
-.x-sheet a[aria-current="page"] {
-  background: var(--c-94de57);
-  color: var(--c-0d0d0d);
-}
-
-:root[data-site-theme="light"] .x-sheet {
-  border-color: var(--c-e2e2dc);
-  background: var(--c-ffffff);
-  color: var(--c-0d0d0d);
-}
 
 /* Site update 1: the Members and Philosophy hover motion stays still under reduced motion. */
 @media (prefers-reduced-motion: reduce) {
@@ -211,7 +115,7 @@ svg text {
   z-index: 70;
   left: 50%;
   top: calc(12px + env(safe-area-inset-top, 0px));
-  width: min(900px, calc(100% - 24px));
+  width: min(1600px, calc(100% - 2 * clamp(8px, 1.6vw, 24px)));
   translate: -50% -140%;
   opacity: 0;
   transition:
@@ -224,16 +128,6 @@ svg text {
   translate: -50% 0;
   opacity: 1;
   pointer-events: auto;
-}
-
-.snav .x-nav {
-  margin: 0;
-  max-width: none;
-  background: rgb(13 13 13 / 0.86);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--c-2c2c2c);
-  box-shadow: 0 12px 30px rgb(0 0 0 / 0.3);
-  min-height: 52px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -322,8 +216,6 @@ svg text {
   }
 
   /* The heroes. The home headline doesn't move, so it paints in place. */
-  .x-hero .x-left,
-  .x-hero .x-right,
   .x-stats,
   .s-hero > *,
   .x-hero-grid > *,
@@ -332,7 +224,6 @@ svg text {
     animation: fx-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
 
-  .x-hero .x-left,
   .x-hero-grid > :nth-child(2),
   .s-hero > :nth-child(2) {
     animation-delay: 0.12s;
@@ -342,7 +233,6 @@ svg text {
     animation-delay: 0.2s;
   }
 
-  .x-hero .x-right,
   .x-stats,
   .s-hero > :nth-child(4) {
     animation-delay: 0.3s;
@@ -351,20 +241,6 @@ svg text {
   @keyframes fx-rise {
     from {
       transform: translateY(26px);
-    }
-
-    to {
-      transform: none;
-    }
-  }
-
-  .x-ctas {
-    animation: fx-pop 0.7s cubic-bezier(0.3, 1.4, 0.4, 1) 0.55s both;
-  }
-
-  @keyframes fx-pop {
-    from {
-      transform: translateY(14px) scale(0.9);
     }
 
     to {
@@ -400,5 +276,559 @@ svg text {
 
   .x-cta {
     contain-intrinsic-size: auto 260px;
+  }
+}
+
+/*
+ * ---------- NAV (update 7 §2, docs/update-7/prototype.html .cl) ----------
+ * MENU pill | logo | "Book a free call" pill, with no bar. Every page; the
+ * home hero places it over its card (home.css). Colours are custom
+ * properties so the dark pages swap them in one place.
+ */
+.cl {
+  --cl-menu-bg: var(--c-f3f3ef);
+  --cl-menu-fg: var(--c-0d0d0d);
+  --cl-menu-hover: var(--c-ffffff);
+  --cl-menu-active: var(--c-e5e5df);
+  --cl-logo: var(--c-0d0d0d);
+  --cl-cta-bg: var(--c-0d0d0d);
+  --cl-cta-fg: var(--c-f3f3ef);
+  --cl-cta-hover: var(--c-262626);
+  --cl-cta-active: var(--c-343434);
+  --cl-cta-icon: var(--c-94de57);
+  --cl-focus: var(--c-0d0d0d);
+
+  position: relative;
+  z-index: 22;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  min-height: clamp(64px, 5.2vw, 100px);
+  padding: 0 clamp(4px, 1vw, 16px);
+  color: var(--cl-logo);
+  font-family: var(--nf-lexend);
+}
+
+/* Dark pages: the same layout, colours swapped (update 7 §2). */
+.cl-dark {
+  --cl-menu-bg: var(--c-262626);
+  --cl-menu-fg: var(--c-f3f3ef);
+  --cl-menu-hover: var(--c-343434);
+  --cl-menu-active: var(--c-3a3a3a);
+  --cl-logo: var(--c-f3f3ef);
+  --cl-cta-bg: var(--c-94de57);
+  --cl-cta-fg: var(--c-0d0d0d);
+  --cl-cta-hover: var(--c-84cc47);
+  --cl-cta-active: var(--c-6bbf3a);
+  --cl-cta-icon: var(--c-0d0d0d);
+  --cl-focus: var(--c-f3f3ef);
+}
+
+/* The light theme turns the dark pages light, so their nav goes back to the light colours. */
+:root[data-site-theme="light"] .cl-dark {
+  --cl-menu-bg: var(--c-ffffff);
+  --cl-menu-fg: var(--c-0d0d0d);
+  --cl-menu-hover: var(--c-f3f3ef);
+  --cl-menu-active: var(--c-e5e5df);
+  --cl-logo: var(--c-0d0d0d);
+  --cl-cta-bg: var(--c-0d0d0d);
+  --cl-cta-fg: var(--c-f3f3ef);
+  --cl-cta-hover: var(--c-262626);
+  --cl-cta-active: var(--c-343434);
+  --cl-cta-icon: var(--c-94de57);
+  --cl-focus: var(--c-0d0d0d);
+}
+
+/* MENU and Book a free call. Hover changes colour only; pressed shrinks to .98. */
+.cl-menu,
+.cl-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 99px;
+  font: 600 14px/1 var(--nf-lexend);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgb(0 0 0 / 0.12);
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    scale 0.12s;
+}
+
+.cl-menu {
+  justify-self: start;
+  padding-left: 16px;
+  background: var(--cl-menu-bg);
+  color: var(--cl-menu-fg);
+}
+
+.cl-menu:hover {
+  background: var(--cl-menu-hover);
+}
+
+.cl-menu:active {
+  background: var(--cl-menu-active);
+  scale: 0.98;
+}
+
+/* Expanded (the CLOSE button over the open panel): Ink, Off-white text, an X. */
+.cl-menu[aria-expanded="true"] {
+  background: var(--c-0d0d0d);
+  color: var(--c-f3f3ef);
+}
+
+.cl-menu[aria-expanded="true"]:hover {
+  background: var(--c-262626);
+}
+
+.cl-menu[aria-expanded="true"]:active {
+  background: var(--c-343434);
+}
+
+.cl-cta {
+  justify-self: end;
+  background: var(--cl-cta-bg);
+  color: var(--cl-cta-fg);
+}
+
+.cl-cta:hover {
+  background: var(--cl-cta-hover);
+}
+
+.cl-cta:active {
+  background: var(--cl-cta-active);
+  scale: 0.98;
+}
+
+.cl-arrow {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--cl-cta-icon);
+}
+
+.cl-short {
+  display: none;
+}
+
+.cl-menu:focus-visible,
+.cl-cta:focus-visible {
+  outline: 3px solid var(--cl-focus);
+  outline-offset: 3px;
+}
+
+/* Disabled: styled for all four pills, though nothing in the nav uses it yet. */
+.cl-menu[aria-disabled="true"],
+.cl-cta[aria-disabled="true"] {
+  background: var(--c-dadad3);
+  color: var(--c-5e5e5a);
+  box-shadow: none;
+  cursor: not-allowed;
+  scale: 1;
+}
+
+.cl-cta[aria-disabled="true"] .cl-arrow {
+  color: var(--c-5e5e5a);
+}
+
+/* Two-line hamburger; the second line grows on hover, both turn into an X when open. */
+.cl-bars {
+  position: relative;
+  flex: none;
+  width: 22px;
+  height: 10px;
+}
+
+.cl-bars i {
+  position: absolute;
+  left: 0;
+  height: 1.5px;
+  border-radius: 2px;
+  background: currentcolor;
+  transition:
+    top 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    rotate 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.4s;
+}
+
+.cl-bars i:first-child {
+  top: 1px;
+  width: 100%;
+}
+
+.cl-bars i:last-child {
+  top: 8px;
+  width: 65%;
+}
+
+.cl-menu:hover .cl-bars i:last-child {
+  width: 100%;
+}
+
+.cl-dialog.open .cl-menu .cl-bars i {
+  top: 4.5px;
+  width: 100%;
+}
+
+.cl-dialog.open .cl-menu .cl-bars i:first-child {
+  rotate: 45deg;
+}
+
+.cl-dialog.open .cl-menu .cl-bars i:last-child {
+  rotate: -45deg;
+}
+
+/* While the panel slides away, CLOSE turns back into MENU's colours. */
+.cl-dialog:not(.open) .cl-menu[aria-expanded="true"] {
+  background: var(--cl-menu-bg);
+  color: var(--cl-menu-fg);
+}
+
+.cl-logo {
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  min-height: 44px;
+  border-radius: 8px;
+  color: var(--cl-logo);
+  font: 600 clamp(1.15rem, 1.75cqw, 2rem) / 1 var(--nf-lexend);
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+
+.cl-logo svg {
+  width: 1.15em;
+  height: 1.15em;
+}
+
+.cl-logo:hover {
+  opacity: 0.72;
+}
+
+.cl-logo:active {
+  opacity: 0.55;
+}
+
+.cl-logo:focus-visible {
+  outline: 3px solid var(--cl-focus);
+  outline-offset: 6px;
+}
+
+/* The menu: a modal <dialog> over the whole screen (MenuSheet). */
+.cl-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  background: transparent;
+  color: var(--c-0d0d0d);
+  font-family: var(--nf-lexend);
+}
+
+.cl-dialog::backdrop {
+  background: transparent;
+}
+
+.cl-dim {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.4);
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cl-dialog.open .cl-dim {
+  opacity: 1;
+}
+
+.cl-panel {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: max(320px, 30%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: calc(var(--cl-top, 0px) + var(--cl-height, 64px) + 3vw) clamp(22px, 2.5vw, 48px)
+    clamp(22px, 2.5vw, 40px) calc(var(--cl-left, 0px) + var(--cl-pl, 16px));
+  overflow-y: auto;
+  background: var(--c-f3f3ef);
+  box-shadow: 20px 0 60px rgb(0 0 0 / 0.18);
+  translate: -101% 0;
+  transition: translate 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cl-dialog.open .cl-panel {
+  translate: 0 0;
+}
+
+.cl-panel ul {
+  display: grid;
+  gap: clamp(6px, 0.9vw, 14px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each link fades and slides in, 50ms apart, after 250ms. */
+.cl-panel li {
+  opacity: 0;
+  translate: 0 -8px;
+  transition:
+    opacity 0.2s,
+    translate 0.2s;
+}
+
+.cl-dialog.open .cl-panel li {
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    opacity 0.4s ease-out,
+    translate 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(0.25s + var(--i) * 50ms);
+}
+
+/* stylelint-disable-next-line no-descending-specificity -- the menu's links never sit in .c-direct */
+.cl-dialog .cl-panel li a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  min-height: 44px;
+  border-radius: 6px;
+  color: var(--c-0d0d0d);
+  font: 500 clamp(24px, 2.1vw, 32px) / 1.15 var(--nf-lexend);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition:
+    color 0.2s,
+    scale 0.12s;
+}
+
+.cl-dialog .cl-panel li a::before {
+  content: "";
+  width: 0.32em;
+  height: 0.32em;
+  border-radius: 50%;
+  background: var(--c-94de57);
+  scale: 0;
+  transition: scale 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cl-dialog .cl-panel li a:hover {
+  color: var(--c-3f7e20);
+}
+
+.cl-dialog .cl-panel li a:hover::before {
+  scale: 1;
+}
+
+.cl-dialog .cl-panel li a:active {
+  color: var(--c-2c5a16);
+  scale: 0.98;
+}
+
+.cl-dialog .cl-panel li a:focus-visible {
+  outline: 3px solid var(--c-3f7e20);
+  outline-offset: 4px;
+}
+
+/* Current page: bold, a 4px green underline, no hover dot. */
+.cl-dialog .cl-panel li a[aria-current="page"] {
+  font-weight: 700;
+}
+
+.cl-dialog .cl-panel li a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--c-94de57);
+}
+
+.cl-dialog .cl-panel li a[aria-current="page"]::before {
+  scale: 0;
+}
+
+.cl-dialog .cl-panel li a[aria-current="page"]:hover {
+  color: var(--c-0d0d0d);
+}
+
+.cl-social {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  border-radius: 8px;
+  color: var(--c-5e5e5a);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.cl-social svg {
+  width: 22px;
+  height: 22px;
+  color: var(--c-0d0d0d);
+}
+
+.cl-social:hover {
+  color: var(--c-0d0d0d);
+}
+
+.cl-social:active {
+  opacity: 0.7;
+}
+
+.cl-social:focus-visible {
+  outline: 3px solid var(--c-3f7e20);
+  outline-offset: 3px;
+}
+
+/* The nav row's copy inside the dialog, placed over the original (MenuSheet sets the
+   variables). The dialog sits inside the home hero, so this must outrank .hx .cl. */
+.cl-dialog .cl.cl-mirror {
+  position: absolute;
+  z-index: 2;
+  top: var(--cl-top);
+  left: var(--cl-left);
+  width: var(--cl-width);
+  height: var(--cl-height);
+  min-height: 0;
+  padding: 0 var(--cl-pr) 0 var(--cl-pl);
+}
+
+.cl-mirror .cl-logo {
+  font-size: var(--cl-logo-size);
+}
+
+/* Sticky copy: the logo floats over the page, so it gets a pill to stay legible. */
+.cl-sticky .cl-logo {
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 99px;
+  background: rgb(13 13 13 / 0.82);
+  color: var(--c-f3f3ef);
+  font-size: 1.15rem;
+  box-shadow: 0 8px 22px rgb(0 0 0 / 0.12);
+  backdrop-filter: blur(12px);
+}
+
+@media (max-width: 900px) {
+  .cl {
+    grid-template-columns: auto 1fr auto;
+    gap: 8px;
+    min-height: 56px;
+  }
+
+  .cl-menu,
+  .cl-cta {
+    min-height: 44px;
+    padding: 0 13px;
+    gap: 7px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+  }
+
+  .cl-menu {
+    padding-left: 11px;
+  }
+
+  .cl-bars {
+    width: 16px;
+  }
+
+  .cl-full,
+  .cl-arrow,
+  .cl-logo span {
+    display: none;
+  }
+
+  .cl-short {
+    display: inline;
+  }
+
+  .cl-logo {
+    font-size: 0.95rem;
+  }
+
+  .cl-logo svg {
+    width: 1.7em;
+    height: 1.7em;
+  }
+
+  .cl-sticky .cl-logo {
+    padding: 0 12px;
+    min-height: 44px;
+  }
+
+  .cl-panel {
+    width: 100%;
+  }
+
+  /* The panel covers the whole width, so a dark page's row sits on Off-white. */
+  .cl-mirror.cl-dark {
+    --cl-logo: var(--c-0d0d0d);
+    --cl-cta-bg: var(--c-0d0d0d);
+    --cl-cta-fg: var(--c-f3f3ef);
+    --cl-cta-hover: var(--c-262626);
+    --cl-cta-active: var(--c-343434);
+    --cl-focus: var(--c-0d0d0d);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Fades only: no slide, no stagger, no shrink. */
+  .cl-panel,
+  .cl-dim,
+  .cl-panel li,
+  .cl-dialog.open .cl-panel li,
+  .cl-bars i {
+    translate: none;
+    transition: opacity 0.2s;
+    transition-delay: 0s;
+  }
+
+  .cl-panel {
+    translate: 0 0;
+    opacity: 0;
+  }
+
+  .cl-dialog.open .cl-panel {
+    opacity: 1;
+  }
+
+  .cl-menu,
+  .cl-cta,
+  .cl-dialog .cl-panel li a {
+    scale: 1;
+  }
+
+  .cl-menu:active,
+  .cl-cta:active,
+  .cl-dialog .cl-panel li a:active {
+    scale: 1;
   }
 }

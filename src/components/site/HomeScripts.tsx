@@ -72,9 +72,6 @@ function tiles(founder: string, t: Tiles): [string, string, Stack][] {
 }
 
 type Props = {
-  chat: Home["hero"]["phone"]["chat"];
-  online: string;
-  typing: string;
   tiles: Tiles;
   invalidEmail: string;
 };
@@ -142,82 +139,13 @@ function trackSteps() {
   };
 }
 
-/** The home page's scripts from reference/index.html: hero chat loop, orbit, steps, email box. */
-export function HomeScripts({
-  chat: CHAT_SCRIPT,
-  online,
-  typing,
-  tiles: tileCopy,
-  invalidEmail,
-}: Props) {
+/** The home page's scripts from reference/index.html: orbit, steps, email box. */
+export function HomeScripts({ tiles: tileCopy, invalidEmail }: Props) {
   useEffect(() => {
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const timers = new Set<ReturnType<typeof setTimeout>>();
-    const later = (fn: () => void, ms: number) => {
-      const id = setTimeout(() => {
-        timers.delete(id);
-        fn();
-      }, ms);
-      timers.add(id);
-    };
     let raf = 0;
     let stopOrbit = () => {};
     const stopSteps = trackSteps();
-
-    // Hero phone: customer asks, AI types and replies, booking confirmed, loop.
-    const chat = document.getElementById("wachat");
-    const status = document.getElementById("wastatus");
-    if (chat && status) {
-      const time = () => {
-        const d = new Date();
-        return d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
-      };
-      const add = (kind: "in" | "out", text: string) => {
-        const m = document.createElement("div");
-        m.className = "x-msg " + kind + (kind === "in" ? " ai" : "");
-        m.textContent = text;
-        const s = document.createElement("small");
-        s.textContent = time() + (kind === "out" ? " ✓✓" : "");
-        m.appendChild(s);
-        chat.appendChild(m);
-        while (chat.children.length > 6) chat.removeChild(chat.firstChild!);
-      };
-      if (reduce) {
-        CHAT_SCRIPT.forEach(([k, t]) => add(k, t));
-      } else {
-        let i = 0;
-        const step = () => {
-          if (i >= CHAT_SCRIPT.length) {
-            later(() => {
-              chat.innerHTML = "";
-              i = 0;
-              step();
-            }, 4200);
-            return;
-          }
-          const [kind, text] = CHAT_SCRIPT[i++];
-          if (kind === "in") {
-            status.textContent = typing;
-            const ty = document.createElement("div");
-            ty.className = "x-typing";
-            ty.innerHTML = "<i></i><i></i><i></i>";
-            chat.appendChild(ty);
-            later(() => {
-              ty.remove();
-              status.textContent = online;
-              add("in", text);
-              later(step, 1600);
-            }, 1300);
-          } else {
-            add("out", text);
-            later(step, 900);
-          }
-        };
-        add("out", CHAT_SCRIPT[0][1]);
-        i = 1;
-        later(step, 900);
-      }
-    }
 
     // Orbit: 16 tiles circle the sliders, then stack into a collage, and back.
     const stage = document.getElementById("ostage");
@@ -341,12 +269,11 @@ export function HomeScripts({
     form?.addEventListener("submit", onSubmit);
 
     return () => {
-      timers.forEach(clearTimeout);
       cancelAnimationFrame(raf);
       stopOrbit();
       stopSteps();
       form?.removeEventListener("submit", onSubmit);
     };
-  }, [CHAT_SCRIPT, online, typing, tileCopy, invalidEmail]);
+  }, [tileCopy, invalidEmail]);
   return null;
 }

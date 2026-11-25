@@ -4,6 +4,7 @@ import { ClientQuote } from "@/components/site/ClientQuote";
 import { Img } from "@/components/site/Img";
 import { LogoMark, WaIcon } from "@/components/site/LogoMark";
 import { Eyebrow } from "@/components/site/Eyebrow";
+import { HeroRing } from "@/components/site/HeroRing";
 import { HomeScripts } from "@/components/site/HomeScripts";
 import { HowWeWork } from "@/components/site/HowWeWork";
 import { Nav } from "@/components/site/Nav";
@@ -60,6 +61,28 @@ const BAND_ICONS: Record<Site["ticker"]["items"][number]["icon"], React.ReactNod
   ),
 };
 
+/** The hero's arrow (Start your project) and four-point star (badge, corner). */
+const ARROW = (
+  <svg viewBox="0 0 16 16" aria-hidden="true">
+    <path
+      d="M3 8h10M9 4l4 4-4 4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+const STAR = (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M12 0c.7 6.6 5.4 11.3 12 12-6.6.7-11.3 5.4-12 12-.7-6.6-5.4-11.3-12-12C6.6 11.3 11.3 6.6 12 0Z"
+    />
+  </svg>
+);
+
 /** Where each orbit slider's knob starts (reference); HomeScripts moves them. */
 const SLIDER_START = [".15", ".55", ".1"];
 
@@ -96,6 +119,8 @@ export default function HomePage() {
   const bannerWaHref = whatsappTextLink().href;
   // The banner's team, by role: CTO left, CIO right, CEO centre and in front.
   const byRole = (abbr: string) => members.find((m) => m.abbr === abbr);
+  // The hero's avatar stack: four of the team's cut-outs, then a "+".
+  const heroTeam = [...members, ...leads].slice(0, 4);
   const bannerTeam = [
     { cls: "p1", member: byRole("CTO") },
     { cls: "p3", member: byRole("CIO") },
@@ -113,137 +138,133 @@ export default function HomePage() {
   return (
     <>
       <JsonLd data={organizationJsonLd()} />
-      <HomeScripts
-        chat={hero.phone.chat}
-        online={hero.phone.online}
-        typing={hero.phone.typing}
-        tiles={orbit.tiles}
-        invalidEmail={contact.invalid}
-      />
+      <HomeScripts tiles={orbit.tiles} invalidEmail={contact.invalid} />
       <div className="x x-glow">
-        <div className="x-wrap x-hero-wrap">
-          <div className="x-hero" id="top">
-            <div className="x-bigword" aria-hidden="true">
-              {hero.bigWord}
-            </div>
-            <Nav logoHref="#top" />
-            <div className="x-h1-row">
-              <svg className="x-burst" viewBox="0 0 100 100" aria-hidden="true">
-                <g stroke="currentColor" strokeWidth="4.5" strokeLinecap="round">
-                  <line x1="50" y1="6" x2="50" y2="36" />
-                  <line x1="50" y1="64" x2="50" y2="94" />
-                  <line x1="6" y1="50" x2="36" y2="50" />
-                  <line x1="64" y1="50" x2="94" y2="50" />
-                  <g transform="rotate(22.5 50 50)">
-                    <line x1="50" y1="6" x2="50" y2="36" />
-                    <line x1="50" y1="64" x2="50" y2="94" />
-                    <line x1="6" y1="50" x2="36" y2="50" />
-                    <line x1="64" y1="50" x2="94" y2="50" />
-                  </g>
-                  <g transform="rotate(45 50 50)">
-                    <line x1="50" y1="6" x2="50" y2="36" />
-                    <line x1="50" y1="64" x2="50" y2="94" />
-                    <line x1="6" y1="50" x2="36" y2="50" />
-                    <line x1="64" y1="50" x2="94" y2="50" />
-                  </g>
-                  <g transform="rotate(67.5 50 50)">
-                    <line x1="50" y1="6" x2="50" y2="36" />
-                    <line x1="50" y1="64" x2="50" y2="94" />
-                    <line x1="6" y1="50" x2="36" y2="50" />
-                    <line x1="64" y1="50" x2="94" y2="50" />
-                  </g>
-                </g>
-              </svg>
-              <h1 className="x-h1">
-                {hero.headline}
-                <svg className="x-tail" viewBox="0 0 30 28" aria-hidden="true">
-                  <g stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" fill="none">
-                    <path d="M4 10 L26 3" />
-                    <path d="M4 15 L22 15" />
-                    <path d="M4 20 L26 26" />
-                  </g>
-                </svg>
-              </h1>
-            </div>
-            <div className="x-stage">
-              <div className="x-left">
-                <svg className="x-ticks" viewBox="0 0 26 20" aria-hidden="true">
-                  <g stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
-                    <path d="M3 18 L6 3" />
-                    <path d="M9 18 L17 6" />
-                    <path d="M13 19 L24 13" />
-                  </g>
-                </svg>
-                <p className="x-lede">{hero.lede}</p>
-                <a className="x-ghost" href={hero.workLink.href}>
-                  {hero.workLink.label}
-                </a>
-              </div>
-              <div className="x-photo">
-                <div className="x-circle" aria-hidden="true" />
-                <div className="x-phone" aria-label={hero.phone.label} role="img">
-                  <div className="x-screen">
-                    <div className="x-wa-top">
-                      <span className="x-wa-av">
-                        <svg viewBox="105 115 1100 990" aria-hidden="true">
-                          <path
-                            d="M685 500 L513 212 Q372 598 200 1010 Q482 842 750 645 L993 1003 L1160 922"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="165"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </span>
-                      <span className="x-wa-name">
-                        <b>{hero.phone.name}</b>
-                        <small id="wastatus">{hero.phone.online}</small>
-                      </span>
-                    </div>
-                    <div className="x-wa-chat" id="wachat" aria-hidden="true" />
-                  </div>
-                </div>
-                <svg className="x-swirl" viewBox="0 0 60 90" aria-hidden="true">
-                  <path
-                    d="M44 4 C20 10 8 30 22 40 C36 50 46 30 30 30 C10 30 8 58 22 70 C28 75 34 78 38 84 M38 84 L30 82 M38 84 L37 76"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <div className="x-ctas">
-                  <a className="x-go" href={hero.startProject.href}>
+        <div className="hx-frame">
+          <div className="hx-wrap">
+            <section className="hx" id="top" aria-labelledby="hero-title">
+              <Nav current="home" logoHref="#top" />
+              <div className="hx-head">
+                <h1 id="hero-title">
+                  <span>{hero.headline.lead}</span>{" "}
+                  <em>
+                    {hero.headline.tail}
+                    <span className="hx-dot" aria-hidden="true">
+                      .
+                    </span>
+                  </em>
+                </h1>
+                <p className="hx-sub">{hero.lede}</p>
+                <div className="hx-ctas">
+                  <a className="hx-btn hx-ink" href={hero.startProject.href}>
                     {hero.startProject.label}
+                    {ARROW}
                   </a>{" "}
-                  <a href={links.whatsapp}>{hero.whatsapp}</a>
+                  <a className="hx-btn hx-out" href={links.whatsapp}>
+                    <span className="hx-wa">
+                      <WaIcon />
+                    </span>
+                    {hero.whatsapp}
+                  </a>
                 </div>
               </div>
-              <div className="x-right">
-                <div className="x-sparks" aria-hidden="true">
-                  <svg viewBox="0 0 20 20">
-                    <path fill="currentColor" d="M10 0 12 8 20 10 12 12 10 20 8 12 0 10 8 8Z" />
-                  </svg>{" "}
-                  <svg viewBox="0 0 20 20">
-                    <path fill="currentColor" d="M10 0 12 8 20 10 12 12 10 20 8 12 0 10 8 8Z" />
-                  </svg>{" "}
-                  <svg viewBox="0 0 20 20">
-                    <path fill="currentColor" d="M10 0 12 8 20 10 12 12 10 20 8 12 0 10 8 8Z" />
-                  </svg>{" "}
-                  <svg viewBox="0 0 20 20">
-                    <path fill="currentColor" d="M10 0 12 8 20 10 12 12 10 20 8 12 0 10 8 8Z" />
-                  </svg>{" "}
-                  <svg viewBox="0 0 20 20">
-                    <path fill="currentColor" d="M10 0 12 8 20 10 12 12 10 20 8 12 0 10 8 8Z" />
-                  </svg>
-                </div>
-                <span className="x-big">{hero.badge.big}</span>{" "}
-                <span className="x-small">{hero.badge.small}</span>
+              <svg
+                className="hx-wires"
+                viewBox="0 0 1140 775"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <path d="M178 370 C 176 445, 232 488, 330 500" />
+                <path d="M962 447 C 962 500, 905 524, 815 530" />
+              </svg>
+              <div className="hx-card hx-card-l">
+                <svg
+                  className="hx-ic"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2" />
+                </svg>
+                <b>{hero.cards[0].title}</b>
+                <p>{hero.cards[0].body}</p>
               </div>
-            </div>
-            <div style={{ height: "clamp(0px,1vw,8px)" }} />
+              <div className="hx-card hx-card-r">
+                <span className="hx-stack" aria-hidden="true">
+                  <i>
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3Z" />
+                    </svg>
+                  </i>
+                  <i>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18" />
+                    </svg>
+                  </i>
+                  <i>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="3" y="5" width="18" height="14" rx="2" />
+                      <path d="m3 7 9 6 9-6" />
+                    </svg>
+                  </i>
+                  <i className="hx-plus">+</i>
+                </span>
+                <b>{hero.cards[1].title}</b>
+                <p>{hero.cards[1].body}</p>
+              </div>
+              <div className="hx-badge" aria-hidden="true">
+                <svg className="hx-badge-ring" viewBox="0 0 80 80">
+                  <defs>
+                    <path id="hx-circ" d="M40 40 m-31 0 a31 31 0 1 1 62 0 a31 31 0 1 1 -62 0" />
+                  </defs>
+                  <text>
+                    <textPath href="#hx-circ" textLength="192" lengthAdjust="spacing">
+                      {hero.badge}
+                    </textPath>
+                  </text>
+                </svg>
+                <span className="hx-badge-mid">{STAR}</span>
+              </div>
+              <div className="hx-corner hx-k-l">
+                <span className="hx-rule" />
+                <span>{lines(hero.team)}</span>
+                <span className="hx-stack" aria-hidden="true">
+                  {heroTeam.map((m) => (
+                    <Img key={m.cutout.src} src={m.cutout.src} alt="" sizes="40px" />
+                  ))}
+                  <i className="hx-plus">+</i>
+                </span>
+              </div>
+              <div className="hx-corner hx-k-r">
+                <span className="hx-star" aria-hidden="true">
+                  {STAR}
+                </span>
+                <span className="hx-rule" />
+                <span>{lines(hero.tagline)}</span>
+              </div>
+              <HeroRing
+                label={hero.ring.label}
+                panels={hero.ring.panels}
+                pictures={hero.ring.pictures.map((p) => (
+                  <Img key={p.src} src={p.src} alt={p.alt} sizes="160px" />
+                ))}
+              >
+                <Img
+                  src={hero.portrait.src}
+                  alt={hero.portrait.alt}
+                  className="hx-portrait"
+                  sizes="(max-width: 900px) min(96vw, 520px), 45vw"
+                  priority
+                />
+              </HeroRing>
+            </section>
           </div>
+        </div>
+        <div className="x-wrap">
           <div className="x-stats" role="list" aria-label={home.stats.label}>
             {home.stats.items.map((stat) => (
               <div className="x-stat" role="listitem" key={stat.label}>

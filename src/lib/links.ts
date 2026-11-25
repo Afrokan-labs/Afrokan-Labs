@@ -7,9 +7,18 @@ import { getSite } from "./content";
 import { socialLinks } from "./social";
 import { whatsappTextLink } from "./whatsapp";
 
-export type NavKey = "services" | "solutions" | "work" | "about" | "contact" | "insights";
+export type NavKey = "home" | "services" | "solutions" | "work" | "about" | "contact" | "insights";
 
 export const NAV = {
+  /** Update 7 §2: the menu panel's links, in the panel's order. */
+  menu: [
+    { key: "home", label: "Home", href: "/" },
+    { key: "services", label: "Services", href: "/services" },
+    { key: "solutions", label: "Solutions", href: "/solutions" },
+    { key: "work", label: "Work", href: "/work" },
+    { key: "about", label: "About", href: "/about" },
+    { key: "contact", label: "Contact", href: "/contact" },
+  ],
   left: [
     { key: "services", label: "Services", href: "/services" },
     { key: "solutions", label: "Solutions", href: "/solutions" },
@@ -57,6 +66,21 @@ export function getLinks() {
           hours: site.ui.phone.hours.replace("{hours}", displayHours(site.hours)),
         }
       : undefined,
+  };
+}
+
+/** The nav's interface text, the site name and the Instagram profile for the menu panel. */
+export function getNavCopy() {
+  const site = getSite();
+  const instagram = getLinks().social.find((s) => s.key === "instagram");
+  return {
+    ...site.ui.nav,
+    name: site.name,
+    // "https://instagram.com/afrokanlabs" -> "@afrokanlabs"
+    instagram: instagram && {
+      ...instagram,
+      handle: `@${new URL(instagram.href).pathname.replace(/^\/|\/$/g, "")}`,
+    },
   };
 }
 

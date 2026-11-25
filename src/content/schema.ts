@@ -190,6 +190,8 @@ export const Site = z.object({
       home: z.string().min(1),
       menu: z.string().min(1),
       close: z.string().min(1),
+      book: z.string().min(1),
+      bookShort: z.string().min(1),
     }),
     notFound: z.object({
       title: z.string().min(1),
@@ -331,23 +333,29 @@ const Stat = z.object({ value: text, unit: z.string().optional(), label: text })
 /** The home page (site handoff reference/index.html plus site update 1). */
 export const Home = z.object({
   meta: z.object({ title: text, description: MetaDescription }),
+  /** Update 7 §3: the green hero card with the portrait and its glass ring. */
   hero: z.object({
-    headline: text,
-    /** Update 2 §2: the giant outlined word behind the hero card (decorative). */
-    bigWord: text,
+    /** Line 1 bold, line 2 light; the full stop is drawn after line 2. */
+    headline: z.object({ lead: text, tail: text }),
     lede: text,
-    workLink: Link,
     startProject: Link,
     whatsapp: text,
-    badge: z.object({ big: text, small: text }),
-    /** The phone demo: a made-up conversation for "Your Business", clearly an example. */
-    phone: z.object({
+    portrait: Photo,
+    ring: z.object({
+      /** The ring's accessible name; its panels are decorative. */
       label: z.string().min(10),
-      name: text,
-      online: text,
-      typing: text,
-      chat: z.array(z.tuple([z.enum(["in", "out"]), text])).min(2),
+      /** WhatsApp AI, Bookings, Dashboards, Workflows, Websites, in ring order. */
+      panels: z.array(z.object({ title: text, body: text })).length(5),
+      /** The picture panels: website, assistant, checklist. */
+      pictures: z.array(Decorative).length(3),
     }),
+    /** The tilted side cards (desktop): left, then right. */
+    cards: z.array(z.object({ title: text, body: text })).length(2),
+    /** The spinning badge's words. */
+    badge: text,
+    /** Bottom-left and bottom-right corner notes, one entry per line. */
+    team: Lines,
+    tagline: Lines,
   }),
   stats: z.object({ label: text, items: z.array(Stat).min(1) }),
   welcome: z.object({

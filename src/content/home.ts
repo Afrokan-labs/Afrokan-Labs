@@ -12,26 +12,40 @@ export const home = {
     description:
       "WhatsApp AI assistants, workflow tools and web platforms for growing businesses. Tell us what slows your team down and we'll build around it.",
   },
+  // Update 7 §3 (docs/update-7/prototype.html). No Ghana, Accra or "Ghanaian"
+  // in the hero: the business wants clients outside Ghana too.
   hero: {
-    headline: "Software built for how Ghanaian businesses actually work",
-    bigWord: "AFROKAN",
-    lede: "WhatsApp AI assistants, workflow tools and web platforms for growing businesses. Tell us what slows your team down and we'll build around it.",
-    workLink: { label: "See our work", href: "#work" },
+    headline: { lead: "AI & software", tail: "for growing businesses" },
+    lede: "We build WhatsApp AI assistants, websites and workflow tools that answer your customers and sort your paperwork, wherever you do business.",
     startProject: { label: "Start your project", href: "#contact" },
     whatsapp: "Chat on WhatsApp",
-    badge: { big: "Ghana-first", small: "AI & software studio, Accra" },
-    phone: {
-      label: "Example: an AI assistant answering a customer on WhatsApp",
-      name: "Your Business",
-      online: "online",
-      typing: "typing…",
-      chat: [
-        ["out", "Hi, are you open this Saturday?"],
-        ["in", "Yes! We’re open 9am to 2pm on Saturdays. Would you like me to book you a slot?"],
-        ["out", "Yes please, 10am"],
-        ["in", "Done ✅ You’re booked for Saturday at 10am. We’ll send a reminder on Friday."],
+    portrait: { src: "hero-portrait.webp", alt: "A business owner, eyes closed and calm" },
+    // The glass ring round the portrait's head. Panels are decorative; the ring's
+    // label names what they show.
+    ring: {
+      label: "What we build: WhatsApp AI, bookings, dashboards, workflows and websites",
+      // In ring order: WhatsApp AI, Bookings, Dashboards, Workflows, Websites.
+      panels: [
+        { title: "WhatsApp AI", body: "Answers 24/7." },
+        { title: "Bookings", body: "Confirmed on autopilot." },
+        { title: "Dashboards", body: "Your day, one screen." },
+        { title: "Workflows", body: "Paperwork, sorted." },
+        { title: "Websites", body: "That bring enquiries." },
+      ],
+      // Greyscale crops on the picture panels: website, assistant, checklist.
+      pictures: [
+        { src: "work-ese-website.webp", alt: "" },
+        { src: "work-ese-assistant.webp", alt: "" },
+        { src: "work-ese-checklist.webp", alt: "" },
       ],
     },
+    cards: [
+      { title: "Turn enquiries into customers.", body: "Reply, follow up and book in one place." },
+      { title: "Answers, anytime, anywhere.", body: "WhatsApp, web and email, day and night." },
+    ],
+    badge: "AI • SOFTWARE • AUTOMATION •",
+    team: ["Built by a small team", "of five specialists."],
+    tagline: ["Less paperwork.", "More customers."],
   },
   stats: {
     label: "Quick facts",
