@@ -93,8 +93,9 @@ async function main() {
     reply = { status: 200, body: JSON.stringify({ ok: true }) };
     await cdp.send("Page.navigate", { url: `${server.origin}/contact` });
     await until(`document.readyState === "complete" && !!document.querySelector("#cform")`);
-    // Hydrated and enhanced: the band shows "Question 1 of 5".
-    await until(`document.querySelector(".c-count").textContent.length > 0`);
+    // Hydrated and enhanced. Not the band's "Question 1 of 5": the server renders
+    // that too (so nothing shifts), so it doesn't mean React has taken over yet.
+    await until(`document.getElementById("cform").classList.contains("is-enhanced")`);
   };
   const pick = (label: string) =>
     ev(
@@ -140,6 +141,14 @@ async function main() {
       async () => {
         await load();
         assert.equal(await ev(`document.querySelector(".c-count").textContent`), "Question 1 of 5");
+        // The honeypot has a name autofill doesn't recognise ("website" got filled in for real visitors).
+        assert.equal(await ev(`!!document.querySelector("#cform [name=website]")`), false);
+        assert.equal(
+          await ev(
+            `document.querySelector("#cform [name=afk_hp_check]").getAttribute("autocomplete")`,
+          ),
+          "off",
+        );
         // The <head> script's "js" class survives hydration, so Continue really shows.
         assert.equal(await ev(`document.documentElement.classList.contains("js")`), true);
         assert.equal(await ev(`!!${visible}.querySelector(".c-next").offsetParent`), true);

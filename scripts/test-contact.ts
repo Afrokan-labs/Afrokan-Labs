@@ -5,6 +5,7 @@
  */
 import assert from "node:assert/strict";
 import { onRequest } from "../functions/api/contact";
+import { FIELD } from "../src/lib/contact-fields";
 import { autoReplyText, ghanaTime, notificationText } from "../src/lib/contact-email";
 import { signatureHtml } from "../src/lib/email-signature";
 
@@ -210,8 +211,15 @@ const tests: [string, () => Promise<void>][] = [
   [
     "filled honeypot: fake success, nothing sent",
     async () => {
-      const r = await post({ ...VALID, website: "http://spam" });
+      const r = await post({ ...VALID, [FIELD.honeypot]: "http://spam" });
       assert.deepEqual([r.status, r.body, sent.length], [200, { ok: true }, 0]);
+    },
+  ],
+  [
+    'an autofilled "website" field (the old honeypot name) no longer drops a real request',
+    async () => {
+      const r = await post({ ...VALID, website: "https://example.com" });
+      assert.deepEqual([r.status, r.body, sent.length], [200, { ok: true }, 3]);
     },
   ],
   [
