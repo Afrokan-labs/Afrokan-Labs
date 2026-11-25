@@ -93,8 +93,9 @@ async function main() {
     reply = { status: 200, body: JSON.stringify({ ok: true }) };
     await cdp.send("Page.navigate", { url: `${server.origin}/contact` });
     await until(`document.readyState === "complete" && !!document.querySelector("#cform")`);
-    // Hydrated and enhanced: the band shows "Question 1 of 5".
-    await until(`document.querySelector(".c-count").textContent.length > 0`);
+    // Hydrated and enhanced. Not the band's "Question 1 of 5": the server renders
+    // that too (so nothing shifts), so it doesn't mean React has taken over yet.
+    await until(`document.getElementById("cform").classList.contains("is-enhanced")`);
   };
   const pick = (label: string) =>
     ev(
