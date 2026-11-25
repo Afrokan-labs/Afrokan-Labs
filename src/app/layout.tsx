@@ -81,6 +81,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={fontVars} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+        {/* "js" before first paint: pages that enhance after hydration (the
+            stepped contact form) lay out their enhanced shape from the start,
+            so nothing shifts when React takes over. */}
+        <script
+          dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add("js")` }}
+        />
         <script dangerouslySetInnerHTML={{ __html: LOADER_HEAD }} />
       </head>
       <body>

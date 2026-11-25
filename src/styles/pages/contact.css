@@ -1848,8 +1848,15 @@ html {
   letter-spacing: -0.03em;
 }
 
+/* Always two lines ("Let's build" / "together"), whichever font has loaded, so
+   Unbounded arriving late can't re-wrap the headline and move the card (CLS). */
+.c-h1 {
+  white-space: nowrap;
+}
+
 .c-hl {
-  display: inline-block;
+  display: table;
+  margin-inline: auto;
   padding: 0 0.18em 0.04em;
   border-radius: 10px;
   background: var(--c-94de57);
@@ -2007,6 +2014,16 @@ html {
 
 .c-step[hidden],
 .c-form[hidden] {
+  display: none;
+}
+
+/*
+ * With JavaScript on (the "js" class is set in <head>), the first paint is
+ * already the stepped form: question 1 alone, with Continue. So hydration
+ * moves nothing (CLS). With it off, every question stacks and only Send shows.
+ */
+.js .c-form:not(.is-enhanced) .c-step:not(:first-child),
+:root:not(.js) .c-next {
   display: none;
 }
 

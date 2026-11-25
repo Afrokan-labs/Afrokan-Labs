@@ -140,6 +140,9 @@ async function main() {
       async () => {
         await load();
         assert.equal(await ev(`document.querySelector(".c-count").textContent`), "Question 1 of 5");
+        // The <head> script's "js" class survives hydration, so Continue really shows.
+        assert.equal(await ev(`document.documentElement.classList.contains("js")`), true);
+        assert.equal(await ev(`!!${visible}.querySelector(".c-next").offsetParent`), true);
         await toReach();
         assert.equal(await step(), 4);
         assert.equal(await ev(`document.querySelector(".c-count").textContent`), "Question 5 of 5");
@@ -422,7 +425,8 @@ async function main() {
           return {
             hidden: f.querySelectorAll(".c-step[hidden]").length,
             steps: f.querySelectorAll(".c-step").length,
-            submits: f.querySelectorAll("button[type=submit]").length,
+            // Continue buttons exist but are hidden without JavaScript: only Send shows.
+            submits: [...f.querySelectorAll("button[type=submit]")].filter((b) => b.offsetParent).length,
             method: f.method,
             action: new URL(f.action).pathname,
           };
@@ -439,7 +443,7 @@ async function main() {
           document.querySelector('input[name=goal][value="${GOAL}"]').checked = true;
           document.getElementById("c-name").value = "Ama";
           document.getElementById("c-phone").value = "024 000 0000";
-          document.querySelector("#cform button[type=submit]").click();
+          document.querySelector("#cform .c-cta:not(.c-next)").click();
         })()`);
         // The post comes from the browser's own form submission, not fetch().
         const start = Date.now();

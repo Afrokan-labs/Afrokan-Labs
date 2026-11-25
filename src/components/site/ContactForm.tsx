@@ -345,13 +345,14 @@ export function ContactForm({
       {text}
     </h2>
   );
-  const next = (label: string = copy.next, arrow = true) =>
-    enhanced && (
-      <button type="submit" className="c-cta">
-        {label}
-        {arrow && ARROW}
-      </button>
-    );
+  // Rendered from the server on, so nothing shifts at hydration; CSS hides them
+  // when JavaScript is off (the stacked form has only Send).
+  const next = (label: string = copy.next, arrow = true) => (
+    <button type="submit" className="c-cta c-next">
+      {label}
+      {arrow && ARROW}
+    </button>
+  );
 
   /** Answer rows: toggle buttons once enhanced, native checkboxes/radios before. */
   const options = (kind: "need" | "goal") => {
@@ -522,14 +523,13 @@ export function ContactForm({
             </svg>
           )}
           <span className="c-count">
-            {enhanced &&
-              (done ? copy.done : fillText(copy.progress, { n: step + 1, total: TOTAL }))}
+            {done ? copy.done : fillText(copy.progress, { n: step + 1, total: TOTAL })}
           </span>
           <span className="c-hint">{hint}</span>
         </div>
         <div className="c-bar" aria-hidden="true">
           {STEPS.map((s, i) => (
-            <i key={s} className={enhanced && (done || i <= step) ? "on" : undefined} />
+            <i key={s} className={done || i <= step ? "on" : undefined} />
           ))}
         </div>
       </div>
@@ -537,7 +537,7 @@ export function ContactForm({
       <div className="c-body">
         {thanks}
         <form
-          className="c-form"
+          className={enhanced ? "c-form is-enhanced" : "c-form"}
           id="cform"
           ref={formRef}
           hidden={done}
