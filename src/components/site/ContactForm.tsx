@@ -669,6 +669,11 @@ export function ContactForm({
               tabIndex={-1}
               autoComplete="off"
               aria-hidden="true"
+              // Keep password managers (1Password, LastPass, Bitwarden, Dashlane) out of it too.
+              data-1p-ignore=""
+              data-lpignore="true"
+              data-bwignore=""
+              data-form-type="other"
             />
             <input type="hidden" name={FIELD.page} value="/contact" />
             {turnstileSiteKey && <div ref={widget} className="c-turnstile" />}

@@ -92,8 +92,12 @@ export async function onRequest({ request, env }: Context): Promise<Response> {
     return failed(400);
   }
 
-  // 1. Honeypot: pretend it worked, so bots learn nothing.
-  if (String(form.get(FIELD.honeypot) ?? "").trim()) return reply({ ok: true }, 200);
+  // 1. Honeypot: pretend it worked, so bots learn nothing. Logged, so a real
+  // visitor caught by it shows up in the function's logs instead of vanishing.
+  if (String(form.get(FIELD.honeypot) ?? "").trim()) {
+    console.warn("contact: honeypot filled, request dropped");
+    return reply({ ok: true }, 200);
+  }
 
   const secrets = z.safeParse(Secrets, env);
   if (!secrets.success) {

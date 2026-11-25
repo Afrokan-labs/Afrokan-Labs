@@ -31,8 +31,13 @@ export const FIELD = {
   /** The page the form was sent from, and the site page the visitor arrived from. */
   page: "page",
   from: "from",
-  /** Honeypot: hidden from people, filled by bots. A filled one gets a fake success. */
-  honeypot: "website",
+  /**
+   * Honeypot: hidden from people, filled by bots. A filled one gets a fake
+   * success. The name means nothing to autofill or password managers: it was
+   * "website", which browsers filled in for real visitors, whose requests were
+   * then dropped as spam without a trace (2026-11-25).
+   */
+  honeypot: "afk_hp_check",
   /** Added to the form by the Turnstile widget. */
   turnstile: "cf-turnstile-response",
 } as const;
