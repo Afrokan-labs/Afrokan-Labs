@@ -89,6 +89,9 @@ export const site = {
       home: "Afrokan Labs home",
       menu: "Menu",
       close: "Close",
+      // Update 7 §2: the nav's right pill; the short label under 900px.
+      book: "Book a free call",
+      bookShort: "Book a call",
     },
     // Drafted with the privacy page (docs/content/privacy.md), approved 2026-10-02.
     notFound: {

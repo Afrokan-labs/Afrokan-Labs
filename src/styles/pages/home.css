@@ -938,288 +938,653 @@ body {
   pointer-events: none;
 }
 
-/* Review bar (not part of the design) */
-
-/* ---------- 1. HERO CARD ---------- */
-.x-hero-wrap {
-  padding-top: clamp(12px, 2vw, 24px);
+/*
+ * ---------- 1. HERO (update 7 §3, docs/update-7/prototype.html, "Lime") ----------
+ * Afrokan Green and Ink set the mood, Off-white is the accent; text on green is
+ * always Ink. Desktop keeps the prototype's 1140 × 775 card: everything is
+ * placed in % and sized in cqw of the hero container. Under 900px it stacks.
+ */
+.hx-frame {
+  padding: clamp(8px, 1.6vw, 24px);
 }
 
-.x-hero {
-  position: relative;
-  background: var(--x-card);
-  color: var(--x-ink);
-  border-radius: 22px 22px clamp(44px, 7vw, 84px) clamp(44px, 7vw, 84px);
-  padding: clamp(10px, 1.4vw, 18px) clamp(10px, 1.4vw, 18px) 0;
-  overflow: hidden;
-}
-
-/* nav pill */
-.x-nav {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  background: var(--x-ink);
-  color: var(--x-white);
-  border-radius: 99px;
-  min-height: 58px;
-  padding: 6px 10px 6px 14px;
-  max-width: 900px;
+.hx-wrap {
+  container: hero / inline-size;
+  max-width: 1600px;
   margin-inline: auto;
 }
 
-.x-nav-side {
+.hx {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  aspect-ratio: 1140 / 775;
+  border-radius: clamp(16px, 1.6cqw, 26px);
+  background:
+    radial-gradient(ellipse 50% 60% at 60% 80%, rgb(255 255 255 / 0.32), transparent 70%),
+    repeating-linear-gradient(-45deg, rgb(0 0 0 / 0.03) 0 2px, transparent 2px 9px), var(--c-94de57);
+  color: var(--c-0d0d0d);
+  font-family: var(--nf-lexend);
+  box-shadow: 0 30px 80px rgb(0 0 0 / 0.35);
+}
+
+/* A green focus ring would vanish on the green. */
+.hx :focus-visible {
+  outline: 3px solid var(--c-0d0d0d);
+  outline-offset: 3px;
+}
+
+/* The nav sits on the card, no bar (site.css draws the pills). */
+.hx .cl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: clamp(64px, 5.2cqw, 100px);
+  min-height: 0;
+  padding: 0 clamp(18px, 2.5cqw, 48px);
+}
+
+.hx-head {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  top: 13.4%;
+  translate: -50% 0;
+  width: 66%;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.hx h1 {
+  margin: 0;
+  font: 600 4.9cqw / 1.02 var(--nf-lexend);
+  letter-spacing: -0.05em;
+}
+
+.hx h1 > span {
+  display: block;
+}
+
+.hx h1 em {
+  display: block;
+  font-style: normal;
+  font-weight: 300;
+}
+
+/* The Off-white full stop is decorative (aria-hidden). */
+.hx-dot {
+  color: var(--c-f3f3ef);
+}
+
+.hx-sub {
+  max-width: 30em;
+  margin: 2.2cqw 0 0;
+  color: var(--c-1d2e12);
+  font-size: max(13px, 1.32cqw);
+  line-height: 1.45;
+}
+
+.hx-ctas {
   display: flex;
-  justify-content: space-around;
-  gap: 8px;
+  gap: 1.1cqw;
+  margin-top: 2.3cqw;
 }
 
-.x-nav a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.x-nav-side a {
-  font-size: 0.82rem;
-  font-weight: 400;
-  padding: 10px 14px;
-  border-radius: 99px;
-  opacity: 0.9;
-}
-
-.x-nav-side a:hover {
-  background: var(--c-222222);
-  opacity: 1;
-}
-
-.x-logo {
+/* Hero buttons: hover changes colour only; pressed shrinks to .98. */
+.hx-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-family: var(--x-font);
-  font-weight: 500;
-  font-size: 1.25rem;
-  letter-spacing: -0.01em;
-  padding-inline: 18px;
-}
-
-.x-logo svg {
-  width: 26px;
-  height: 26px;
-  color: var(--x-lime);
-}
-
-.x-menu {
-  display: none;
-  justify-self: end;
-  background: var(--x-lime);
-  color: var(--x-ink);
+  justify-content: center;
+  gap: 0.7em;
+  height: max(44px, 3.25cqw);
+  padding: 0 1.5em;
   border: 0;
   border-radius: 99px;
-  font: 500 0.85rem/1 var(--x-font);
-  padding: 0 16px;
-  min-height: 40px;
-  cursor: pointer;
-}
-
-/* headline */
-.x-h1-row {
-  position: relative;
-  text-align: center;
-  padding: clamp(36px, 5vw, 64px) 8px 0;
-}
-
-.x-h1 {
-  margin: 0;
-  font-family: var(--x-font);
-  font-weight: 500;
-  font-size: clamp(1.9rem, 1rem + 3.4vw, 3.6rem);
-  line-height: 1.12;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
-  max-width: 15.5em;
-  margin-inline: auto;
-}
-
-.x-h1 .x-tail {
-  display: inline-block;
-  width: 0.6em;
-  height: 0.55em;
-  margin-left: 0.08em;
-  vertical-align: -0.02em;
-  color: var(--x-lime);
-}
-
-.x-burst {
-  position: absolute;
-  left: clamp(6px, 2vw, 28px);
-  top: clamp(22px, 3vw, 44px);
-  width: clamp(48px, 6vw, 82px);
-  color: var(--x-lime);
-}
-
-/* stage: left copy · photo · right badge */
-.x-stage {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr);
-  align-items: center;
-  gap: 12px;
-  margin-top: clamp(8px, 1.5vw, 20px);
-}
-
-.x-left {
-  display: grid;
-  gap: 22px;
-  justify-items: start;
-  padding-left: clamp(8px, 2.5vw, 34px);
-  position: relative;
-}
-
-.x-ticks {
-  width: 26px;
-  height: 20px;
-  color: var(--x-lime);
-}
-
-.x-lede {
-  margin: 0;
-  font-size: 0.86rem;
-  font-weight: 300;
-  line-height: 1.6;
-  color: var(--x-ink-2);
-  max-width: 30ch;
-}
-
-.x-ghost {
-  display: inline-flex;
-  align-items: center;
-  min-height: 40px;
-  padding: 0 18px;
-  border-radius: 99px;
-  border: 1px solid var(--x-ink);
-  color: var(--x-ink);
-  font: 400 0.8rem/1 var(--x-font);
+  font: 500 max(12.5px, 1.12cqw) / 1 var(--nf-lexend);
   text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    scale 0.12s;
 }
 
-.x-ghost:hover {
-  background: var(--x-ink);
-  color: var(--x-white);
+.hx-ink {
+  background: var(--c-0d0d0d);
+  color: var(--c-f3f3ef);
 }
 
-.x-photo {
-  position: relative;
-  place-self: end center;
-  width: min(100%, 470px);
-  aspect-ratio: 1 / 1.02;
+.hx-ink svg {
+  width: 1.05em;
+  height: 1.05em;
+  color: var(--c-94de57);
 }
 
-.x-photo .x-circle {
-  position: absolute;
-  left: 50%;
-  translate: -50% 0;
-  width: 92%;
-  aspect-ratio: 1;
+.hx-ink:hover {
+  background: var(--c-262626);
+}
+
+.hx-ink:active {
+  background: var(--c-343434);
+  scale: 0.98;
+}
+
+.hx-out {
+  padding-left: 0.55em;
+  background: var(--c-f3f3ef);
+  color: var(--c-0d0d0d);
+}
+
+.hx-out:hover {
+  background: var(--c-ffffff);
+}
+
+.hx-out:active {
+  background: var(--c-e5e5df);
+  scale: 0.98;
+}
+
+.hx-wa {
+  display: grid;
+  place-items: center;
+  width: 1.7em;
+  height: 1.7em;
   border-radius: 50%;
-  background: var(--x-grey);
-  bottom: 8%;
+  background: var(--c-94de57);
+  color: var(--c-0d0d0d);
 }
 
-.x-photo .x-person {
+.hx-wa svg {
+  width: 0.95em;
+  height: 0.95em;
+}
+
+.hx-btn[aria-disabled="true"] {
+  background: var(--c-dadad3);
+  color: var(--c-5e5e5a);
+  cursor: not-allowed;
+  scale: 1;
+}
+
+.hx-btn[aria-disabled="true"] svg {
+  color: var(--c-5e5e5a);
+}
+
+.hx-out[aria-disabled="true"] .hx-wa {
+  background: var(--c-c4c4bd);
+  color: var(--c-5e5e5a);
+}
+
+/* Side cards (desktop), linked to the ring by the wires. */
+.hx-wires {
   position: absolute;
-  left: 50%;
-  bottom: 0;
-  translate: -50% 0;
-  width: 70%;
-  height: 96%;
-  border-radius: 999px 999px 0 0;
-  overflow: hidden;
-  background: var(--c-d9d9d9);
-}
-
-.x-photo .x-person img {
+  z-index: 1;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 50% 0;
-  filter: grayscale(1) contrast(1.05);
+  pointer-events: none;
 }
 
-.x-swirl {
-  position: absolute;
-  left: -2%;
-  bottom: 22%;
-  width: 18%;
-  color: var(--x-ink);
+.hx-wires path {
+  fill: none;
+  stroke: rgb(13 13 13 / 0.35);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
 }
 
-.x-ctas {
+.hx-card {
   position: absolute;
-  left: 50%;
-  bottom: clamp(18px, 3vw, 34px);
-  translate: -50% 0;
+  z-index: 6;
+  width: 14.3%;
+  aspect-ratio: 163 / 168;
   display: flex;
-  gap: 4px;
-  padding: 5px;
-  border-radius: 99px;
-  background: rgb(20 20 20 / 0.55);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgb(255 255 255 / 0.35);
+  flex-direction: column;
+  padding: 1.6cqw 1.5cqw;
+  border-radius: 1.9cqw;
+  background: var(--c-0d0d0d);
+  color: var(--c-f3f3ef);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.08),
+    0 18px 40px rgb(0 0 0 / 0.18);
+}
+
+.hx-ic {
+  width: 2.9cqw;
+  height: 2.9cqw;
+  padding: 0.65cqw;
+  border-radius: 0.8cqw;
+  background: var(--c-f3f3ef);
+  color: var(--c-0d0d0d);
+}
+
+.hx-card b {
+  margin-top: auto;
+  font-weight: 500;
+  font-size: 1.36cqw;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.hx-card p {
+  margin: 0.6cqw 0 0;
+  color: var(--c-b9b9b4);
+  font-size: 1.02cqw;
+  line-height: 1.35;
+}
+
+.hx-card-l {
+  top: 26%;
+  left: 8.1%;
+  rotate: -6deg;
+}
+
+.hx-card-r {
+  top: 36%;
+  left: 78%;
+  rotate: 5deg;
+}
+
+/* Icon and avatar stacks, with the "+" bubble. */
+.hx-stack {
+  display: flex;
+  align-items: center;
+}
+
+.hx-stack i,
+.hx-stack img {
+  display: grid;
+  place-items: center;
+  width: 2.6cqw;
+  height: 2.6cqw;
+  margin-left: -0.7cqw;
+  border: 2px solid var(--c-94de57);
+  border-radius: 50%;
+  background: var(--c-f3f3ef);
+  color: var(--c-0d0d0d);
+  font-style: normal;
+}
+
+.hx-stack > :first-child {
+  margin-left: 0;
+}
+
+.hx-card .hx-stack i {
+  border-color: var(--c-0d0d0d);
+}
+
+.hx-stack svg {
+  width: 1.2cqw;
+  height: 1.2cqw;
+}
+
+/* The cut-outs are head-and-shoulders: keep the face in the circle. */
+.hx-stack img {
+  object-fit: cover;
+  object-position: 50% 8%;
+  filter: grayscale(1);
+}
+
+.hx-plus {
+  font-size: 1.2cqw;
+}
+
+/* Spinning badge, top right: 26s a turn. */
+.hx-badge {
+  position: absolute;
+  z-index: 6;
+  top: 20.6%;
+  left: 90.5%;
+  width: 6.9cqw;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+}
+
+.hx-badge-ring {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: hx-spin 26s linear infinite;
+}
+
+.hx-badge text {
+  font-size: 7.2px;
+  font-weight: 500;
+  letter-spacing: 2.3px;
+  fill: var(--c-0d0d0d);
+}
+
+.hx-badge-mid {
+  position: absolute;
+  inset: 27%;
+  padding: 9%;
+  border-radius: 50%;
+  background: var(--c-0d0d0d);
+  color: var(--c-94de57);
+}
+
+.hx-badge-mid svg,
+.hx-star svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes hx-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* Corner notes (desktop). */
+.hx-corner {
+  position: absolute;
+  z-index: 6;
+  color: var(--c-1d2e12);
+  font-size: max(12px, 1.1cqw);
+  line-height: 1.35;
+}
+
+.hx-rule {
+  display: block;
+  width: 1.9cqw;
+  height: 1px;
+  background: rgb(13 13 13 / 0.35);
+}
+
+.hx-k-l {
+  top: 74%;
+  left: 6.4%;
+  display: grid;
+  gap: 1.1cqw;
+}
+
+.hx-k-r {
+  top: 79%;
+  left: 85.2%;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  column-gap: 1.2cqw;
+}
+
+.hx-star {
+  grid-column: 2;
+  width: 1.5cqw;
+  height: 1.5cqw;
+  margin: 0 0 1.3cqw 1cqw;
+  color: var(--c-0d0d0d);
+}
+
+.hx-k-r .hx-rule,
+.hx-k-r > span:last-child {
+  grid-row: 2;
+}
+
+/* The portrait and its ring. --hx-s is the portrait's width; HeroRing turns --rot. */
+.hx-subject {
+  --hx-s: 45cqw;
+
+  position: absolute;
+  z-index: 3;
+  top: 48.5%;
+  left: 27.5%;
+  width: 45%;
+  aspect-ratio: 1;
+  isolation: isolate;
+}
+
+.hx-portrait {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hx-ring {
+  position: absolute;
+  top: 27%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  perspective: calc(var(--hx-s) * 2.4);
+  perspective-origin: 50% 40%;
+}
+
+.hx-ring.back {
+  z-index: 1;
+}
+
+.hx-ring.front {
+  z-index: 3;
+}
+
+.hx-rot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(-9deg) rotateZ(-6deg);
+}
+
+.hx-p {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--hx-s) * var(--w) * 0.78);
+  height: calc(var(--hx-s) * var(--h) * 0.78);
+  overflow: hidden;
+  border-radius: calc(var(--hx-s) * 0.035);
+  background: linear-gradient(
+    160deg,
+    rgb(13 13 13 / 0.82),
+    rgb(13 13 13 / 0.66) 60%,
+    rgb(13 13 13 / 0.6)
+  );
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.14),
+    0 14px 34px rgb(0 0 0 / 0.25);
+  transform: translate(-50%, -50%) translateY(calc(var(--hx-s) * (var(--row) * 0.085 + var(--dy))))
+    rotateY(calc(var(--a) + var(--rot, 0deg))) translateZ(calc(var(--hx-s) * 0.42));
+  will-change: transform;
+}
+
+/* Each panel is drawn in both layers; only the copy on the side it faces shows. */
+.hx-p[data-off] {
+  visibility: hidden;
+}
+
+.hx-ring.front .hx-p {
+  backdrop-filter: blur(4px) saturate(1.1);
+}
+
+.hx-ring.back .hx-p {
+  background: linear-gradient(160deg, var(--c-1a1a1a), var(--c-0d0d0d));
+}
+
+.hx-ring.back .hx-p > * {
+  visibility: hidden;
+}
+
+.hx-p.lab {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-content: center;
+  gap: 0 calc(var(--hx-s) * 0.025);
+  padding: 0 calc(var(--hx-s) * 0.035);
+}
+
+.hx-chip {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: calc(var(--hx-s) * 0.062);
+  height: calc(var(--hx-s) * 0.062);
+  border-radius: calc(var(--hx-s) * 0.016);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
+}
+
+.hx-chip svg {
+  width: 55%;
+  height: 55%;
+}
+
+.hx-chip.lime {
+  background: var(--c-94de57);
+  color: var(--c-0d0d0d);
+}
+
+.hx-chip.deep {
+  background: var(--c-3f7e20);
+  color: var(--c-ffffff);
+}
+
+.hx-chip.ink {
+  background: var(--c-0d0d0d);
+  color: var(--c-94de57);
+}
+
+.hx-p.lab b,
+.hx-p.lab > span:last-child {
   white-space: nowrap;
 }
 
-.x-ctas a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 38px;
-  padding: 0 18px;
-  border-radius: 99px;
-  font: 400 0.78rem/1 var(--x-font);
-  text-decoration: none;
-  color: var(--x-white);
-}
-
-.x-ctas .x-go {
-  background: var(--x-lime);
-  color: var(--x-ink);
+.hx-p.lab b {
+  color: var(--c-ffffff);
   font-weight: 500;
+  font-size: calc(var(--hx-s) * 0.032);
+  line-height: 1.15;
 }
 
-.x-ctas a:not(.x-go):hover {
-  background: rgb(255 255 255 / 0.12);
+.hx-p.lab > span:last-child {
+  color: var(--c-b9b9b4);
+  font-size: calc(var(--hx-s) * 0.02);
+  line-height: 1.3;
 }
 
-.x-right {
-  justify-self: end;
-  text-align: right;
-  padding-right: clamp(8px, 2.5vw, 34px);
+.hx-p.pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.05);
+}
+
+.hx-p.pic::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, rgb(255 255 255 / 0.18), transparent 55%);
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.14);
+}
+
+.hx-p.dark {
   display: grid;
-  gap: 4px;
-  justify-items: end;
+  place-items: center;
+  background: var(--c-0d0d0d);
 }
 
-.x-sparks {
-  display: flex;
-  gap: 3px;
-  color: var(--x-lime);
+.hx-p.dark svg {
+  width: 34%;
+  color: var(--c-94de57);
 }
 
-.x-sparks svg {
-  width: 15px;
-  height: 15px;
+/* Hover pauses the ring; a sideways drag spins it. */
+.hx-hit {
+  position: absolute;
+  z-index: 5;
+  inset: 44% 20% 0;
+  cursor: grab;
+  touch-action: pan-y;
 }
 
-.x-big {
-  font-size: clamp(1.3rem, 1rem + 1vw, 1.9rem);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+.hx-hit.drag {
+  cursor: grabbing;
 }
 
-.x-small {
-  font-size: 0.78rem;
-  font-weight: 300;
-  color: var(--x-ink-2);
+/* Phones and tablets: nav, headline, lede, buttons, then the portrait. */
+@media (max-width: 900px) {
+  .hx {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    aspect-ratio: auto;
+    padding: 6px 14px 0;
+  }
+
+  .hx .cl {
+    position: relative;
+    justify-self: stretch;
+    width: 100%;
+    height: 56px;
+    padding: 0;
+  }
+
+  .hx-head {
+    position: relative;
+    top: auto;
+    left: auto;
+    translate: none;
+    width: 100%;
+    padding: 9cqw 2px 0;
+  }
+
+  .hx h1 {
+    font-size: 10cqw;
+    line-height: 1.04;
+  }
+
+  .hx-sub {
+    margin-top: 16px;
+    font-size: 15px;
+  }
+
+  .hx-ctas {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .hx-btn {
+    height: 56px;
+    font-size: 15px;
+  }
+
+  .hx-card,
+  .hx-wires,
+  .hx-badge,
+  .hx-corner,
+  .hx-hit {
+    display: none;
+  }
+
+  .hx-subject {
+    --hx-s: min(96cqw, 520px);
+
+    position: relative;
+    top: auto;
+    left: auto;
+    width: min(96cqw, 520px);
+    margin-top: 16cqw;
+    margin-bottom: -14%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hx-badge-ring {
+    animation: none;
+  }
+
+  .hx-btn,
+  .hx-btn:active {
+    scale: 1;
+  }
 }
 
 /* ---------- 2. STATS STRIP ---------- */
@@ -3442,7 +3807,6 @@ html {
   color: var(--c-0d0d0d);
 }
 
-:root[data-site-theme="light"] .x-hero,
 :root[data-site-theme="light"] .sol-card {
   box-shadow:
     0 1px 0 var(--c-e2e2dc),
@@ -4321,23 +4685,6 @@ html {
   border-color: var(--c-94de57);
 }
 
-.x-nav .x-nav-cta {
-  background: var(--x-lime);
-  color: var(--x-ink);
-  opacity: 1;
-  font-weight: 500;
-}
-
-.x-nav .x-nav-cta:hover {
-  background: var(--c-ffffff);
-  color: var(--c-0d0d0d);
-}
-
-.x-nav .x-menu {
-  text-decoration: none;
-  color: var(--x-ink);
-}
-
 /* ---------- OUR SERVICES: big numeral rows ---------- */
 .sv {
   position: relative;
@@ -4613,179 +4960,6 @@ html {
 }
 
 /* ---------- HERO PHONE (replaces photo) ---------- */
-.x-photo .x-phone {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  translate: -50% 0;
-  width: 56%;
-  height: 94%;
-  background: var(--c-0d0d0d);
-  border-radius: 42px 42px 0 0;
-  padding: 9px 9px 0;
-  box-shadow: 0 30px 60px rgb(0 0 0 / 0.18);
-}
-
-.x-phone::before {
-  content: "";
-  position: absolute;
-  top: 16px;
-  left: 50%;
-  translate: -50% 0;
-  width: 26%;
-  height: 16px;
-  border-radius: 99px;
-  background: var(--c-0d0d0d);
-  z-index: 2;
-}
-
-.x-screen {
-  height: 100%;
-  border-radius: 34px 34px 0 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  background: var(--c-ece5dd);
-  background-image: radial-gradient(rgb(0 0 0 / 0.05) 1px, transparent 1px);
-  background-size: 14px 14px;
-}
-
-.x-wa-top {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 40px 12px 10px;
-  background: var(--c-1f3a2c);
-  color: var(--c-ffffff);
-}
-
-.x-wa-av {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--c-94de57);
-  color: var(--c-0d0d0d);
-  display: grid;
-  place-items: center;
-  flex: none;
-}
-
-.x-wa-av svg {
-  width: 16px;
-  height: 16px;
-}
-
-.x-wa-name {
-  display: grid;
-  line-height: 1.15;
-  min-width: 0;
-}
-
-.x-wa-name b {
-  font-size: 0.74rem;
-  font-weight: 600;
-}
-
-.x-wa-name small {
-  font-size: 0.6rem;
-  opacity: 0.75;
-}
-
-.x-wa-chat {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 6px;
-  padding: 10px 10px 74px;
-  overflow: hidden;
-}
-
-.x-msg {
-  max-width: 82%;
-  padding: 7px 9px 5px;
-  border-radius: 9px;
-  font-size: 0.66rem;
-  line-height: 1.35;
-  color: var(--c-111111);
-  box-shadow: 0 1px 1px rgb(0 0 0 / 0.08);
-  animation: x-msg-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1.2) both;
-}
-
-.x-msg small {
-  display: block;
-  text-align: right;
-  font-size: 0.5rem;
-  color: var(--c-666677);
-  margin-top: 2px;
-}
-
-.x-msg.in {
-  align-self: flex-start;
-  background: var(--c-ffffff);
-  border-top-left-radius: 2px;
-}
-
-.x-msg.out {
-  align-self: flex-end;
-  background: var(--c-d9fdd3);
-  border-top-right-radius: 2px;
-}
-
-.x-msg.ai {
-  border-left: 3px solid var(--c-94de57);
-}
-
-.x-typing {
-  align-self: flex-start;
-  background: var(--c-ffffff);
-  border-radius: 9px;
-  padding: 9px 11px;
-  display: flex;
-  gap: 3px;
-  animation: x-msg-in 0.25s both;
-}
-
-.x-typing i {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--c-99aaaa);
-  animation: x-dot 1s infinite;
-}
-
-.x-typing i:nth-child(2) {
-  animation-delay: 0.15s;
-}
-
-.x-typing i:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-@keyframes x-msg-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px) scale(0.96);
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes x-dot {
-  50% {
-    opacity: 0.3;
-    transform: translateY(-2px);
-  }
-}
-
-@media (max-width: 900px) {
-  .x-photo .x-phone {
-    width: 62%;
-  }
-}
 
 .x-clip img.x-img {
   display: block;
@@ -5137,55 +5311,6 @@ html {
 }
 
 /* tablet */
-@media (max-width: 900px) {
-  .x-nav-side {
-    display: none;
-  }
-
-  .x-nav {
-    grid-template-columns: 1fr auto;
-    padding-left: 4px;
-  }
-
-  .x-menu {
-    display: inline-flex;
-    align-items: center;
-  }
-
-  .x-stage {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-
-  .x-left,
-  .x-right {
-    padding-inline: 10px;
-  }
-
-  .x-left {
-    order: 1;
-  }
-
-  .x-right {
-    order: 2;
-    justify-self: start;
-    text-align: left;
-    justify-items: start;
-  }
-
-  .x-photo {
-    order: 3;
-    width: min(100%, 420px);
-  }
-
-  .x-burst {
-    top: 16px;
-  }
-
-  .x-h1-row {
-    padding-top: 64px;
-  }
-}
 
 /* phone */
 @media (max-width: 560px) {
@@ -5193,22 +5318,9 @@ html {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     row-gap: 22px;
   }
-
-  .x-ctas a {
-    padding: 0 13px;
-    font-size: 0.74rem;
-  }
-
-  .x-h1 .x-tail {
-    display: none;
-  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .x-burst {
-    animation: x-spin 24s linear infinite;
-  }
-
   @keyframes x-spin {
     to {
       rotate: 360deg;
@@ -5219,23 +5331,6 @@ html {
 /* ================= UPDATE 2 (afrokan-site-update-2/CHANGES.md) ================= */
 
 /* §2 Giant outlined "AFROKAN" behind the hero card */
-.x-hero {
-  isolation: isolate;
-}
-
-.x-bigword {
-  position: absolute;
-  z-index: -1;
-  left: 50%;
-  bottom: -2%;
-  translate: -50% 0;
-  font: 800 clamp(5rem, 1rem + 17vw, 17rem) / 0.8 var(--nf-archivo);
-  letter-spacing: -0.04em;
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--c-e2e3de);
-  white-space: nowrap;
-  pointer-events: none;
-}
 
 /* §4 Rotating text badge at the top right of "Turning ideas into working software" */
 .x-ideas {
