@@ -140,6 +140,14 @@ async function main() {
       async () => {
         await load();
         assert.equal(await ev(`document.querySelector(".c-count").textContent`), "Question 1 of 5");
+        // The honeypot has a name autofill doesn't recognise ("website" got filled in for real visitors).
+        assert.equal(await ev(`!!document.querySelector("#cform [name=website]")`), false);
+        assert.equal(
+          await ev(
+            `document.querySelector("#cform [name=afk_hp_check]").getAttribute("autocomplete")`,
+          ),
+          "off",
+        );
         // The <head> script's "js" class survives hydration, so Continue really shows.
         assert.equal(await ev(`document.documentElement.classList.contains("js")`), true);
         assert.equal(await ev(`!!${visible}.querySelector(".c-next").offsetParent`), true);
