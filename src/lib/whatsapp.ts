@@ -48,6 +48,17 @@ export function whatsappTextLink() {
   };
 }
 
+/**
+ * The bare wa.me link (no message), for a client component that adds its own
+ * `?text=` once it knows what to say (the contact form's thank-you screen).
+ * Until the number is confirmed it's the same inert anchor as waHref().
+ */
+export function whatsappBase(): string {
+  const { whatsappNumber } = getSite();
+  if (whatsappNumber.startsWith("TODO_")) return `#${whatsappNumber}`;
+  return waMeUrl(whatsappNumber);
+}
+
 /** The demo-offer CTA (OfferBand), with the demo prefill. */
 export function demoOfferLink(): WhatsAppLinkProps {
   const site = getSite();

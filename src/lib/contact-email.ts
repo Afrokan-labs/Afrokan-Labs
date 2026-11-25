@@ -156,37 +156,52 @@ export function notificationSubject(e: Enquiry): string {
   return fill(copy.email.subjectWithNeeds, { name, needs: oneLine(e.needs.join(", "), 120) });
 }
 
+/**
+ * A typed WhatsApp number as wa.me wants it: digits only, and a Ghana local
+ * number ("024 000 0000": a 0 and nine digits) with the 233 country code.
+ */
+export function waNumber(phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+  return /^0\d{9}$/.test(digits) ? `233${digits.slice(1)}` : digits;
+}
+
+type Row = [label: string, value: string, href?: string];
+
 /** The rows of the notification table, in order. Empty optional rows are left out. */
-function notificationRows(e: Enquiry, sentAt: Date): [label: string, value: string][] {
+function notificationRows(e: Enquiry, sentAt: Date): Row[] {
   const page = e.page
     ? e.from && e.from !== e.page
       ? `${e.page} (${fill(copy.email.cameFrom, { path: e.from })})`
       : e.page
     : undefined;
-  const rows: [string, string | undefined][] = [
+  // The reply channel: an email address, or a WhatsApp number (a wa.me link).
+  const contact: Row = isEmail(e.contact)
+    ? [notificationLabels.email, e.contact, `mailto:${e.contact}`]
+    : [notificationLabels.phone, e.contact, waMeUrl(waNumber(e.contact))];
+  const rows: [string, string | undefined, string?][] = [
     [notificationLabels.name, e.name],
-    [isEmail(e.contact) ? notificationLabels.email : notificationLabels.contact, e.contact],
+    contact,
     [notificationLabels.phone, e.phone],
     [notificationLabels.company, e.company],
     [notificationLabels.needs, e.needs.length ? e.needs.join(", ") : undefined],
+    [notificationLabels.goal, e.goal],
     [notificationLabels.message, e.message],
     [notificationLabels.sent, ghanaTime(sentAt)],
     [notificationLabels.page, page],
   ];
-  return rows.filter((r): r is [string, string] => Boolean(r[1]));
+  return rows.filter((r): r is Row => Boolean(r[1]));
 }
 
 export function notificationHtml(e: Enquiry, sentAt: Date, assetOrigin: string): string {
   const cell = `padding:12px 0;border-bottom:1px solid ${C.rule};vertical-align:top;`;
   const rows = notificationRows(e, sentAt)
-    .map(([label, value]) => {
+    .map(([label, value, href]) => {
       // Line breaks kept, long words wrapped.
       const html = esc(value).replace(/\r?\n/g, "<br>");
-      const link = label === notificationLabels.email;
       return `<tr>
 <td width="120" style="${cell}width:120px;padding-right:16px;font:600 13px/1.5 ${FONT};color:${C.muted};">${esc(label)}</td>
 <td style="${cell}font:15px/1.55 ${FONT};color:${C.ink};word-break:break-word;overflow-wrap:anywhere;">${
-        link ? `<a href="mailto:${esc(e.contact)}" style="color:${C.ink};">${html}</a>` : html
+        href ? `<a href="${esc(href)}" style="color:${C.ink};">${html}</a>` : html
       }</td>
 </tr>`;
     })
@@ -210,8 +225,11 @@ ${replyHint}`,
 
 /** The plain-text part: every row as "Label: value", the message on its own lines. */
 export function notificationText(e: Enquiry, sentAt: Date): string {
-  const lines = notificationRows(e, sentAt).map(([label, value]) =>
-    value.includes("\n") ? `${label}:\n${value}\n` : `${label}: ${value}`,
+  // A WhatsApp contact also gets its wa.me link, so it can be tapped in plain text.
+  const lines = notificationRows(e, sentAt).map(([label, value, href]) =>
+    value.includes("\n")
+      ? `${label}:\n${value}\n`
+      : `${label}: ${value}${href?.startsWith("https:") ? ` (${href})` : ""}`,
   );
   return [copy.email.heading, "", ...lines].join("\n").trimEnd();
 }

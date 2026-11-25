@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 const REVEAL =
-  ".x-ideas-head, .x-shot, .o-text, .o-stage, .sv-top, .sv-row, .x-work-grid, .x-words, .hw2-card, .hw2-stage, .x-crew-head, .x-arch, .x-tband, .x-contact-text, .x-mapwrap, .f-big, .f-cols, .f-bottom, .x-head, .s-row, .sol-moment, .i-item, .i-news, .rd-panel, .x-stop, .x-story, .st-lead, .st-flow, .st-facts, .x-cta, .x-lower > *, .c-direct";
+  ".x-ideas-head, .x-shot, .o-text, .o-stage, .sv-top, .sv-row, .x-work-grid, .x-words, .hw2-card, .hw2-stage, .x-crew-head, .x-arch, .x-tband, .x-contact-text, .x-mapwrap, .f-big, .f-cols, .f-bottom, .x-head, .s-row, .sol-moment, .i-item, .i-news, .rd-panel, .x-stop, .x-story, .st-lead, .st-flow, .st-facts, .x-cta, .x-lower > *";
 
 /**
  * The reference's shared page script, run once per page load: theme toggle,

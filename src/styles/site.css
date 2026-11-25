@@ -41,8 +41,7 @@ svg text {
   font-family: var(--nf-lexend);
 }
 
-.x-mail a,
-.c-direct a {
+.x-mail a {
   color: inherit;
   text-decoration: none;
 }
@@ -152,39 +151,6 @@ svg text {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-}
-
-.c-social {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.c-social b {
-  margin-right: 4px;
-}
-
-.c-direct .c-social a {
-  display: inline-grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  color: var(--c-0d0d0d);
-}
-
-.c-direct .c-social a:hover {
-  background: rgb(0 0 0 / 0.08);
-}
-
-.c-direct .c-social a:focus-visible {
-  outline: 2px solid var(--c-0d0d0d);
-  outline-offset: 1px;
-}
-
-.c-social .social-icon {
-  width: 18px;
-  height: 18px;
 }
 
 /*
@@ -318,10 +284,13 @@ svg text {
   --cl-logo: var(--c-f3f3ef);
   --cl-cta-bg: var(--c-94de57);
   --cl-cta-fg: var(--c-0d0d0d);
-  --cl-cta-hover: var(--c-84cc47);
-  --cl-cta-active: var(--c-6bbf3a);
+
+  /* The Afrokan primary button: lighter on hover, deeper when pressed; a green
+     focus ring on the dark page (button-states spec). */
+  --cl-cta-hover: var(--c-b4eb86);
+  --cl-cta-active: var(--c-7cc944);
   --cl-cta-icon: var(--c-0d0d0d);
-  --cl-focus: var(--c-f3f3ef);
+  --cl-focus: var(--c-94de57);
 }
 
 /* The light theme turns the dark pages light, so their nav goes back to the light colours. */
@@ -606,7 +575,6 @@ svg text {
   transition-delay: calc(0.25s + var(--i) * 50ms);
 }
 
-/* stylelint-disable-next-line no-descending-specificity -- the menu's links never sit in .c-direct */
 .cl-dialog .cl-panel li a {
   position: relative;
   display: inline-flex;
