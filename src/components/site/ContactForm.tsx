@@ -662,19 +662,22 @@ export function ContactForm({
                 aria-describedby={invalid("email", "both") && errId(4)}
               />
             </div>
-            <input
-              className="c-hp"
-              type="text"
-              name={FIELD.honeypot}
-              tabIndex={-1}
-              autoComplete="off"
-              aria-hidden="true"
-              // Keep password managers (1Password, LastPass, Bitwarden, Dashlane) out of it too.
-              data-1p-ignore=""
-              data-lpignore="true"
-              data-bwignore=""
-              data-form-type="other"
-            />
+            {/* The honeypot, inside a `hidden` element: never rendered, so no browser or
+                password manager fills it, while bots that fill every input in the HTML
+                still do. It's still posted with the form. An off-screen field got
+                autofilled, which dropped real requests as spam. */}
+            <div hidden>
+              <input
+                type="text"
+                name={FIELD.honeypot}
+                tabIndex={-1}
+                autoComplete="off"
+                data-1p-ignore=""
+                data-lpignore="true"
+                data-bwignore=""
+                data-form-type="other"
+              />
+            </div>
             <input type="hidden" name={FIELD.page} value="/contact" />
             {turnstileSiteKey && <div ref={widget} className="c-turnstile" />}
             {stepError(4)}
