@@ -11,6 +11,7 @@ export const LIMITS = {
   message: 5000,
   company: 100,
   phone: 40,
+  goal: 100,
   /** A site path: the form's page, or the page the visitor came from. */
   path: 200,
 } as const;
@@ -25,6 +26,8 @@ export const FIELD = {
   phone: "phone",
   /** One value per ticked "What do you need?" option. */
   needs: "need",
+  /** The one "What's your main goal?" option. */
+  goal: "goal",
   /** The page the form was sent from, and the site page the visitor arrived from. */
   page: "page",
   from: "from",
@@ -33,6 +36,17 @@ export const FIELD = {
   /** Added to the form by the Turnstile widget. */
   turnstile: "cf-turnstile-response",
 } as const;
+
+/**
+ * A WhatsApp number as people type it: 9 to 15 digits, with "+", spaces, "-",
+ * "(", ")" and "." allowed. The browser and the function both use this.
+ */
+export function isPhone(value: string): boolean {
+  const v = value.trim();
+  if (!/^\+?[\d\s\-().]+$/.test(v)) return false;
+  const digits = v.replace(/\D/g, "").length;
+  return digits >= 9 && digits <= 15;
+}
 
 export type ErrorKey = "required" | "tooLong" | "invalid";
 export type Field = "name" | "contact" | "message";

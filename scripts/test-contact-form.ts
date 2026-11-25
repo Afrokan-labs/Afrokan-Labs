@@ -4,8 +4,10 @@
  * script, and Turnstile is replaced by a stub that issues a token, so no
  * request leaves the machine. Exits 1 on any failure.
  *
- * Covers: client and server validation errors, the sending state, the success
- * message, Turnstile and server failures, focus and live regions.
+ * Covers the stepped form (contact form update, 2026-11-25): all five
+ * questions, Back keeping values, each step's validation, Enter advancing,
+ * "Not sure yet", focus on each new question, Send's loading, success and
+ * error states, the thank-you screen, and the stacked form without JavaScript.
  */
 import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
@@ -14,13 +16,14 @@ import { contact } from "../src/content/contact";
 import { launch, OUT, serve, sleep } from "./browser";
 
 const copy = contact.form;
-/** The text before the first {placeholder}: enough to recognise a message. */
-const lead = (template: string) => template.split("{")[0].trim();
+const [NEED_A, NEED_B] = copy.needs.options;
+const NOT_SURE = copy.needs.options.at(-1)!;
+const GOAL = copy.goal.options[1];
 
 type Reply = { status: number; body: string; delay?: number };
 let reply: Reply = { status: 200, body: JSON.stringify({ ok: true }) };
 let posts = 0;
-/** The raw body of the last post (multipart form data). */
+/** The raw body of the last post (multipart or urlencoded form data). */
 let posted = "";
 
 /** Stands in for Turnstile: a widget that writes a token, which the test can withhold. */
@@ -41,11 +44,15 @@ const TURNSTILE_STUB = `
     remove() {},
   };`;
 
+/** The posted values of one field, from a multipart body. */
+const field = (name: string) =>
+  [...posted.matchAll(new RegExp(`name="${name}"\\r\\n\\r\\n([^\\r]*)`, "g"))].map((m) => m[1]);
+
 async function main() {
   if (!existsSync(join(OUT, "contact.html")))
     throw new Error("out/contact.html not found. Run `pnpm build` first.");
   const server = await serve((req, res) => {
-    if (req.method !== "POST" || req.url !== "/api/contact") return false;
+    if (req.method !== "POST" || !req.url?.startsWith("/api/contact")) return false;
     posts++;
     posted = "";
     req.on("data", (chunk: Buffer) => (posted += chunk.toString()));
@@ -76,254 +83,374 @@ async function main() {
     }
   };
 
-  /** Opens /contact and focuses the form, which renders the (stub) Turnstile widget. */
+  // ----- Helpers -----
+  const visible = `document.querySelector(".c-step:not([hidden])")`;
+  /** Which question shows (0–4), or -1 when none does (the thank-you screen). */
+  const step = () =>
+    ev<number>(`[...document.querySelectorAll(".c-step")].findIndex((s) => !s.hidden)`);
   const load = async () => {
     posts = 0;
+    reply = { status: 200, body: JSON.stringify({ ok: true }) };
     await cdp.send("Page.navigate", { url: `${server.origin}/contact` });
     await until(`document.readyState === "complete" && !!document.querySelector("#cform")`);
-    // Wait for hydration: React attaches its handlers before the focus engages the form.
-    await until(
-      `!!Object.keys(document.querySelector("#cform")).find((k) => k.startsWith("__react"))`,
+    // Hydrated and enhanced: the band shows "Question 1 of 5".
+    await until(`document.querySelector(".c-count").textContent.length > 0`);
+  };
+  const pick = (label: string) =>
+    ev(
+      `[...document.querySelectorAll(".c-step:not([hidden]) .c-opt")].find((b) => b.textContent.trim() === ${JSON.stringify(label)}).click()`,
     );
-    await ev(`document.getElementById("c-name").focus()`);
+  const pressed = () =>
+    ev<string[]>(
+      `[...document.querySelectorAll(".c-step:not([hidden]) .c-opt[aria-pressed=true]")].map((b) => b.textContent.trim())`,
+    );
+  const next = () => ev(`${visible}.querySelector(".c-cta").click()`);
+  /** Types into a field the way a person does: the value, then an input event. */
+  const type = (id: string, value: string) =>
+    ev(`(() => {
+      const el = document.getElementById(${JSON.stringify(id)});
+      el.value = ${JSON.stringify(value)};
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+    })()`);
+  const error = () => ev<string>(`${visible}.querySelector(".c-err")?.textContent ?? ""`);
+  const invalid = () =>
+    ev<string[]>(`[...document.querySelectorAll("[aria-invalid=true]")].map((el) => el.id)`);
+  const active = () => ev<string>(`document.activeElement.id || document.activeElement.className`);
+  const sendButton = () =>
+    ev<{ cls: string; text: string; disabled: string | null }>(
+      `(() => { const b = document.querySelectorAll(".c-step")[4].querySelector(".c-cta"); return { cls: b.className, text: b.textContent.trim(), disabled: b.getAttribute("aria-disabled") }; })()`,
+    );
+  /** Answers questions 1 to 4 and lands on question 5 with the Turnstile token in place. */
+  const toReach = async (name = "Ama Test") => {
+    await pick(NEED_A);
+    await next();
+    await pick(GOAL);
+    await next();
+    await type("c-msg", "We lose orders in our chats.");
+    await next();
+    await type("c-name", name);
+    await type("c-company", "Test Shop Ltd");
+    await next();
     await until(`!!document.querySelector("[name=cf-turnstile-response]")`);
   };
-  const fill = (values: { name: string; email: string; message: string }) =>
-    ev(`(() => {
-      const v = ${JSON.stringify(values)};
-      document.getElementById("c-name").value = v.name;
-      document.getElementById("c-email").value = v.email;
-      document.getElementById("c-msg").value = v.message;
-    })()`);
-  const submit = () => ev(`document.querySelector(".c-submit").click()`);
-  const active = () =>
-    ev<string>(`(() => { const a = document.activeElement; return a.id || a.className; })()`);
-  const invalid = () =>
-    ev<string[]>(
-      `["c-name", "c-email", "c-msg"].filter((id) => document.getElementById(id).getAttribute("aria-invalid") === "true")`,
-    );
-
-  const VALID = { name: "Ama Test", email: "ama@example.com", message: "We need a shop website." };
 
   const tests: [string, () => Promise<void>][] = [
     [
-      "empty submit: every field flagged with its message, focus on Name, nothing posted",
+      "all five questions, then Sending… (locked), Sent, and the thank-you screen",
       async () => {
         await load();
-        await fill({ name: "", email: "", message: "" });
-        await submit();
-        await sleep(100);
-        assert.deepEqual(await invalid(), ["c-name", "c-email", "c-msg"]);
-        assert.equal(await ev(`document.getElementById("e-name").textContent`), copy.errors.name);
-        assert.equal(await ev(`document.getElementById("e-email").textContent`), copy.errors.email);
-        assert.equal(await ev(`document.getElementById("e-msg").textContent`), copy.errors.message);
-        assert.equal(await active(), "c-name");
-        assert.equal(posts, 0);
+        assert.equal(await ev(`document.querySelector(".c-count").textContent`), "Question 1 of 5");
+        await toReach();
+        assert.equal(await step(), 4);
+        assert.equal(await ev(`document.querySelector(".c-count").textContent`), "Question 5 of 5");
+        assert.equal(
+          await ev(`document.querySelector(".c-hint").textContent`),
+          copy.timeHints.late,
+        );
+        await type("c-phone", "024 000 0000");
+        await type("c-email", "ama@example.com");
+        reply = { status: 200, body: JSON.stringify({ ok: true }), delay: 600 };
+        await next();
+        await sleep(150);
+        let b = await sendButton();
+        assert.match(b.cls, /is-loading/);
+        assert.equal(b.text, copy.send.loading);
+        assert.equal(b.disabled, "true");
+        assert.equal(await ev(`document.getElementById("c-email").disabled`), true);
+        assert.equal(
+          await ev(`document.querySelector(".c-back").getAttribute("aria-disabled")`),
+          "true",
+        );
+        await next(); // a second click while sending must not post again
+        await until(
+          `document.querySelectorAll(".c-step")[4].querySelector(".c-cta").classList.contains("is-success")`,
+        );
+        b = await sendButton();
+        assert.equal(b.text, copy.send.success);
+        await until(`!!document.querySelector(".c-thanks")`, 3000);
+        assert.equal(posts, 1);
+        assert.equal(await step(), -1);
+        assert.equal(
+          await ev(`document.querySelector(".c-thanks h2").textContent`),
+          "Thanks, Ama!",
+        );
+        assert.equal(await active(), "c-h-done");
+        assert.match(
+          await ev<string>(`document.querySelector(".c-thanks p").textContent`),
+          /reply on WhatsApp or by email within 1 business day\./,
+        );
+        assert.equal(await ev(`document.querySelector(".c-count").textContent`), copy.done);
+        // Each detail is posted as its own field.
+        assert.deepEqual(field("name"), ["Ama Test"]);
+        assert.deepEqual(field("contact"), ["ama@example.com"]);
+        assert.deepEqual(field("phone"), ["024 000 0000"]);
+        assert.deepEqual(field("need"), [NEED_A]);
+        assert.deepEqual(field("goal"), [GOAL]);
+        assert.deepEqual(field("company"), ["Test Shop Ltd"]);
+        assert.deepEqual(field("page"), ["/contact"]);
+        // The WhatsApp button carries the summary.
+        const href = await ev<string>(`document.querySelector(".c-thanks a.c-cta").href`);
+        const text = decodeURIComponent(new URL(href).searchParams.get("text") ?? "");
+        assert.ok(href.startsWith("https://wa.me/233596069011?text="), href);
+        assert.equal(
+          text,
+          `Hi Afrokan Labs, I’m Ama Test from Test Shop Ltd. I just sent a request on your website.\nI need: ${NEED_A}\nMain goal: ${GOAL}`,
+        );
       },
     ],
     [
-      "invalid email: only Email flagged and focused",
+      "Send another request: back to question 1, empty",
+      async () => {
+        await ev(`document.querySelector(".c-thanks .c-link").click()`);
+        await until(`!document.querySelector(".c-thanks")`);
+        assert.equal(await step(), 0);
+        assert.deepEqual(await pressed(), []);
+        assert.equal(await ev(`document.getElementById("c-name").value`), "");
+        assert.equal(await active(), "c-h-0");
+      },
+    ],
+    [
+      "each question's validation message, on Continue only",
       async () => {
         await load();
-        await fill({ ...VALID, email: "not-an-email" });
-        await submit();
-        await sleep(100);
+        await next();
+        assert.equal(await error(), copy.errors.needs);
+        assert.equal(await step(), 0);
+        await pick(NEED_A); // choosing clears it
+        assert.equal(await error(), "");
+        await next();
+        await next();
+        assert.equal(await error(), copy.errors.goal);
+        await pick(GOAL);
+        await next();
+        // Question 3 is optional: "Skip this question" until there's text.
+        assert.equal(await ev(`${visible}.querySelector(".c-cta").textContent`), copy.skip);
+        await type("c-msg", "Hi");
+        assert.equal(await ev(`${visible}.querySelector(".c-cta").textContent`), copy.next);
+        await type("c-msg", "");
+        await next();
+        assert.equal(await step(), 3);
+        await type("c-name", "   ");
+        await next();
+        assert.equal(await error(), copy.errors.name);
+        assert.deepEqual(await invalid(), ["c-name"]);
+        await type("c-name", "Ama");
+        assert.equal(await error(), "");
+        await next();
+        await next();
+        assert.equal(await error(), copy.errors.reach);
+        assert.deepEqual(await invalid(), ["c-phone", "c-email"]);
+        await type("c-phone", "123");
+        await next();
+        assert.equal(await error(), copy.errors.phone);
+        assert.deepEqual(await invalid(), ["c-phone"]);
+        await type("c-phone", "");
+        await type("c-email", "not-an-email");
+        await next();
+        await until(`!!${visible}.querySelector(".c-err")`);
+        assert.equal(await error(), copy.errors.email);
         assert.deepEqual(await invalid(), ["c-email"]);
-        assert.equal(await active(), "c-email");
         assert.equal(posts, 0);
       },
     ],
     [
-      "server validation (422): the field is flagged and focused",
+      "Back keeps every answer",
       async () => {
         await load();
+        await toReach();
+        await ev(`document.querySelector(".c-back").click()`);
+        assert.equal(await step(), 3);
+        assert.equal(await ev(`document.getElementById("c-name").value`), "Ama Test");
+        await ev(`document.querySelector(".c-back").click()`);
+        assert.equal(
+          await ev(`document.getElementById("c-msg").value`),
+          "We lose orders in our chats.",
+        );
+        await ev(`document.querySelector(".c-back").click()`);
+        assert.deepEqual(await pressed(), [GOAL]);
+        await ev(`document.querySelector(".c-back").click()`);
+        assert.deepEqual(await pressed(), [NEED_A]);
+        // No Back on question 1: the logo is in its place.
+        assert.equal(await ev(`!!document.querySelector(".c-back")`), false);
+        assert.equal(await ev(`!!document.querySelector(".c-mark")`), true);
+      },
+    ],
+    [
+      '"Not sure yet" clears the others, and choosing another clears it',
+      async () => {
+        await load();
+        await pick(NEED_A);
+        await pick(NEED_B);
+        assert.deepEqual(await pressed(), [NEED_A, NEED_B]);
+        await pick(NOT_SURE);
+        assert.deepEqual(await pressed(), [NOT_SURE]);
+        await pick(NEED_B);
+        assert.deepEqual(await pressed(), [NEED_B]);
+      },
+    ],
+    [
+      "Enter in a field goes to the next question, and focus moves to its heading",
+      async () => {
+        await load();
+        await pick(NEED_A);
+        await next();
+        assert.equal(await active(), "c-h-1");
+        await pick(GOAL);
+        await next();
+        await next();
+        assert.equal(await step(), 3);
+        await type("c-name", "Ama");
+        await ev(`document.getElementById("c-name").focus()`);
+        await cdp.key("Enter");
+        await sleep(100);
+        assert.equal(await step(), 4);
+        assert.equal(await active(), "c-h-4");
+        assert.equal(posts, 0);
+      },
+    ],
+    [
+      "server failure (502): the error state and status, everything kept; editing resets it",
+      async () => {
+        await load();
+        await toReach();
+        await type("c-email", "ama@example.com");
+        reply = { status: 502, body: JSON.stringify({ ok: false, error: "failed" }) };
+        await next();
+        await until(
+          `document.querySelectorAll(".c-step")[4].querySelector(".c-cta").classList.contains("is-error")`,
+        );
+        const b = await sendButton();
+        assert.equal(b.text, copy.send.error);
+        assert.equal(b.disabled, null);
+        assert.equal(
+          await ev(`document.querySelector(".c-status").textContent`),
+          copy.send.errorStatus,
+        );
+        assert.equal(
+          await ev(`document.querySelector(".c-status").getAttribute("role")`),
+          "status",
+        );
+        assert.equal(await ev(`document.getElementById("c-email").value`), "ama@example.com");
+        assert.equal(await ev(`document.getElementById("c-name").value`), "Ama Test");
+        await type("c-email", "ama@example.org");
+        assert.equal((await sendButton()).cls, "c-cta");
+        // And a retry goes through.
+        reply = { status: 200, body: JSON.stringify({ ok: true }) };
+        await next();
+        await until(`!!document.querySelector(".c-thanks")`);
+      },
+    ],
+    [
+      "unreadable reply (500, not JSON): the same error state",
+      async () => {
+        await load();
+        await toReach();
+        await type("c-phone", "024 000 0000");
+        reply = { status: 500, body: "Internal Server Error" };
+        await next();
+        await until(
+          `document.querySelectorAll(".c-step")[4].querySelector(".c-cta").classList.contains("is-error")`,
+        );
+      },
+    ],
+    [
+      "server validation (422 on contact): question 5's message",
+      async () => {
+        await load();
+        await toReach();
+        await type("c-phone", "024 000 0000");
         reply = {
           status: 422,
           body: JSON.stringify({ ok: false, errors: { contact: "invalid" } }),
         };
-        await fill(VALID);
-        await submit();
-        await until(`document.getElementById("c-email").getAttribute("aria-invalid") === "true"`);
-        assert.equal(await active(), "c-email");
-        assert.equal(await ev(`document.getElementById("c-msg").value`), VALID.message);
-      },
-    ],
-    [
-      "success: Sending… while it posts, then the form is replaced by a focused confirmation",
-      async () => {
-        await load();
-        reply = { status: 200, body: JSON.stringify({ ok: true }), delay: 600 };
-        await fill(VALID);
-        await submit();
-        await sleep(100);
-        assert.equal(await ev(`document.querySelector(".c-submit").disabled`), true);
-        assert.equal(await ev(`document.querySelector(".c-submit").textContent`), copy.sending);
-        await submit(); // a second click while sending must not post again
-        await until(`!!document.querySelector(".c-done")`);
-        assert.equal(posts, 1);
-        assert.equal(await ev(`!!document.getElementById("cform")`), false);
-        const text = await ev<string>(`document.querySelector(".c-done").textContent`);
-        assert.match(text, /Thanks, Ama Test\./);
-        assert.match(text, /ama@example\.com within 1 business day/);
-        assert.equal(
-          await ev(`!!document.querySelector('.c-done a[href^="https://wa.me/"]')`),
-          true,
-        );
-        assert.equal(await active(), "c-done");
-        assert.equal(await ev(`!!document.activeElement.closest("[aria-live]")`), true);
-        assert.equal(
-          await ev(`document.querySelector(".c-done h2").textContent`),
-          `${copy.sent.title} ✓`,
-        );
-      },
-    ],
-    [
-      "each detail is posted as its own field, with the page and where the visitor came from",
-      async () => {
-        await load();
-        reply = { status: 200, body: JSON.stringify({ ok: true }) };
-        await fill(VALID);
-        await ev(`(() => {
-          document.getElementById("c-company").value = "Test Shop Ltd";
-          document.getElementById("c-phone").value = "024 000 0000";
-          document.querySelectorAll(".c-chips input").forEach((c, i) => (c.checked = i < 2));
-        })()`);
-        await submit();
-        await until(`!!document.querySelector(".c-done")`);
-        const field = (name: string) =>
-          [...posted.matchAll(new RegExp(`name="${name}"\\r\\n\\r\\n([^\\r]*)`, "g"))].map(
-            (m) => m[1],
-          );
-        assert.deepEqual(field("message"), [VALID.message]);
-        assert.deepEqual(field("company"), ["Test Shop Ltd"]);
-        assert.deepEqual(field("phone"), ["024 000 0000"]);
-        assert.deepEqual(field("need"), copy.needs.options.slice(0, 2));
-        assert.deepEqual(field("page"), ["/contact"]);
-      },
-    ],
-    [
-      "on a phone, the success and error panels scroll into view",
-      async () => {
-        await cdp.send("Emulation.setDeviceMetricsOverride", {
-          width: 390,
-          height: 844,
-          deviceScaleFactor: 1,
-          mobile: true,
-        });
-        const inView = (sel: string) =>
-          ev<boolean>(
-            `(() => { const r = document.querySelector("${sel}").getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight; })()`,
-          );
-        try {
-          for (const [sel, r] of [
-            [".c-alert", { status: 502, body: JSON.stringify({ ok: false, error: "failed" }) }],
-            [".c-done", { status: 200, body: JSON.stringify({ ok: true }) }],
-          ] as const) {
-            await load();
-            reply = r;
-            await fill(VALID);
-            await ev(`scrollTo(0, 0)`);
-            await submit();
-            await until(`!!document.querySelector("${sel}")`);
-            await sleep(900); // smooth scrolling
-            assert.ok(await inView(sel), `${sel} not in view`);
-            assert.equal(await active(), sel.slice(1));
-          }
-          assert.equal(
-            await ev(`document.querySelector(".c-done h2").textContent`),
-            `${copy.sent.title} ✓`,
-          );
-        } finally {
-          await cdp.send("Emulation.setDeviceMetricsOverride", {
-            width: 1280,
-            height: 900,
-            deviceScaleFactor: 1,
-            mobile: false,
-          });
-        }
-      },
-    ],
-    [
-      "server failure (502): fallback with WhatsApp and email links, focused, typing kept",
-      async () => {
-        await load();
-        reply = { status: 502, body: JSON.stringify({ ok: false, error: "failed" }) };
-        await fill(VALID);
-        await submit();
-        await until(`!!document.querySelector(".c-alert")`);
-        const text = await ev<string>(`document.querySelector(".c-alert p").textContent`);
-        assert.ok(text.startsWith(lead(copy.sendErrors.failed)), text);
-        assert.equal(
-          await ev(`!!document.querySelector('.c-alert a[href^="https://wa.me/"]')`),
-          true,
-        );
-        assert.equal(
-          await ev(`!!document.querySelector('.c-alert a[href="mailto:hello@afrokanlabs.com"]')`),
-          true,
-        );
-        assert.equal(await active(), "c-alert");
-        assert.equal(await ev(`!!document.activeElement.closest("[role=alert]")`), true);
-        assert.equal(
-          await ev(`document.querySelector(".c-alert h2").textContent`),
-          copy.sendErrors.title,
-        );
-        assert.equal(await ev(`document.getElementById("c-name").value`), VALID.name);
-        assert.equal(await ev(`document.getElementById("c-msg").value`), VALID.message);
-        assert.equal(await ev(`document.querySelector(".c-submit").disabled`), false);
-        assert.equal(await ev(`document.querySelector(".c-submit").textContent`), copy.submit);
-      },
-    ],
-    [
-      "unreadable reply (500, not JSON): the same server fallback",
-      async () => {
-        await load();
-        reply = { status: 500, body: "Internal Server Error" };
-        await fill(VALID);
-        await submit();
-        await until(`!!document.querySelector(".c-alert")`);
-        const text = await ev<string>(`document.querySelector(".c-alert p").textContent`);
-        assert.ok(text.startsWith(lead(copy.sendErrors.failed)), text);
-      },
-    ],
-    [
-      "Turnstile rejected (403): the verification message",
-      async () => {
-        await load();
-        reply = { status: 403, body: JSON.stringify({ ok: false, error: "verification" }) };
-        await fill(VALID);
-        await submit();
-        await until(`!!document.querySelector(".c-alert")`);
-        const text = await ev<string>(`document.querySelector(".c-alert p").textContent`);
-        assert.ok(text.startsWith(lead(copy.sendErrors.verification)), text);
-        assert.equal(await ev(`document.getElementById("c-msg").value`), VALID.message);
+        await next();
+        await until(`!!${visible}.querySelector(".c-err")`);
+        assert.equal(await step(), 4);
+        assert.equal(await error(), copy.errors.reach);
+        assert.equal((await sendButton()).cls, "c-cta");
       },
     ],
     [
       "Turnstile blocked (no token): the verification message, nothing posted",
       async () => {
         await load();
+        await toReach();
         await ev(
           `window.__token = ""; document.querySelector("[name=cf-turnstile-response]").value = ""`,
         );
-        await fill(VALID);
-        await submit();
-        await until(`!!document.querySelector(".c-alert")`);
-        const text = await ev<string>(`document.querySelector(".c-alert p").textContent`);
-        assert.ok(text.startsWith(lead(copy.sendErrors.verification)), text);
+        await type("c-email", "ama@example.com");
+        await next();
+        await until(`document.querySelector(".c-status").textContent.length > 0`);
+        const text = await ev<string>(`document.querySelector(".c-status").textContent`);
+        assert.ok(text.startsWith(copy.verification.split("{")[0].trim()), text);
+        assert.equal(
+          await ev(`!!document.querySelector('.c-status a[href="mailto:hello@afrokanlabs.com"]')`),
+          true,
+        );
         assert.equal(posts, 0);
       },
     ],
     [
-      "an error clears when the visitor tries again",
+      "phone only: the thank-you screen says WhatsApp",
       async () => {
         await load();
-        reply = { status: 502, body: JSON.stringify({ ok: false, error: "failed" }) };
-        await fill(VALID);
-        await submit();
-        await until(`!!document.querySelector(".c-alert")`);
-        reply = { status: 200, body: JSON.stringify({ ok: true }) };
-        await submit();
-        await until(`!!document.querySelector(".c-done")`);
+        await toReach("Kofi");
+        await type("c-phone", "024 000 0000");
+        await next();
+        await until(`!!document.querySelector(".c-thanks")`);
+        assert.match(
+          await ev<string>(`document.querySelector(".c-thanks p").textContent`),
+          /reply on WhatsApp within/,
+        );
+        assert.deepEqual(field("contact"), [""]);
+      },
+    ],
+    [
+      "without JavaScript: every question stacked in one form with one submit, posting natively",
+      async () => {
+        posts = 0;
+        await cdp.send("Page.navigate", { url: `${server.origin}/contact?nojs` });
+        await until(`document.readyState === "complete" && !!document.querySelector("#cform")`);
+        const shape = await ev<{
+          hidden: number;
+          steps: number;
+          submits: number;
+          method: string;
+          action: string;
+        }>(`(() => {
+          const f = document.getElementById("cform");
+          return {
+            hidden: f.querySelectorAll(".c-step[hidden]").length,
+            steps: f.querySelectorAll(".c-step").length,
+            submits: f.querySelectorAll("button[type=submit]").length,
+            method: f.method,
+            action: new URL(f.action).pathname,
+          };
+        })()`);
+        assert.deepEqual(shape, {
+          hidden: 0,
+          steps: 5,
+          submits: 1,
+          method: "post",
+          action: "/api/contact",
+        });
+        await ev(`(() => {
+          document.querySelector('input[name=need][value="${NEED_B}"]').checked = true;
+          document.querySelector('input[name=goal][value="${GOAL}"]').checked = true;
+          document.getElementById("c-name").value = "Ama";
+          document.getElementById("c-phone").value = "024 000 0000";
+          document.querySelector("#cform button[type=submit]").click();
+        })()`);
+        // The post comes from the browser's own form submission, not fetch().
+        const start = Date.now();
+        while (!posts && Date.now() - start < 3000) await sleep(50);
+        assert.equal(posts, 1);
+        const params = new URLSearchParams(posted);
+        assert.equal(params.get("need"), NEED_B);
+        assert.equal(params.get("goal"), GOAL);
+        assert.equal(params.get("name"), "Ama");
+        assert.equal(params.get("phone"), "024 000 0000");
+        assert.equal(params.get("page"), "/contact");
       },
     ],
   ];

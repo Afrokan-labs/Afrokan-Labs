@@ -10,11 +10,13 @@
  * here, because wrangler bundles this file into the function.
  */
 import * as z from "zod/mini";
-import { FIELD, LIMITS, type Field, type FieldErrors } from "./contact-fields";
+import { FIELD, LIMITS, isPhone, type Field, type FieldErrors } from "./contact-fields";
+
+export { isPhone };
 
 const email = z.email();
 
-/** A well-formed email address. The form posts it as "contact". */
+/** A well-formed email address. */
 export const isEmail = (value: string): boolean => z.safeParse(email, value).success;
 
 const text = (max: number) =>
@@ -22,7 +24,8 @@ const text = (max: number) =>
 
 export const ContactSubmission = z.object({
   name: text(LIMITS.name),
-  contact: text(LIMITS.contact).check(z.refine(isEmail, "invalid")),
+  /** How to reply: an email address or a WhatsApp number. */
+  contact: text(LIMITS.contact).check(z.refine((v) => isEmail(v) || isPhone(v), "invalid")),
   message: text(LIMITS.message),
 });
 export type ContactSubmission = z.infer<typeof ContactSubmission>;
@@ -47,6 +50,22 @@ export function validateContact(input: Record<Field, unknown>): Result {
   return { ok: false, errors };
 }
 
+/**
+ * Before validation (with or without JavaScript): the form posts the email
+ * field as "contact" and the WhatsApp number as "phone". When there's no email
+ * but there is a number, the number becomes the contact, and the "phone"
+ * extra is dropped so the email doesn't show it twice. An empty message
+ * (the question is optional) becomes `noMessage`.
+ */
+export function resolveSubmission(form: FormData, noMessage: string): void {
+  const value = (key: string) => String(form.get(key) ?? "").trim();
+  if (!value(FIELD.contact) && value(FIELD.phone)) {
+    form.set(FIELD.contact, value(FIELD.phone));
+    form.delete(FIELD.phone);
+  }
+  if (!value(FIELD.message)) form.set(FIELD.message, noMessage);
+}
+
 /** Reads the three fields from posted form data. */
 export const readFields = (form: FormData): Record<Field, unknown> => ({
   name: form.get(FIELD.name),
@@ -59,6 +78,7 @@ export type ContactExtras = {
   company?: string;
   phone?: string;
   needs: string[];
+  goal?: string;
   page?: string;
   from?: string;
 };
@@ -81,6 +101,7 @@ export function readExtras(form: FormData): ContactExtras {
     company: text(FIELD.company, LIMITS.company),
     phone: text(FIELD.phone, LIMITS.phone),
     needs: [...new Set(form.getAll(FIELD.needs).map((n) => String(n).trim()))].filter(Boolean),
+    goal: text(FIELD.goal, LIMITS.goal),
     page: path(FIELD.page),
     from: path(FIELD.from),
   };

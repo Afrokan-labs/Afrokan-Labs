@@ -33,7 +33,13 @@ import {
   type ContactResponse,
   type SendError,
 } from "../../src/lib/contact-fields";
-import { readExtras, readFields, replyToFor, validateContact } from "../../src/lib/contact-form";
+import {
+  readExtras,
+  readFields,
+  replyToFor,
+  resolveSubmission,
+  validateContact,
+} from "../../src/lib/contact-form";
 
 /** The parts of Cloudflare's EventContext this function uses. */
 type Context = { request: Request; env: Record<string, unknown> };
@@ -101,7 +107,9 @@ export async function onRequest({ request, env }: Context): Promise<Response> {
   const ip = request.headers.get("CF-Connecting-IP") ?? undefined;
   if (!(await verifyTurnstile(secrets.data, token, ip))) return failed(403, "verification");
 
-  // 3. Validation.
+  // 3. Validation. A WhatsApp number can stand in for the email, and the
+  // message is optional (contact-form.ts resolveSubmission).
+  resolveSubmission(form, copy.form.noMessage);
   const result = validateContact(readFields(form));
   if (!result.ok) return reply({ ok: false, errors: result.errors }, 422);
 
@@ -109,8 +117,9 @@ export async function onRequest({ request, env }: Context): Promise<Response> {
   const enquiry: Enquiry = {
     ...result.data,
     ...extras,
-    // Only the form's own options: anything else in "needs" is dropped.
+    // Only the form's own options: anything else in "needs" or "goal" is dropped.
     needs: extras.needs.filter((n) => copy.form.needs.options.includes(n)),
+    goal: extras.goal && copy.form.goal.options.includes(extras.goal) ? extras.goal : undefined,
   };
 
   // 4. Notification.

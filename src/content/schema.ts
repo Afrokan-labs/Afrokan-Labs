@@ -896,46 +896,73 @@ const ResultPage = z.object({ title: z.string().min(1), body: z.string().min(1) 
 
 /** /contact (BUILD_PLAN 6.1, architecture §5). Field rules: src/lib/contact-form.ts. */
 export const ContactCopy = z.object({
-  /** /contact (site handoff reference/contact.html). */
+  /** /contact (contact form update, 2026-11-25). */
   page: z.object({
     meta: z.object({ title: text, description: MetaDescription }),
-    leftLabel: text,
-    homeLabel: text,
-    big: z.tuple([text, text]),
-    sub: text,
-    body: text,
-    whatsapp: text,
-    closeLabel: text,
-    heading: text,
-    /** {replyWithin} is filled from site.replyWithin. */
-    intro: z.string().includes("{replyWithin}"),
-    direct: z.object({ email: text, based: text, follow: text }),
+    headline: text,
+    headlineHighlight: text,
+    subline: text,
+    chatLine: z.string().includes("{whatsapp}"),
+    chatLink: text,
   }),
-  /** The handoff form. Its post goes to functions/api/contact.ts. */
+  /** The stepped form: five questions, then a thank-you screen. Posts to functions/api/contact.ts. */
   form: z.object({
-    labels: z.object({ name: text, company: text, email: text, phone: text, message: text }),
+    progress: z.string().includes("{n}").includes("{total}"),
+    done: text,
+    timeHints: z.object({ early: text, late: text, sent: text }),
+    back: text,
+    next: text,
+    skip: text,
+    steps: z.object({
+      needs: z.object({ title: text, hint: text }),
+      goal: z.object({ title: text, hint: text }),
+      message: z.object({ title: text, hint: text }),
+      name: z.object({ title: text, hint: text.optional() }),
+      reach: z.object({ title: text, hint: text }),
+    }),
+    labels: z.object({ name: text, company: text, email: text, phone: text }),
     optional: text,
     phonePlaceholder: text,
+    emailPlaceholder: text,
     messagePlaceholder: text,
-    needs: z.object({ legend: text, options: z.array(text).min(1) }),
-    errors: z.object({ name: text, email: text, message: text }),
+    /** The last option is "Not sure yet", which can't be combined with the others. */
+    needs: z.object({ options: z.array(text).min(2) }),
+    goal: z.object({ options: z.array(text).min(2) }),
+    errors: z.object({
+      needs: text,
+      goal: text,
+      name: text,
+      reach: text,
+      phone: text,
+      email: text,
+    }),
+    noMessage: text,
     privacyNote: z.string().includes("{privacy}"),
     privacyLink: z.object({ label: text, href: z.string().startsWith("/") }),
-    submit: text,
-    sending: text,
-    /** Replaces the form once sent. {name} and {email} are what the visitor typed. */
-    sent: z.object({
-      title: text,
-      body: z.string().includes("{name}").includes("{email}").includes("{replyWithin}"),
-      urgent: z.string().includes("{whatsapp}"),
+    send: z.object({
+      idle: text,
+      loading: text,
+      success: text,
+      error: text,
+      errorStatus: text,
     }),
     /** {whatsapp} and {email} render as links (the label is `whatsappLabel`, then the site email). */
-    sendErrors: z.object({
-      title: text,
-      verification: z.string().includes("{whatsapp}").includes("{email}"),
-      failed: z.string().includes("{whatsapp}").includes("{email}"),
-    }),
+    verification: z.string().includes("{whatsapp}").includes("{email}"),
     whatsappLabel: text,
+    sent: z.object({
+      title: z.string().includes("{firstName}"),
+      fallbackName: text,
+      body: z.string().includes("{via}").includes("{replyWithin}"),
+      via: z.object({ whatsapp: text, email: text, both: text }),
+      waCta: text,
+      again: text,
+    }),
+    waPrefill: z.object({
+      intro: z.string().includes("{name}").includes("{company}"),
+      company: z.string().includes("{company}"),
+      needs: z.string().includes("{needs}"),
+      goal: z.string().includes("{goal}"),
+    }),
   }),
   whatsappCta: text,
   success: z.object({
@@ -957,10 +984,10 @@ export const ContactCopy = z.object({
     labels: z.object({
       name: text,
       email: text,
-      contact: text,
       phone: text,
       company: text,
       needs: text,
+      goal: text,
       message: text,
       sent: text,
       page: text,

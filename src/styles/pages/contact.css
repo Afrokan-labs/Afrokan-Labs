@@ -1784,421 +1784,528 @@ html {
   }
 }
 
-/* ---------- CONTACT PAGE ---------- */
-.c-split {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  min-height: 100vh;
-  min-height: 100svh;
-}
-
-.c-left {
+/*
+ * ---------- CONTACT PAGE (contact form update, 2026-11-25) ----------
+ * An Off-white page with one centred column: headline, subline, the stepped
+ * form card (ContactForm), and a WhatsApp line. Every control's states are
+ * classes here (button states spec), never inline colours.
+ */
+.c-page {
   position: relative;
-  overflow: hidden;
-  background: var(--c-9c9c98);
-  color: var(--c-ffffff);
-  padding: clamp(20px, 3vw, 36px) clamp(20px, 4vw, 56px) clamp(32px, 5vw, 64px);
-  display: flex;
-  flex-direction: column;
   isolation: isolate;
+  overflow: hidden;
+  min-height: 100vh;
+  padding-bottom: 64px;
+  background: var(--c-f3f3ef);
+  color: var(--c-0d0d0d);
 }
 
-.c-art {
+/* Two large, faint logo marks behind the column. */
+.c-deco {
   position: absolute;
-  inset: 0;
-  z-index: -2;
-  width: 100%;
-  height: 100%;
-}
-
-.c-left::after {
-  content: "";
-  position: absolute;
-  inset: 0;
   z-index: -1;
-  background: linear-gradient(
-    180deg,
-    rgb(0 0 0 / 0.28) 0%,
-    transparent 18%,
-    transparent 38%,
-    rgb(0 0 0 / 0.55) 100%
-  );
+  width: min(60vw, 640px);
+  height: auto;
   pointer-events: none;
 }
 
-.c-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--c-ffffff);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95rem;
+.c-deco-a {
+  bottom: -8%;
+  left: -12%;
+  color: var(--c-e5ded3);
 }
 
-.c-logo svg {
-  width: 22px;
-  height: 22px;
+.c-deco-b {
+  top: 4%;
+  right: -14%;
+  color: var(--c-d9e8c8);
+  rotate: 12deg;
+}
+
+.c-top {
+  max-width: var(--x-max);
+  margin-inline: auto;
+  padding: clamp(8px, 1.6vw, 24px) var(--x-gutter) 0;
+}
+
+/* The pills sit on Off-white, so MENU turns white to stand out. */
+.c-page .cl:not(.cl-dark) {
+  --cl-menu-bg: var(--c-ffffff);
+  --cl-menu-hover: var(--c-f3f3ef);
+}
+
+.c-col {
+  width: 100%;
+  max-width: 560px;
+  margin: clamp(24px, 5vw, 56px) auto 0;
+  padding-inline: 16px;
+  text-align: center;
+}
+
+.c-h1 {
+  margin: 0;
+  font: 700 clamp(2rem, 1.3rem + 3vw, 3.1rem) / 1.12 var(--nf-unbounded-text);
+  letter-spacing: -0.03em;
+}
+
+.c-hl {
+  display: inline-block;
+  padding: 0 0.18em 0.04em;
+  border-radius: 10px;
+  background: var(--c-94de57);
+}
+
+.c-subline {
+  margin: 14px 0 28px;
+  color: var(--c-5e5e5a);
+  font-size: 17px;
+}
+
+.c-chat {
+  margin: 24px 0 0;
+  color: var(--c-5e5e5a);
+  font-size: 16px;
+}
+
+.c-chat a,
+.c-privacy a,
+.c-status a {
+  color: var(--c-3f7e20);
+  text-underline-offset: 3px;
+}
+
+.c-chat a:hover,
+.c-privacy a:hover,
+.c-status a:hover {
+  color: var(--c-0d0d0d);
+}
+
+/* On the Off-white page #3F7E20 is just short of 4.5:1, so this link is a shade deeper. */
+.c-chat a {
+  color: var(--c-2c5a16);
+}
+
+/* ----- The card ----- */
+.c-card {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: 22px;
+  background: var(--c-ffffff);
+  color: var(--c-0d0d0d);
+  text-align: left;
+  box-shadow:
+    0 1px 2px rgb(13 13 13 / 0.08),
+    0 16px 40px rgb(13 13 13 / 0.1);
+}
+
+.c-band {
+  display: grid;
+  gap: 14px;
+  padding: 14px 20px 18px;
+  background: var(--c-0d0d0d);
+  color: var(--c-ffffff);
+}
+
+.c-band-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+}
+
+.c-mark {
+  flex: none;
+  width: 26px;
+  height: 23px;
   color: var(--c-94de57);
 }
 
-.c-big {
-  margin: auto 0 0;
-  padding-top: 40px;
-  font-weight: 300;
-  font-size: clamp(3.2rem, 1.6rem + 6vw, 7.2rem);
-  line-height: 0.92;
-  letter-spacing: -0.05em;
-  color: var(--c-ffffff);
+.c-count {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
 }
 
-.c-big span {
-  display: block;
+.c-hint {
+  color: var(--c-a3a3a3);
+  font-size: 13px;
+}
+
+.c-bar {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.c-bar i {
+  height: 6px;
+  border-radius: 6px;
+  background: var(--c-343434);
+  transition: background-color 0.3s;
+}
+
+.c-bar i.on {
+  background: var(--c-94de57);
+}
+
+/* Back, on the black band: 44px circle. */
+.c-back {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-left: -10px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--c-ffffff);
+  cursor: pointer;
+  transition: background-color 0.12s;
+}
+
+.c-back svg {
+  width: 22px;
+  height: 22px;
+}
+
+.c-back:hover {
+  background: var(--c-262626);
+}
+
+.c-back:active {
+  background: var(--c-343434);
+}
+
+.c-back:focus-visible {
+  outline: 3px solid var(--c-94de57);
+  outline-offset: 1px;
+}
+
+.c-back[aria-disabled="true"] {
+  opacity: 0.35;
+  background: transparent;
+  cursor: not-allowed;
+}
+
+.c-body {
+  padding: 24px 20px;
+}
+
+.c-form,
+.c-step {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Unenhanced (no JavaScript yet): the questions stack, with room between them. */
+.c-form {
+  gap: 36px;
+}
+
+.c-step[hidden],
+.c-form[hidden] {
+  display: none;
+}
+
+.c-step fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.c-q {
+  margin: 0;
+  font: 600 22px/1.25 var(--nf-unbounded-text);
+  letter-spacing: -0.02em;
+}
+
+.c-q:focus {
+  outline: none;
+}
+
+.c-q:focus-visible {
+  outline: 3px solid var(--c-3f7e20);
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
 .c-sub {
-  margin: clamp(24px, 4vw, 44px) 0 0;
-  font-weight: 400;
-  font-size: clamp(1.4rem, 1rem + 1.6vw, 2.3rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  color: var(--c-94de57);
-  max-width: 10em;
+  margin: -12px 0 0;
+  color: var(--c-5e5e5a);
+  font-size: 16px;
 }
 
-.c-left p.c-txt {
-  margin: 14px 0 0;
-  font-size: 0.82rem;
-  font-weight: 300;
-  line-height: 1.6;
-  color: var(--c-f1f1ee);
-  max-width: 34ch;
+.c-step fieldset .c-sub {
+  margin: 0 0 6px;
 }
 
-.c-wa {
-  margin-top: 18px;
-  align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 42px;
-  padding: 0 18px;
-  border-radius: 4px;
-  background: var(--c-94de57);
-  color: var(--c-0d0d0d);
-  font: 500 0.8rem/1 var(--x-font);
-  text-decoration: none;
-}
-
-.c-wa svg {
-  width: 16px;
-  height: 16px;
-}
-
-.c-wa:hover {
-  background: var(--c-ffffff);
-}
-
-.c-right {
-  position: relative;
-  background: var(--c-94de57);
-  color: var(--c-0d0d0d);
-  padding: clamp(56px, 7vw, 96px) clamp(20px, 5vw, 72px) clamp(32px, 5vw, 64px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.c-close {
-  position: absolute;
-  top: clamp(16px, 2.4vw, 28px);
-  right: clamp(16px, 2.4vw, 28px);
-  width: 40px;
-  height: 40px;
+.c-opts {
   display: grid;
-  place-items: center;
+  gap: 10px;
+}
+
+/* ----- Answer rows ----- */
+.c-opt {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 16px;
+  border: 1.5px solid var(--c-a3a3a3);
+  border-radius: 12px;
+  background: var(--c-ffffff);
   color: var(--c-0d0d0d);
+  font: 400 17px/1.35 var(--nf-lexend);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.12s,
+    border-color 0.12s,
+    scale 0.1s;
+}
+
+.c-opt:hover {
+  border-color: var(--c-0d0d0d);
+  background: var(--c-f4faee);
+}
+
+.c-opt:active {
+  scale: 0.99;
+}
+
+.c-opt:focus-visible,
+.c-opt:has(input:focus-visible) {
+  outline: 3px solid var(--c-3f7e20);
+  outline-offset: 2px;
+}
+
+.c-opt.is-on,
+.c-opt:has(input:checked) {
+  border-color: var(--c-0d0d0d);
+  background: var(--c-0d0d0d);
+  color: var(--c-ffffff);
+  font-weight: 500;
+}
+
+.c-opt.is-on:hover,
+.c-opt:has(input:checked):hover {
+  background: var(--c-262626);
+}
+
+/* The native inputs (before hydration) are drawn by the box and ring. */
+.c-opt input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.c-box,
+.c-dot {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--c-5e5e5a);
+}
+
+.c-box {
+  border-radius: 6px;
+  color: var(--c-0d0d0d);
+}
+
+.c-box svg {
+  width: 14px;
+  height: 14px;
+}
+
+.c-dot {
   border-radius: 50%;
 }
 
-.c-close svg {
-  width: 20px;
-  height: 20px;
+.c-opt.is-on .c-box,
+.c-opt:has(input:checked) .c-box {
+  border: 0;
+  background: var(--c-94de57);
 }
 
-.c-close:hover {
-  background: rgb(0 0 0 / 0.08);
+.c-opt.is-on .c-dot,
+.c-opt:has(input:checked) .c-dot {
+  border: 7px solid var(--c-94de57);
+  background: var(--c-0d0d0d);
 }
 
-.c-right h1 {
-  margin: 0;
-  font-weight: 400;
-  font-size: clamp(2rem, 1.3rem + 2.4vw, 3.2rem);
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-
-.c-intro {
-  margin: 12px 0 0;
-  font-size: 0.82rem;
-  font-weight: 300;
-  max-width: 48ch;
-  color: var(--c-1d2e12);
-}
-
-.c-form {
-  margin-top: clamp(22px, 3vw, 32px);
-  align-items: start;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 14px 16px;
-  max-width: 560px;
-}
-
+/* ----- Text fields ----- */
 .c-field {
-  display: grid;
-  gap: 6px;
-  min-width: 0;
-  align-content: start;
-}
-
-.c-field.full {
-  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .c-field label {
-  font-size: 0.72rem;
+  font-size: 16px;
   font-weight: 500;
 }
 
 .c-field label i {
+  color: var(--c-5e5e5a);
   font-style: normal;
-  font-weight: 300;
-  opacity: 0.7;
+  font-weight: 400;
 }
 
-.c-field input,
-.c-field select,
-.c-field textarea {
+.c-in {
   width: 100%;
-  min-width: 0;
-  border: 1px solid transparent;
-  border-radius: 0;
+  min-height: 56px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--c-5e5e5a);
+  border-radius: 12px;
+  outline: 0;
   background: var(--c-ffffff);
   color: var(--c-0d0d0d);
-  font: 300 0.86rem/1.4 var(--x-font);
-  padding: 10px 12px;
-  min-height: 42px;
-  outline: 0;
+
+  /* 17px keeps iOS from zooming in on focus. */
+  font: 400 17px/1.4 var(--nf-lexend);
 }
 
-.c-field textarea {
-  min-height: 128px;
+textarea.c-in {
+  min-height: 120px;
+  line-height: 1.5;
   resize: vertical;
 }
 
-.c-field input:focus,
-.c-field select:focus,
-.c-field textarea:focus {
-  border-color: var(--c-0d0d0d);
-  box-shadow: 0 0 0 2px rgb(13 13 13 / 0.15);
+.c-in::placeholder {
+  color: var(--c-5e5e5a);
 }
 
-.c-field [aria-invalid="true"] {
+.c-in:hover {
+  border-color: var(--c-0d0d0d);
+}
+
+.c-in:focus {
+  border-color: var(--c-0d0d0d);
+  box-shadow: 0 0 0 3px var(--c-94de57);
+}
+
+.c-in[aria-invalid="true"] {
   border-color: var(--c-8a1c1c);
 }
 
+.c-in:disabled {
+  background: var(--c-f3f3ef);
+  color: var(--c-5e5e5a);
+}
+
 .c-err {
-  font-size: 0.68rem;
-  color: var(--c-6b1414);
-  min-height: 0;
-}
-
-.c-needs {
-  grid-column: 1 / -1;
-  border: 0;
   margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 8px;
+  color: var(--c-8a1c1c);
+  font-size: 15px;
 }
 
-.c-needs legend {
-  font-size: 0.72rem;
-  font-weight: 500;
-  padding: 0;
-  margin-bottom: 8px;
-}
-
-.c-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.c-chips label {
-  position: relative;
-  cursor: pointer;
-}
-
-.c-chips input {
-  position: absolute;
-  opacity: 0;
-  width: 1px;
-  height: 1px;
-}
-
-.c-chips span {
+/* ----- Primary button: Continue, Send request, Chat with us on WhatsApp ----- */
+.c-cta {
   display: inline-flex;
   align-items: center;
-  min-height: 34px;
-  padding: 0 14px;
-  border: 1px solid rgb(13 13 13 / 0.35);
-  font-size: 0.76rem;
-  transition:
-    background 0.15s,
-    color 0.15s;
-}
-
-.c-chips input:checked + span {
-  background: var(--c-0d0d0d);
-  color: var(--c-94de57);
-  border-color: var(--c-0d0d0d);
-}
-
-.c-chips input:focus-visible + span {
-  outline: 2px solid var(--c-0d0d0d);
-  outline-offset: 2px;
-}
-
-.c-actions {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 4px;
-}
-
-.c-actions small {
-  flex-basis: 100%;
-  font-size: 0.7rem;
-  font-weight: 300;
-  color: var(--c-1d2e12);
-}
-
-.c-submit {
-  min-height: 44px;
-  padding: 0 36px;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 56px;
+  padding: 0 20px;
   border: 0;
-  background: var(--c-0d0d0d);
-  color: var(--c-ffffff);
-  font: 500 0.82rem/1 var(--x-font);
+  border-radius: 12px;
+  background: var(--c-94de57);
+  color: var(--c-0d0d0d);
+  font: 600 17px/1 var(--nf-lexend);
+  text-decoration: none;
   cursor: pointer;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    scale 0.1s;
 }
 
-.c-submit:hover {
-  background: var(--c-2a2a2a);
+.c-cta svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
 }
 
-.c-status {
-  grid-column: 1 / -1;
-  margin: 0;
-  font-size: 0.78rem;
-  min-height: 1.2em;
+.c-cta:hover {
+  background: var(--c-b4eb86);
+  color: var(--c-0d0d0d);
 }
 
-.c-submit:disabled {
-  cursor: progress;
-  background: var(--c-2a2a2a);
+.c-cta:active {
+  background: var(--c-7cc944);
+  scale: 0.98;
 }
 
-/*
- * Outcome panels. Success replaces the form in deep green; a failed send shows
- * in deep red next to the button, with WhatsApp and email as the way out.
- * Both are scrolled into view and focused (ContactForm).
- */
-.c-alert-live {
-  grid-column: 1 / -1;
-}
-
-.c-done,
-.c-alert {
-  max-width: 560px;
-  padding: clamp(20px, 3vw, 28px);
-  color: var(--c-ffffff);
-  border-radius: 4px;
-  scroll-margin: 24px;
-}
-
-.c-done {
-  margin-top: clamp(22px, 3vw, 32px);
-  background: var(--c-1d3a0c);
-  border-left: 6px solid var(--c-0d0d0d);
-}
-
-.c-alert {
-  background: var(--c-6b1414);
-  border-left: 6px solid var(--c-0d0d0d);
-}
-
-.c-done h2,
-.c-alert h2 {
-  margin: 0 0 10px;
-  font-weight: 600;
-  font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-}
-
-.c-done h2 {
-  color: var(--c-94de57);
-}
-
-.c-done p,
-.c-alert p {
-  margin: 0;
-  font-size: 0.92rem;
-  font-weight: 400;
-  line-height: 1.55;
-}
-
-.c-done p + p {
-  margin-top: 10px;
-}
-
-.c-actions small a,
-.c-alert a,
-.c-done a {
-  color: inherit;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.c-alert:focus,
-.c-done:focus {
+.c-cta:focus-visible {
   outline: 3px solid var(--c-0d0d0d);
   outline-offset: 3px;
 }
 
-.c-direct {
-  margin-top: clamp(22px, 3vw, 32px);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 24px;
-  font-size: 0.76rem;
-  padding-top: 16px;
-  border-top: 1px solid rgb(13 13 13 / 0.18);
-  max-width: 560px;
+.c-cta:disabled,
+.c-cta.is-disabled {
+  background: var(--c-dadad3);
+  color: var(--c-5e5e5a);
+  cursor: not-allowed;
+  scale: 1;
 }
 
-.c-direct b {
-  font-weight: 500;
+/* Send: loading stays green; repeat clicks are ignored (aria-disabled). */
+.c-cta.is-loading {
+  background: var(--c-94de57);
+  color: var(--c-0d0d0d);
+  cursor: progress;
+  scale: 1;
+}
 
-  /* With the space after the label, about the reference's 6px gap. */
-  margin-right: 3px;
+.c-cta.is-success {
+  background: var(--c-0d0d0d);
+  color: var(--c-94de57);
+  cursor: default;
+  scale: 1;
+}
+
+.c-cta.is-error {
+  background: var(--c-8a1c1c);
+  color: var(--c-ffffff);
+  animation: c-shake 0.3s ease-in-out;
+}
+
+.c-cta.is-error:hover {
+  background: var(--c-6b1414);
+  color: var(--c-ffffff);
+}
+
+.c-status {
+  margin: -8px 0 0;
+  color: var(--c-5e5e5a);
+  font-size: 15px;
+  text-align: center;
+}
+
+.c-status:empty {
+  display: none;
+}
+
+.c-status.is-error {
+  color: var(--c-8a1c1c);
+}
+
+.c-privacy {
+  margin: 0;
+  color: var(--c-5e5e5a);
+  font-size: 14px;
+  text-align: center;
 }
 
 .c-hp {
@@ -2206,34 +2313,127 @@ html {
   left: -9999px;
 }
 
-@media (max-width: 860px) {
-  .c-split {
-    grid-template-columns: minmax(0, 1fr);
-    min-height: 0;
-  }
+.c-spin {
+  animation: c-spin 0.8s linear infinite;
+}
 
-  .c-left {
-    min-height: 520px;
+.c-pop {
+  animation: c-pop 0.25s ease-out;
+}
+
+@keyframes c-spin {
+  to {
+    rotate: 360deg;
   }
 }
 
-@media (max-width: 480px) {
-  .c-form {
-    grid-template-columns: minmax(0, 1fr);
+@keyframes c-pop {
+  from {
+    opacity: 0;
+    scale: 0.6;
   }
 }
 
-/*
- * Contrast fix (WCAG 2.1 AA, 2026-10-22): a deeper scrim over the hero art so
- * "Let's Build", the lime subtitle and the body text clear 3:1 / 4.5:1. Same
- * overlay as above, darker where the text sits; the brand colours are unchanged.
- */
-.c-left::after {
-  background: linear-gradient(
-    180deg,
-    rgb(0 0 0 / 0.3) 0%,
-    rgb(0 0 0 / 0.42) 22%,
-    rgb(0 0 0 / 0.66) 48%,
-    rgb(0 0 0 / 0.74) 100%
-  );
+@keyframes c-shake {
+  25% {
+    translate: -4px 0;
+  }
+
+  75% {
+    translate: 4px 0;
+  }
+}
+
+/* ----- Thank-you screen ----- */
+.c-thanks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0;
+  text-align: center;
+}
+
+.c-tick {
+  display: inline-grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--c-0d0d0d);
+  color: var(--c-94de57);
+  animation: c-pop 0.25s ease-out;
+}
+
+.c-tick svg {
+  width: 30px;
+  height: 30px;
+}
+
+.c-thanks .c-q {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.c-thanks p {
+  max-width: 34ch;
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.c-thanks .c-cta {
+  margin-top: 8px;
+}
+
+/* "Send another request": a text link. */
+.c-link {
+  min-height: 44px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--c-0d0d0d);
+  font: 500 16px/1 var(--nf-lexend);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.c-link:hover {
+  color: var(--c-3f7e20);
+  text-decoration-thickness: 2px;
+}
+
+.c-link:active {
+  color: var(--c-1d3a0c);
+}
+
+.c-link:focus-visible {
+  outline: 3px solid var(--c-3f7e20);
+  outline-offset: 2px;
+}
+
+@media (max-width: 560px) {
+  .c-col {
+    padding-inline: 12px;
+  }
+
+  .c-deco {
+    width: 90vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No shake, no shrink, no pop; the spinner still turns so loading reads. */
+  .c-cta.is-error,
+  .c-pop,
+  .c-tick {
+    animation: none;
+  }
+
+  .c-cta:active,
+  .c-opt:active {
+    scale: 1;
+  }
 }

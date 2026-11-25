@@ -261,4 +261,7 @@
   /* Button states spec: primary (green) button hover and pressed. */
   --c-b4eb86: #b4eb86;
   --c-7cc944: #7cc944;
+
+  /* Contact form update: an answer row's hover. */
+  --c-f4faee: #f4faee;
 }

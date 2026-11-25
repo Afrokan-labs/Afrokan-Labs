@@ -124,11 +124,78 @@ const tests: [string, () => Promise<void>][] = [
     },
   ],
   [
-    "a phone number instead of an email: 422, nothing sent",
+    "a phone number as the contact: accepted, shown as a wa.me link, no auto-reply",
     async () => {
       const r = await post({ ...VALID, contact: "+233 00 000 0000" });
-      assert.deepEqual([r.status, r.body], [422, { ok: false, errors: { contact: "invalid" } }]);
+      assert.deepEqual([r.status, r.body], [200, { ok: true }]);
+      // Turnstile and the notification only: there's no address to auto-reply to.
+      assert.equal(sent.length, 2);
+      const email = sent[1].body as Record<string, string>;
+      assert.equal(email.reply_to, undefined);
+      assert.match(email.text, /^WhatsApp: \+233 00 000 0000 \(https:\/\/wa\.me\/233000000000\)$/m);
+    },
+  ],
+  [
+    "phone only (empty email): the number becomes the contact, a Ghana local number gets 233",
+    async () => {
+      const r = await post({ ...VALID, contact: "", phone: "024 000 0000" });
+      assert.deepEqual([r.status, r.body], [200, { ok: true }]);
+      const email = sent[1].body as Record<string, string>;
+      assert.match(email.html, /<a href="https:\/\/wa\.me\/233240000000"[^>]*>024 000 0000<\/a>/);
+      // Shown once, as the reply channel, not again as an extra row.
+      assert.equal(email.text.match(/^WhatsApp:/gm)?.length, 1);
+      assert.equal(sent.length, 2);
+    },
+  ],
+  [
+    "email only: the email is the contact, with an auto-reply",
+    async () => {
+      const r = await post({ ...VALID, phone: "" });
+      assert.deepEqual([r.status, r.body], [200, { ok: true }]);
+      assert.equal(sent.length, 3);
+      assert.match((sent[1].body as Record<string, string>).text, /^Email: test@example\.com$/m);
+    },
+  ],
+  [
+    "both: the email is the contact and the phone stays an extra row",
+    async () => {
+      await post({ ...VALID, phone: "024 000 0000" });
+      const email = sent[1].body as Record<string, string>;
+      assert.equal(email.reply_to, "test@example.com");
+      assert.match(email.text, /^Email: test@example\.com$/m);
+      assert.match(email.text, /^WhatsApp: 024 000 0000$/m);
+    },
+  ],
+  [
+    "neither phone nor email: 422 on contact, nothing sent",
+    async () => {
+      const r = await post({ ...VALID, contact: "", phone: "" });
+      assert.deepEqual([r.status, r.body], [422, { ok: false, errors: { contact: "required" } }]);
       assert.equal(sent.length, 1);
+    },
+  ],
+  [
+    "a known goal gets its own row; an unknown one is dropped",
+    async () => {
+      await post({ ...VALID, goal: "Save time on repetitive work" });
+      assert.match(
+        (sent[1].body as Record<string, string>).text,
+        /^Main goal: Save time on repetitive work$/m,
+      );
+      await post({ ...VALID, goal: "Free money" });
+      const email = sent[1].body as Record<string, string>;
+      assert.doesNotMatch(email.text + email.html, /Main goal|Free money/);
+    },
+  ],
+  [
+    "an empty message (the question is optional) is sent as noMessage",
+    async () => {
+      const r = await post({ ...VALID, message: "  " });
+      assert.deepEqual([r.status, r.body], [200, { ok: true }]);
+      assert.match(
+        (sent[1].body as Record<string, string>).text,
+        /^Message: \(No extra details given\.\)$/m,
+      );
     },
   ],
   [
@@ -170,6 +237,7 @@ const tests: [string, () => Promise<void>][] = [
   [
     "invalid fields: 422 with error keys, no email",
     async () => {
+      // "123" is neither an email nor a 9–15 digit number.
       const r = await post({ ...VALID, name: " ", contact: "123", message: "x".repeat(5001) });
       assert.equal(r.status, 422);
       assert.deepEqual(r.body, {
