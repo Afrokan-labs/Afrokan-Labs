@@ -257,4 +257,8 @@
   --c-2c5a16: #2c5a16;
   --c-b9b9b4: #b9b9b4;
   --c-c4c4bd: #c4c4bd;
+
+  /* Button states spec: primary (green) button hover and pressed. */
+  --c-b4eb86: #b4eb86;
+  --c-7cc944: #7cc944;
 }
